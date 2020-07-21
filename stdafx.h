@@ -34,6 +34,13 @@ enum class pivot : int
 #include "randomFunction.h"
 #include "imageManager.h"
 #include "timeManager.h"
+#include "keyManager.h"
+#include "keyAniManager.h"
+#include "effectManager.h"
+#include "eventManager.h"
+#include "iniDataManager.h"
+#include "objectManager.h"
+#include "soundManager.h"
 #include "textData.h"
 
 using namespace UTIL;
