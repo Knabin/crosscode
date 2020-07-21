@@ -19,9 +19,6 @@
     <Filter Include="playGround">
       <UniqueIdentifier>{95982806-068a-439b-ba72-8cb93f3609f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2DGameFramework\SingletonBase">
-      <UniqueIdentifier>{fab0ad69-58ad-46bb-984d-736d10eee0f5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2DGameFramework\image">
       <UniqueIdentifier>{2b96036b-918a-44d8-922a-e0385cb74f0b}</UniqueIdentifier>
     </Filter>
@@ -61,6 +58,9 @@
     <Filter Include="2DGameFramework\camera">
       <UniqueIdentifier>{3cada4fd-2ccb-46d8-9a79-cbae77d7c0d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2DGameFramework\singletonBase">
+      <UniqueIdentifier>{fab0ad69-58ad-46bb-984d-736d10eee0f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -79,16 +79,13 @@
       <Filter>playGround</Filter>
     </ClInclude>
     <ClInclude Include="singletonBase.h">
-      <Filter>2DGameFramework\SingletonBase</Filter>
+      <Filter>2DGameFramework\singletonBase</Filter>
     </ClInclude>
     <ClInclude Include="randomFunction.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="gameNode.h">
       <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="vector2.h">
-      <Filter>2DGameFramework\utils</Filter>
     </ClInclude>
     <ClInclude Include="floatRect.h">
       <Filter>2DGameFramework\utils</Filter>
@@ -144,6 +141,24 @@
     <ClInclude Include="keyAniManager.h">
       <Filter>2DGameFramework\manager</Filter>
     </ClInclude>
+    <ClInclude Include="eventManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="objectManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="floatCircle.h">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="vector2.h">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -157,9 +172,6 @@
     </ClCompile>
     <ClCompile Include="gameNode.cpp">
       <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="vector2.cpp">
-      <Filter>2DGameFramework\utils</Filter>
     </ClCompile>
     <ClCompile Include="floatRect.cpp">
       <Filter>2DGameFramework\utils</Filter>
@@ -210,6 +222,24 @@
       <Filter>2DGameFramework\manager</Filter>
     </ClCompile>
     <ClCompile Include="keyAniManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="eventManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="soundManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="objectManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="floatCircle.cpp">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="vector2.cpp">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
       <Filter>2DGameFramework\manager</Filter>
     </ClCompile>
   </ItemGroup>

@@ -21,7 +21,7 @@ inline T * singletonBase<T>::getSingleton()
 {
 	if (!singleton) singleton = new T;
 
-	return singleton;;
+	return singleton;
 }
 
 template<typename T>

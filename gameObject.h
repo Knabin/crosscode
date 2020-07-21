@@ -28,5 +28,8 @@ public:
 
 	void setRect(floatRect rect) { _rc = rect; }
 	floatRect getRect() const { return _rc; }
+
+	void setActive(bool active) { _isActive = active; }
+	bool getActive() { return _isActive; }
 };
 

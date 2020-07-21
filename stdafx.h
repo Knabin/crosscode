@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <map>
+#include <queue>
 
 using namespace std;
 
@@ -23,11 +24,11 @@ enum class pivot : int
 	LEFTTOP, CENTER, BOTTOM
 };
 
-
 #include "vector2.h"
+#include "utils.h"
 #include "floatPoint.h"
 #include "floatRect.h"
-#include "utils.h"
+#include "floatCircle.h"
 
 #include "commonMacroFunction.h"
 #include "randomFunction.h"
