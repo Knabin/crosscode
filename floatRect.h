@@ -23,10 +23,32 @@ public:
 	void update(const float& x, const float& y, const float& width, const float& height, const pivot & pivot);
 	void move(const float& moveX, const float& moveY);
 
+	void setLeftTop(float left, float top);
+	void setCenter(float centerX, float centerY);
+
+	void render(HDC hdc)
+	{
+		Rectangle(hdc,
+			FLOAT_TO_INT(left),
+			FLOAT_TO_INT(top),
+			FLOAT_TO_INT(right),
+			FLOAT_TO_INT(bottom));
+	}
+
+	void renderCircle(HDC hdc)
+	{
+		Ellipse(hdc,
+			FLOAT_TO_INT(left),
+			FLOAT_TO_INT(top),
+			FLOAT_TO_INT(right),
+			FLOAT_TO_INT(bottom));
+	}
+
 	const floatRect& operator=(const RECT& rc);
 };
 inline floatRect RectMakePivot(const floatPoint& position, const floatPoint& size, const pivot& pivot){
 	floatRect result;
+
 	switch (pivot)
 	{
 	case pivot::LEFTTOP:
