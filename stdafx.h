@@ -23,8 +23,6 @@ enum class pivot : int
 	LEFTTOP, CENTER, BOTTOM
 };
 
-
-#include "vector2.h"
 #include "floatPoint.h"
 #include "floatRect.h"
 #include "utils.h"

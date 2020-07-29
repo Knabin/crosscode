@@ -12,7 +12,3 @@ floatPoint::floatPoint(const float & x, const float & y)
 floatPoint::floatPoint(const int & x, const int & y)
 {
 }
-
-floatPoint::floatPoint(const vector2 & vector)
-{
-}

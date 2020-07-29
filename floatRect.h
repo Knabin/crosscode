@@ -11,23 +11,21 @@ public:
 	floatRect();
 	explicit floatRect(const float& left, const float& top, const float& right, const float& bottom);
 	explicit floatRect(const int& left, const int& top, const int& right, const int& bottom);
-	explicit floatRect(const vector2& position, const vector2& size, const pivot& pivot);
+	explicit floatRect(const float& x, const float& y, const float& width, const float& height, const pivot & pivot);
 	explicit floatRect(const RECT& rc);
 
 	const RECT getRect();
 	float getWidth();
 	float getHeight();
-	vector2 getCenter();
-	vector2 getBottom();
-	vector2 getSize();
-	void update(const vector2& position, const vector2& size, const pivot& pivot);
-	void move(const vector2& moveValue);
+	floatPoint getCenter();
+	floatPoint getBottom();
+	floatPoint getSize();
+	void update(const float& x, const float& y, const float& width, const float& height, const pivot & pivot);
+	void move(const float& moveX, const float& moveY);
 
 	const floatRect& operator=(const RECT& rc);
 };
-
-inline floatRect RectMakePivot(const vector2& position, const vector2& size, const pivot& pivot)
-{
+inline floatRect RectMakePivot(const floatPoint& position, const floatPoint& size, const pivot& pivot){
 	floatRect result;
 	switch (pivot)
 	{

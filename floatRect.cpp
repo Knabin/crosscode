@@ -16,9 +16,9 @@ floatRect::floatRect(const int & left, const int & top, const int & right, const
 {
 }
 
-floatRect::floatRect(const vector2 & position, const vector2 & size, const pivot & pivot)
+floatRect::floatRect(const float & x, const float & y, const float & width, const float & height, const pivot & pivot)
 {
-	*this = RectMakePivot(position, size, pivot);
+	*this = RectMakePivot(floatPoint(x, y), floatPoint(width, height), pivot);
 }
 
 floatRect::floatRect(const RECT & rc)
@@ -41,32 +41,32 @@ float floatRect::getHeight()
 	return bottom - top;
 }
 
-vector2 floatRect::getCenter()
+floatPoint floatRect::getCenter()
 {
-	return vector2(left + (right - left) * 0.5f, top + (bottom - top) * 0.5f);
+	return floatPoint(left + (right - left) * 0.5f, top + (bottom - top) * 0.5f);
 }
 
-vector2 floatRect::getBottom()
+floatPoint floatRect::getBottom()
 {
-	return vector2(left + (right - left) * 0.5f, bottom);
+	return floatPoint(left + (right - left) * 0.5f, bottom);
 }
 
-vector2 floatRect::getSize()
+floatPoint floatRect::getSize()
 {
-	return vector2((right - left), (bottom - top));
+	return floatPoint((right - left), (bottom - top));
 }
 
-void floatRect::update(const vector2 & position, const vector2 & size, const pivot & pivot)
+void floatRect::update(const float & x, const float & y, const float & width, const float & height, const pivot & pivot)
 {
-	*this = RectMakePivot(position, size, pivot);
+	*this = RectMakePivot(floatPoint(x, y), floatPoint(width, height), pivot);
 }
 
-void floatRect::move(const vector2 & moveValue)
+void floatRect::move(const float & moveX, const float & moveY)
 {
-	left += moveValue.x;
-	right += moveValue.x;
-	top += moveValue.y;
-	bottom += moveValue.y;
+	left += moveX;
+	right += moveX;
+	top += moveY;
+	bottom += moveY;
 }
 
 const floatRect & floatRect::operator=(const RECT & rc)

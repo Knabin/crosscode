@@ -61,6 +61,12 @@
     <Filter Include="2DGameFramework\camera">
       <UniqueIdentifier>{3cada4fd-2ccb-46d8-9a79-cbae77d7c0d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playTest">
+      <UniqueIdentifier>{f3c8e3c4-4399-43b8-89eb-406e151afac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playTest\player">
+      <UniqueIdentifier>{eadc69a6-6fdd-41a6-8a1c-c213b4aab677}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -86,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="gameNode.h">
       <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="vector2.h">
-      <Filter>2DGameFramework\utils</Filter>
     </ClInclude>
     <ClInclude Include="floatRect.h">
       <Filter>2DGameFramework\utils</Filter>
@@ -144,6 +147,9 @@
     <ClInclude Include="keyAniManager.h">
       <Filter>2DGameFramework\manager</Filter>
     </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>playTest\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -157,9 +163,6 @@
     </ClCompile>
     <ClCompile Include="gameNode.cpp">
       <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="vector2.cpp">
-      <Filter>2DGameFramework\utils</Filter>
     </ClCompile>
     <ClCompile Include="floatRect.cpp">
       <Filter>2DGameFramework\utils</Filter>
@@ -211,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="keyAniManager.cpp">
       <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>playTest\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
