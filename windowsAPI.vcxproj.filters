@@ -66,9 +66,6 @@
     <Filter Include="2DGameFramework\singletonBase">
       <UniqueIdentifier>{fab0ad69-58ad-46bb-984d-736d10eee0f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\player">
-      <UniqueIdentifier>{bd77196c-9a57-4c36-a836-20cd759ce1b0}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -169,12 +166,6 @@
     <ClInclude Include="keyManager.h">
       <Filter>2DGameFramework\manager</Filter>
     </ClInclude>
-    <ClInclude Include="iniDataManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>playGround\player</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -259,12 +250,6 @@
     </ClCompile>
     <ClCompile Include="keyManager.cpp">
       <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="iniDataManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>playGround\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
