@@ -2,14 +2,20 @@
 class gameObject
 {
 protected:
-	string _name;
-	vector2 _position;
-	vector2 _size;
-	floatRect _rc;
-	bool _isActive;
+	string _name;		// 오브젝트 이름
+	float _x;			// 오브젝트 좌표 X
+	float _y;			// 오브젝트 좌표 Y
+	float _width;		// 오브젝트 가로 크기
+	float _height;		// 오브젝트 세로 크기
+	floatRect _rc;		// 오브젝트 RECT(float type)
+	bool _isActive;		// 오브젝트 활성화 여부
+	bool _isAlive;		// 오브젝트 살아 있는지
+	pivot _pivot;		// 오브젝트 RECT 기준(pivot)
 
 public:
 	gameObject();
+	gameObject(float x, float y);
+	gameObject(const string& name, const float& x, const float& y, const float& width, const float& height, const pivot& pivot);
 	virtual ~gameObject();
 
 	virtual void init() = 0;
@@ -17,16 +23,35 @@ public:
 	virtual void update() = 0;
 	virtual void render() = 0;
 
+
+	// =========================================================
+	// getter / setter
+	// =========================================================
 	void setName(string name) { _name = name; }
 	string getName() const { return _name; }
 
-	void setPosition(vector2 position) { _position = position; }
-	vector2 getPosition() const { return _position; }
+	void setX(float x) { _x = x; _rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot); }
+	float getX() const { return _x; }
 
-	void setSize(vector2 size) { _size = size; }
-	vector2 getSize() const { return _size; }
+	void setY(float y) { _y = y; _rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot); }
+	float getY() const { return _y; }
+
+	void setPosition(floatPoint position) { _x = position.x; _y = position.y; _rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot); }
+	floatPoint getPosition() const { return floatPoint(_x, _y); }
+
+	void setWidth(float width) { _width = width; _rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot); }
+	float getWidth() const { return _width; }
+
+	void setHeight(float height) { _height = height; _rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot); }
+	float getHeight() const { return _height; }
 
 	void setRect(floatRect rect) { _rc = rect; }
 	floatRect getRect() const { return _rc; }
+
+	void setIsActive(bool isActive) { _isActive = isActive; }
+	bool getIsActive() const { return _isActive; }
+
+	void setIsAlive(bool isAlive) { _isAlive = isAlive; }
+	bool getIsAlive() const { return _isAlive; }
 };
 

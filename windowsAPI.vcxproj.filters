@@ -87,9 +87,6 @@
     <ClInclude Include="gameNode.h">
       <Filter>2DGameFramework</Filter>
     </ClInclude>
-    <ClInclude Include="vector2.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
     <ClInclude Include="floatRect.h">
       <Filter>2DGameFramework\utils</Filter>
     </ClInclude>
@@ -141,7 +138,19 @@
     <ClInclude Include="effectManager.h">
       <Filter>2DGameFramework\manager</Filter>
     </ClInclude>
-    <ClInclude Include="keyAniManager.h">
+    <ClInclude Include="floatCircle.h">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="eventManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="objectManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
       <Filter>2DGameFramework\manager</Filter>
     </ClInclude>
   </ItemGroup>
@@ -157,9 +166,6 @@
     </ClCompile>
     <ClCompile Include="gameNode.cpp">
       <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="vector2.cpp">
-      <Filter>2DGameFramework\utils</Filter>
     </ClCompile>
     <ClCompile Include="floatRect.cpp">
       <Filter>2DGameFramework\utils</Filter>
@@ -209,7 +215,19 @@
     <ClCompile Include="effectManager.cpp">
       <Filter>2DGameFramework\manager</Filter>
     </ClCompile>
-    <ClCompile Include="keyAniManager.cpp">
+    <ClCompile Include="floatCircle.cpp">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="eventManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="objectManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="soundManager.cpp">
       <Filter>2DGameFramework\manager</Filter>
     </ClCompile>
   </ItemGroup>

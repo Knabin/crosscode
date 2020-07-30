@@ -2,23 +2,23 @@
 #include "floatRect.h"
 
 floatRect::floatRect()
-	: left(0.0f), top(0.0f), right(0.0f), bottom(0.0f) 
+	: left(0.0f), top(0.0f), right(0.0f), bottom(0.0f)
 {
 }
 
 floatRect::floatRect(const float & left, const float & top, const float & right, const float & bottom)
-	: left(left), top(top), right(right), bottom(bottom) 
+	: left(left), top(top), right(right), bottom(bottom)
 {
 }
 
 floatRect::floatRect(const int & left, const int & top, const int & right, const int & bottom)
-	: left((float)left), top((float)top), right((float)right), bottom((float)bottom) 
+	: left((float)left), top((float)top), right((float)right), bottom((float)bottom)
 {
 }
 
-floatRect::floatRect(const vector2 & position, const vector2 & size, const pivot & pivot)
+floatRect::floatRect(const float & x, const float & y, const float & width, const float & height, const pivot & pivot)
 {
-	*this = RectMakePivot(position, size, pivot);
+	*this = RectMakePivot(floatPoint(x, y), floatPoint(width, height), pivot);
 }
 
 floatRect::floatRect(const RECT & rc)
@@ -41,32 +41,46 @@ float floatRect::getHeight()
 	return bottom - top;
 }
 
-vector2 floatRect::getCenter()
+floatPoint floatRect::getCenter()
 {
-	return vector2(left + (right - left) * 0.5f, top + (bottom - top) * 0.5f);
+	return floatPoint(left + (right - left) * 0.5f, top + (bottom - top) * 0.5f);
 }
 
-vector2 floatRect::getBottom()
+floatPoint floatRect::getSize()
 {
-	return vector2(left + (right - left) * 0.5f, bottom);
+	return floatPoint((right - left), (bottom - top));
 }
 
-vector2 floatRect::getSize()
+void floatRect::update(const float & x, const float & y, const float & width, const float & height, const pivot & pivot)
+{}
+void floatRect::setLeftTop(float _left, float _top)
 {
-	return vector2((right - left), (bottom - top));
+	float w = getWidth();
+	float h = getHeight();
+
+	left = _left;
+	top = _top;
+	right = _left + w;
+	bottom = _top + h;
 }
 
-void floatRect::update(const vector2 & position, const vector2 & size, const pivot & pivot)
+void floatRect::setCenter(float centerX, float centerY)
 {
-	*this = RectMakePivot(position, size, pivot);
+	float w = getWidth() * 0.5f;
+	float h = getHeight() * 0.5f;
+
+	left = centerX - w;
+	top = centerY - h;
+	right = centerX + w;
+	bottom = centerY + h;
 }
 
-void floatRect::move(const vector2 & moveValue)
+void floatRect::move(const float & moveX, const float & moveY)
 {
-	left += moveValue.x;
-	right += moveValue.x;
-	top += moveValue.y;
-	bottom += moveValue.y;
+	left += moveX;
+	right += moveX;
+	top += moveY;
+	bottom += moveY;
 }
 
 const floatRect & floatRect::operator=(const RECT & rc)

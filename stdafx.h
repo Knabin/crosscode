@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <map>
+#include <queue>
 
 using namespace std;
 
@@ -23,16 +24,20 @@ enum class pivot : int
 	LEFTTOP, CENTER, BOTTOM
 };
 
-
-#include "vector2.h"
+#include "utils.h"
 #include "floatPoint.h"
 #include "floatRect.h"
-#include "utils.h"
+#include "floatCircle.h"
 
 #include "commonMacroFunction.h"
 #include "randomFunction.h"
 #include "imageManager.h"
 #include "timeManager.h"
+#include "keyManager.h"
+#include "effectManager.h"
+#include "eventManager.h"
+#include "objectManager.h"
+//#include "soundManager.h"
 #include "textData.h"
 
 using namespace UTIL;
@@ -50,7 +55,14 @@ using namespace UTIL;
 #define WINSIZEY	768
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 
-#define RND randomFunction::getSingleton()
+#define RND randomFunction::getInstance()
+#define IMAGEMANAGER imageManager::getInstance()
+#define TIMEMANAGER timeManager::getInstance()
+#define KEYMANAGER keyManager::getInstance()
+#define EFFECTMANAGER effectManager::getInstance()
+#define EVENTMANAGER eventManager::getInstance()
+#define OBJECTMANAGER objectManager::getInstance()
+#define TEXTDATA textData::getInstance()
 
 #define SAFE_DELETE(p)		{if(p) {delete(p); (p) = NULL;}}
 #define SAFE_RELEASE(p)		{if(p) {(p)->release(); (p) = NULL;}}
