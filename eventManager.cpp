@@ -14,7 +14,7 @@ void eventManager::update()
 {
 	if (_mEventQueue.size() == 0)
 		return;
-	
+
 	bool isEventEnd = _mEventQueue.front()->eventUpdate();
 	if (isEventEnd)
 	{

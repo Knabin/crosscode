@@ -6,18 +6,15 @@ namespace MINTCHOCO_UTIL
 	bool checkPointInRect(const RECT& rc, const POINT& pt);
 	bool checkPointInRect(const RECT& rc, const floatPoint& pt);
 	bool checkPointInRect(const RECT& rc, int x, int y);
-	bool checkPointInRect(const RECT& rc, const vector2& vector);
 
 	bool checkPointInRect(const floatRect& rc, const POINT& pt);
 	bool checkPointInRect(const floatRect& rc, const floatPoint& pt);
 	bool checkPointInRect(const floatRect& rc, float x, float y);
-	bool checkPointInRect(const floatRect& rc, const vector2& vector);
 
 
 	//POINT가 원 안에 있나
 	bool checkPointInCircle(float cX, float cY, float cR, const POINT& pt);
 	bool checkPointInCircle(float cX, float cY, float cR, float x, float y);
-	bool checkPointInCircle(float cX, float cY, float cR, const vector2& vector);
 	bool checkPointInCircle(const floatRect& rc, float x, float y);
 	bool checkPointInCircle(const floatRect& rc, const floatPoint& pt);
 

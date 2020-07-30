@@ -2,17 +2,17 @@
 #include "floatRect.h"
 
 floatRect::floatRect()
-	: left(0.0f), top(0.0f), right(0.0f), bottom(0.0f) 
+	: left(0.0f), top(0.0f), right(0.0f), bottom(0.0f)
 {
 }
 
 floatRect::floatRect(const float & left, const float & top, const float & right, const float & bottom)
-	: left(left), top(top), right(right), bottom(bottom) 
+	: left(left), top(top), right(right), bottom(bottom)
 {
 }
 
 floatRect::floatRect(const int & left, const int & top, const int & right, const int & bottom)
-	: left((float)left), top((float)top), right((float)right), bottom((float)bottom) 
+	: left((float)left), top((float)top), right((float)right), bottom((float)bottom)
 {
 }
 
@@ -44,16 +44,6 @@ float floatRect::getHeight()
 floatPoint floatRect::getCenter()
 {
 	return floatPoint(left + (right - left) * 0.5f, top + (bottom - top) * 0.5f);
-}
-
-float floatRect::getCenterX()
-{
-	return left + (right - left) * 0.5f;
-}
-
-float floatRect::getCenterY()
-{
-	return top + (bottom - top) * 0.5f;
 }
 
 floatPoint floatRect::getSize()
@@ -91,14 +81,6 @@ void floatRect::move(const float & moveX, const float & moveY)
 	right += moveX;
 	top += moveY;
 	bottom += moveY;
-}
-
-void floatRect::move(const float & dx, const float & dy)
-{
-	left += dx;
-	right += dx;
-	top += dy;
-	bottom += dy;
 }
 
 const floatRect & floatRect::operator=(const RECT & rc)

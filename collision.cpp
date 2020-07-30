@@ -22,13 +22,6 @@ bool MINTCHOCO_UTIL::checkPointInRect(const RECT & rc, int x, int y)
 	return false;
 }
 
-bool MINTCHOCO_UTIL::checkPointInRect(const RECT & rc, const vector2 & vector)
-{
-	if ((rc.left <= vector.x && vector.x <= rc.right) &&
-		(rc.top <= vector.y && vector.y <= rc.bottom)) return true;
-	return false;
-}
-
 bool MINTCHOCO_UTIL::checkPointInRect(const floatRect& rc, const POINT & pt)
 {
 	if ((rc.left <= pt.x && pt.x <= rc.right) &&
@@ -50,24 +43,12 @@ bool MINTCHOCO_UTIL::checkPointInRect(const floatRect & rc, float x, float y)
 	return false;
 }
 
-bool MINTCHOCO_UTIL::checkPointInRect(const floatRect & rc, const vector2 & vector)
-{
-	if ((rc.left <= vector.x && vector.x <= rc.right) &&
-		(rc.top <= vector.y && vector.y <= rc.bottom)) return true;
-	return false;
-}
-
 bool MINTCHOCO_UTIL::checkPointInCircle(float cX, float cY, float cR, const POINT & pt)
 {
 	return false;
 }
 
 bool MINTCHOCO_UTIL::checkPointInCircle(float cX, float cY, float cR, float x, float y)
-{
-	return false;
-}
-
-bool MINTCHOCO_UTIL::checkPointInCircle(float cX, float cY, float cR, const vector2 & vector)
 {
 	return false;
 }

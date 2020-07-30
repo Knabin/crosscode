@@ -162,7 +162,6 @@
     <ClInclude Include="iEvent.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
-    <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="playGround.h" />
@@ -194,7 +193,6 @@
     <ClCompile Include="iEvent.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
-    <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="playGround.cpp" />

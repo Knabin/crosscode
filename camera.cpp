@@ -5,7 +5,7 @@
 
 
 camera::camera()
-	//: _cameraInfo(NULL)
+//: _cameraInfo(NULL)
 	: _state(CAMERASTATE::TARGET), _position(0.0f, 0.0f)
 {
 }

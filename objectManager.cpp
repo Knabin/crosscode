@@ -38,7 +38,7 @@ void objectManager::update()
 		vector<gameObject*>& objectList = iter->second;
 		for (int i = 0; i < objectList.size(); ++i)
 		{
-			if (objectList[i]->getActive())
+			if (objectList[i]->getIsActive())
 				objectList[i]->update();
 		}
 	}
@@ -52,7 +52,7 @@ void objectManager::render()
 		vector<gameObject*>& objectList = iter->second;
 		for (int i = 0; i < objectList.size(); ++i)
 		{
-			if (objectList[i]->getActive())
+			if (objectList[i]->getIsActive())
 				objectList[i]->render();
 		}
 	}

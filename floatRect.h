@@ -18,7 +18,6 @@ public:
 	float getWidth();
 	float getHeight();
 	floatPoint getCenter();
-	floatPoint getBottom();
 	floatPoint getSize();
 	void update(const float& x, const float& y, const float& width, const float& height, const pivot & pivot);
 	void move(const float& moveX, const float& moveY);
@@ -46,7 +45,7 @@ public:
 
 	const floatRect& operator=(const RECT& rc);
 };
-inline floatRect RectMakePivot(const floatPoint& position, const floatPoint& size, const pivot& pivot){
+inline floatRect RectMakePivot(const floatPoint& position, const floatPoint& size, const pivot& pivot) {
 	floatRect result;
 
 	switch (pivot)

@@ -143,7 +143,19 @@
     <ClInclude Include="effectManager.h">
       <Filter>2DGameFramework\manager</Filter>
     </ClInclude>
-    <ClInclude Include="keyAniManager.h">
+    <ClInclude Include="floatCircle.h">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="eventManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="objectManager.h">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
       <Filter>2DGameFramework\manager</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
@@ -228,7 +240,19 @@
     <ClCompile Include="effectManager.cpp">
       <Filter>2DGameFramework\manager</Filter>
     </ClCompile>
-    <ClCompile Include="keyAniManager.cpp">
+    <ClCompile Include="floatCircle.cpp">
+      <Filter>2DGameFramework\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="eventManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="objectManager.cpp">
+      <Filter>2DGameFramework\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="soundManager.cpp">
       <Filter>2DGameFramework\manager</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
