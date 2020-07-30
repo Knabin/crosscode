@@ -1,28 +1,28 @@
 #pragma once
-#include "singletonBase.h"
 #include <bitset>
-#include <list>
+
+#define KEYMAX 256
 
 using namespace std;
 
 class keyManager
 {
 public:
-	keyManager* getInstance()
+	static keyManager* getInstance()
 	{
 		static keyManager instance;
 		return &instance;
 	}
-
 private:
 	keyManager();
 	~keyManager();
 
 private:
-	list<int> _lKey;
-	list<int>::iterator _liKey;
+	bitset<KEYMAX> _keyUp;
+	bitset<KEYMAX> _keyDown;
 
 public:
+	HRESULT init();
 	void release();
 	//키를 한 번 누르면
 	bool isOnceKeyDown(int key);
@@ -32,5 +32,11 @@ public:
 	bool isStayKeyDown(int key);
 	//키가 토글되면(?) 캡스롹 생각해라
 	bool isToggleKey(int key);
+
+	bitset<KEYMAX> getKeyUp() { return _keyUp; }
+	bitset<KEYMAX> getKeyDown() { return _keyDown; }
+
+	void setKeyDown(int key, bool state) { _keyDown.set(key, state); }
+	void setKeyUp(int key, bool state) { _keyUp.set(key, state); }
 };
 

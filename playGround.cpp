@@ -14,6 +14,8 @@ playGround::~playGround()
 //초기화 함수
 HRESULT playGround::init()
 {
+	_player = new player();
+	_player->init();
 
 	return S_OK;
 }
@@ -27,6 +29,7 @@ void playGround::release()
 //연산
 void playGround::update()
 {
+	_player->update();
 }
 
 //그리기 전용

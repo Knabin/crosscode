@@ -9,7 +9,7 @@ enum class objectType : int
 class objectManager
 {
 public:
-	objectManager* getInstance()
+	static objectManager* getInstance()
 	{
 		static objectManager instance;
 		return &instance;

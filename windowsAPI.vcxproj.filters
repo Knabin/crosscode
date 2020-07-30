@@ -1,285 +1,188 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="2DGameFramework">
-      <UniqueIdentifier>{6f3d1e45-ab86-42a7-9a61-2bd45cd7872c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="playGround">
-      <UniqueIdentifier>{95982806-068a-439b-ba72-8cb93f3609f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\image">
-      <UniqueIdentifier>{2b96036b-918a-44d8-922a-e0385cb74f0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\manager">
-      <UniqueIdentifier>{c3b483bd-b726-41d5-8978-b1d36dc0854f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\gameObject">
-      <UniqueIdentifier>{995c49c0-976f-42f2-a1dd-728ce8d9670e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\utils">
-      <UniqueIdentifier>{bf8fb93e-4234-46f3-b701-83e6ede16f15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\timer">
-      <UniqueIdentifier>{2ded0684-76a9-4a87-827c-88eb9a49361c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\textData">
-      <UniqueIdentifier>{5dfad7c3-f7e8-4993-8615-2be6a85228cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\event">
-      <UniqueIdentifier>{3f5cb575-0b1a-471b-9bf9-216dc0556f64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\effect">
-      <UniqueIdentifier>{f99341ab-4a09-4f0d-b70d-94ffd3ee06b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\animation">
-      <UniqueIdentifier>{cfc012b6-836c-42ad-b7bf-b6fcab56e2da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\button">
-      <UniqueIdentifier>{f0a02868-d0db-4cf9-8aeb-c00d9801923e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\z-order">
-      <UniqueIdentifier>{7bec0302-d9c8-41ca-ba70-6bd9a3466fe8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\progressBar">
-      <UniqueIdentifier>{4e379be5-aa7a-4c9c-b324-8a25d5c827e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\camera">
-      <UniqueIdentifier>{3cada4fd-2ccb-46d8-9a79-cbae77d7c0d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="playTest">
-      <UniqueIdentifier>{f3c8e3c4-4399-43b8-89eb-406e151afac4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="playTest\player">
-      <UniqueIdentifier>{eadc69a6-6fdd-41a6-8a1c-c213b4aab677}</UniqueIdentifier>
-    <Filter Include="2DGameFramework\singletonBase">
-      <UniqueIdentifier>{fab0ad69-58ad-46bb-984d-736d10eee0f5}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="windowsAPI.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="playGround.h">
-      <Filter>playGround</Filter>
-    </ClInclude>
-    <ClInclude Include="singletonBase.h">
-      <Filter>2DGameFramework\singletonBase</Filter>
-    </ClInclude>
-    <ClInclude Include="randomFunction.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="gameNode.h">
-      <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="floatRect.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>2DGameFramework\timer</Filter>
-    </ClInclude>
-    <ClInclude Include="textData.h">
-      <Filter>2DGameFramework\textData</Filter>
-    </ClInclude>
-    <ClInclude Include="gameObject.h">
-      <Filter>2DGameFramework\gameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="collision.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="progressBar.h">
-      <Filter>2DGameFramework\progressBar</Filter>
-    </ClInclude>
-    <ClInclude Include="floatPoint.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="image.h">
-      <Filter>2DGameFramework\image</Filter>
-    </ClInclude>
-    <ClInclude Include="animation.h">
-      <Filter>2DGameFramework\animation</Filter>
-    </ClInclude>
-    <ClInclude Include="imageManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="iEvent.h">
-      <Filter>2DGameFramework\event</Filter>
-    </ClInclude>
-    <ClInclude Include="timeManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>2DGameFramework\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="commonMacroFunction.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="effect.h">
-      <Filter>2DGameFramework\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="effectManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="floatCircle.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="keyManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="eventManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="objectManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="soundManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>playTest\player</Filter>
-    <ClInclude Include="eventManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="soundManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="objectManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="floatCircle.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="vector2.h">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="keyManager.h">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="animation.cpp">
+      <Filter>2DGameFrameWork\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>2DGameFrameWork\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="iEvent.cpp">
+      <Filter>2DGameFrameWork\event</Filter>
+    </ClCompile>
+    <ClCompile Include="gameObject.cpp">
+      <Filter>2DGameFrameWork\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>2DGameFrameWork\image</Filter>
+    </ClCompile>
+    <ClCompile Include="effectManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="eventManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>2DGameFrameWork\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="floatCircle.cpp">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="floatPoint.cpp">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="floatRect.cpp">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="gameNode.cpp">
+      <Filter>2DGameFrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="imageManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="objectManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="playGround.cpp">
+      <Filter>playerTest</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBar.cpp">
+      <Filter>2DGameFrameWork\progressBar</Filter>
+    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="windowsAPI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="playGround.cpp">
-      <Filter>playGround</Filter>
+    <ClCompile Include="timeManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
     </ClCompile>
-    <ClCompile Include="gameNode.cpp">
-      <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="floatRect.cpp">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="timer.cpp">
-      <Filter>2DGameFramework\timer</Filter>
+    <ClCompile Include="soundManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
     </ClCompile>
     <ClCompile Include="textData.cpp">
-      <Filter>2DGameFramework\textData</Filter>
+      <Filter>2DGameFrameWork\textData</Filter>
     </ClCompile>
-    <ClCompile Include="gameObject.cpp">
-      <Filter>2DGameFramework\gameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="collision.cpp">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="progressBar.cpp">
-      <Filter>2DGameFramework\progressBar</Filter>
-    </ClCompile>
-    <ClCompile Include="floatPoint.cpp">
-      <Filter>2DGameFramework\utils</Filter>
+    <ClCompile Include="timer.cpp">
+      <Filter>2DGameFrameWork\timer</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="image.cpp">
-      <Filter>2DGameFramework\image</Filter>
-    </ClCompile>
-    <ClCompile Include="animation.cpp">
-      <Filter>2DGameFramework\animation</Filter>
-    </ClCompile>
-    <ClCompile Include="imageManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="iEvent.cpp">
-      <Filter>2DGameFramework\event</Filter>
-    </ClCompile>
-    <ClCompile Include="timeManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>2DGameFramework\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="effect.cpp">
-      <Filter>2DGameFramework\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="effectManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="floatCircle.cpp">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="keyManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="eventManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="objectManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="soundManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
+      <Filter>2DGameFrameWork\utils</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
-      <Filter>playTest\player</Filter>
-    <ClCompile Include="eventManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
+      <Filter>playerTest</Filter>
     </ClCompile>
-    <ClCompile Include="soundManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
+    <ClCompile Include="playerState.cpp">
+      <Filter>playerTest</Filter>
     </ClCompile>
-    <ClCompile Include="objectManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="floatCircle.cpp">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="vector2.cpp">
-      <Filter>2DGameFramework\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="keyManager.cpp">
-      <Filter>2DGameFramework\manager</Filter>
+    <ClCompile Include="playerStateController.cpp">
+      <Filter>playerTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="windowsAPI.rc">
-      <Filter>리소스 파일</Filter>
-    </ResourceCompile>
+    <ClInclude Include="animation.h">
+      <Filter>2DGameFrameWork\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>2DGameFrameWork\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="iEvent.h">
+      <Filter>2DGameFrameWork\event</Filter>
+    </ClInclude>
+    <ClInclude Include="gameObject.h">
+      <Filter>2DGameFrameWork\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>2DGameFrameWork\image</Filter>
+    </ClInclude>
+    <ClInclude Include="effectManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="eventManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>2DGameFrameWork\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="floatCircle.h">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="floatPoint.h">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="floatRect.h">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="gameNode.h">
+      <Filter>2DGameFrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="imageManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="objectManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="playGround.h">
+      <Filter>playerTest</Filter>
+    </ClInclude>
+    <ClInclude Include="progressBar.h">
+      <Filter>2DGameFrameWork\progressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="randomFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="windowsAPI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="timeManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="textData.h">
+      <Filter>2DGameFrameWork\textData</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>2DGameFrameWork\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>playerTest</Filter>
+    </ClInclude>
+    <ClInclude Include="playerState.h">
+      <Filter>playerTest</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateController.h">
+      <Filter>playerTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -288,5 +191,60 @@
     <Image Include="windowsAPI.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="2DGameFrameWork">
+      <UniqueIdentifier>{930e88a5-d4d5-4326-acff-9c68bc68bb4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\animation">
+      <UniqueIdentifier>{457e2a6e-0c8f-4f8a-9194-98d0747ca0be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\effect">
+      <UniqueIdentifier>{0d14f20d-1907-456b-8ce4-7685ee5d4de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\event">
+      <UniqueIdentifier>{fa6add39-0b6f-4386-9a71-1bd90edcbfd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\gameObject">
+      <UniqueIdentifier>{0ae581a6-d01d-48e9-a1b2-c5a14ab5380a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\image">
+      <UniqueIdentifier>{28d80357-beda-41d0-9df2-3df0198e5556}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\manager">
+      <UniqueIdentifier>{21208871-8b7a-44a5-89d7-7c7ff52891c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\camera">
+      <UniqueIdentifier>{42cf5099-0f01-4eca-99fa-d777590fbc70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\utils">
+      <UniqueIdentifier>{c0069a8f-4476-431c-903d-bb69b60236cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{cdc30139-2dfb-429c-8a4a-03094b36e42d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{4586dff2-50cf-454f-87f2-6e9f28a202e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playerTest">
+      <UniqueIdentifier>{61d0858b-2ce5-41c2-bf94-7b121375b8fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\progressBar">
+      <UniqueIdentifier>{4e40cc42-ee15-4a77-98e1-a4d36296b302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{bf693f75-2c83-49ba-9638-d82a6203b9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\textData">
+      <UniqueIdentifier>{7a66c115-dd3a-484b-829d-06a991453af0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\timer">
+      <UniqueIdentifier>{2fc2d90c-84d8-4bdc-80ae-a63892c21077}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="windowsAPI.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

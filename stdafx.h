@@ -17,6 +17,8 @@
 #include <map>
 #include <queue>
 
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+
 using namespace std;
 
 enum class pivot : int
