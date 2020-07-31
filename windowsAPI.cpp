@@ -36,7 +36,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
 
 	RegisterClass(&wndClass);
-
 	_hWnd = CreateWindow(
 		WINNAME,
 		WINNAME,
@@ -50,6 +49,22 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		hInstance,
 		NULL
 	);
+	/*_hWnd = CreateWindowEx(
+		WS_EX_APPWINDOW,
+		WINNAME,
+		WINNAME,
+		WS_POPUP,
+		0,
+		0,
+		GetSystemMetrics(SM_CXSCREEN),
+		GetSystemMetrics(SM_CYSCREEN),
+		NULL,
+		(HMENU)NULL,
+		hInstance,
+		NULL
+	);*/
+
+	setWindowsSize(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CXSCREEN));
 
 	setWindowsSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
 

@@ -53,8 +53,8 @@ using namespace UTIL;
 #define WINNAME (LPCTSTR)(TEXT("프레임워크 테스트"))
 #define WINSTARTX	200
 #define WINSTARTY	50
-#define WINSIZEX	1024		
-#define WINSIZEY	768
+#define WINSIZEX	GetSystemMetrics(SM_CXSCREEN)		
+#define WINSIZEY	GetSystemMetrics(SM_CYSCREEN)
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 
 #define RND randomFunction::getInstance()

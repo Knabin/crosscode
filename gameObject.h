@@ -1,5 +1,7 @@
 #pragma once
-class gameObject
+#include "gameNode.h"
+
+class gameObject : public gameNode
 {
 protected:
 	string _name;		// 오브젝트 이름
@@ -9,7 +11,6 @@ protected:
 	float _height;		// 오브젝트 세로 크기
 	floatRect _rc;		// 오브젝트 RECT(float type)
 	bool _isActive;		// 오브젝트 활성화 여부
-	bool _isAlive;		// 오브젝트 살아 있는지
 	pivot _pivot;		// 오브젝트 RECT 기준(pivot)
 
 public:
@@ -17,11 +18,6 @@ public:
 	gameObject(float x, float y);
 	gameObject(const string& name, const float& x, const float& y, const float& width, const float& height, const pivot& pivot);
 	virtual ~gameObject();
-
-	virtual void init() = 0;
-	virtual void release() = 0;
-	virtual void update() = 0;
-	virtual void render() = 0;
 
 
 	// =========================================================
@@ -50,8 +46,5 @@ public:
 
 	void setIsActive(bool isActive) { _isActive = isActive; }
 	bool getIsActive() const { return _isActive; }
-
-	void setIsAlive(bool isAlive) { _isAlive = isAlive; }
-	bool getIsAlive() const { return _isAlive; }
 };
 

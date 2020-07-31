@@ -7,7 +7,7 @@ private:
 	playerState* _state;
 
 public:
-	playerStateController(playerState* defaultState);
+	playerStateController(playerState * defaultState);
 
 	void updateState();
 	void setState(playerState* state);

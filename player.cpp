@@ -11,6 +11,8 @@ player::player()
 	_vState.push_back(move);
 	_vState.push_back(jump);
 
+	_isActive = true;
+
 	_state = new playerStateController(idle);
 }
 
@@ -18,8 +20,11 @@ player::~player()
 {
 }
 
-void player::init()
+HRESULT player::init()
 {
+	_image = IMAGEMANAGER->addFrameImage("p", "playertest.bmp", 1536, 1824, 16, 19, true, RGB(255, 0, 255));
+
+	return S_OK;
 }
 
 void player::release()

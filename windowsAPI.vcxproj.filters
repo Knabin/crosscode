@@ -49,9 +49,6 @@
     <ClCompile Include="objectManager.cpp">
       <Filter>2DGameFrameWork\manager</Filter>
     </ClCompile>
-    <ClCompile Include="playGround.cpp">
-      <Filter>playerTest</Filter>
-    </ClCompile>
     <ClCompile Include="progressBar.cpp">
       <Filter>2DGameFrameWork\progressBar</Filter>
     </ClCompile>
@@ -84,6 +81,45 @@
     </ClCompile>
     <ClCompile Include="playerStateController.cpp">
       <Filter>playerTest</Filter>
+    </ClCompile>
+    <ClCompile Include="playGround.cpp">
+      <Filter>playGround</Filter>
+    </ClCompile>
+    <ClCompile Include="inventory.cpp">
+      <Filter>playGround\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyManager.cpp">
+      <Filter>playGround\enemyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="uiController.cpp">
+      <Filter>playGround\uiController</Filter>
+    </ClCompile>
+    <ClCompile Include="collisionManager.cpp">
+      <Filter>playGround\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="aStar.cpp">
+      <Filter>playGround\enemyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="titleScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="mapToolScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="tile.cpp">
+      <Filter>2DGameFrameWork\maptool</Filter>
+    </ClCompile>
+    <ClCompile Include="mapObject.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="uiObject.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>playGround\item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +174,6 @@
     <ClInclude Include="objectManager.h">
       <Filter>2DGameFrameWork\manager</Filter>
     </ClInclude>
-    <ClInclude Include="playGround.h">
-      <Filter>playerTest</Filter>
-    </ClInclude>
     <ClInclude Include="progressBar.h">
       <Filter>2DGameFrameWork\progressBar</Filter>
     </ClInclude>
@@ -182,6 +215,45 @@
     </ClInclude>
     <ClInclude Include="playerStateController.h">
       <Filter>playerTest</Filter>
+    </ClInclude>
+    <ClInclude Include="playGround.h">
+      <Filter>playGround</Filter>
+    </ClInclude>
+    <ClInclude Include="inventory.h">
+      <Filter>playGround\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyManager.h">
+      <Filter>playGround\enemyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="uiController.h">
+      <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionManager.h">
+      <Filter>playGround\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="aStar.h">
+      <Filter>playGround\enemyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="titleScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="mapToolScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="tile.h">
+      <Filter>2DGameFrameWork\maptool</Filter>
+    </ClInclude>
+    <ClInclude Include="mapObject.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="uiObject.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>playGround\item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -240,6 +312,33 @@
     </Filter>
     <Filter Include="2DGameFrameWork\timer">
       <UniqueIdentifier>{2fc2d90c-84d8-4bdc-80ae-a63892c21077}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround">
+      <UniqueIdentifier>{340ae8e1-4f9a-4df3-8330-b6e7aa2426c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\inventory">
+      <UniqueIdentifier>{c5dd4662-8100-4b0f-9105-c57c72faa4de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\enemyManager">
+      <UniqueIdentifier>{fe1280d4-3967-4ed5-a013-1ef152262ce8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\uiController">
+      <UniqueIdentifier>{eb69577f-f4e5-43fe-91c7-b5416b1bfe96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\collision">
+      <UniqueIdentifier>{1d2d9d55-33ad-4ea1-8593-9afacbe8a7e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\scene">
+      <UniqueIdentifier>{45cd19d1-ccea-408a-a400-cd4ac57f4343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\maptool">
+      <UniqueIdentifier>{6aa0e5b8-b6e6-421f-9cff-fefac26f95a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\object">
+      <UniqueIdentifier>{88fb07dc-f645-417f-855e-a8c992828645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\item">
+      <UniqueIdentifier>{329300ac-9946-43f9-89da-1a2bf29075a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

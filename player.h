@@ -19,16 +19,19 @@ enum PLAYERSTATE : int
 class player : public gameObject
 {
 private:
+	image* _image;
+	animation* _ani;
+
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
 	
-	vector<playerState*>						_vState;
+	vector<playerState*>	_vState;
 
 public:
 	player();
 	virtual ~player();
 
-	void init() override;
+	HRESULT init() override;
 	void release() override;
 	void update() override;
 	void render() override;
