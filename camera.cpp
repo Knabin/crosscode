@@ -5,9 +5,10 @@
 
 
 camera::camera()
-//: _cameraInfo(NULL)
-	: _state(CAMERASTATE::TARGET), _position(0.0f, 0.0f)
+	: _state(CAMERASTATE::NONE), _position(0.0f, 0.0f)
 {
+	_mapWidth = WINSIZEX;
+	_mapHeight = WINSIZEY;
 }
 
 camera::~camera()
@@ -20,8 +21,7 @@ void camera::update()
 	switch (_state)
 	{
 	case camera::CAMERASTATE::TARGET:
-		break;
-	case camera::CAMERASTATE::MOUSE:
+		moveToTarget();
 		break;
 	case camera::CAMERASTATE::END:
 		break;
@@ -35,81 +35,44 @@ void camera::release()
 
 }
 
-float camera::lerpX(float deltaTime)
+void camera::moveToTarget()
 {
-	//return _x + (_target->getX() - _x) * deltaTime;
-	return 0.0f;
+	if (_target == NULL) return;
+	
+	floatPoint position = _position;
+	float length = getDistance(_target->getPosition().x, _target->getPosition().y, _position.x, _position.y);
+	float angle = getAngle(_position.x, _position.y, _target->getPosition().x, _target->getPosition().y);
+	if (length > 50.0f)
+	{
+		// TODO: 카메라 선형 보간 필요
+		_speed = 300.0f;
+		position.x += cosf(angle) * _speed * TIMEMANAGER->getElapsedTime();
+		position.y -= sinf(angle) * _speed * TIMEMANAGER->getElapsedTime();
+
+		_position = position;
+		_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
+	}
+	else
+	{
+		_position = position;
+		_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
+	}
+
+	if (_rc.left < 0.0f)
+		_position.x -= _rc.left;
+	else if (_rc.right > _mapWidth)
+		_position.x -= _rc.right - _mapWidth;
+	
+	if (_rc.top < 0.0f)
+		_position.y -= _rc.top;
+	else if (_rc.bottom > _mapHeight)
+		_position.y -= _rc.bottom - _mapHeight;
+
+	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
 }
 
-float camera::lerpY(float deltaTime)
+void camera::changeTarget(gameObject* gameObject)
 {
-	return 0.0f;
+	_target = gameObject;
+	_state = CAMERASTATE::TARGET;
 }
-
-void camera::changeTarget(gameObject * gameObject)
-{
-}
-
-//
-//bool camera::checkCameraX()
-//{
-//	if (_cameraInfo->x - _cameraInfo->width / 2 <= 0 ||
-//		_cameraInfo->x + _cameraInfo->width / 2 >= _cameraInfo->backWidth)
-//		return false;
-//	return true;
-//}
-//
-//bool camera::checkCameraY()
-//{
-//	if (_cameraInfo->y - _cameraInfo->height / 2 <= 0 ||
-//		_cameraInfo->y + _cameraInfo->height / 2 >= _cameraInfo->backHeight)
-//		return false;
-//	return true;
-//}
-//
-//
-//void camera::cameraShake()
-//{
-//	_isShaking = true;
-//	_shakeAmount = 2.0f;
-//	_shakeCount = 0;
-//}
-//
-//void camera::shakeStart()
-//{
-//	if (_isShaking)
-//	{
-//		++_shakeCount;
-//		if (_shakeCount > 10)
-//		{
-//			_shakeCount = 0;
-//			_shakeAmount = 0;
-//			_isShaking = false;
-//		}
-//		else
-//		{
-//			_flag *= -1;
-//		}
-//	}
-//
-//}
-//
-//void camera::cameraFixed(float x, float y)
-//{
-//}
-//
-//void camera::FixedStart()
-//{
-//}
-//
-//void camera::changePosition(float x, float y)
-//{
-//	int d = getDistance(x, y, _cameraInfo->x, _cameraInfo->y);
-//	float angle = getAngle(_cameraInfo->x, _cameraInfo->y, x, y);
-//
-//	if (d > 50)
-//	{
-//		_cameraInfo->x += cosf(angle) * 5;
-//		_cameraInfo->y -= sinf(angle) * 5;
-//	}
-//}

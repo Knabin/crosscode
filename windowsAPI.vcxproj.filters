@@ -121,6 +121,15 @@
     <ClCompile Include="item.cpp">
       <Filter>playGround\item</Filter>
     </ClCompile>
+    <ClCompile Include="sceneManager.cpp">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>2DGameFrameWork\button</Filter>
+    </ClCompile>
+    <ClCompile Include="testScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -255,6 +264,15 @@
     <ClInclude Include="item.h">
       <Filter>playGround\item</Filter>
     </ClInclude>
+    <ClInclude Include="sceneManager.h">
+      <Filter>2DGameFrameWork\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="button.h">
+      <Filter>2DGameFrameWork\button</Filter>
+    </ClInclude>
+    <ClInclude Include="testScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -339,6 +357,9 @@
     </Filter>
     <Filter Include="playGround\item">
       <UniqueIdentifier>{329300ac-9946-43f9-89da-1a2bf29075a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\button">
+      <UniqueIdentifier>{595d1619-7bb7-4375-9212-4bf6941f9537}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

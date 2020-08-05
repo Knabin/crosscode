@@ -4,8 +4,8 @@ class camera
 public:
 	enum class CAMERASTATE : int
 	{
-		TARGET,
-		MOUSE,		// 맵툴용?
+		NONE,		// 고정 카메라
+		TARGET,		// 타겟팅 카메라
 		END,
 	};
 
@@ -19,86 +19,46 @@ private:
 	~camera();
 
 private:
-	CAMERASTATE _state;
-	RECT _rc;
-	floatPoint _position;
-	float _width;
-	float _height;
-	float _mapWidth;
-	float _mapHeight;
-	float _speed;
+	CAMERASTATE _state;		// 현재 카메라의 상태
+	RECT _rc;				// 현재 카메라의 RECT
+	floatPoint _position;	// 카메라의 중점
+	float _width;			// 카메라의 가로 길이
+	float _height;			// 카메라의 세로 길이
+	float _mapWidth;		// 백버퍼의 가로 길이
+	float _mapHeight;		// 백버퍼의 세로 길이
+	float _speed;			// 카메라 이동 속도
 
+	// 이벤트용 변수(미구현)
 	float _moveTime;
 	float _stopTime;
 	float _worldTime;
-	float _worldTime2;
 
+	// 카메라 셰이크용 변수(미구현)
 	bool _isShake;
 	float _shakeAmount;
 	float _shakeTime;
 	float _shakeNowTime;
 
+	// 카메라 줌용 변수(미구현)
 	bool _isZoom;
 	float _zoomAmount;
 	float _zoomTime;
 
-	class gameObject* _target;
+	class gameObject* _target;	// 타겟팅될 게임 오브젝트
 
 public:
 	void update();
 	void release();
 
-	float lerpX(float deltaTime);
-	float lerpY(float deltaTime);
+	void moveToTarget();
 
+	// 타겟팅될 게임 오브젝트 변경
 	void changeTarget(class gameObject* gameObject);
 
-	//bool checkCameraX();
-	//bool checkCameraY();
+	float getMapWidth() { return _mapWidth; }
+	float getMapHeight() { return _mapHeight; }
+	void setMapSize(float mapWidth, float mapHeight) { _mapWidth = mapWidth; _mapHeight = mapHeight; }
 
-	//void cameraShake();
-	//void shakeStart();
-
-	//void cameraFixed(float x, float y);
-	//void FixedStart();
-
-	//void changePosition(float x, float y);
-
-	//inline float getShakeNumber() { return _shakeAmount * _flag; }
-
-	//inline void setPosition(float x, float y) { _cameraInfo->x = x; _cameraInfo->y = y; }
-
-	//inline void setX(int x) { _cameraInfo->x = x; }
-	//inline float getX() { return _cameraInfo->x; }
-
-	//inline void setY(int y) { _cameraInfo->y = y; }
-	//inline float getY() { return _cameraInfo->y; }
-
-	//inline void setBlackSize(int size) { _cameraInfo->blackSize = size; }
-	//inline int getBlackSize() { return _cameraInfo->blackSize; }
-
-	//inline void setWidth(int width) { _cameraInfo->width = width; }
-	//inline int getWidth() { return _cameraInfo->width; }
-
-	//inline void setHeight(int height) { _cameraInfo->height = height; }
-	//inline int getHeight() { return _cameraInfo->height; }
-
-	//inline void setBackWidth(int width) { _cameraInfo->backWidth = width; }
-	//inline void setBackHeight(int height) { _cameraInfo->backHeight = height; }
-
-	//inline int getLeft() {
-	//	if (!checkCameraX()) return (_cameraInfo->x <= _cameraInfo->backWidth / 2) ? 0 : _cameraInfo->backWidth - _cameraInfo->width;
-	//	return _cameraInfo->x - _cameraInfo->width / 2;
-	//}
-	//inline int getTop() {
-	//	if (!checkCameraY()) return (_cameraInfo->y <= _cameraInfo->backHeight / 2) ? 0 : _cameraInfo->backHeight - _cameraInfo->height;
-	//	return _cameraInfo->y - _cameraInfo->height / 2;
-	//}
-
-	//inline void setIsShaking(bool isShaking) { _isShaking = isShaking; _shakeAmount = _isShaking ? 6.0f : 0; }
-	//inline bool getIsShaking() { return _isShaking; }
-
-	//inline RECT getRect() { return RectMakeCenter(_cameraInfo->x, _cameraInfo->y, _cameraInfo->width, _cameraInfo->height); }
-
+	RECT& getRect() { return _rc; }
 };
 

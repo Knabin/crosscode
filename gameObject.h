@@ -10,14 +10,17 @@ protected:
 	float _width;		// 오브젝트 가로 크기
 	float _height;		// 오브젝트 세로 크기
 	floatRect _rc;		// 오브젝트 RECT(float type)
-	bool _isActive;		// 오브젝트 활성화 여부
+	bool _isActive;		// 오브젝트 활성화 여부, 화면에 표시할 것인지
 	pivot _pivot;		// 오브젝트 RECT 기준(pivot)
 
 public:
 	gameObject();
 	gameObject(float x, float y);
+	// 생성자 (오브젝트 이름, x, y, 가로 길이, 세로 길이, 기준점(pivot:: 치면 나옴))
 	gameObject(const string& name, const float& x, const float& y, const float& width, const float& height, const pivot& pivot);
 	virtual ~gameObject();
+	// 오브젝트를 절대 좌표 기준으로 출력하기 위한 함수
+	virtual void renderRelative(float x, float y) {};
 
 
 	// =========================================================
@@ -42,7 +45,7 @@ public:
 	float getHeight() const { return _height; }
 
 	void setRect(floatRect rect) { _rc = rect; }
-	floatRect getRect() const { return _rc; }
+	floatRect& getRect() { return _rc; }
 
 	void setIsActive(bool isActive) { _isActive = isActive; }
 	bool getIsActive() const { return _isActive; }

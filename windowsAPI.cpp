@@ -36,20 +36,20 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
 
 	RegisterClass(&wndClass);
-	_hWnd = CreateWindow(
-		WINNAME,
-		WINNAME,
-		WS_OVERLAPPEDWINDOW,
-		WINSTARTX,
-		WINSTARTY,
-		WINSIZEX,
-		WINSIZEY,
-		NULL,
-		(HMENU)NULL,
-		hInstance,
-		NULL
-	);
-	/*_hWnd = CreateWindowEx(
+	//_hWnd = CreateWindow(
+	//	WINNAME,
+	//	WINNAME,
+	//	WS_OVERLAPPEDWINDOW,
+	//	WINSTARTX,
+	//	WINSTARTY,
+	//	WINSIZEX,
+	//	WINSIZEY,
+	//	NULL,
+	//	(HMENU)NULL,
+	//	hInstance,
+	//	NULL
+	//);
+	_hWnd = CreateWindowEx(
 		WS_EX_APPWINDOW,
 		WINNAME,
 		WINNAME,
@@ -62,11 +62,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		(HMENU)NULL,
 		hInstance,
 		NULL
-	);*/
+	);
 
 	setWindowsSize(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CXSCREEN));
-
-	setWindowsSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
 
 	ShowWindow(_hWnd, cmdShow);
 
@@ -75,14 +73,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	{
 		return 0;
 	}
-
-	/* 애는 나중에 맵툴 & 라디오버튼으로 만들때 씁니다
-	while (GetMessage(&message, 0, 0, 0))
-	{
-		TranslateMessage(&message);
-		DispatchMessage(&message);
-	}
-	*/
 
 	while (true)
 	{
@@ -95,7 +85,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		else
 		{
 			//우선 60프레임으로 둔다
-			//TIMEMANAGER->update(60);
+			//TIMEMANAGER->set(60);
 			_pg.update();
 			_pg.render();
 		}

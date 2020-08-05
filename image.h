@@ -118,6 +118,9 @@ public:
 	//프레임 알파렌더(뿌려질DC, 그려질 좌표(left), 그려질 좌표(top), 현재 프레임 가로번호, 현재 프레임 세로번호, 알파값(0 ~ 255))
 	void alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha);
 
+	void alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, int size, BYTE alpha);
+	BOOL StretchBlt(HDC hdcDest, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest, HDC hdcSrc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, DWORD dwRop);
+
 	void alphaRedRender(HDC hdc, BYTE alpha);
 	void alphaRedRender(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight, BYTE alpha);
 

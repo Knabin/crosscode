@@ -36,20 +36,20 @@ void timeManager::render(HDC hdc)
 	char str[256];
 	string frameRate;
 
-	SetTextColor(hdc, RGB(255, 255, 255));
+	SetTextColor(hdc, RGB(0, 0, 0));
 	SetBkMode(hdc, TRANSPARENT);
 
 
 #ifdef _DEBUG
 	{
 		sprintf_s(str, "framePerSecond(FPS) : %d", _timer->getFrameRate());
-		TextOut(hdc, 0, 0, str, strlen(str));
+		TextOut(hdc, CAMERA->getRect().left, CAMERA->getRect().top, str, strlen(str));
 
 		sprintf_s(str, "worldTime : %f", _timer->getWorldTime());
-		TextOut(hdc, 0, 20, str, strlen(str));
+		TextOut(hdc, CAMERA->getRect().left, CAMERA->getRect().top + 20, str, strlen(str));
 
 		sprintf_s(str, "elapsedTime : %f", _timer->getElapsedTime());
-		TextOut(hdc, 0, 40, str, strlen(str));
+		TextOut(hdc, CAMERA->getRect().left, CAMERA->getRect().top + 40, str, strlen(str));
 
 	}
 #else

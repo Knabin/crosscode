@@ -51,8 +51,14 @@ floatPoint floatRect::getSize()
 	return floatPoint((right - left), (bottom - top));
 }
 
-void floatRect::update(const float & x, const float & y, const float & width, const float & height, const pivot & pivot)
-{}
+void floatRect::set(const float & x, const float & y, const float & width, const float & height)
+{
+	left = x - width * 0.5f;
+	top = y - height * 0.5f;
+	right = left + width;
+	bottom = top + height;
+}
+
 void floatRect::setLeftTop(float _left, float _top)
 {
 	float w = getWidth();

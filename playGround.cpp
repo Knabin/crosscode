@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "playGround.h"
+#include "titleScene.h"
+#include "mapToolScene.h"
+#include "testScene.h"
 
 
 playGround::playGround()
@@ -14,12 +17,20 @@ playGround::~playGround()
 //초기화 함수
 HRESULT playGround::init()
 {
-	gameNode::init();
+	gameNode::init(true);
 
 	_player = new player();
 	_player->init();
-	_player->setIsActive(true);
+	_player->setIsActive(false);
 	OBJECTMANAGER->addObject(objectType::Player, _player);
+
+	_ui = new uiController();
+	_ui->init();
+
+	SCENEMANAGER->addScene("title", new titleScene());
+	SCENEMANAGER->addScene("maptool", new mapToolScene());
+	SCENEMANAGER->addScene("test", new testScene());
+	SCENEMANAGER->loadScene("title");
 
 	return S_OK;
 }
@@ -33,7 +44,11 @@ void playGround::release()
 //연산
 void playGround::update()
 {
+	SCENEMANAGER->update();
+	TIMEMANAGER->update();
 	OBJECTMANAGER->update();
+	CAMERA->update();
+	_ui->update();
 }
 
 //그리기 전용
@@ -41,9 +56,14 @@ void playGround::render()
 {	
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//=================================================
-
+	Rectangle(getMemDC(), CAMERA->getRect());
+	SCENEMANAGER->render();
 	OBJECTMANAGER->render();
+	TIMEMANAGER->render(getMemDC());
+	_ui->render();
+
 
 	//=============================================
-	_backBuffer->render(getHDC(), 0, 0);
+	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);
+	//_backBuffer->render(getHDC(), 0, 0);
 }

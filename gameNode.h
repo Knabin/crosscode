@@ -1,7 +1,7 @@
 #pragma once
 #include "image.h"
 
-static image* _backBuffer = imageManager::getInstance()->addImage("backBuffer", WINSIZEX, WINSIZEY);
+static image* _backBuffer = imageManager::getInstance()->addImage("backBuffer", 9600, 9600);
 
 
 class gameNode

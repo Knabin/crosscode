@@ -19,7 +19,9 @@ public:
 	float getHeight();
 	floatPoint getCenter();
 	floatPoint getSize();
-	void update(const float& x, const float& y, const float& width, const float& height, const pivot & pivot);
+	
+	// floatRect 만드는 함수 (center x, center y, 가로 길이, 세로 길이)
+	void set(const float& x, const float& y, const float& width, const float& height);
 	void move(const float& moveX, const float& moveY);
 
 	void setLeftTop(float left, float top);
@@ -32,6 +34,15 @@ public:
 			FLOAT_TO_INT(top),
 			FLOAT_TO_INT(right),
 			FLOAT_TO_INT(bottom));
+	}
+
+	void render(HDC hdc, int x, int y)
+	{
+		Rectangle(hdc,
+			FLOAT_TO_INT(left) + x,
+			FLOAT_TO_INT(top) + y,
+			FLOAT_TO_INT(right) + x,
+			FLOAT_TO_INT(bottom) + y);
 	}
 
 	void renderCircle(HDC hdc)

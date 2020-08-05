@@ -135,7 +135,7 @@ typedef struct FMOD_DSP_DESCRIPTION
     FMOD_DSP_RELEASECALLBACK     release;            /* [w] Release callback.  This is called just before the unit is freed so the user can do any cleanup needed for the unit.  Can be null. */
     FMOD_DSP_RESETCALLBACK       reset;              /* [w] Reset callback.  This is called by the user to reset any history buffers that may need resetting for a filter, when it is to be used or re-used for the first time to its initial clean state.  Use to avoid clicks or artifacts. */
     FMOD_DSP_READCALLBACK        read;               /* [w] Read callback.  Processing is done here.  Can be null. */
-    FMOD_DSP_SETPOSITIONCALLBACK setposition;        /* [w] Set position callback.  This is called if the unit wants to update its position info but not process data, or reset a cursor position internally if it is reading data from a certain source.  Can be null. */
+    FMOD_DSP_SETPOSITIONCALLBACK setposition;        /* [w] Set position callback.  This is called if the unit wants to set its position info but not process data, or reset a cursor position internally if it is reading data from a certain source.  Can be null. */
 
     int                          numparameters;      /* [w] Number of parameters used in this filter.  The user finds this with DSP::getNumParameters */
     FMOD_DSP_PARAMETERDESC      *paramdesc;          /* [w] Variable number of parameter structures. */

@@ -28,7 +28,13 @@ HRESULT gameNode::init(bool managerInit)
 
 	if (_managerInit)
 	{
-		//	SetTimer(_hWnd, 1, 10, NULL);
+		//SetTimer(_hWnd, 1, 10, NULL);
+		IMAGEMANAGER->init();
+		TIMEMANAGER->init();
+		KEYMANAGER->init();
+		EFFECTMANAGER->init();
+		TEXTDATA->init();
+		SCENEMANAGER->init();
 
 	}
 
@@ -41,8 +47,13 @@ void gameNode::release()
 	if (_managerInit)
 	{
 		//	KillTimer(_hWnd, 1);
-
-
+		IMAGEMANAGER->release();
+		TIMEMANAGER->release();
+		KEYMANAGER->release();
+		EFFECTMANAGER->release();
+		OBJECTMANAGER->release();
+		TEXTDATA->release();
+		SCENEMANAGER->release();
 	}
 
 	ReleaseDC(_hWnd, _hdc);
@@ -87,7 +98,6 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		}
 	}
 	break;
-
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;

@@ -4,8 +4,14 @@
 
 enum class PLAYERDIRECTION : int
 {
+	TOP,
+	LEFT_TOP,
 	LEFT,
-	RIGHT
+	LEFT_BOTTOM,
+	BOTTOM,
+	RIGHT_BOTTOM,
+	RIGHT,
+	RIGHT_TOP,
 };
 
 enum PLAYERSTATE : int
@@ -38,5 +44,12 @@ public:
 
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
+
+	void setImage(image* image) { _image = image; }
+	void setAnimation(animation* ani) { _ani = ani; }
+
+	animation* getAnimation() { return _ani; }
+
+	PLAYERDIRECTION getDirection() { return _direction; }
 };
 

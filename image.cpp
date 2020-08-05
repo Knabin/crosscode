@@ -661,6 +661,49 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, i
 
 }
 
+void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, int size, BYTE alpha)
+{
+	_blendFunc.SourceConstantAlpha = alpha;
+	_imageInfo->currentFrameX = currentFrameX;
+	_imageInfo->currentFrameY = currentFrameY;
+
+	if (_trans)
+	{
+		BitBlt(_blendImage->hMemDC, 0, 0, _imageInfo->frameWidth, _imageInfo->frameHeight,
+			hdc, destX, destY, SRCCOPY);
+
+		GdiTransparentBlt(_blendImage->hMemDC, 0, 0,	// 출력할 DC, 출력할 위치
+			_imageInfo->frameWidth,		// 출력할 길이
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,			// 가져올 DC
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,	// 가져올 위치
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,		// 가져올 크기
+			_imageInfo->frameHeight,
+			_transColor);
+
+		AlphaBlend(hdc, destX, destY,	// 출력할 dc, 출력할 위치
+			_imageInfo->frameWidth,		// 출력할 이미지 크기
+			_imageInfo->frameHeight,
+			_blendImage->hMemDC,		// 가져올 dc
+			0, 0,						// 가져올 위치 x,y
+			_imageInfo->frameWidth,		// 가져올 크기
+			_imageInfo->frameHeight,
+			_blendFunc);
+	}
+	else
+	{
+		AlphaBlend(hdc, destX, destY,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight, _blendFunc);
+	}
+}
+
 void image::alphaRedRender(HDC hdc, BYTE alpha)
 {
 	_blendFunc.SourceConstantAlpha = alpha;

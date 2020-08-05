@@ -16,6 +16,7 @@
 #include <vector>
 #include <map>
 #include <queue>
+#include <functional>
 
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
@@ -41,6 +42,8 @@ enum class pivot : int
 #include "objectManager.h"
 //#include "soundManager.h"
 #include "textData.h"
+#include "sceneManager.h"
+#include "camera.h"
 
 using namespace UTIL;
 
@@ -65,6 +68,8 @@ using namespace UTIL;
 #define EVENTMANAGER eventManager::getInstance()
 #define OBJECTMANAGER objectManager::getInstance()
 #define TEXTDATA textData::getInstance()
+#define SCENEMANAGER sceneManager::getInstance()
+#define CAMERA camera::getInstance()
 
 #define SAFE_DELETE(p)		{if(p) {delete(p); (p) = NULL;}}
 #define SAFE_RELEASE(p)		{if(p) {(p)->release(); (p) = NULL;}}
