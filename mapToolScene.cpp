@@ -15,13 +15,16 @@ HRESULT mapToolScene::init()
 
 	_isStayKeyDown = false;
 
+	_tileViewRc.set(0, 0, 18 * SIZE, 18 * SIZE);
+	_tileViewRc.setLeftTop(50, 150);
+
 	for (int i = 0; i < MAXNUMY; ++i)
 	{
 		vector<tile *> v;
 		for (int j = 0; j < MAXNUMX; ++j)
 		{
 			tile * t = new tile();
-			t->setTileRc(j * SIZE, i * SIZE);
+			t->setTileRc(_tileViewRc.left + j * SIZE, _tileViewRc.top + i * SIZE);
 			v.push_back(t);
 		}
 		_vTiles.push_back(v);
@@ -33,7 +36,7 @@ HRESULT mapToolScene::init()
 	_cameraControl->setY(WINSIZEY / 2);
 
 	CAMERA->changeTarget(_cameraControl);
-	CAMERA->setMapSize(SIZE * MAXNUMX, SIZE * MAXNUMY);
+	CAMERA->setMapSize(SIZE * MAXNUMX + _tileViewRc.left, SIZE * MAXNUMY + _tileViewRc.top);
 
 	IMAGEMANAGER->addFrameImage("saveload", "images/buttons_saveload.bmp", 132, 126, 1, 2, false, RGB(0, 0, 0));
 	IMAGEMANAGER->addFrameImage("edit", "images/buttons_edit.bmp", 72, 269, 1, 1, true, RGB(255, 0, 255));
@@ -82,6 +85,7 @@ HRESULT mapToolScene::init()
 		}
 	}
 
+
 	return S_OK;
 }
 
@@ -96,19 +100,20 @@ void mapToolScene::update()
 
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT) || _ptMouse.x < 100)
 	{
-		_cameraControl->move(-3.f, 0);
+		//_cameraControl->move(-3.f, 0);
+		
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) || (_ptMouse.x > WINSIZEX - 100 && !PtInRect(&_editUi->getSampleRc().getRect(), _ptMouse)))
 	{
-		_cameraControl->move(3.f, 0);
+		//_cameraControl->move(3.f, 0);
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_UP) || _ptMouse.y < 100)
 	{
-		_cameraControl->move(0, -3.f);
+		//_cameraControl->move(0, -3.f);
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN) || _ptMouse.y > WINSIZEY - 100)
 	{
-		_cameraControl->move(0, 3.f);
+		//_cameraControl->move(0, 3.f);
 	}
 
 	switch (_mode)
@@ -127,12 +132,12 @@ void mapToolScene::update()
 		// 맵 사이즈 변경 모드에서는 꾹 눌러서 이동하는 대로 화면에 보여질 RECT의 개수를 결정한다.
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
-			for (int i = 0; i < _vTiles.size(); ++i)
+			for (int i = 0; i < MAXNUMY; ++i)
 			{
-				vector<tile*> v = _vTiles[i];
-				for (int j = 0; j < v.size(); ++j)
+				for (int j = 0; j < MAXNUMX; ++j)
 				{
-					if (PtInRect(&v[j]->getRect().getRect(), _ptMouseAbs))
+					if (!_vTiles[i][j]->canView()) continue;
+					if (PtInRect(&_vTiles[i][j]->getRect().getRect(), _ptMouseAbs))
 					{
 						_changeSizeX = j;
 						_changeSizeY = i;
@@ -196,6 +201,7 @@ void mapToolScene::update()
 				{
 					for (int j = 0; j <= _nowIndexX; ++j)
 					{
+						if (!_vTiles[i][j]->canView()) continue;
 						if (PtInRect(&_vTiles[i][j]->getRect().getRect(), _ptMouseAbs))
 						{
 							if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
@@ -272,9 +278,9 @@ void mapToolScene::update()
 				}
 			}
 		}
+		// 현재 상태가 타입(타일 오더) 변경일 경우
 		else if (_editUi->getEditMode() == EDITMODE::TYPE)
 		{
-			bool b = false;
 			for (int i = 0; i <= _nowIndexY; ++i)
 			{
 				for (int j = 0; j <= _nowIndexX; ++j)
@@ -285,9 +291,6 @@ void mapToolScene::update()
 						{
 							_drawStartX = _drawEndX = j;
 							_drawStartY = _drawEndY = i;
-
-							if (_sampleStartX == _sampleEndX && _sampleStartY == _sampleEndY)
-								_isStayKeyDown = true;
 						}
 						if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 						{
@@ -298,8 +301,6 @@ void mapToolScene::update()
 						{
 							_drawEndX = j;
 							_drawEndY = i;
-							_isStayKeyDown = false;
-							b = true;
 
 							if (_drawStartX > _drawEndX)
 								swap(_drawStartX, _drawEndX);
@@ -315,31 +316,9 @@ void mapToolScene::update()
 			ORDER type = _editUi->getTileType();
 			if (_editUi->getPenMode() == PENMODE::MINUS) type = ORDER::ONE;
 
-			if (_sampleStartX == _sampleEndX && _sampleStartY == _sampleStartY)
+			if (_drawStartX != -1 && _drawStartY != -1)
 			{
-				if (b)
-				{
-					for (int i = 0; i <= _drawEndY - _drawStartY; ++i)
-					{
-						for (int j = 0; j <= _drawEndX - _drawStartX; ++j)
-						{
-							_vTiles[_drawStartY + i][_drawStartX + j]->setOrder(type);
-						}
-					}
-					_isStayKeyDown = false;
-				}
-			}
-			else if (_drawStartX != -1 && _drawStartY != -1)
-			{
-				for (int i = 0; i <= _sampleEndY - _sampleStartY; ++i)
-				{
-					for (int j = 0; j <= _sampleEndX - _sampleStartX; ++j)
-					{
-						_vTiles[_drawStartY + i][_drawStartX + j]->setOrder(type);
-						if (_drawStartX + j + 1 > _nowIndexX) break;
-					}
-					if (_drawStartY + i + 1 > _nowIndexY) break;
-				}
+				_vTiles[_drawStartY][_drawStartX]->setOrder(type);
 			}
 		}
 		break;
@@ -348,6 +327,7 @@ void mapToolScene::update()
 
 void mapToolScene::render()
 {
+	_tileViewRc.render(getMemDC());
 	char str[20];
 	switch (_mode)
 	{
@@ -356,14 +336,14 @@ void mapToolScene::render()
 		{
 			for (int j = 0; j <= _nowIndexX; ++j)
 			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
-				_vTiles[i][j]->getRect().render(getMemDC());
+				if (!_vTiles[i][j]->canView(_tileViewRc)) continue;
+				
 				if (_vTiles[i][j]->getTerrainX() != -1) 
 					IMAGEMANAGER->findImage("terrain b")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+				else 
+					_vTiles[i][j]->getRect().render(getMemDC());
+				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
+				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
 			}
 		}
 		break;
@@ -375,11 +355,7 @@ void mapToolScene::render()
 		{
 			for (int j = 0; j <= _nowIndexX; ++j)
 			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
+				if (!_vTiles[i][j]->canView()) continue;
 				if (_vTiles[i][j]->getTerrainX() != -1 || _vTiles[i][j]->getTerrainY() != -1) 
 					IMAGEMANAGER->findImage("terrain b")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
 				if (PtInRect(&_vTiles[i][j]->getRect().getRect(), _ptMouseAbs))
@@ -387,6 +363,11 @@ void mapToolScene::render()
 					tempX = j;
 					tempY = i;
 				}
+				if(_editUi->getEditMode() == EDITMODE::TYPE)
+					IMAGEMANAGER->findImage("tile type")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, 0, _vTiles[i][j]->getOrderIndex());
+
+				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
+				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
 			}
 		}
 
@@ -431,22 +412,6 @@ void mapToolScene::render()
 				}
 			}
 		}
-		else if (_editUi->getEditMode() == EDITMODE::TYPE)
-		{
-			for (int i = 0; i <= _nowIndexY; ++i)
-			{
-				for (int j = 0; j <= _nowIndexX; ++j)
-				{
-					if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-						CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-						CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-						CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-						continue;
-
-					IMAGEMANAGER->findImage("tile type")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, 0, _vTiles[i][j]->getOrderIndex());
-				}
-			}
-		}
 	}
 		break;
 
@@ -458,12 +423,10 @@ void mapToolScene::render()
 		{
 			for (int j = 0; j <= _changeSizeX; ++j)
 			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
+				if (!_vTiles[i][j]->canView()) continue;
 				_vTiles[i][j]->getRect().render(getMemDC());
+				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
+				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
 			}
 		}
 
@@ -471,23 +434,8 @@ void mapToolScene::render()
 		DeleteObject(brush);
 		break;
 	}
-	if (_editUi->getEditMode() != EDITMODE::TYPE)
-	{
-		for (int i = 0; i <= _nowIndexY; ++i)
-		{
-			for (int j = 0; j <= _nowIndexX; ++j)
-			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
 
-				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
-				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
-			}
-		}
-	}
+	_cameraControl->getRect().render(getMemDC());
 }
 
 void mapToolScene::saveMap()

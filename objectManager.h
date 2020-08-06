@@ -33,6 +33,7 @@ private:
 public:
 	void release();
 	void update();
+	void update(objectType type);
 	void render();
 
 	// 오브젝트를 추가합니다. (타입(objectType:: 치면 나옴), 객체)

@@ -44,6 +44,21 @@ void objectManager::update()
 	}
 }
 
+void objectManager::update(objectType type)
+{
+	objectContainerIter iter = _mObjectContainer.find(type);
+	for (; iter != _mObjectContainer.end(); ++iter)
+	{
+		vector<gameObject*>& objectList = iter->second;
+		for (int i = 0; i < objectList.size(); ++i)
+		{
+			// 해당 오브젝트만 보여지고 있는 경우에만 update 진행합니다.
+			if (objectList[i]->getIsActive())
+				objectList[i]->update();
+		}
+	}
+}
+
 void objectManager::render()
 {
 	objectContainerIter iter = _mObjectContainer.begin();
@@ -86,13 +101,14 @@ void objectManager::removeObjectsWithoutPlayer()
 	for (; iter != _mObjectContainer.end(); ++iter)
 	{
 		if (iter->first == objectType::Player) continue;
-		vector<gameObject*>& objectList = iter->second;
-		for (int i = 0; i < objectList.size(); ++i)
+		//vector<gameObject*>& objectList = iter->second;
+		vector<gameObject*>::iterator viter = iter->second.begin();
+		for (; viter != iter->second.end(); )
 		{
-			objectList[i]->release();
-			SAFE_DELETE(objectList[i]);
+			(*viter)->release();
+			SAFE_DELETE(*viter);
+			viter = iter->second.erase(viter);
 		}
-		objectList.clear();
 	}
 }
 

@@ -151,6 +151,7 @@
     <ClInclude Include="aStar.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="CCaptureScreen.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="CCaptureScreen.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collisionManager.cpp" />
     <ClCompile Include="effect.cpp" />

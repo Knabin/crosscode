@@ -24,6 +24,7 @@ private:
 	mScenes		_mScenes;
 	miScenes	_miScenes;
 	class scene* _currentScene;
+	string _currentSceneName;
 
 public:
 	void init();
@@ -36,5 +37,6 @@ public:
 	scene* findScene(string sceneName);
 
 	scene* getCurrentScene() { return _currentScene; }
+	string getCurrentSceneName() { return _currentSceneName; }
 };
 

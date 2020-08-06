@@ -78,6 +78,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	{
 		if (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
 		{
+
 			if (message.message == WM_QUIT) break;
 			TranslateMessage(&message);
 			DispatchMessage(&message);

@@ -10,6 +10,7 @@ playGround::playGround()
 }
 
 
+
 playGround::~playGround()
 {
 }
@@ -32,6 +33,8 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("test", new testScene());
 	SCENEMANAGER->loadScene("title");
 
+	_test = false;
+
 	return S_OK;
 }
 
@@ -49,14 +52,15 @@ void playGround::update()
 	OBJECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();
+
 }
 
 //그리기 전용
 void playGround::render()
 {	
-	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
+	PatBlt(getMemDC(), 0, 0, CAMERA->getMapWidth(), CAMERA->getMapHeight(), WHITENESS);
 	//=================================================
-	Rectangle(getMemDC(), CAMERA->getRect());
+	//Rectangle(getMemDC(), CAMERA->getRect());
 	SCENEMANAGER->render();
 	OBJECTMANAGER->render();
 	TIMEMANAGER->render(getMemDC());
@@ -65,5 +69,4 @@ void playGround::render()
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);
-	//_backBuffer->render(getHDC(), 0, 0);
 }

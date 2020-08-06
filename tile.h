@@ -34,6 +34,23 @@ public:
 
 	void setTiles(int terX, int terY, int objX, int objY, int order);
 
+	bool canView() {
+		if (CAMERA->getRect().left < _rc.right &&
+			CAMERA->getRect().right > _rc.left &&
+			CAMERA->getRect().top < _rc.bottom &&
+			CAMERA->getRect().bottom > _rc.top) return true;
+		return false;
+	}
+
+	bool canView(floatRect rc)
+	{
+		if (rc.left < _rc.right && rc.right > _rc.left &&
+			rc.top < _rc.bottom && rc.bottom > _rc.top) return true;
+		return false;
+	}
+
+	// ======== getter / setter ========
+
 	int getTerrainX() { return _terrainX; }
 	void setTerrainX(int x) { _terrainX = x; }
 
@@ -47,5 +64,7 @@ public:
 	void setOrder(ORDER order) { _order = order; }
 
 	void setTileRc(int left, int top) { _rc = RectMake(left, top, SIZE, SIZE); }
+
+
 };
 

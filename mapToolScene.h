@@ -107,6 +107,8 @@ private:
 	int _changeSizeX;
 	int _changeSizeY;
 
+	floatRect _tileViewRc;
+
 	floatRect _sampleViewRc;
 	int _sampleStartX;
 	int _sampleStartY;

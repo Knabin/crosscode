@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
+#include "tile.h"
 
 player::player()
 {
@@ -87,6 +88,78 @@ void player::update()
 void player::render()
 {
 	_image->aniRender(getMemDC(), _x, _y, _ani);
+}
+
+void player::playerMove()
+{
+	RECT rcCollision;
+	int tileIndex[2];
+	int tileX, tileY;
+
+	rcCollision = _rc.getRect();
+
+	float elapsedTime = TIMEMANAGER->getElapsedTime();
+	float moveSpeed = elapsedTime * 5.0f;
+
+	switch (_direction)
+	{
+	case PLAYERDIRECTION::TOP:
+		_y -= moveSpeed;
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		break;
+	case PLAYERDIRECTION::LEFT:
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		_y += moveSpeed;
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		_x += moveSpeed;
+		_y += moveSpeed;
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		_x += moveSpeed;
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		_x += moveSpeed;
+		_y -= moveSpeed;
+		break;
+	}
+
+	rcCollision = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
+
+	rcCollision.left += 2;
+	rcCollision.top += 2;
+	rcCollision.right -= 2;
+	rcCollision.bottom -= 2;
+
+	tileX = rcCollision.left / SIZE;
+	tileY = rcCollision.top / SIZE;
+
+	switch (_direction)
+	{
+	case PLAYERDIRECTION::TOP:
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		break;
+	case PLAYERDIRECTION::LEFT:
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		//tileIndex[0] = (tileX + tileY * )
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		break;
+	default:
+		break;
+	}
 }
 
 void player::move(const float & x, const float & y)

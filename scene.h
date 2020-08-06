@@ -9,11 +9,14 @@ public:
 	typedef vector<tile*>::iterator				viTileOneLine;
 	typedef vector<vector<tile*>>				vTiles;
 	typedef vector<vector<tile*>>::iterator		viTiles;
-private:
-	vTiles _vTile;
-	viTiles _viTile;
+protected:
+	vTiles _vTiles;
+	viTiles _viTiles;
 	floatPoint _previous;
 	floatPoint _next;
+
+	int _maxX;
+	int _maxY;
 
 public:
 	virtual ~scene();
@@ -21,5 +24,9 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+	void getTilesFromFile(string fileName);
+
+	vTiles& getTiles() { return _vTiles; }
 };
 

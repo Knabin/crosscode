@@ -10,6 +10,10 @@ private:
 	uiController* _ui;
 	
 public:
+	bool _test;
+	bool _test2;
+
+public:
 	playGround();
 	~playGround();
 
