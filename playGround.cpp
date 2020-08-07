@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "playGround.h"
 #include "titleScene.h"
-#include "mapToolScene.h"
+//#include "mapToolScene.h"
+#include "mapToolScene2.h"
 #include "testScene.h"
 
 
@@ -29,7 +30,7 @@ HRESULT playGround::init()
 	_ui->init();
 
 	SCENEMANAGER->addScene("title", new titleScene());
-	SCENEMANAGER->addScene("maptool", new mapToolScene());
+	SCENEMANAGER->addScene("maptool", new mapToolScene2());
 	SCENEMANAGER->addScene("test", new testScene());
 	SCENEMANAGER->loadScene("title");
 
@@ -48,7 +49,6 @@ void playGround::release()
 void playGround::update()
 {
 	SCENEMANAGER->update();
-	TIMEMANAGER->update();
 	OBJECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();
@@ -60,7 +60,7 @@ void playGround::render()
 {	
 	PatBlt(getMemDC(), 0, 0, CAMERA->getMapWidth(), CAMERA->getMapHeight(), WHITENESS);
 	//=================================================
-	//Rectangle(getMemDC(), CAMERA->getRect());
+	Rectangle(getMemDC(), CAMERA->getRect());
 	SCENEMANAGER->render();
 	OBJECTMANAGER->render();
 	TIMEMANAGER->render(getMemDC());

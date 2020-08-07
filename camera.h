@@ -1,14 +1,15 @@
 #pragma once
+
+enum class CAMERASTATE : int
+{
+	NONE,		// 고정 카메라
+	TARGET,		// 타겟팅 카메라
+	END,
+};
+
 class camera
 {
 public:
-	enum class CAMERASTATE : int
-	{
-		NONE,		// 고정 카메라
-		TARGET,		// 타겟팅 카메라
-		END,
-	};
-
 	static camera* getInstance()
 	{
 		static camera instance;
@@ -51,6 +52,8 @@ public:
 	void release();
 
 	void moveToTarget();
+
+	void setCameraMode(CAMERASTATE state) { _state = state; }
 
 	// 타겟팅될 게임 오브젝트 변경
 	void changeTarget(class gameObject* gameObject);

@@ -28,7 +28,7 @@ void scene::getTilesFromFile(string fileName)
 	HANDLE file;
 	DWORD read;
 
-	char str[100 + MAXNUMX * MAXNUMY * 14];
+	char str[100 + MAXTILEX * MAXTILEY * 14];
 	char* context = NULL;
 
 	LPCSTR t = fileName.c_str();
@@ -68,7 +68,7 @@ void scene::getTilesFromFile(string fileName)
 
 	//OPENFILENAME ofn = { 0 };
 	//char filePathSize[1028] = "";
-	//char str[100 + MAXNUMX * MAXNUMY * 14];
+	//char str[100 + MAXTILEX * MAXTILEY * 14];
 	//char* context = NULL;
 
 	//ZeroMemory(&ofn, sizeof(OPENFILENAME));

@@ -2,8 +2,10 @@
 #include "gameObject.h"
 
 #define SIZE 48
-#define MAXNUMX 50
-#define MAXNUMY 50
+#define MAXTILEX 50
+#define MAXTILEY 50
+#define MAXMAPTOOLX 23
+#define MAXMAPTOOLY 18
 
 #define SAMPLESIZE 32
 #define SAMPLENUMX 16
@@ -22,6 +24,9 @@ enum class ORDER : int
 class tile : public gameObject
 {
 private:
+	int _terrainType;
+	int _objectType;
+
 	int _terrainX;
 	int _terrainY;
 	int _objectX;
@@ -50,6 +55,9 @@ public:
 	}
 
 	// ======== getter / setter ========
+
+	int getTerrainType() { return _terrainType; }
+	void setTerrainType(int type) { _terrainType = type; }
 
 	int getTerrainX() { return _terrainX; }
 	void setTerrainX(int x) { _terrainX = x; }

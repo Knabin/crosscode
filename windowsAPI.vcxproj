@@ -172,6 +172,7 @@
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
+    <ClInclude Include="mapToolScene2.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
+    <ClCompile Include="mapToolScene2.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerState.cpp" />

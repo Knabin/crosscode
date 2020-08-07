@@ -15,16 +15,13 @@ HRESULT mapToolScene::init()
 
 	_isStayKeyDown = false;
 
-	_tileViewRc.set(0, 0, 18 * SIZE, 18 * SIZE);
-	_tileViewRc.setLeftTop(50, 150);
-
-	for (int i = 0; i < MAXNUMY; ++i)
+	for (int i = 0; i < MAXTILEY; ++i)
 	{
 		vector<tile *> v;
-		for (int j = 0; j < MAXNUMX; ++j)
+		for (int j = 0; j < MAXTILEX; ++j)
 		{
 			tile * t = new tile();
-			t->setTileRc(_tileViewRc.left + j * SIZE, _tileViewRc.top + i * SIZE);
+			t->setTileRc(j * SIZE, i * SIZE);
 			v.push_back(t);
 		}
 		_vTiles.push_back(v);
@@ -36,7 +33,7 @@ HRESULT mapToolScene::init()
 	_cameraControl->setY(WINSIZEY / 2);
 
 	CAMERA->changeTarget(_cameraControl);
-	CAMERA->setMapSize(SIZE * MAXNUMX + _tileViewRc.left, SIZE * MAXNUMY + _tileViewRc.top);
+	CAMERA->setMapSize(SIZE * MAXTILEX, SIZE * MAXTILEY);
 
 	IMAGEMANAGER->addFrameImage("saveload", "images/buttons_saveload.bmp", 132, 126, 1, 2, false, RGB(0, 0, 0));
 	IMAGEMANAGER->addFrameImage("edit", "images/buttons_edit.bmp", 72, 269, 1, 1, true, RGB(255, 0, 255));
@@ -100,20 +97,20 @@ void mapToolScene::update()
 
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT) || _ptMouse.x < 100)
 	{
-		//_cameraControl->move(-3.f, 0);
+		_cameraControl->move(-3.f, 0);
 		
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) || (_ptMouse.x > WINSIZEX - 100 && !PtInRect(&_editUi->getSampleRc().getRect(), _ptMouse)))
 	{
-		//_cameraControl->move(3.f, 0);
+		_cameraControl->move(3.f, 0);
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_UP) || _ptMouse.y < 100)
 	{
-		//_cameraControl->move(0, -3.f);
+		_cameraControl->move(0, -3.f);
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN) || _ptMouse.y > WINSIZEY - 100)
 	{
-		//_cameraControl->move(0, 3.f);
+		_cameraControl->move(0, 3.f);
 	}
 
 	switch (_mode)
@@ -132,9 +129,9 @@ void mapToolScene::update()
 		// 맵 사이즈 변경 모드에서는 꾹 눌러서 이동하는 대로 화면에 보여질 RECT의 개수를 결정한다.
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
-			for (int i = 0; i < MAXNUMY; ++i)
+			for (int i = 0; i < MAXTILEY; ++i)
 			{
-				for (int j = 0; j < MAXNUMX; ++j)
+				for (int j = 0; j < MAXTILEX; ++j)
 				{
 					if (!_vTiles[i][j]->canView()) continue;
 					if (PtInRect(&_vTiles[i][j]->getRect().getRect(), _ptMouseAbs))
@@ -149,8 +146,8 @@ void mapToolScene::update()
 		// 마우스 좌클릭을 끝냈을 때 맵을 고정하고 기본 모드로 전환한다.
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 		{
-			_nowIndexX = _changeSizeX > MAXNUMX - 1 ? MAXNUMX - 1 : _changeSizeX;
-			_nowIndexY = _changeSizeY > MAXNUMY - 1 ? MAXNUMY - 1 : _changeSizeY;
+			_nowIndexX = _changeSizeX > MAXTILEX - 1 ? MAXTILEX - 1 : _changeSizeX;
+			_nowIndexY = _changeSizeY > MAXTILEY - 1 ? MAXTILEY - 1 : _changeSizeY;
 			_mode = NOWMODE::NONE;
 		}
 		break;
@@ -327,7 +324,7 @@ void mapToolScene::update()
 
 void mapToolScene::render()
 {
-	_tileViewRc.render(getMemDC());
+	//_tileViewRc.render(getMemDC());
 	char str[20];
 	switch (_mode)
 	{
@@ -336,7 +333,7 @@ void mapToolScene::render()
 		{
 			for (int j = 0; j <= _nowIndexX; ++j)
 			{
-				if (!_vTiles[i][j]->canView(_tileViewRc)) continue;
+				if (!_vTiles[i][j]->canView()) continue;
 				
 				if (_vTiles[i][j]->getTerrainX() != -1) 
 					IMAGEMANAGER->findImage("terrain b")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
@@ -442,7 +439,7 @@ void mapToolScene::saveMap()
 {
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXNUMX * MAXNUMY * 14];
+	char str[100 + MAXTILEX * MAXTILEY * 14];
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
@@ -492,7 +489,7 @@ void mapToolScene::loadMap()
 
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXNUMX * MAXNUMY * 14];
+	char str[100 + MAXTILEX * MAXTILEY * 14];
 	char* context = NULL;
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -742,4 +739,5 @@ void mapUi::renderRelative(float x, float y)
 		SelectObject(getMemDC(), oldPen);
 		DeleteObject(pen);
 	}
+	_rc.render(getMemDC());
 }

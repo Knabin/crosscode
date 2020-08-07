@@ -12,7 +12,7 @@ HRESULT testScene::init()
 
 	IMAGEMANAGER->addFrameImage("terrain b", "images/tiletestbig.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
 
-	this->getTilesFromFile("111.map");
+	this->getTilesFromFile("test.map");
 
 	return S_OK;
 }

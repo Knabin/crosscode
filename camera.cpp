@@ -3,7 +3,6 @@
 #include "camera.h"
 #include "gameObject.h"
 
-
 camera::camera()
 	: _state(CAMERASTATE::NONE), _position(0.0f, 0.0f)
 {
@@ -20,10 +19,13 @@ void camera::update()
 {
 	switch (_state)
 	{
-	case camera::CAMERASTATE::TARGET:
+	case CAMERASTATE::NONE:
+		_rc = RectMake(0, 0, WINSIZEX, WINSIZEY);
+		break;
+	case CAMERASTATE::TARGET:
 		moveToTarget();
 		break;
-	case camera::CAMERASTATE::END:
+	case CAMERASTATE::END:
 		break;
 	default:
 		break;
