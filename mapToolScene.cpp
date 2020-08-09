@@ -15,10 +15,10 @@ HRESULT mapToolScene::init()
 
 	_isStayKeyDown = false;
 
-	for (int i = 0; i < MAXNUMY; ++i)
+	for (int i = 0; i < MAXTILEY; ++i)
 	{
 		vector<tile *> v;
-		for (int j = 0; j < MAXNUMX; ++j)
+		for (int j = 0; j < MAXTILEX; ++j)
 		{
 			tile * t = new tile();
 			t->setTileRc(j * SIZE, i * SIZE);
@@ -33,42 +33,42 @@ HRESULT mapToolScene::init()
 	_cameraControl->setY(WINSIZEY / 2);
 
 	CAMERA->changeTarget(_cameraControl);
-	CAMERA->setMapSize(SIZE * MAXNUMX, SIZE * MAXNUMY);
+	CAMERA->setMapSize(SIZE * MAXTILEX, SIZE * MAXTILEY);
 
 	IMAGEMANAGER->addFrameImage("saveload", "images/buttons_saveload.bmp", 132, 126, 1, 2, false, RGB(0, 0, 0));
 	IMAGEMANAGER->addFrameImage("edit", "images/buttons_edit.bmp", 72, 269, 1, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("edit ui", "images/ui_edit.bmp", 600, 850, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("exit", "images/buttons_editexit.bmp", 66, 62, 1, 1, true, RGB(255, 0, 255));
 
-	button* save = new button();
-	save->init("saveload", WINSIZEX / 2 - 100, 66, 0, 0, bind(&mapToolScene::saveMap, this));
-	save->setName("save button");
+	//button* save = new button();
+	//save->init("saveload", WINSIZEX / 2 - 100, 66, 0, 0, bind(&mapToolScene::saveMap, this));
+	//save->setName("save button");
 
-	button* load = new button();
-	load->init("saveload", WINSIZEX / 2 + 100, 66, 0, 1, bind(&mapToolScene::loadMap, this));
-	load->setName("load button");
+	//button* load = new button();
+	//load->init("saveload", WINSIZEX / 2 + 100, 66, 0, 1, bind(&mapToolScene::loadMap, this));
+	//load->setName("load button");
 
-	button* edit = new button();
-	edit->init("edit", WINSIZEX - 36, WINSIZEY / 2, 0, 0, bind(&mapToolScene::startEdit, this));
-	edit->setName("edit button");
+	//button* edit = new button();
+	//edit->init("edit", WINSIZEX - 36, WINSIZEY / 2, 0, 0, bind(&mapToolScene::startEdit, this));
+	//edit->setName("edit button");
 
-	OBJECTMANAGER->addObject(objectType::UI, save);
+	/*OBJECTMANAGER->addObject(objectType::UI, save);
 	OBJECTMANAGER->addObject(objectType::UI, load);
-	OBJECTMANAGER->addObject(objectType::UI, edit);
+	OBJECTMANAGER->addObject(objectType::UI, edit);*/
 
-	_editUi = new mapUi();
-	_editUi->init();
-	_editUi->setName("edit ui");
-	_editUi->setIsActive(false);
+	//_editUi = new mapUi();
+	//_editUi->init();
+	//_editUi->setName("edit ui");
+	//_editUi->setIsActive(false);
 
-	OBJECTMANAGER->addObject(objectType::UI, _editUi);
+	//OBJECTMANAGER->addObject(objectType::UI, _editUi);
 
-	button* exit = new button();
-	exit->init("exit", WINSIZEX - 33, _editUi->getRect().top + 31, 0, 0, bind(&mapToolScene::endEdit, this));
-	exit->setName("exit button");
-	exit->setIsActive(false);
+	//button* exit = new button();
+	//exit->init("exit", WINSIZEX - 33, _editUi->getRect().top + 31, 0, 0, bind(&mapToolScene::endEdit, this));
+	//exit->setName("exit button");
+	//exit->setIsActive(false);
 
-	OBJECTMANAGER->addObject(objectType::UI, exit);
+	//OBJECTMANAGER->addObject(objectType::UI, exit);
 
 	for (int i = 0; i < SAMPLENUMY; ++i)
 	{
@@ -81,6 +81,7 @@ HRESULT mapToolScene::init()
 				_editUi->getSampleRc().top + SAMPLESIZE * i);
 		}
 	}
+
 
 	return S_OK;
 }
@@ -97,6 +98,7 @@ void mapToolScene::update()
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT) || _ptMouse.x < 100)
 	{
 		_cameraControl->move(-3.f, 0);
+		
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) || (_ptMouse.x > WINSIZEX - 100 && !PtInRect(&_editUi->getSampleRc().getRect(), _ptMouse)))
 	{
@@ -127,12 +129,12 @@ void mapToolScene::update()
 		// 맵 사이즈 변경 모드에서는 꾹 눌러서 이동하는 대로 화면에 보여질 RECT의 개수를 결정한다.
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
-			for (int i = 0; i < _vTiles.size(); ++i)
+			for (int i = 0; i < MAXTILEY; ++i)
 			{
-				vector<tile*> v = _vTiles[i];
-				for (int j = 0; j < v.size(); ++j)
+				for (int j = 0; j < MAXTILEX; ++j)
 				{
-					if (PtInRect(&v[j]->getRect().getRect(), _ptMouseAbs))
+					if (!_vTiles[i][j]->canView()) continue;
+					if (PtInRect(&_vTiles[i][j]->getRect().getRect(), _ptMouseAbs))
 					{
 						_changeSizeX = j;
 						_changeSizeY = i;
@@ -144,8 +146,8 @@ void mapToolScene::update()
 		// 마우스 좌클릭을 끝냈을 때 맵을 고정하고 기본 모드로 전환한다.
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 		{
-			_nowIndexX = _changeSizeX > MAXNUMX - 1 ? MAXNUMX - 1 : _changeSizeX;
-			_nowIndexY = _changeSizeY > MAXNUMY - 1 ? MAXNUMY - 1 : _changeSizeY;
+			_nowIndexX = _changeSizeX > MAXTILEX - 1 ? MAXTILEX - 1 : _changeSizeX;
+			_nowIndexY = _changeSizeY > MAXTILEY - 1 ? MAXTILEY - 1 : _changeSizeY;
 			_mode = NOWMODE::NONE;
 		}
 		break;
@@ -196,6 +198,7 @@ void mapToolScene::update()
 				{
 					for (int j = 0; j <= _nowIndexX; ++j)
 					{
+						if (!_vTiles[i][j]->canView()) continue;
 						if (PtInRect(&_vTiles[i][j]->getRect().getRect(), _ptMouseAbs))
 						{
 							if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
@@ -272,9 +275,9 @@ void mapToolScene::update()
 				}
 			}
 		}
+		// 현재 상태가 타입(타일 오더) 변경일 경우
 		else if (_editUi->getEditMode() == EDITMODE::TYPE)
 		{
-			bool b = false;
 			for (int i = 0; i <= _nowIndexY; ++i)
 			{
 				for (int j = 0; j <= _nowIndexX; ++j)
@@ -285,9 +288,6 @@ void mapToolScene::update()
 						{
 							_drawStartX = _drawEndX = j;
 							_drawStartY = _drawEndY = i;
-
-							if (_sampleStartX == _sampleEndX && _sampleStartY == _sampleEndY)
-								_isStayKeyDown = true;
 						}
 						if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 						{
@@ -298,8 +298,6 @@ void mapToolScene::update()
 						{
 							_drawEndX = j;
 							_drawEndY = i;
-							_isStayKeyDown = false;
-							b = true;
 
 							if (_drawStartX > _drawEndX)
 								swap(_drawStartX, _drawEndX);
@@ -315,31 +313,9 @@ void mapToolScene::update()
 			ORDER type = _editUi->getTileType();
 			if (_editUi->getPenMode() == PENMODE::MINUS) type = ORDER::ONE;
 
-			if (_sampleStartX == _sampleEndX && _sampleStartY == _sampleStartY)
+			if (_drawStartX != -1 && _drawStartY != -1)
 			{
-				if (b)
-				{
-					for (int i = 0; i <= _drawEndY - _drawStartY; ++i)
-					{
-						for (int j = 0; j <= _drawEndX - _drawStartX; ++j)
-						{
-							_vTiles[_drawStartY + i][_drawStartX + j]->setOrder(type);
-						}
-					}
-					_isStayKeyDown = false;
-				}
-			}
-			else if (_drawStartX != -1 && _drawStartY != -1)
-			{
-				for (int i = 0; i <= _sampleEndY - _sampleStartY; ++i)
-				{
-					for (int j = 0; j <= _sampleEndX - _sampleStartX; ++j)
-					{
-						_vTiles[_drawStartY + i][_drawStartX + j]->setOrder(type);
-						if (_drawStartX + j + 1 > _nowIndexX) break;
-					}
-					if (_drawStartY + i + 1 > _nowIndexY) break;
-				}
+				_vTiles[_drawStartY][_drawStartX]->setOrder(type);
 			}
 		}
 		break;
@@ -348,6 +324,7 @@ void mapToolScene::update()
 
 void mapToolScene::render()
 {
+	//_tileViewRc.render(getMemDC());
 	char str[20];
 	switch (_mode)
 	{
@@ -356,14 +333,14 @@ void mapToolScene::render()
 		{
 			for (int j = 0; j <= _nowIndexX; ++j)
 			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
-				_vTiles[i][j]->getRect().render(getMemDC());
+				if (!_vTiles[i][j]->canView()) continue;
+				
 				if (_vTiles[i][j]->getTerrainX() != -1) 
 					IMAGEMANAGER->findImage("terrain b")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+				else 
+					_vTiles[i][j]->getRect().render(getMemDC());
+				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
+				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
 			}
 		}
 		break;
@@ -375,11 +352,7 @@ void mapToolScene::render()
 		{
 			for (int j = 0; j <= _nowIndexX; ++j)
 			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
+				if (!_vTiles[i][j]->canView()) continue;
 				if (_vTiles[i][j]->getTerrainX() != -1 || _vTiles[i][j]->getTerrainY() != -1) 
 					IMAGEMANAGER->findImage("terrain b")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
 				if (PtInRect(&_vTiles[i][j]->getRect().getRect(), _ptMouseAbs))
@@ -387,6 +360,11 @@ void mapToolScene::render()
 					tempX = j;
 					tempY = i;
 				}
+				if(_editUi->getEditMode() == EDITMODE::TYPE)
+					IMAGEMANAGER->findImage("tile type")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, 0, _vTiles[i][j]->getOrderIndex());
+
+				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
+				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
 			}
 		}
 
@@ -431,22 +409,6 @@ void mapToolScene::render()
 				}
 			}
 		}
-		else if (_editUi->getEditMode() == EDITMODE::TYPE)
-		{
-			for (int i = 0; i <= _nowIndexY; ++i)
-			{
-				for (int j = 0; j <= _nowIndexX; ++j)
-				{
-					if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-						CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-						CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-						CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-						continue;
-
-					IMAGEMANAGER->findImage("tile type")->frameRender(getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, 0, _vTiles[i][j]->getOrderIndex());
-				}
-			}
-		}
 	}
 		break;
 
@@ -458,12 +420,10 @@ void mapToolScene::render()
 		{
 			for (int j = 0; j <= _changeSizeX; ++j)
 			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
+				if (!_vTiles[i][j]->canView()) continue;
 				_vTiles[i][j]->getRect().render(getMemDC());
+				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
+				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
 			}
 		}
 
@@ -471,30 +431,15 @@ void mapToolScene::render()
 		DeleteObject(brush);
 		break;
 	}
-	if (_editUi->getEditMode() != EDITMODE::TYPE)
-	{
-		for (int i = 0; i <= _nowIndexY; ++i)
-		{
-			for (int j = 0; j <= _nowIndexX; ++j)
-			{
-				if (!(CAMERA->getRect().left < _vTiles[i][j]->getRect().right &&
-					CAMERA->getRect().right >_vTiles[i][j]->getRect().left &&
-					CAMERA->getRect().top < _vTiles[i][j]->getRect().bottom &&
-					CAMERA->getRect().bottom > _vTiles[i][j]->getRect().top))
-					continue;
 
-				sprintf_s(str, "(%d,%d)", j + 1, i + 1);
-				TextOut(getMemDC(), _vTiles[i][j]->getRect().left + 2, _vTiles[i][j]->getRect().top + 2, str, strlen(str));
-			}
-		}
-	}
+	_cameraControl->getRect().render(getMemDC());
 }
 
 void mapToolScene::saveMap()
 {
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXNUMX * MAXNUMY * 14];
+	char str[100 + MAXTILEX * MAXTILEY * 14];
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
@@ -544,7 +489,7 @@ void mapToolScene::loadMap()
 
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXNUMX * MAXNUMY * 14];
+	char str[100 + MAXTILEX * MAXTILEY * 14];
 	char* context = NULL;
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -794,4 +739,5 @@ void mapUi::renderRelative(float x, float y)
 		SelectObject(getMemDC(), oldPen);
 		DeleteObject(pen);
 	}
+	_rc.render(getMemDC());
 }

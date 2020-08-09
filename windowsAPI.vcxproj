@@ -50,7 +50,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -151,11 +151,13 @@
     <ClInclude Include="aStar.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="CCaptureScreen.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyManager.h" />
     <ClInclude Include="eventManager.h" />
     <ClInclude Include="floatCircle.h" />
@@ -163,6 +165,7 @@
     <ClInclude Include="floatRect.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="gameObject.h" />
+    <ClInclude Include="hedgehag.h" />
     <ClInclude Include="iEvent.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
@@ -171,6 +174,7 @@
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
+    <ClInclude Include="mapToolScene2.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
@@ -200,10 +204,12 @@
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="CCaptureScreen.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collisionManager.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyManager.cpp" />
     <ClCompile Include="eventManager.cpp" />
     <ClCompile Include="floatCircle.cpp" />
@@ -211,6 +217,7 @@
     <ClCompile Include="floatRect.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="gameObject.cpp" />
+    <ClCompile Include="hedgehag.cpp" />
     <ClCompile Include="iEvent.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
@@ -219,6 +226,7 @@
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
+    <ClCompile Include="mapToolScene2.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerState.cpp" />

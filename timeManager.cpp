@@ -36,7 +36,7 @@ void timeManager::render(HDC hdc)
 	char str[256];
 	string frameRate;
 
-	SetTextColor(hdc, RGB(0, 0, 0));
+	SetTextColor(hdc, RGB(255, 255, 255));
 	SetBkMode(hdc, TRANSPARENT);
 
 

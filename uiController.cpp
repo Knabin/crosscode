@@ -14,7 +14,7 @@ void uiController::release()
 
 void uiController::update()
 {
-	_vUiObjects = OBJECTMANAGER->getObjectList(OBJECTMANAGER->intToObjType(4));
+	_vUiObjects = OBJECTMANAGER->getObjectList(objectType::UI);
 }
 
 void uiController::render()

@@ -3,7 +3,7 @@
 
 enum class objectType : int
 {
-	MapObject, Monster, Player, Item, UI, End,
+	Monster, Player, Item, UI, MapObject, End,
 };
 
 // object manager는 모든 gameObject를 관리합니다. 다시 말해 모든 gameObject들의 메모리를 쥐고 있습니다.
@@ -33,6 +33,7 @@ private:
 public:
 	void release();
 	void update();
+	void update(objectType type);
 	void render();
 
 	// 오브젝트를 추가합니다. (타입(objectType:: 치면 나옴), 객체)

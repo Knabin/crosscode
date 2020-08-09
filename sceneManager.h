@@ -24,6 +24,9 @@ private:
 	mScenes		_mScenes;
 	miScenes	_miScenes;
 	class scene* _currentScene;
+	string _currentSceneName;
+	image* _tileBuffer;
+	image* _tileImages[3];
 
 public:
 	void init();
@@ -31,10 +34,14 @@ public:
 	void update();
 	void render();
 
+	image* getTileBuffer() { return _tileBuffer; }
+	image* getTileImage(int pageNum) { return _tileImages[pageNum]; }
+
 	void addScene(string sceneName, class scene* scene);
 	void loadScene(string sceneName);
 	scene* findScene(string sceneName);
 
 	scene* getCurrentScene() { return _currentScene; }
+	string getCurrentSceneName() { return _currentSceneName; }
 };
 

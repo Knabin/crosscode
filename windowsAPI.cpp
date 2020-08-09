@@ -27,7 +27,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
 	wndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wndClass.hCursor = LoadCursor(NULL, NULL);
 	wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	wndClass.hInstance = hInstance;
 	wndClass.lpfnWndProc = (WNDPROC)WndProc;
@@ -78,6 +78,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	{
 		if (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
 		{
+
 			if (message.message == WM_QUIT) break;
 			TranslateMessage(&message);
 			DispatchMessage(&message);
@@ -85,7 +86,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		else
 		{
 			//우선 60프레임으로 둔다
-			//TIMEMANAGER->set(60);
+			TIMEMANAGER->update(60);
 			_pg.update();
 			_pg.render();
 		}

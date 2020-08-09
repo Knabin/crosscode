@@ -42,6 +42,7 @@ public:
 	void update() override;
 	void render() override;
 
+	void playerMove();
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
 

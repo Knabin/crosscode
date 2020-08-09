@@ -44,6 +44,21 @@ void objectManager::update()
 	}
 }
 
+void objectManager::update(objectType type)
+{
+	objectContainerIter iter = _mObjectContainer.find(type);
+	for (; iter != _mObjectContainer.end(); ++iter)
+	{
+		vector<gameObject*>& objectList = iter->second;
+		for (int i = 0; i < objectList.size(); ++i)
+		{
+			// 해당 오브젝트만 보여지고 있는 경우에만 update 진행합니다.
+			if (objectList[i]->getIsActive())
+				objectList[i]->update();
+		}
+	}
+}
+
 void objectManager::render()
 {
 	objectContainerIter iter = _mObjectContainer.begin();
@@ -52,10 +67,21 @@ void objectManager::render()
 		vector<gameObject*>& objectList = iter->second;
 		// UI는 uiController에서 상대 좌표 기준으로 render하기 때문에 하므로 continue 처리합니다.
 		if (iter->first == objectType::UI) continue;
-		for (int i = 0; i < objectList.size(); ++i)
+		else if (iter->first == objectType::MapObject)
 		{
-			if (objectList[i]->getIsActive())
-				objectList[i]->render();
+			for (int i = 0; i < objectList.size(); ++i)
+			{
+				if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::Player, "player")->getRect().bottom)
+					objectList[i]->render();
+			}
+		}
+		else
+		{
+			for (int i = 0; i < objectList.size(); ++i)
+			{
+				if (objectList[i]->getIsActive())
+					objectList[i]->render();
+			}
 		}
 	}
 }
@@ -86,13 +112,14 @@ void objectManager::removeObjectsWithoutPlayer()
 	for (; iter != _mObjectContainer.end(); ++iter)
 	{
 		if (iter->first == objectType::Player) continue;
-		vector<gameObject*>& objectList = iter->second;
-		for (int i = 0; i < objectList.size(); ++i)
+		//vector<gameObject*>& objectList = iter->second;
+		vector<gameObject*>::iterator viter = iter->second.begin();
+		for (; viter != iter->second.end(); )
 		{
-			objectList[i]->release();
-			SAFE_DELETE(objectList[i]);
+			(*viter)->release();
+			SAFE_DELETE(*viter);
+			viter = iter->second.erase(viter);
 		}
-		objectList.clear();
 	}
 }
 

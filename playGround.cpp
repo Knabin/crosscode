@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "playGround.h"
 #include "titleScene.h"
-#include "mapToolScene.h"
+//#include "mapToolScene.h"
+#include "mapToolScene2.h"
 #include "testScene.h"
 
 
 playGround::playGround()
 {
 }
+
 
 
 playGround::~playGround()
@@ -28,9 +30,13 @@ HRESULT playGround::init()
 	_ui->init();
 
 	SCENEMANAGER->addScene("title", new titleScene());
-	SCENEMANAGER->addScene("maptool", new mapToolScene());
+	SCENEMANAGER->addScene("maptool", new mapToolScene2());
 	SCENEMANAGER->addScene("test", new testScene());
 	SCENEMANAGER->loadScene("title");
+
+	_test = false;
+
+	SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
 
 	return S_OK;
 }
@@ -45,16 +51,16 @@ void playGround::release()
 void playGround::update()
 {
 	SCENEMANAGER->update();
-	TIMEMANAGER->update();
 	OBJECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();
+
 }
 
 //그리기 전용
 void playGround::render()
 {	
-	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
+	PatBlt(getMemDC(), 0, 0, CAMERA->getMapWidth(), CAMERA->getMapHeight(), WHITENESS);
 	//=================================================
 	Rectangle(getMemDC(), CAMERA->getRect());
 	SCENEMANAGER->render();
@@ -65,5 +71,4 @@ void playGround::render()
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);
-	//_backBuffer->render(getHDC(), 0, 0);
 }
