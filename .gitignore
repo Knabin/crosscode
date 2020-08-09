@@ -4,3 +4,5 @@ x64/Release/
 .vs/windowsAPI/v15/Browse.VC.db
 .vs/windowsAPI/v15/ipch/4adf74e4c402a1bd.ipch
 /.vs
+.vs/windowsAPI/v15/ipch/9680e1d86f5c381.ipch
+*.ipch
