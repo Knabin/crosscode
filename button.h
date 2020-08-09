@@ -13,7 +13,8 @@ private:
 
 	const char* _imageName;
 	image* _image;
-	POINT _framePoint;
+	POINT _frameDownPoint;
+	POINT _frameUpPoint;
 	POINT _ptMouseAbs;
 
 	function<void(void)> _callbackFunction;
@@ -22,7 +23,7 @@ public:
 	button();
 	~button();
 
-	HRESULT init(const char* imageName, float x, float y, int frameX, int frameY, function<void(void)> cbFunction);
+	HRESULT init(const char* imageName, float x, float y, int frameX, int frameY, int frameDownX, int frameDownY, function<void(void)> cbFunction);
 
 	void release();
 	void update();

@@ -36,6 +36,8 @@ HRESULT playGround::init()
 
 	_test = false;
 
+	SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
+
 	return S_OK;
 }
 

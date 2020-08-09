@@ -25,12 +25,17 @@ private:
 	miScenes	_miScenes;
 	class scene* _currentScene;
 	string _currentSceneName;
+	image* _tileBuffer;
+	image* _tileImages[3];
 
 public:
 	void init();
 	void release();
 	void update();
 	void render();
+
+	image* getTileBuffer() { return _tileBuffer; }
+	image* getTileImage(int pageNum) { return _tileImages[pageNum]; }
 
 	void addScene(string sceneName, class scene* scene);
 	void loadScene(string sceneName);

@@ -67,10 +67,21 @@ void objectManager::render()
 		vector<gameObject*>& objectList = iter->second;
 		// UI는 uiController에서 상대 좌표 기준으로 render하기 때문에 하므로 continue 처리합니다.
 		if (iter->first == objectType::UI) continue;
-		for (int i = 0; i < objectList.size(); ++i)
+		else if (iter->first == objectType::MapObject)
 		{
-			if (objectList[i]->getIsActive())
-				objectList[i]->render();
+			for (int i = 0; i < objectList.size(); ++i)
+			{
+				if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::Player, "player")->getRect().bottom)
+					objectList[i]->render();
+			}
+		}
+		else
+		{
+			for (int i = 0; i < objectList.size(); ++i)
+			{
+				if (objectList[i]->getIsActive())
+					objectList[i]->render();
+			}
 		}
 	}
 }

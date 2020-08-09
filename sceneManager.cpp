@@ -13,6 +13,10 @@ sceneManager::~sceneManager()
 void sceneManager::init()
 {
 	_currentScene = NULL;
+	_tileBuffer = IMAGEMANAGER->addImage("tileBuffer", 2400, 2400);
+	_tileImages[0] = IMAGEMANAGER->addFrameImage("terrain1 b", "images/tile1_big.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
+	_tileImages[1] = IMAGEMANAGER->addFrameImage("terrain2 b", "images/tile2_big.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
+	_tileImages[2] = IMAGEMANAGER->addFrameImage("terrain3 b", "images/tile3_big.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
 }
 
 void sceneManager::release()

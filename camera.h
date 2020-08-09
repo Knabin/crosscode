@@ -4,6 +4,7 @@ enum class CAMERASTATE : int
 {
 	NONE,		// 고정 카메라
 	TARGET,		// 타겟팅 카메라
+	EVENT,		// 이벤트용 카메라
 	END,
 };
 

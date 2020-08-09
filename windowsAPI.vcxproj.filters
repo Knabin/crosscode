@@ -136,6 +136,12 @@
     <ClCompile Include="mapToolScene2.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>enemyTest</Filter>
+    </ClCompile>
+    <ClCompile Include="hedgehag.cpp">
+      <Filter>enemyTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -285,6 +291,12 @@
     <ClInclude Include="mapToolScene2.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>enemyTest</Filter>
+    </ClInclude>
+    <ClInclude Include="hedgehag.h">
+      <Filter>enemyTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -372,6 +384,9 @@
     </Filter>
     <Filter Include="2DGameFrameWork\button">
       <UniqueIdentifier>{595d1619-7bb7-4375-9212-4bf6941f9537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="enemyTest">
+      <UniqueIdentifier>{00aba195-e801-49a1-9a0e-95460cae7d8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

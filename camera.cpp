@@ -41,24 +41,18 @@ void camera::moveToTarget()
 {
 	if (_target == NULL) return;
 	
-	floatPoint position = _position;
+	/*floatPoint position = _position;
 	float length = getDistance(_target->getPosition().x, _target->getPosition().y, _position.x, _position.y);
 	float angle = getAngle(_position.x, _position.y, _target->getPosition().x, _target->getPosition().y);
-	if (length > 50.0f)
+	if (length > 5.f)
 	{
-		// TODO: 카메라 선형 보간 필요
-		_speed = 300.0f;
+		_speed = 200;
 		position.x += cosf(angle) * _speed * TIMEMANAGER->getElapsedTime();
 		position.y -= sinf(angle) * _speed * TIMEMANAGER->getElapsedTime();
-
-		_position = position;
-		_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
-	}
-	else
-	{
-		_position = position;
-		_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
-	}
+	}*/
+	_position = _target->getPosition();
+	//_position = position;
+	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
 
 	if (_rc.left < 0.0f)
 		_position.x -= _rc.left;

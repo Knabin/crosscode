@@ -14,3 +14,18 @@ void tile::setTiles(int terX, int terY, int objX, int objY, int order)
 	_objectY = objY;
 	_order = (ORDER)order;
 }
+
+void tile::setTiles(int terX, int terY, int objX, int objY, int pageNum, int order)
+{
+	_terrainX = terX;
+	_terrainY = terY;
+	_objectX = objX;
+	_objectY = objY;
+	_pageNum = pageNum;
+	_order = (ORDER)order;
+}
+
+void tile::render()
+{
+	IMAGEMANAGER->findImage("object b")->alphaFrameRender(getMemDC(), _rc.left, _rc.top, _objectX, _objectY, 100);
+}

@@ -9,7 +9,7 @@ button::~button()
 {
 }
 
-HRESULT button::init(const char * imageName, float x, float y, int frameX, int frameY, function<void(void)> cbFunction)
+HRESULT button::init(const char * imageName, float x, float y, int frameX, int frameY, int frameDownX, int frameDownY, function<void(void)> cbFunction)
 {
 	_callbackFunction = cbFunction;
 	
@@ -23,8 +23,11 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 
 	_rc = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
 
-	_framePoint.x = frameX;
-	_framePoint.y = frameY;
+	_frameUpPoint.x = frameX;
+	_frameUpPoint.y = frameY;
+
+	_frameDownPoint.x = frameDownX;
+	_frameDownPoint.y = frameDownY;
 
 	return S_OK;
 }
@@ -50,10 +53,30 @@ void button::update()
 
 void button::render()
 {
-	_image->frameRender(getMemDC(), _rc.left, _rc.top, _framePoint.x, _framePoint.y);
+	switch (_direction)
+	{
+	case BUTTONDIRECTION::NONE:	case BUTTONDIRECTION::UP:
+		_image->frameRender(getMemDC(), _rc.left, _rc.top,
+			_frameUpPoint.x, _frameUpPoint.y);
+		break;
+	case BUTTONDIRECTION::DOWN:
+		_image->frameRender(getMemDC(), _rc.left, _rc.top,
+			_frameDownPoint.x, _frameDownPoint.y);
+		break;
+	}
 }
 
 void button::renderRelative(float x, float y)
 {
-	_image->frameRender(getMemDC(), x + _rc.left, y + _rc.top, _framePoint.x, _framePoint.y);
+	switch (_direction)
+	{
+	case BUTTONDIRECTION::NONE:	case BUTTONDIRECTION::UP:
+		_image->frameRender(getMemDC(), _rc.left + x, _rc.top + y,
+			_frameUpPoint.x, _frameUpPoint.y);
+		break;
+	case BUTTONDIRECTION::DOWN:
+		_image->frameRender(getMemDC(), _rc.left + x, _rc.top + y,
+			_frameDownPoint.x, _frameDownPoint.y);
+		break;
+	}
 }

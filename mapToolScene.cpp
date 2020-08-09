@@ -40,35 +40,35 @@ HRESULT mapToolScene::init()
 	IMAGEMANAGER->addImage("edit ui", "images/ui_edit.bmp", 600, 850, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("exit", "images/buttons_editexit.bmp", 66, 62, 1, 1, true, RGB(255, 0, 255));
 
-	button* save = new button();
-	save->init("saveload", WINSIZEX / 2 - 100, 66, 0, 0, bind(&mapToolScene::saveMap, this));
-	save->setName("save button");
+	//button* save = new button();
+	//save->init("saveload", WINSIZEX / 2 - 100, 66, 0, 0, bind(&mapToolScene::saveMap, this));
+	//save->setName("save button");
 
-	button* load = new button();
-	load->init("saveload", WINSIZEX / 2 + 100, 66, 0, 1, bind(&mapToolScene::loadMap, this));
-	load->setName("load button");
+	//button* load = new button();
+	//load->init("saveload", WINSIZEX / 2 + 100, 66, 0, 1, bind(&mapToolScene::loadMap, this));
+	//load->setName("load button");
 
-	button* edit = new button();
-	edit->init("edit", WINSIZEX - 36, WINSIZEY / 2, 0, 0, bind(&mapToolScene::startEdit, this));
-	edit->setName("edit button");
+	//button* edit = new button();
+	//edit->init("edit", WINSIZEX - 36, WINSIZEY / 2, 0, 0, bind(&mapToolScene::startEdit, this));
+	//edit->setName("edit button");
 
-	OBJECTMANAGER->addObject(objectType::UI, save);
+	/*OBJECTMANAGER->addObject(objectType::UI, save);
 	OBJECTMANAGER->addObject(objectType::UI, load);
-	OBJECTMANAGER->addObject(objectType::UI, edit);
+	OBJECTMANAGER->addObject(objectType::UI, edit);*/
 
-	_editUi = new mapUi();
-	_editUi->init();
-	_editUi->setName("edit ui");
-	_editUi->setIsActive(false);
+	//_editUi = new mapUi();
+	//_editUi->init();
+	//_editUi->setName("edit ui");
+	//_editUi->setIsActive(false);
 
-	OBJECTMANAGER->addObject(objectType::UI, _editUi);
+	//OBJECTMANAGER->addObject(objectType::UI, _editUi);
 
-	button* exit = new button();
-	exit->init("exit", WINSIZEX - 33, _editUi->getRect().top + 31, 0, 0, bind(&mapToolScene::endEdit, this));
-	exit->setName("exit button");
-	exit->setIsActive(false);
+	//button* exit = new button();
+	//exit->init("exit", WINSIZEX - 33, _editUi->getRect().top + 31, 0, 0, bind(&mapToolScene::endEdit, this));
+	//exit->setName("exit button");
+	//exit->setIsActive(false);
 
-	OBJECTMANAGER->addObject(objectType::UI, exit);
+	//OBJECTMANAGER->addObject(objectType::UI, exit);
 
 	for (int i = 0; i < SAMPLENUMY; ++i)
 	{
