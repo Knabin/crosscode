@@ -43,5 +43,8 @@ public:
 
 	scene* getCurrentScene() { return _currentScene; }
 	string getCurrentSceneName() { return _currentSceneName; }
+
+	int getCurrentSceneMapXSize(); //{ return _currentScene->getTiles()[0].size(); }
+	int getCurrentSceneMapYSize(); //{ return _currentScene->getTiles().size(); }
 };
 

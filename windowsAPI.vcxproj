@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStar.h" />
+    <ClInclude Include="boss.h" />
+    <ClInclude Include="bossTestScene.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CCaptureScreen.h" />
@@ -202,6 +204,8 @@
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStar.cpp" />
+    <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bossTestScene.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CCaptureScreen.cpp" />

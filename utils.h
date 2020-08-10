@@ -20,4 +20,5 @@ namespace UTIL
 {
 	float getDistance(float startX, float startY, float endX, float endY);
 	float getAngle(float x1, float y1, float x2, float y2);
+	void drawLine(HDC hdc, float startX, float startY, float endX, float endY);
 }

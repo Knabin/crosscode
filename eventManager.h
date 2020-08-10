@@ -17,5 +17,6 @@ public:
 
 	void update();
 	void addEvent(class iEvent* pEvent);
+	bool isPlayingEvent();
 };
 

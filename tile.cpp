@@ -27,5 +27,6 @@ void tile::setTiles(int terX, int terY, int objX, int objY, int pageNum, int ord
 
 void tile::render()
 {
-	IMAGEMANAGER->findImage("object b")->alphaFrameRender(getMemDC(), _rc.left, _rc.top, _objectX, _objectY, 100);
+	//IMAGEMANAGER->findImage("object b")->alphaFrameRender(getMemDC(), _rc.left, _rc.top, _objectX, _objectY, 100);
+	IMAGEMANAGER->findImage("object b")->frameRender(getMemDC(), _rc.left, _rc.top, _objectX, _objectY);
 }

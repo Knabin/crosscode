@@ -32,3 +32,19 @@ bool iObjectMove::eventUpdate()
 
 	return false;
 }
+
+iMoveToTarget::iMoveToTarget(gameObject * targetObject, floatPoint targetLocation, float speed)
+{
+	_targetObject = targetObject;
+	_targetLocation = targetLocation;
+	_speed = speed;
+}
+
+void iMoveToTarget::eventStart()
+{
+}
+
+bool iMoveToTarget::eventUpdate()
+{
+	return false;
+}

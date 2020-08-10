@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "player.h"
 #include "tile.h"
+#include "scene.h"
 
 player::player()
 {
@@ -16,6 +17,7 @@ player::player()
 	_isActive = true;
 
 	_state = new playerStateController(idle);
+	_y = 700;
 }
 
 player::~player()
@@ -24,9 +26,13 @@ player::~player()
 
 HRESULT player::init()
 {
-	_image = IMAGEMANAGER->addFrameImage("p", "playertest.bmp", 768, 512, 12, 8, true, RGB(255, 0, 255));
-	_rc.set(0, 0, 64, 64);
-	_rc.setLeftTop(_x, _y);
+	_image = IMAGEMANAGER->addFrameImage("p", "playertest.bmp", 1152, 768, 12, 8, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player jump", "images/playerjump.bmp", 192, 768, 2, 8, true, RGB(255, 0, 255));
+	_width = _height = 96;
+	_pivot = pivot::CENTER;
+	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
+	_tile.set(0, 0, 48, 48);
+	_nowOrder = 1;
 
 	return S_OK;
 }
@@ -113,88 +119,125 @@ void player::update()
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_UP) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp(VK_DOWN))
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 
+	_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
 	_state->updateState();
 }
 
 void player::render()
 {
-	_rc.render(getMemDC());
-	_image->aniRender(getMemDC(), _x, _y, _ani);
+	//_rc.render(getMemDC());
+	_tile.render(getMemDC());
+	_image->aniRender(getMemDC(), _rc.left, _rc.top, _ani);
+	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
+	Rectangle(getMemDC(), rcCollision);
 }
 
 void player::playerMove()
 {
-	RECT rcCollision;
-	int tileIndex[2];
-	int tileX, tileY;
+	// 보고 있는 방향으로 앞에 체크
+	// 체크한 타일과 층이 같다면
+	//		그냥 이동
+	// 체크한 타일과 층이 다르다면
+	//		높다면
+	//			1차이라면 점프함
+	//			아니라면 이동하지 않음
+	//		낮다면
 
-	rcCollision = _rc.getRect();
+	//			현재 층이 0이라면 빠져나감
+	//			(만약 앞앞타일과 층이 같다면 거기까지 점프함)
+	//			아니라면 (누른 시간만큼) 점프함
+	// **점프 함수에서 착지했을 때 층 체크해서 player 갱신해 주고 idle로 이동
 
-	float elapsedTime = TIMEMANAGER->getElapsedTime();
-	float moveSpeed = elapsedTime * 5.0f;
+	POINT currentTileIndex = {_tile.left / SIZE, _tile.top / SIZE};
+	POINT nextTileIndex;
+	float moveSpeed = 4.5f;
 
 	switch (_direction)
 	{
 	case PLAYERDIRECTION::TOP:
-		_y -= moveSpeed;
+		nextTileIndex = { currentTileIndex.x, currentTileIndex.y - 1 };
 		break;
 	case PLAYERDIRECTION::LEFT_TOP:
-		_x -= moveSpeed;
-		_y -= moveSpeed;
+		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
 		break;
 	case PLAYERDIRECTION::LEFT:
-		_x -= moveSpeed;
+		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y };
 		break;
 	case PLAYERDIRECTION::LEFT_BOTTOM:
-		_x -= moveSpeed;
-		_y += moveSpeed;
+		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
 		break;
 	case PLAYERDIRECTION::BOTTOM:
-		_y += moveSpeed;
+		nextTileIndex = { currentTileIndex.x, currentTileIndex.y + 1 };
 		break;
 	case PLAYERDIRECTION::RIGHT_BOTTOM:
-		_x += moveSpeed;
-		_y += moveSpeed;
+		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
 		break;
 	case PLAYERDIRECTION::RIGHT:
-		_x += moveSpeed;
+		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y };
 		break;
 	case PLAYERDIRECTION::RIGHT_TOP:
-		_x += moveSpeed;
-		_y -= moveSpeed;
+		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
 		break;
 	}
 
-	rcCollision = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
 
-	rcCollision.left += 2;
-	rcCollision.top += 2;
-	rcCollision.right -= 2;
-	rcCollision.bottom -= 2;
+	// 다음 타일
+	if (nextTileIndex.x > maxTileX) nextTileIndex.x = maxTileX;
+	else if (nextTileIndex.x < 0) nextTileIndex.x = 0;
+	if (nextTileIndex.y > maxTileY) nextTileIndex.y = maxTileY;
+	else if (nextTileIndex.y < 0) nextTileIndex.y = 0;
+	tile* t = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex.y][nextTileIndex.x];
 
-	tileX = rcCollision.left / SIZE;
-	tileY = rcCollision.top / SIZE;
-
-	switch (_direction)
+	// 층이 같다면
+	if (t->getOrderIndex() == _nowOrder)
 	{
-	case PLAYERDIRECTION::TOP:
-		break;
-	case PLAYERDIRECTION::LEFT_TOP:
-		break;
-	case PLAYERDIRECTION::LEFT:
-		break;
-	case PLAYERDIRECTION::LEFT_BOTTOM:
-		break;
-	case PLAYERDIRECTION::BOTTOM:
-		break;
-	case PLAYERDIRECTION::RIGHT_BOTTOM:
-		break;
-	case PLAYERDIRECTION::RIGHT:
-		break;
-	case PLAYERDIRECTION::RIGHT_TOP:
-		break;
-	default:
-		break;
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			move(0, -moveSpeed);
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			moveAngle(PI * 0.75, moveSpeed);
+			break;
+		case PLAYERDIRECTION::LEFT:
+			move(-moveSpeed, 0);
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			moveAngle(PI * 1.25, moveSpeed);
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			move(0, moveSpeed);
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			moveAngle(PI * 1.75, moveSpeed);
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			move(moveSpeed, 0);
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			moveAngle(PI * 0.25, moveSpeed);
+			break;
+		}
+		_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
+		_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+	}
+	// 층이 플레이어보다 높다면
+	else if(t->getOrderIndex() > _nowOrder)
+	{
+		// 한 층 차이라면
+		if (t->getOrderIndex() - _nowOrder == 1)
+		{
+			// TODO: 점프
+		}
+	}
+	// 층이 플레이어보다 낮다면
+	else
+	{
+		// 예외 처리
+		if (_nowOrder == 0) return;
+		// TODO: 점프
 	}
 }
 
@@ -202,12 +245,12 @@ void player::move(const float & x, const float & y)
 {
 	_x += x;
 	_y += y;
-	_rc.setLeftTop(_x, _y);
+	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
 }
 
 void player::moveAngle(const float & cangle, const float & speed)
 {
 	_x += cosf(cangle) * speed;
 	_y -= sinf(cangle) * speed;
-	_rc.setLeftTop(_x, _y);
+	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
 }

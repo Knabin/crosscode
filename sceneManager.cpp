@@ -61,6 +61,7 @@ void sceneManager::loadScene(string sceneName)
 	if (iter == _mScenes.end()) return;
 	else if (iter->second == _currentScene) return;
 
+
 	if (_currentScene != NULL)
 		_currentScene->release();
 
@@ -75,4 +76,14 @@ scene * sceneManager::findScene(string sceneName)
 	miScenes iter = _mScenes.find(sceneName);
 	if (iter != _mScenes.end())
 		return iter->second;
+}
+
+int sceneManager::getCurrentSceneMapXSize()
+{
+	return _currentScene->getTiles()[0].size();
+}
+
+int sceneManager::getCurrentSceneMapYSize()
+{
+	return _currentScene->getTiles().size();
 }

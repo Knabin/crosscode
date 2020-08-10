@@ -8,6 +8,19 @@ public:
 	virtual bool eventUpdate() = 0;
 };
 
+class iMoveToTarget final : public iEvent
+{
+	class gameObject* _targetObject;
+	floatPoint _targetLocation;
+	float _speed;
+
+public:
+	iMoveToTarget(class gameObject* targetObject, floatPoint targetLocation, float speed);
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};
+
 class iObjectMove final : public iEvent
 {
 	class gameObject* _targetObject;

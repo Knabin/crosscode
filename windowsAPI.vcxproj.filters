@@ -142,6 +142,12 @@
     <ClCompile Include="hedgehag.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>enemyTest</Filter>
+    </ClCompile>
+    <ClCompile Include="bossTestScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -296,6 +302,12 @@
     </ClInclude>
     <ClInclude Include="hedgehag.h">
       <Filter>enemyTest</Filter>
+    </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>enemyTest</Filter>
+    </ClInclude>
+    <ClInclude Include="bossTestScene.h">
+      <Filter>playGround\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

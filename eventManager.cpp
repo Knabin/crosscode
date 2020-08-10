@@ -36,3 +36,9 @@ void eventManager::addEvent(iEvent * pEvent)
 
 	_mEventQueue.push(pEvent);
 }
+
+bool eventManager::isPlayingEvent()
+{
+//	if (_mEventQueue.size == 0) return false;
+	return true;
+}

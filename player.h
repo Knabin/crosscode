@@ -27,11 +27,20 @@ class player : public gameObject
 private:
 	image* _image;
 	animation* _ani;
+	floatRect _tile;		// center x, bottom 기준으로 현재 밟고 있는 tile rect
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
 	
+
 	vector<playerState*>	_vState;
+
+	POINT tileIndex;
+	RECT rcCollision;
+	int _nowOrder;
+
+	float _jumpPower;
+	float _gravity;
 
 public:
 	player();
@@ -47,6 +56,7 @@ public:
 	void moveAngle(const float& cangle, const float& speed);
 
 	void setImage(image* image) { _image = image; }
+	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }
 
 	animation* getAnimation() { return _ani; }

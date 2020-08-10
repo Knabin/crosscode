@@ -26,3 +26,9 @@ float UTIL::getAngle(float x1, float y1, float x2, float y2)
 
 	return angle;
 }
+
+void UTIL::drawLine(HDC hdc, float startX, float startY, float endX, float endY)
+{
+	MoveToEx(hdc, startX, startY, NULL);
+	LineTo(hdc, endX, endY);
+}

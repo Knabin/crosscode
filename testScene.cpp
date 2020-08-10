@@ -21,7 +21,6 @@ HRESULT testScene::init()
 	{
 		for (int j = 0; j <= _maxX; ++j)
 		{
-			// 테스트용으로 이미지 바로 불러와서 썼습니다~ 최종적으로는 현재 타일이 몇 번째 이미지인지를 가지고 있기 때문에 해당 이미지로 수정해야 함
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getPageNum())->frameRender(SCENEMANAGER->getTileBuffer()->getMemDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
 			// 해당 타일에 오브젝트가 존재하는 경우, object manager에 추가해서 위에 오브젝트만 렌더 한 번 더 하게끔!
 			// object manager에서 플레이어보다 뒤에 있어야 하는 경우에만 렌더 처리하면 될 것 같아요
@@ -33,6 +32,12 @@ HRESULT testScene::init()
 			}
 		}
 	}
+
+	// 디버깅용 tile 외곽선 그림
+	for(int i = 0; i <= _maxY; ++i)
+		drawLine(SCENEMANAGER->getTileBuffer()->getMemDC(), 0, i * SIZE, _maxX * SIZE, i * SIZE);
+	for (int i = 0; i <= _maxX; ++i)
+		drawLine(SCENEMANAGER->getTileBuffer()->getMemDC(), i * SIZE, 0, i * SIZE, _maxY * SIZE);
 
 	return S_OK;
 }
