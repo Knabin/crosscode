@@ -2,7 +2,7 @@
 #include "playGround.h"
 #include "titleScene.h"
 //#include "mapToolScene.h"
-#include "mapToolScene2.h"
+#include "mapToolScene.h"
 #include "testScene.h"
 #include "testScene2.h"
 #include "bossTestScene.h"
@@ -32,7 +32,7 @@ HRESULT playGround::init()
 	_ui->init();
 
 	SCENEMANAGER->addScene("title", new titleScene());			// 타이틀 씬
-	SCENEMANAGER->addScene("maptool", new mapToolScene2());		// 맵툴 씬
+	SCENEMANAGER->addScene("maptool", new mapToolScene());		// 맵툴 씬
 	SCENEMANAGER->addScene("test", new testScene());			// 테스트용(새 게임 버튼)
 	SCENEMANAGER->addScene("test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
 	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)

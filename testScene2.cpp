@@ -11,7 +11,7 @@ HRESULT testScene2::init()
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::Player, "player"));
 	OBJECTMANAGER->findObject(objectType::Player, "player")->setIsActive(true);
 
-	IMAGEMANAGER->addFrameImage("object b", "images/tile_object_big.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("object b", "images/tile/tile_object_big.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
 
 	this->getDataFromFile("2.map");
 
