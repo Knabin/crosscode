@@ -36,6 +36,21 @@ private:
 
 	ORDER _order;
 
+	bool _isOpen;
+
+	tile* _parentTile;
+
+	float _totalCost;		//F
+	float _costFromStart;	//G
+	float _costToGoal;		//H
+
+	int _idX;
+	int _idY;
+
+	bool _player;
+	bool _enemy;
+	bool _start;
+
 public:
 	tile();
 
@@ -84,6 +99,31 @@ public:
 
 	void setTileRc(int left, int top) { _rc = RectMake(left, top, SIZE, SIZE); }
 
+	void setIsOpen(bool isOpen) { _isOpen = isOpen; }
+	bool getIsOpen() { return _isOpen; }
 
+	void setParentTile(tile* t) { _parentTile = t; }
+	tile* getParentTile() { return _parentTile; }
+
+	void setTotalCost(float totalCost) { _totalCost = totalCost; }
+	float getTotalCost() { return _totalCost; }
+
+	void setCostFromStart(float costFromStart) { _costFromStart = costFromStart; }
+	float getCostFromStart() { return _costFromStart; }
+
+	void setCostToGoal(float costToGoal) { _costToGoal = costToGoal; }
+	float getCostToGoal() { return _costToGoal; }
+
+	void setIdX(int x) { _idX = x; }
+	int getIdX() { return _idX; }
+	void setIdY(int y) { _idY = y; }
+	int getIdY() { return _idY; }
+
+	void setPlayer(bool player) { _player = player; }
+	bool getPlayer() { return _player; }
+	void setEnemy(bool enemy) { _enemy = enemy; }
+	bool getEnemy() { return _enemy; }
+	void setStart(bool Start) { _start = Start; }
+	bool getStart() { return _start; }
 };
 
