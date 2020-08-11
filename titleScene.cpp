@@ -7,17 +7,17 @@ titleScene::~titleScene()
 
 HRESULT titleScene::init()
 {
-	IMAGEMANAGER->addFrameImage("buttons", "images/buttons.bmp", 486, 360, 1, 5, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("leaTitle", "images/lea.bmp", 3312, 735, 6, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("title", "images/title.bmp", 1920, 1080, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("buttons", "images/title/button_title.bmp", 486, 360, 1, 5, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("leaTitle", "images/title/lea.bmp", 3312, 735, 6, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("title", "images/title/title.bmp", 1920, 1080, false, RGB(255, 0, 255));
 
-	IMAGEMANAGER->addImage("clouds1", "images/clouds-1.bmp", 1771, 439, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("clouds2", "images/clouds-2.bmp", 1920, 936, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("ground", "images/ground.bmp", 1920, 548, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("planet", "images/planet.bmp", 608, 1064, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("railings", "images/railings.bmp", 1920, 213, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("sky", "images/sky.bmp", 1920, 1335, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("logo", "images/logo.bmp", 1056, 768, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("clouds1", "images/title/clouds-1.bmp", 1771, 439, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("clouds2", "images/title/clouds-2.bmp", 1920, 936, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("ground", "images/title/ground.bmp", 1920, 548, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("planet", "images/title/planet.bmp", 608, 1064, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("railings", "images/title/railings.bmp", 1920, 213, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("sky", "images/title/sky.bmp", 1920, 1335, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("logo", "images/title/logo.bmp", 1056, 768, true, RGB(255, 0, 255));
 
 
 	_index = _time = 0;
