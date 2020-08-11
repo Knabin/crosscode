@@ -47,11 +47,12 @@ void titleScene::render()
 
 void titleScene::cbStart()
 {
+	SCENEMANAGER->loadScene("test");
 }
 
 void titleScene::cbContinue()
 {
-	SCENEMANAGER->loadScene("test");
+	SCENEMANAGER->loadScene("test2");
 }
 
 void titleScene::cbMaptool()
@@ -61,6 +62,7 @@ void titleScene::cbMaptool()
 
 void titleScene::cbOption()
 {
+	SCENEMANAGER->loadScene("boss");
 }
 
 void titleScene::cbExit()

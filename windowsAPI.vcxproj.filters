@@ -148,6 +148,9 @@
     <ClCompile Include="bossTestScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
+    <ClCompile Include="testScene2.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -307,6 +310,9 @@
       <Filter>enemyTest</Filter>
     </ClInclude>
     <ClInclude Include="bossTestScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="testScene2.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
   </ItemGroup>

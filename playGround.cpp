@@ -4,6 +4,8 @@
 //#include "mapToolScene.h"
 #include "mapToolScene2.h"
 #include "testScene.h"
+#include "testScene2.h"
+#include "bossTestScene.h"
 
 
 playGround::playGround()
@@ -29,14 +31,19 @@ HRESULT playGround::init()
 	_ui = new uiController();
 	_ui->init();
 
-	SCENEMANAGER->addScene("title", new titleScene());
-	SCENEMANAGER->addScene("maptool", new mapToolScene2());
-	SCENEMANAGER->addScene("test", new testScene());
+	SCENEMANAGER->addScene("title", new titleScene());			// 타이틀 씬
+	SCENEMANAGER->addScene("maptool", new mapToolScene2());		// 맵툴 씬
+	SCENEMANAGER->addScene("test", new testScene());			// 테스트용(새 게임 버튼)
+	SCENEMANAGER->addScene("test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
+	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
 	SCENEMANAGER->loadScene("title");
 
 	_test = false;
 
-	SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
+	// 커서 추가해 놨는데 좌표가 어긋나요... 이유는 모르겠음
+	//SetCursor(LoadCursorFromFile("cursor/cursor-2.cur"));
+	//SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
+	SetCursor(LoadCursorFromFile("cursor/cursor-throw.cur"));
 
 	return S_OK;
 }
@@ -62,12 +69,11 @@ void playGround::render()
 {	
 	PatBlt(getMemDC(), 0, 0, CAMERA->getMapWidth(), CAMERA->getMapHeight(), WHITENESS);
 	//=================================================
-	Rectangle(getMemDC(), CAMERA->getRect());
+
 	SCENEMANAGER->render();
 	OBJECTMANAGER->render();
 	TIMEMANAGER->render(getMemDC());
 	_ui->render();
-
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);
