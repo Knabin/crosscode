@@ -5,6 +5,7 @@
 
 scene::~scene()
 {
+
 }
 
 HRESULT scene::init()
@@ -28,6 +29,10 @@ void scene::getDataFromFile(string fileName)
 {
 	getTilesFromFile(fileName);
 	getEnemiesFromFile(fileName);
+
+	_as = new aStar;
+	_as->init();
+	_as->setTiles();
 }
 
 void scene::getTilesFromFile(string fileName)

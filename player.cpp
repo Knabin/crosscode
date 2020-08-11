@@ -18,6 +18,10 @@ player::player()
 
 	_state = new playerStateController(idle);
 	_y = 700;
+
+	_attackPower = RND->getFromIntTo(5, 10);
+	_count = 0;
+	_isAttack = false;
 }
 
 player::~player()
@@ -116,6 +120,24 @@ void player::update()
 		}
 	}
 
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	{
+		_attackRC.set(0, 0, 100, 100);
+		_attackRC.setCenter(_x, _y);
+		_isAttack = true;
+	}
+
+	if (_isAttack)
+	{
+		_count++;
+		if (_count % 5 == 0)
+		{
+			_attackRC.set(0, 0, 0, 0);
+			_count = 0;
+			_isAttack = false;
+		}
+	}
+
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_UP) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp(VK_DOWN))
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 
@@ -125,6 +147,7 @@ void player::update()
 
 void player::render()
 {
+	_attackRC.render(getMemDC());
 	//_rc.render(getMemDC());
 	_tile.render(getMemDC());
 	_image->aniRender(getMemDC(), _rc.left, _rc.top, _ani);

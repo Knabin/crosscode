@@ -14,7 +14,7 @@ HRESULT testScene::init()
 	IMAGEMANAGER->addFrameImage("object b", "images/tile/tile_object_big.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
 
 	this->getDataFromFile("1.map");
-
+	
 	CAMERA->setMapSize(_maxX * SIZE, _maxY * SIZE);
 
 	for (int i = 0; i <= _maxY; ++i)
