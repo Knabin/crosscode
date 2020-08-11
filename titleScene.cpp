@@ -7,7 +7,7 @@ titleScene::~titleScene()
 
 HRESULT titleScene::init()
 {
-	IMAGEMANAGER->addFrameImage("buttons", "images/buttons.bmp", 486, 360, 1, 5, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("buttons", "images/title/button_title.bmp", 486, 360, 1, 5, true, RGB(255, 0, 255));
 
 	button* btnStart = new button();
 	btnStart->init("buttons", 300, 500, 0, 0, 0, 0, bind(&titleScene::cbStart, this));

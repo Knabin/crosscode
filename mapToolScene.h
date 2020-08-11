@@ -1,6 +1,6 @@
 #pragma once
-#include "scene.h"
 #include "tile.h"
+#include "scene.h"
 
 enum class NOWMODE : int
 {
@@ -26,111 +26,108 @@ enum class PENMODE : int
 	END
 };
 
-enum class PAGE : int
+enum
 {
-	ONE,
-	TWO,
-	THREE,
-	FOUR,
-	END
+	PAGE_ONE,
+	PAGE_TWO,
+	PAGE_THREE,
+	PAGE_END,
 };
 
-class mapCamera : public gameObject
+struct tagEnemy
 {
-public:
-	void move(float x, float y)
-	{
-		float moveX = x;
-		float moveY = y;
-		if ((_x + _rc.getWidth() * 0.5f >= CAMERA->getMapWidth() && x > 0) || (_x - _rc.getWidth() * 0.5f <= 0 && x < 0)) moveX = 0;
-		if ((_y + _rc.getHeight() * 0.5f >= CAMERA->getMapHeight() && y > 0) || (_y - _rc.getHeight() * 0.5f <= 0 && y < 0)) moveY = 0;
-		_rc.move(moveX, moveY); 
-		_x = _rc.getCenter().x;
-		_y = _rc.getCenter().y;
-	}
-};
-
-class mapUi : public gameObject
-{
-private:
-	image* _image;
-	image* _terrain;
-	floatRect _terrainRc;
-	floatRect _objectRc;
-	floatRect _enemyRc;
-	floatRect _typeRc;
-	floatRect _plusRc;
-	floatRect _minusRc;
-
-	floatRect _sampleRc;
-	floatRect _sampleViewRc;
-
-	floatRect _typeRcs[5];
-	int _selectType;
-
-	EDITMODE _editMode;
-	PENMODE _penMode;
-	PAGE _page;
-
-public:
-	HRESULT init();
-	void release();
-	void update();
-	void render();
-	void renderRelative(float x, float y);
-
-	void setSampleViewRc(floatRect& rc) { _sampleViewRc = rc; }
-	
-
-	floatRect& getSampleRc() { return _sampleRc; }
-	ORDER getTileType() { return (ORDER)_selectType; }
-	EDITMODE& getEditMode() { return _editMode; }
-	void setPenMode(PENMODE mode) { _penMode = mode; }
-	PENMODE& getPenMode() { return _penMode; }
-	PAGE& getPage() { return _page; }
+	int tileX;
+	int tileY;
+	int frameX;
+	int frameY;
+	int enemyType;
 };
 
 class mapToolScene : public scene
 {
 private:
 	vector<vector<tile *>> _vTiles;
-	tile _sampleTiles[SAMPLENUMY][SAMPLENUMX];
-	mapCamera* _cameraControl;
-	mapUi* _editUi;
-	NOWMODE _mode;
+	vector<tagEnemy> _vEnemies;
+	tile _sampleTiles[SAMPLENUMX * SAMPLENUMY];
+	image* _mapBuffer;
+	image* _uiImage;
+	image* _terrainImage[PAGE_END];
+	image* _terrainImageBig[PAGE_END];
+	image* _objectImage;
+	image* _objectImageBig;
+	image* _enemyImage;
+	image* _enemyImageBig;
+	image* _typeImage;
 
-	POINT _ptMouseAbs;
+	// UI 관련 RECT
+	floatRect _mapViewRc;
+	floatRect _editUiRc;
+	floatRect _editButtonRc[(int)EDITMODE::END];
+	floatRect _numButtonRc[PAGE_END];
+	floatRect _plusRc;
+	floatRect _minusRc;
 
-	int _nowIndexX;
-	int _nowIndexY;
+	floatRect _typeRcs[5];
+	int _selectType;
 
-	int _changeSizeX;
-	int _changeSizeY;
+	NOWMODE _controlMode;
+	EDITMODE _editMode;
+	PENMODE _penMode;
+	int _page;
 
+	// 마우스 절대 좌표
+	POINT _ptMouseAbs;	
+	// 클리핑 좌표
+	POINT _clippingPoint;
+
+	// 현재 위치
+	POINT _nowIndex;
+
+	// sample 관련 변수
+	floatRect _sampleRc;
 	floatRect _sampleViewRc;
-	int _sampleStartX;
-	int _sampleStartY;
-	int _sampleEndX;
-	int _sampleEndY;
+	POINT _sampleStart;
+	POINT _sampleEnd;
 
+	// 그려지는 곳 관련 변수
 	bool _isStayKeyDown;
 	floatRect _drawViewRc;
-	int _drawStartX;
-	int _drawStartY;
-	int _drawEndX;
-	int _drawEndY;
+	POINT _drawStart;
+	POINT _drawEnd;
+
+
+	// 맵 사이즈 변경 관련 변수
+	POINT _viewIndex;			// 지금 현재 화면에 존재하는 TILE의 최소 인덱스(좌측 상단)
+	POINT _viewLastIndex;		// 지금 현재 화면에 존재하는 TILE의 최대 인덱스(존재하는 TILE들 중 우측 하단)
+	POINT _viewMaxIndex;		// 지금 현재 화면에서 볼 수 있는 TILE의 최대 인덱스(우측 하단)
+	POINT _selectIndex;			// 지금 마우스가 클릭하고 있는 TILE의 인덱스
+	POINT _selectStartIndex;	// 선택됐을 당시 TILE의 인덱스
 
 public:
+	HDC getMapBufferDC() { return _mapBuffer->getMemDC(); }
+
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
 	virtual void render();
 
+	void checkMapIndex();
+	void checkMapSize();
+	void checkSelectSample();
+	void changeMapSize();
+	void moveMapView();
+	void selectUiButton();
+	void renderChangeMap();
+	void renderSelectTile();
+	void renderPreviewTile();
+	void resetSample();
+
 	void saveMap();
 	void loadMap();
-	void startEdit();
-	void endEdit();
 	
 	void drawMap();
+	void redrawMap();
+
+	void backToTitle();
 };
 

@@ -106,9 +106,6 @@
     <ClCompile Include="titleScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
-    <ClCompile Include="mapToolScene.cpp">
-      <Filter>playGround\scene</Filter>
-    </ClCompile>
     <ClCompile Include="tile.cpp">
       <Filter>2DGameFrameWork\maptool</Filter>
     </ClCompile>
@@ -133,9 +130,6 @@
     <ClCompile Include="CCaptureScreen.cpp">
       <Filter>2DGameFrameWork\utils</Filter>
     </ClCompile>
-    <ClCompile Include="mapToolScene2.cpp">
-      <Filter>playGround\scene</Filter>
-    </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
@@ -149,6 +143,9 @@
       <Filter>playGround\scene</Filter>
     </ClCompile>
     <ClCompile Include="testScene2.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="mapToolScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -270,9 +267,6 @@
     <ClInclude Include="titleScene.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
-    <ClInclude Include="mapToolScene.h">
-      <Filter>playGround\scene</Filter>
-    </ClInclude>
     <ClInclude Include="tile.h">
       <Filter>2DGameFrameWork\maptool</Filter>
     </ClInclude>
@@ -297,9 +291,6 @@
     <ClInclude Include="CCaptureScreen.h">
       <Filter>2DGameFrameWork\utils</Filter>
     </ClInclude>
-    <ClInclude Include="mapToolScene2.h">
-      <Filter>playGround\scene</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>enemyTest</Filter>
     </ClInclude>
@@ -313,6 +304,9 @@
       <Filter>playGround\scene</Filter>
     </ClInclude>
     <ClInclude Include="testScene2.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="mapToolScene.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
   </ItemGroup>
