@@ -19,7 +19,9 @@ HRESULT titleScene::init()
 	IMAGEMANAGER->addImage("sky", "images/title/sky.bmp", 1920, 1335, false, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("logo", "images/title/logo.bmp", 1056, 768, true, RGB(255, 0, 255));
 
-
+	//로딩이미지
+	//IMAGEMANAGER->addFrameImage("load", "images/loading.bmp", 4371, 141, 31, 1, true, RGB(255, 0, 255));
+	
 	_index = _time = 0;
 	_c1.x = 150;
 	_c1.y = 650;
@@ -33,6 +35,7 @@ HRESULT titleScene::init()
 	_rl.y = 1200;
 	_pl.x = 1300;
 	_pl.y = 710;
+
 	return S_OK;
 }
 
@@ -63,7 +66,7 @@ void titleScene::update()
 			_index = 0;
 	}
 
-	if (_time > 68)
+	if (_time == 68 )
 	{
 		button* btnStart = new button();
 		btnStart->init("buttons", 300, 500, 0, 0, 0, 0, bind(&titleScene::cbStart, this));
@@ -87,6 +90,7 @@ void titleScene::update()
 		OBJECTMANAGER->addObject(objectType::UI, btnExit);
 
 	}
+
 }
 
 void titleScene::render()
@@ -100,9 +104,7 @@ void titleScene::render()
 	IMAGEMANAGER->findImage("logo")->render(getMemDC(), 400, _rl.y - 1000);
 	IMAGEMANAGER->findImage("railings"	)->render(getMemDC(),_rl.x,_rl.y);
 
-	
 	IMAGEMANAGER->findImage("leaTitle")->frameRender(getMemDC(), _pl.x, _pl.y, _index, 0);
-	
 }
 
 void titleScene::cbStart()
