@@ -17,6 +17,7 @@ enum class ORDER : int
 	ONE,			// 1Ãþ(±âº»)
 	TWO,			// 2Ãþ
 	THREE,			// 3Ãþ
+	TEDURI,
 	NONE,			// ÀÌµ¿ ºÒ°¡´É
 	END
 };
