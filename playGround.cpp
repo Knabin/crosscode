@@ -27,6 +27,12 @@ HRESULT playGround::init()
 	_player->setIsActive(false);
 	OBJECTMANAGER->addObject(objectType::PLAYER, _player);
 
+	_collisionManager = new collisionManager;
+	_collisionManager->init();
+
+	_enemyManager = new enemyManager;
+	_enemyManager->init();
+
 	_ui = new uiController();
 	_ui->init();
 
@@ -36,9 +42,6 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
 	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
 	SCENEMANAGER->loadScene("title");
-
-	_em = new enemyManager();
-	_em->init();
 
 	_test = false;
 
@@ -86,8 +89,10 @@ void playGround::update()
 	CAMERA->update();
 	_ui->update();
 
+	_collisionManager->update();
+	_enemyManager->update();
 
-
+	//vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::Monster);
 }
 
 //그리기 전용

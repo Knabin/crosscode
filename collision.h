@@ -15,8 +15,8 @@ namespace MINTCHOCO_UTIL
 	//POINT가 원 안에 있나
 	bool checkPointInCircle(float cX, float cY, float cR, const POINT& pt);
 	bool checkPointInCircle(float cX, float cY, float cR, float x, float y);
-	bool checkPointInCircle(const floatRect& rc, float x, float y);
-	bool checkPointInCircle(const floatRect& rc, const floatPoint& pt);
+	bool checkPointInCircle(const floatCircle& rc, float x, float y);
+	bool checkPointInCircle(const floatCircle& rc, const floatPoint& pt);
 
 
 	//사각형이 사각형이랑 충돌했누?
