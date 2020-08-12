@@ -19,6 +19,10 @@ enum PLAYERSTATE : int
 	IDLE,
 	MOVE,
 	JUMP,
+	GUARD,
+	DODGE,
+	LONGATTACKLEFT,
+	LONGATTACKRIGHT,
 	END,
 };
 
@@ -26,7 +30,9 @@ class player : public gameObject
 {
 private:
 	image* _image;
+	image* _imgShield;
 	animation* _ani;
+	animation* _aniShield;
 	floatRect _tile;		// center x, bottom 기준으로 현재 밟고 있는 tile rect
 
 	playerStateController* _state;
@@ -42,6 +48,7 @@ private:
 	float _jumpPower;
 	float _gravity;
 
+
 public:
 	player();
 	virtual ~player();
@@ -54,6 +61,7 @@ public:
 	void playerMove();
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
+	void playerFire();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }

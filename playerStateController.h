@@ -10,6 +10,7 @@ public:
 	playerStateController(playerState * defaultState);
 
 	void updateState();
+	playerState* getState() { return _state; }
 	void setState(playerState* state);
 };
 

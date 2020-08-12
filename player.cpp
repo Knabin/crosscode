@@ -8,10 +8,18 @@ player::player()
 	playerState* idle = new idleState(this);
 	playerState* move = new moveState(this);
 	playerState* jump = new jumpState(this);
+	playerState* guard = new guardState(this);
+	playerState* dodge = new dodgeState(this);
+	playerState* defaltLongAttack = new defaltLongAttackState(this);
+
+
 
 	_vState.push_back(idle);
 	_vState.push_back(move);
 	_vState.push_back(jump);
+	_vState.push_back(guard);
+	_vState.push_back(dodge);
+	_vState.push_back(defaltLongAttack);
 
 	_name = "player";
 	_isActive = true;
@@ -26,8 +34,14 @@ player::~player()
 
 HRESULT player::init()
 {
-	_image = IMAGEMANAGER->addFrameImage("p", "playertest.bmp", 1152, 768, 12, 8, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("player jump", "images/playerjump.bmp", 192, 768, 2, 8, true, RGB(255, 0, 255));
+	_image = IMAGEMANAGER->addFrameImage("p", "images/player/player_move.bmp", 1152, 768, 12, 8, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player guard", "images/player/player_guard.bmp", 288, 768, 3, 8, true, RGB(255, 0, 255));
+	_imgShield = IMAGEMANAGER->addFrameImage("guard shield", "images/player/guardShield.bmp", 192, 146, 6, 4, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player jump", "images/player/playerjump.bmp", 192, 768, 2, 8, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player dodge", "images/player/player_dodge.bmp", 711,696, 9, 8, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player longAttack", "images/player/player_longAttack.bmp", 1581, 720, 17, 8, true, RGB(255, 0, 255));
+	
+
 	_width = _height = 96;
 	_pivot = pivot::CENTER;
 	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
@@ -46,8 +60,14 @@ void player::update()
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
 		// KEYDOWN 시 이동 상태로 변경
-		_state->setState(_vState[PLAYERSTATE::MOVE]);
-
+		if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
+		{
+			_state->setState(_vState[PLAYERSTATE::DODGE]);
+		}
+		else
+		{
+			_state->setState(_vState[PLAYERSTATE::MOVE]);
+		}
 		// UP/DOWN 키를 같이 누르면 대각선으로 방향 변경
 		if (KEYMANAGER->isStayKeyDown(VK_UP))
 		{
@@ -66,8 +86,14 @@ void player::update()
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
 		// KEYDOWN 시 이동 상태로 변경
-		_state->setState(_vState[PLAYERSTATE::MOVE]);
-		
+		if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
+		{
+			_state->setState(_vState[PLAYERSTATE::DODGE]);
+		}
+		else
+		{
+			_state->setState(_vState[PLAYERSTATE::MOVE]);
+		}
 		// UP/DOWN 키를 같이 누르면 대각선으로 방향 변경
 		if (KEYMANAGER->isStayKeyDown(VK_UP))
 		{
@@ -85,7 +111,15 @@ void player::update()
 
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
-		_state->setState(_vState[PLAYERSTATE::MOVE]);
+		if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
+		{
+			_state->setState(_vState[PLAYERSTATE::DODGE]);
+		}
+		else
+		{
+			_state->setState(_vState[PLAYERSTATE::MOVE]);
+		}			
+
 		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 		{
 			_direction = PLAYERDIRECTION::RIGHT_TOP;
@@ -99,9 +133,18 @@ void player::update()
 			_direction = PLAYERDIRECTION::TOP;
 		}
 	}
+
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
-		_state->setState(_vState[PLAYERSTATE::MOVE]);
+		if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
+		{
+			_state->setState(_vState[PLAYERSTATE::DODGE]);
+		}
+		else
+		{
+			_state->setState(_vState[PLAYERSTATE::MOVE]);
+		}
+
 		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 		{
 			_direction = PLAYERDIRECTION::RIGHT_BOTTOM;
@@ -116,8 +159,33 @@ void player::update()
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_UP) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp(VK_DOWN))
+	if (_state->getState() == _vState[IDLE] &&
+		(KEYMANAGER->isStayKeyDown('C') || KEYMANAGER->isStayKeyDown(VK_RBUTTON)))
+	{
+			_state->setState(_vState[PLAYERSTATE::GUARD]);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		_state->setState(_vState[PLAYERSTATE::LONGATTACKLEFT]);
+		playerFire();
+	}
+
+
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) 
+		|| KEYMANAGER->isOnceKeyUp(VK_UP) 
+		|| KEYMANAGER->isOnceKeyUp(VK_RIGHT) 
+		|| KEYMANAGER->isOnceKeyUp(VK_DOWN)
+		|| KEYMANAGER->isOnceKeyUp('C')
+		|| KEYMANAGER->isOnceKeyUp(VK_RBUTTON)
+		//|| KEYMANAGER->isOnceKeyUp(VK_LBUTTON)
+		)
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
+
+	//if (_state->getState()->longAttack == false)
+	//{
+	//	_state->setState(_vState[PLAYERSTATE::IDLE]);
+	//}
 
 	_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
 	_state->updateState();
@@ -253,4 +321,8 @@ void player::moveAngle(const float & cangle, const float & speed)
 	_x += cosf(cangle) * speed;
 	_y -= sinf(cangle) * speed;
 	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
+}
+
+void player::playerFire()
+{
 }
