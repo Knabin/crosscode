@@ -141,7 +141,7 @@ HRESULT hedgehag::init()
 	_attackMotion_L->setFPS(1);
 
 	_attackMotion_R = new animation;
-	_attackMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getHeight());
+	_attackMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
 	_attackMotion_R->setPlayFrame(65, 64, false, true);
 	_attackMotion_R->setFPS(1);
 	//고슴도치 공격 애니메이션
