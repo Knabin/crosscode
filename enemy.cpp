@@ -4,7 +4,7 @@
 HRESULT enemy::init()
 {
 	_oneAngry = false;//앵그리 함수를 한번만 실행되게 하기 위한 변수
-
+	
 	return S_OK;
 }
 

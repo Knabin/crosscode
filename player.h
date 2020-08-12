@@ -32,7 +32,7 @@ private:
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
 	
-
+	
 	vector<playerState*>	_vState;
 
 	floatRect _attackRC;

@@ -106,11 +106,6 @@ protected:
 	bool _distanceChange;//거리에 따른 상태처리
 
 private:
-	typedef vector<enemy*>			 vEnemy;
-	typedef vector<enemy*>::iterator viEnemy;
-
-	vEnemy _vEnemy;
-	viEnemy _viEnemy;
 
 	bool _oneAngry;//앵그리 함수를 한번만 실행되게 하기 위한 변수
 
@@ -142,6 +137,7 @@ public:
 	void setEnemyX(float x) { _x = x; }//에너미의 x좌표 변경
 	void setEnemyY(float y) { _y = y; }//에너미의 y좌표 변경
 	void setEnemyAttackRect() { _attackRC.set(0, 0, 0, 0); }//에너미의 공격렉트 지우기
+	void setEnemyIsActive(bool isActive) { _isActive = isActive; }//에너미 사망
 	//설정자
 
 	vector<tile*>& getMove() { return _move; }

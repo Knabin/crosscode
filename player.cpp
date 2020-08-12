@@ -202,7 +202,7 @@ void player::playerMove()
 		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
 		break;
 	}
-
+	
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
 

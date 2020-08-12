@@ -27,7 +27,7 @@ void collisionManager::render()
 void collisionManager::collision()
 {
 	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::Monster);
-
+	
 	for (int i = 0; i < temp.size(); i++)
 	{
 		enemy* e = dynamic_cast<enemy*>(temp[i]);

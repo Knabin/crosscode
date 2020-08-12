@@ -218,13 +218,13 @@ void hedgehag::move()
 		{
 			if (!_distanceChange && !_isAttack)//플레이어와 에너미의 거리가 250보다 크면
 			{
-				/*
+
 				if (_move.size() != NULL)
 				{
-					float d = getDistance(_x, _y, _move[_move.size() - 1]->getCenter().x,
-						_move[_move.size() - 1]->getCenter().y);
-					float an = getAngle(_x, _y, _move[_move.size() - 1]->getCenter().x,
-						_move[_move.size() - 1]->getCenter().y);
+					float d = getDistance(_x, _y, _move[_move.size() - 1]->getPosition().x,
+						_move[_move.size() - 1]->getPosition().y);
+					float an = getAngle(_x, _y, _move[_move.size() - 1]->getPosition().x,
+						_move[_move.size() - 1]->getPosition().y);
 
 					_x += cosf(an) * _speed;
 					_y += -sinf(an) * _speed;
@@ -234,14 +234,14 @@ void hedgehag::move()
 						deleteMove();
 					}
 				}
-				*/
+				
 			}
 			else if (_distanceChange)
 			{
-				//if (_move.size() != NULL)
-				//{
-					//clearMove();
-				//}
+				if (_move.size() != NULL)
+				{
+					clearMove();
+				}
 
 				_attackDelay++;//공격딜레이
 				if (_attackDelay >= _maxAttackDelay && !_isAttack)

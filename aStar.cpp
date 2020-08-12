@@ -9,7 +9,7 @@ HRESULT aStar::init()
 	_totalSize = _opensize =
 		_stack = _maxX = _maxY = 0;
 	_move = false;
-
+	
 	_scene = SCENEMANAGER->getCurrentScene();
 
 	return S_OK;

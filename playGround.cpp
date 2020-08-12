@@ -28,11 +28,11 @@ HRESULT playGround::init()
 	_player->setIsActive(false);
 	OBJECTMANAGER->addObject(objectType::Player, _player);
 
-	//_as = new aStar;
-	//_as->init();
-
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
+
+	_enemyManager = new enemyManager;
+	_enemyManager->init();
 
 	_ui = new uiController();
 	_ui->init();
@@ -50,8 +50,6 @@ HRESULT playGround::init()
 	//SetCursor(LoadCursorFromFile("cursor/cursor-2.cur"));
 	//SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
 	SetCursor(LoadCursorFromFile("cursor/cursor-throw.cur"));
-
-	//_time = 0;
 
 	return S_OK;
 }
@@ -72,29 +70,9 @@ void playGround::update()
 	_ui->update();
 
 	_collisionManager->update();
-	//_as->update();
+	_enemyManager->update();
 
-	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::Monster);
-
-	//_time++;
-	//if (_time % 100 == 0)
-	//{
-	//	for (int i = 0; i < temp.size(); i++)
-	//	{
-	//		enemy* e = dynamic_cast<enemy*>(temp[i]);
-	//		
-	//		if (e->getMove().size() == NULL)
-	//		{
-	//			_as->clearEnemyRect();
-	//			for (int j = 0; j < temp.size(); j++)
-	//			{
-	//				_as->enemyRectPush(e->getRect());
-	//			}
-	//			e->setMove( _as->pathChecking(e->getRect()));
-	//			
-	//		}
-	//	}
-	//}
+	//vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::Monster);
 }
 
 //그리기 전용
