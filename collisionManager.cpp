@@ -83,8 +83,66 @@ void collisionManager::collision()
 		}
 		//에너미 공격렉트랑 플레이어가 충돌시
 
+		//에너미 렉트와 에너미 렉트가 충돌시 에너미 밀어내기
+		RECT rcInter2;
+
+		RECT rcHold2;
+
+		RECT rcMove2;
+
+		for (int j = 0; j < temp.size(); j++)
+		{
+			enemy* e2 = dynamic_cast<enemy*>(temp[j]);
+
+			if (i == j) continue;
+
+			rcHold2.left = FLOAT_TO_INT(e->getRect().left);
+			rcHold2.right = FLOAT_TO_INT(e->getRect().right);
+			rcHold2.top = FLOAT_TO_INT(e->getRect().top);
+			rcHold2.bottom = FLOAT_TO_INT(e->getRect().bottom);
+
+			rcMove2.left = FLOAT_TO_INT(e2->getRect().left);
+			rcMove2.right = FLOAT_TO_INT(e2->getRect().right);
+			rcMove2.top = FLOAT_TO_INT(e2->getRect().top);
+			rcMove2.bottom = FLOAT_TO_INT(e2->getRect().bottom);
+
+			if (e->getEnemyIsAttack())
+			{
+				if (IntersectRect(&rcInter2, &rcHold2, &rcMove2))
+				{
+					int interW2 = rcInter2.right - rcInter2.left;
+					int interH2 = rcInter2.bottom - rcInter2.top;
+
+					if (interW2 > interH2)//수직충돌(위아래)
+					{
+						if (rcInter2.top == rcHold2.top)//위에서 충돌
+						{
+							e2->setEnemyY(e2->getRect().getCenter().y - interH2);
+						}
+						//아래에서 충돌
+						else if (rcInter2.bottom == rcHold2.bottom)
+						{
+							e2->setEnemyY(e2->getRect().getCenter().y + interH2);
+						}
+					}
+					else//양옆에서 충돌
+					{
+						if (rcInter2.left == rcHold2.left)//왼쪽에서 충돌
+						{
+							e2->setEnemyX(e2->getRect().getCenter().x - interW2);
+						}
+
+						else if (rcInter2.right == rcHold2.right)//오른쪽에서 충돌
+						{
+							e2->setEnemyX(e2->getRect().getCenter().x + interW2);
+						}
+					}
+				}
+			}
+		}
+		//에너미 렉트와 에너미 렉트가 충돌시 에너미 밀어내기
+
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-		/*
 		RECT rcInter;
 
 		RECT rcHold;
@@ -135,6 +193,6 @@ void collisionManager::collision()
 			}
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-		*/
+		
 	}
 }
