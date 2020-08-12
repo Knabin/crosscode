@@ -45,31 +45,79 @@ bool MINTCHOCO_UTIL::checkPointInRect(const floatRect & rc, float x, float y)
 
 bool MINTCHOCO_UTIL::checkPointInCircle(float cX, float cY, float cR, const POINT & pt)
 {
-	return false;
+	float deltaX = pt.x - cX;
+	float deltaY = pt.y - cY;
+
+	float distSquare = deltaX * deltaX + deltaY * deltaY;
+
+	float radiusSquare = cR * cR;
+
+	if (radiusSquare < distSquare) return false;
+
+	return true;
 }
 
 bool MINTCHOCO_UTIL::checkPointInCircle(float cX, float cY, float cR, float x, float y)
 {
-	return false;
+	float deltaX = x - cX;
+	float deltaY = y - cY;
+
+	float distSquare = deltaX * deltaX + deltaY * deltaY;
+
+	float radiusSquare = cR * cR;
+
+	if (radiusSquare < distSquare) return false;
+
+	return true;
 }
 
-bool MINTCHOCO_UTIL::checkPointInCircle(const floatRect & rc, float x, float y)
+bool MINTCHOCO_UTIL::checkPointInCircle(const floatCircle & rc, float x, float y)
 {
-	return false;
+	float deltaX = x - rc.x;
+	float deltaY = y - rc.y;
+
+	float distSquare = deltaX * deltaX + deltaY * deltaY;
+
+	float radiusSquare = rc.r * rc.r;
+
+	if (radiusSquare < distSquare) return false;
+
+	return true;
 }
 
-bool MINTCHOCO_UTIL::checkPointInCircle(const floatRect & rc, const floatPoint & pt)
+bool MINTCHOCO_UTIL::checkPointInCircle(const floatCircle & rc, const floatPoint & pt)
 {
-	return false;
+	float deltaX = pt.x - rc.x;
+	float deltaY = pt.y - rc.y;
+
+	float distSquare = deltaX * deltaX + deltaY * deltaY;
+
+	float radiusSquare = rc.r * rc.r;
+
+	if (radiusSquare < distSquare) return false;
 }
 
-bool MINTCHOCO_UTIL::isCollision(const floatRect & cir, const RECT & rc)
+bool MINTCHOCO_UTIL::isCollision(const floatRect & rc1, const RECT & rc2)
 {
+	if ((rc1.left <= rc2.right && rc1.right >= rc2.left) &&
+		(rc1.top <= rc2.bottom && rc1.bottom >= rc2.top)) return true;
+
 	return false;
 }
 
 bool MINTCHOCO_UTIL::isCollision(const floatRect & rc1, const floatRect & rc2)
 {
+	if ((rc1.left <= rc2.right && rc1.right >= rc2.left) &&
+		(rc1.top <= rc2.bottom && rc1.bottom >= rc2.top)) return true;
+
+	return false;
+}
+
+bool MINTCHOCO_UTIL::isCollision(const RECT & rc1, const RECT & rc2)
+{
+	if ((rc1.left <= rc2.right && rc1.right >= rc2.left) &&
+		(rc1.top <= rc2.bottom && rc1.bottom >= rc2.top)) return true;
+
 	return false;
 }
 
@@ -192,10 +240,5 @@ bool MINTCHOCO_UTIL::isCollisionReactionCircle(const floatCircle & cirHold, floa
 		return true;
 	}
 
-	return false;
-}
-
-bool MINTCHOCO_UTIL::isCollision(const RECT & rc1, const RECT & rc2)
-{
 	return false;
 }

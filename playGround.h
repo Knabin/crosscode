@@ -1,17 +1,17 @@
 #pragma once
 #include "gameNode.h"
 #include "player.h"
+#include "collisionManager.h"
 #include "uiController.h"
+#include "enemyManager.h"
 
 class playGround : public gameNode
 {
 private:
 	player* _player;
+	collisionManager* _collisionManager;
 	uiController* _ui;
-	
-public:
-	bool _test;
-	bool _test2;
+	enemyManager* _enemyManager;
 
 public:
 	playGround();

@@ -5,10 +5,12 @@
 
 HRESULT aStar::init()
 {
-	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::Player, "player"));
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	_totalSize = _opensize =
 		_stack = _maxX = _maxY = 0;
 	_move = false;
+	
+	_scene = SCENEMANAGER->getCurrentScene();
 
 	return S_OK;
 }

@@ -5,7 +5,7 @@ class aStar :public gameNode
 {
 private:
 	class scene* _scene;
-
+	
 
 	//전체 타일을 담을 벡터
 	vector<tile*>			_vTotalList;

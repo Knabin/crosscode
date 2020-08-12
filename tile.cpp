@@ -21,12 +21,11 @@ void tile::setTiles(int terX, int terY, int objX, int objY, int pageNum, int ord
 	_terrainY = terY;
 	_objectX = objX;
 	_objectY = objY;
-	_pageNum = pageNum;
+	_terrainImageNum = pageNum;
 	_order = (ORDER)order;
 }
 
 void tile::render()
 {
-	//IMAGEMANAGER->findImage("object b")->alphaFrameRender(getMemDC(), _rc.left, _rc.top, _objectX, _objectY, 100);
-	IMAGEMANAGER->findImage("object b")->frameRender(getMemDC(), _rc.left, _rc.top, _objectX, _objectY);
+	SCENEMANAGER->getObjectImage(_objectImageNum)->frameRender(getMemDC(), _rc.left, _rc.top, _objectX, _objectY);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "tile.h"
+#include "aStar.h"
 
 class scene : public gameNode
 {
@@ -13,6 +14,8 @@ protected:
 	// 해당 씬 타일 관련 변수
 	vTiles _vTiles;
 	viTiles _viTiles;
+
+	aStar* _as;
 
 	int _maxX;
 	int _maxY;
@@ -31,6 +34,7 @@ public:
 	void getDataFromFile(string fileName);
 	void getTilesFromFile(string fileName);
 	void getEnemiesFromFile(string fileName);
+	void getObjectsFromFile(string fileName);
 
 	vTiles& getTiles() { return _vTiles; }
 };
