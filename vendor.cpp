@@ -21,6 +21,5 @@ void vendor::update()
 
 void vendor::render()
 {
-	_rc.render(getMemDC());
 	_image->frameRender(getMemDC(), _rc.left, _rc.top, _type, 0);
 }

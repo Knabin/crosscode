@@ -57,7 +57,7 @@ public:
 	tile();
 
 	void setTiles(int terX, int terY, int objX, int objY, int order);
-	void setTiles(int terX, int terY, int objX, int objY, int pageNum, int order);
+	void setTiles(int terX, int terY, int objX, int objY, int pageNum, int objPagenum, int order);
 
 	bool canView() {
 		if (CAMERA->getRect().left < _rc.right &&
