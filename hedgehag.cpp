@@ -201,8 +201,8 @@ void hedgehag::render()
 
 void hedgehag::move()
 {
-	_playerX = OBJECTMANAGER->findObject(objectType::Player, "player")->getX();
-	_playerY = OBJECTMANAGER->findObject(objectType::Player, "player")->getY();
+	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getX();
+	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getY();
 
 	_distance = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
 	_angle = getAngle(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);

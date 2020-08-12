@@ -5,7 +5,7 @@
 
 HRESULT collisionManager::init()
 {
-	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::Player, "player"));
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	_count = 0;
 
 	return S_OK;
@@ -26,7 +26,7 @@ void collisionManager::render()
 
 void collisionManager::collision()
 {
-	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::Monster);
+	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 	
 	for (int i = 0; i < temp.size(); i++)
 	{

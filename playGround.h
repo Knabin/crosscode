@@ -12,10 +12,6 @@ private:
 	collisionManager* _collisionManager;
 	uiController* _ui;
 	enemyManager* _enemyManager;
-	
-public:
-	bool _test;
-	bool _test2;
 
 public:
 	playGround();

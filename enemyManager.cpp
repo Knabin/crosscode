@@ -15,8 +15,9 @@ void enemyManager::update()
 {
 	_vEnemy = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 
-	for (int i = 0; _vEnemy.size(); ++i)
+	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
+		cout << i << endl;
 		//enemy* e = dynamic_cast<enemy*>(_vEnemy[i]);
 	}
 }

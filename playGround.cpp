@@ -30,8 +30,7 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-	_enemyManager = new enemyManager;
-	_enemyManager->init();
+
 
 	_ui = new uiController();
 	_ui->init();
@@ -43,7 +42,8 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
 	SCENEMANAGER->loadScene("title");
 
-	_test = false;
+	_enemyManager = new enemyManager;
+	_enemyManager->init();
 
 	// 커서 추가해 놨는데 좌표가 어긋나요... 이유는 모르겠음
 	//SetCursor(LoadCursorFromFile("cursor/cursor-2.cur"));
@@ -85,14 +85,11 @@ void playGround::update()
 
 	SCENEMANAGER->update();
 	OBJECTMANAGER->update();
-	_em->update();
 	CAMERA->update();
 	_ui->update();
 
 	_collisionManager->update();
 	_enemyManager->update();
-
-	//vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::Monster);
 }
 
 //그리기 전용
