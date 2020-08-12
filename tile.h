@@ -17,7 +17,7 @@ enum class ORDER : int
 	ONE,			// 1Ãþ(±âº»)
 	TWO,			// 2Ãþ
 	THREE,			// 3Ãþ
-	TEDURI,
+	BORDER,			// ¸ð¼­¸®(Z-ORDER¿ë)
 	NONE,			// ÀÌµ¿ ºÒ°¡´É
 	END
 };
@@ -33,7 +33,8 @@ private:
 	int _objectX;
 	int _objectY;
 
-	int _pageNum;
+	int _terrainImageNum;
+	int _objectImageNum;
 
 	ORDER _order;
 
@@ -95,8 +96,11 @@ public:
 	int getOrderIndex() { return (int)_order; }
 	void setOrder(ORDER order) { _order = order; }
 
-	int getPageNum() { return _pageNum; }
-	void setPageNum(int page) { _pageNum = page; }
+	int getTerrainImageNum() { return _terrainImageNum; }
+	void setTerrainImageNum(int imageNum) { _terrainImageNum = imageNum; }
+
+	int getObjectImageNum() { return _objectImageNum; }
+	void setObjectImageNum(int imageNum) { _objectImageNum = imageNum; }
 
 	void setTileRc(int left, int top) { _rc = RectMake(left, top, SIZE, SIZE); }
 

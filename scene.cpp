@@ -2,10 +2,11 @@
 #include "scene.h"
 #include <commdlg.h>
 #include "hedgehag.h"
+#include "vendor.h"
+#include "door.h"
 
 scene::~scene()
 {
-
 }
 
 HRESULT scene::init()
@@ -29,10 +30,7 @@ void scene::getDataFromFile(string fileName)
 {
 	getTilesFromFile(fileName);
 	getEnemiesFromFile(fileName);
-
-	_as = new aStar;
-	_as->init();
-	_as->setTiles();
+	getObjectsFromFile(fileName);
 }
 
 void scene::getTilesFromFile(string fileName)
@@ -117,7 +115,67 @@ void scene::getEnemiesFromFile(string fileName)
 			gameObject* hed = new hedgehag();
 			hed->init();
 			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
-			OBJECTMANAGER->addObject(objectType::Monster, hed);
+			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
+			break;
+		}
+		tok = strtok_s(NULL, "\n", &context);
+	}
+
+	CloseHandle(file);
+}
+
+void scene::getObjectsFromFile(string fileName)
+{
+	HANDLE file;
+	DWORD read;
+
+	char str[1000];
+	char* context = NULL;
+
+	string strfileName = "object/" + fileName;
+
+	file = CreateFile(TEXT(strfileName.c_str()), GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (file == INVALID_HANDLE_VALUE)
+		return;
+
+	ReadFile(file, str, strlen(str), &read, NULL);
+
+	int maxNum = 0;
+
+	char* tok = strtok_s(str, "\n", &context);
+	sscanf_s(tok, "object number: %d", &maxNum);
+	tok = strtok_s(NULL, "\n", &context);
+
+	for (int i = 0; i < maxNum; ++i)
+	{
+		int tx = -1, ty = -1, fx = -1, fy = -1, ot = 0;
+		sscanf_s(tok, "%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &ot);
+
+		switch (ot)
+		{
+		case 0:
+		case 1:
+		case 2:
+		{
+			vendor* ven = new vendor();
+			ven->setType(ot);
+			ven->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+			ven->init();
+			OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(ven));
+		}
+			break;
+		case 3:
+		case 4:
+		case 5:
+		{
+			door* doo = new door();
+			doo->setType(ot);
+			doo->setPosition(floatPoint{ _vTiles[ty][tx]->getRect().left, _vTiles[ty][tx]->getRect().top });
+			doo->init();
+			OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(doo));
+		}
 			break;
 		}
 		tok = strtok_s(NULL, "\n", &context);

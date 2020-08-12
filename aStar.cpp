@@ -2,14 +2,16 @@
 #include "aStar.h"
 #include "player.h"
 #include "scene.h"
+#include "enemy.h"
 
 HRESULT aStar::init()
 {
-	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::Player, "player"));
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+	_vEnemy = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 	_totalSize = _opensize =
 		_stack = _maxX = _maxY = 0;
 	_move = false;
-
+	
 	_scene = SCENEMANAGER->getCurrentScene();
 
 	return S_OK;
@@ -18,6 +20,7 @@ HRESULT aStar::init()
 void aStar::setTiles()
 {
 	_vTotalList.clear();
+	if (_scene->getTiles().size() == 0) return;
 
 	_maxX = _scene->getTiles()[0].size();
 	_maxY = _scene->getTiles().size();
@@ -41,7 +44,7 @@ void aStar::setTiles()
 		_startTile = NULL;
 		_endTile = NULL;
 		_currentTile = NULL;
-		if (_vTotalList[i]->getOrderIndex() == 4 || _vTotalList[i]->getOrderIndex() == 0)
+		if (_vTotalList[i]->getOrderIndex() == 5 || _vTotalList[i]->getOrderIndex() == 0)
 		{
 			_vTotalList[i]->setIsOpen(false);
 		}
@@ -75,7 +78,7 @@ void aStar::pathFinder(tile* currentTile)
 
 		if (!node->getIsOpen()) continue;
 		if (node->getStart()) continue;
-		if (node->getOrderIndex() == 4) continue;
+		if (node->getOrderIndex() == 5) continue;
 		if (node->getOrderIndex() == 0) continue;
 		if (node->getEnemy()) continue;
 		if (node->getPlayer() && _currentTile->getStart())
@@ -187,16 +190,16 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 
 	for (int i = 0; i < _totalSize; ++i)
 	{
-		if (_vTotalList[i]->getOrderIndex() == 4)	continue;
+		if (_vTotalList[i]->getOrderIndex() == 5)	continue;
 		if (_vTotalList[i]->getOrderIndex() == 0)	continue;
 
 		_vTotalList[i]->setIsOpen(true);
 		_vTotalList[i]->setParentTile(NULL);
-		for (int j = 0; j < _enemyRect.size(); ++j)
+		for (int j = 0; j < _vEnemy.size(); ++j)
 		{
-			if (PtInRect(&_vTotalList[i]->getRect().getRect(), PointMake(_enemyRect[j].getCenter().x, _enemyRect[j].getCenter().y)))
+			if (PtInRect(&_vTotalList[i]->getRect().getRect(), PointMake(_vEnemy[j]->getX(), _vEnemy[j]->getY())))
 			{
-				if (_enemyRect[j].getCenter().x == enemyRC.getCenter().x && _enemyRect[j].getCenter().y == enemyRC.getCenter().y)
+				if (_vEnemy[j]->getX() == enemyRC.getCenter().x && _vEnemy[j]->getY() == enemyRC.getCenter().y)
 				{
 					_vTotalList[i]->setStart(true);
 					_currentTile = _vTotalList[i];
@@ -223,6 +226,11 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 		}
 	}
 
+	if (_currentTile == NULL)
+	{
+		return _vMove;
+	}
+
 	while (_move == false)
 		pathFinder(_currentTile);
 
@@ -243,7 +251,7 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 			_vTotalList[i]->setIsOpen(true);
 			count++;
 		}
-		if (count >= _enemyRect.size() - 1)
+		if (count >= _vEnemy.size() - 1)
 			break;
 	}
 

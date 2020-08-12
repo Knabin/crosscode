@@ -19,6 +19,10 @@ enum PLAYERSTATE : int
 	IDLE,
 	MOVE,
 	JUMP,
+	GUARD,
+	DODGE,
+	LONGATTACKLEFT,
+	LONGATTACKRIGHT,
 	END,
 };
 
@@ -26,7 +30,9 @@ class player : public gameObject
 {
 private:
 	image* _image;
+	image* _imgShield;
 	animation* _ani;
+	animation* _aniShield;
 	floatRect _tile;		// center x, bottom 기준으로 현재 밟고 있는 tile rect
 
 	playerStateController* _state;
@@ -35,18 +41,13 @@ private:
 
 	vector<playerState*>	_vState;
 
-	floatRect _attackRC;
-
 	POINT tileIndex;
 	RECT rcCollision;
 	int _nowOrder;
-	int _count;
-	int _attackPower;
 
 	float _jumpPower;
 	float _gravity;
 
-	bool _isAttack;
 
 public:
 	player();
@@ -60,20 +61,14 @@ public:
 	void playerMove();
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
+	void playerFire();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }
-	void setPlayerAttackRectRemove() { _attackRC.set(0, 0, 0, 0); }
-	void setPlayerX(float x) { _x = x; }
-	void setPlayerY(float y) { _y = y; }
 
 	animation* getAnimation() { return _ani; }
 
 	PLAYERDIRECTION getDirection() { return _direction; }
-
-	floatRect& getPlayerAttackRect() { return _attackRC; }
-
-	int getPlayerAttackPower() { return _attackPower; }
 };
 

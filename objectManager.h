@@ -3,7 +3,7 @@
 
 enum class objectType : int
 {
-	Monster, Player, Item, UI, MapObject, End,
+	ENEMY, PLAYER, MAPOBJECT, ITEM, TILEOBJECT, UI, END,
 };
 
 // object manager는 모든 gameObject를 관리합니다. 다시 말해 모든 gameObject들의 메모리를 쥐고 있습니다.
@@ -30,6 +30,8 @@ private:
 	unordered_map<objectType, vector<class gameObject*>> _mObjectContainer;
 	typedef unordered_map<objectType, vector<class gameObject*>>::iterator objectContainerIter;
 
+	vector<class gameObject*> _vZOrderRender;
+
 public:
 	void release();
 	void update();
@@ -49,6 +51,8 @@ public:
 	vector<class gameObject*> findObjects(objectType type, string objectName);
 	// 해당 타입의 오브젝트들을 찾아서 벡터로 반환합니다. (타입(objectType:: 치면 나옴))
 	vector<class gameObject*>& getObjectList(objectType type);
+
+	void sortZorder(int start, int end);
 
 	// 0: tile, 1: monster, 2: player, 3: item, 4: ui
 	objectType intToObjType(int type) { return (objectType)type; }

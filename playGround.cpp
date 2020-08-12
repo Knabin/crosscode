@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "playGround.h"
 #include "titleScene.h"
-//#include "mapToolScene.h"
 #include "mapToolScene.h"
 #include "testScene.h"
 #include "testScene2.h"
@@ -26,13 +25,12 @@ HRESULT playGround::init()
 	_player = new player();
 	_player->init();
 	_player->setIsActive(false);
-	OBJECTMANAGER->addObject(objectType::Player, _player);
-
-	//_as = new aStar;
-	//_as->init();
+	OBJECTMANAGER->addObject(objectType::PLAYER, _player);
 
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
+
+
 
 	_ui = new uiController();
 	_ui->init();
@@ -44,14 +42,13 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
 	SCENEMANAGER->loadScene("title");
 
-	_test = false;
+	_enemyManager = new enemyManager;
+	_enemyManager->init();
 
 	// 커서 추가해 놨는데 좌표가 어긋나요... 이유는 모르겠음
 	//SetCursor(LoadCursorFromFile("cursor/cursor-2.cur"));
 	//SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
 	SetCursor(LoadCursorFromFile("cursor/cursor-throw.cur"));
-
-	//_time = 0;
 
 	return S_OK;
 }
@@ -65,6 +62,26 @@ void playGround::release()
 //연산
 void playGround::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_F1))
+	{
+		SCENEMANAGER->loadScene("title");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F2))
+	{
+		SCENEMANAGER->loadScene("test");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		SCENEMANAGER->loadScene("test2");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F4))
+	{
+		SCENEMANAGER->loadScene("maptool");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F5))
+	{
+		SCENEMANAGER->loadScene("boss");
+	}
 
 	SCENEMANAGER->update();
 	OBJECTMANAGER->update();
@@ -72,29 +89,7 @@ void playGround::update()
 	_ui->update();
 
 	_collisionManager->update();
-	//_as->update();
-
-	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::Monster);
-
-	//_time++;
-	//if (_time % 100 == 0)
-	//{
-	//	for (int i = 0; i < temp.size(); i++)
-	//	{
-	//		enemy* e = dynamic_cast<enemy*>(temp[i]);
-	//		
-	//		if (e->getMove().size() == NULL)
-	//		{
-	//			_as->clearEnemyRect();
-	//			for (int j = 0; j < temp.size(); j++)
-	//			{
-	//				_as->enemyRectPush(e->getRect());
-	//			}
-	//			e->setMove( _as->pathChecking(e->getRect()));
-	//			
-	//		}
-	//	}
-	//}
+	_enemyManager->update();
 }
 
 //그리기 전용
@@ -107,6 +102,7 @@ void playGround::render()
 	OBJECTMANAGER->render();
 	TIMEMANAGER->render(getMemDC());
 	_ui->render();
+	//_enemyManager->render();
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);

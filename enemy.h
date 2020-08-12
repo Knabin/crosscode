@@ -82,6 +82,9 @@ protected:
 
 	floatRect _attackRC;//에너미 공격렉트
 
+	floatRect _tile;//에너미가 타일을 검출하기 위해 필요한 렉트
+	tile* _t;//검출할 타일
+
 	float _speed;//에너미 스피드
 	float _angle;//에너미 앵글
 
@@ -105,13 +108,9 @@ protected:
 	bool _isAttack;//에너미가 공격상태인지 확인하기 위한 변수
 	bool _distanceChange;//거리에 따른 상태처리
 
+	int _nowOrder;//현재 에너미의 층이 몇층인지 확인하기 위한 변수
+
 private:
-	typedef vector<enemy*>			 vEnemy;
-	typedef vector<enemy*>::iterator viEnemy;
-
-	vEnemy _vEnemy;
-	viEnemy _viEnemy;
-
 	bool _oneAngry;//앵그리 함수를 한번만 실행되게 하기 위한 변수
 
 public:
@@ -142,6 +141,7 @@ public:
 	void setEnemyX(float x) { _x = x; }//에너미의 x좌표 변경
 	void setEnemyY(float y) { _y = y; }//에너미의 y좌표 변경
 	void setEnemyAttackRect() { _attackRC.set(0, 0, 0, 0); }//에너미의 공격렉트 지우기
+	void setEnemyIsActive(bool isActive) { _isActive = isActive; }//에너미 사망
 	//설정자
 
 	vector<tile*>& getMove() { return _move; }

@@ -7,6 +7,9 @@ titleScene::~titleScene()
 
 HRESULT titleScene::init()
 {
+	CAMERA->setCameraMode(CAMERASTATE::NONE);
+	CAMERA->setMapSize(WINSIZEX, WINSIZEY);
+
 	IMAGEMANAGER->addFrameImage("buttons", "images/title/button_title.bmp", 486, 360, 1, 5, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("leaTitle", "images/title/lea.bmp", 3312, 735, 6, 1, true, RGB(255, 0, 255));
 
@@ -91,7 +94,6 @@ void titleScene::update()
 		OBJECTMANAGER->addObject(objectType::UI, btnMaptool);
 		OBJECTMANAGER->addObject(objectType::UI, btnOption);
 		OBJECTMANAGER->addObject(objectType::UI, btnExit);
-
 	}
 
 }
@@ -100,9 +102,9 @@ void titleScene::render()
 {
 	IMAGEMANAGER->findImage("sky")->render(getMemDC(),0,0);
 	IMAGEMANAGER->findImage("planet")->render(getMemDC(), _mn.x, _mn.y);
-	IMAGEMANAGER->findImage("clouds1"	)->render(getMemDC(),_c1.x,_c1.y);
-	IMAGEMANAGER->findImage("clouds2"	)->render(getMemDC(),_c2.x,_c2.y);
-	IMAGEMANAGER->findImage("ground"	)->render(getMemDC(),_gr.x,_gr.y);
+	IMAGEMANAGER->findImage("clouds1")->render(getMemDC(),_c1.x,_c1.y);
+	IMAGEMANAGER->findImage("clouds2")->render(getMemDC(),_c2.x,_c2.y);
+	IMAGEMANAGER->findImage("ground")->render(getMemDC(),_gr.x,_gr.y);
 	IMAGEMANAGER->findImage("logo")->render(getMemDC(), 400, _rl.y - 1000);
 	IMAGEMANAGER->findImage("railings"	)->render(getMemDC(),_rl.x,_rl.y);
 
