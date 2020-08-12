@@ -2,12 +2,14 @@
 #include "gameNode.h"
 #include "player.h"
 #include "uiController.h"
+#include "enemyManager.h"
 
 class playGround : public gameNode
 {
 private:
 	player* _player;
 	uiController* _ui;
+	enemyManager* _em;
 	
 public:
 	bool _test;

@@ -157,6 +157,7 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="collisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="door.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="enemy.h" />
@@ -174,7 +175,6 @@
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="keyManager.h" />
-    <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
@@ -199,6 +199,7 @@
     <ClInclude Include="uiController.h" />
     <ClInclude Include="uiObject.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="vendor.h" />
     <ClInclude Include="windowsAPI.h" />
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +212,7 @@
     <ClCompile Include="CCaptureScreen.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collisionManager.cpp" />
+    <ClCompile Include="door.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />
@@ -228,7 +230,6 @@
     <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyManager.cpp" />
-    <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
@@ -255,6 +256,7 @@
     <ClCompile Include="uiController.cpp" />
     <ClCompile Include="uiObject.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="vendor.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

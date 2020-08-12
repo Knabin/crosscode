@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "playGround.h"
 #include "titleScene.h"
-//#include "mapToolScene.h"
 #include "mapToolScene.h"
 #include "testScene.h"
 #include "testScene2.h"
@@ -26,7 +25,7 @@ HRESULT playGround::init()
 	_player = new player();
 	_player->init();
 	_player->setIsActive(false);
-	OBJECTMANAGER->addObject(objectType::Player, _player);
+	OBJECTMANAGER->addObject(objectType::PLAYER, _player);
 
 	_ui = new uiController();
 	_ui->init();
@@ -37,6 +36,9 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
 	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
 	SCENEMANAGER->loadScene("title");
+
+	_em = new enemyManager();
+	_em->init();
 
 	_test = false;
 
@@ -57,10 +59,34 @@ void playGround::release()
 //연산
 void playGround::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_F1))
+	{
+		SCENEMANAGER->loadScene("title");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F2))
+	{
+		SCENEMANAGER->loadScene("test");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		SCENEMANAGER->loadScene("test2");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F4))
+	{
+		SCENEMANAGER->loadScene("maptool");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F5))
+	{
+		SCENEMANAGER->loadScene("boss");
+	}
+
 	SCENEMANAGER->update();
 	OBJECTMANAGER->update();
+	_em->update();
 	CAMERA->update();
 	_ui->update();
+
+
 
 }
 

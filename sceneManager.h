@@ -27,6 +27,7 @@ private:
 	string _currentSceneName;
 	image* _tileBuffer;
 	image* _tileImages[3];
+	image* _objectImages[3];
 
 public:
 	void init();
@@ -36,6 +37,7 @@ public:
 
 	image* getTileBuffer() { return _tileBuffer; }
 	image* getTileImage(int pageNum) { return _tileImages[pageNum]; }
+	image* getObjectImage(int pageNum) { return _objectImages[pageNum]; }
 
 	void addScene(string sceneName, class scene* scene);
 	void loadScene(string sceneName);

@@ -107,10 +107,7 @@
       <Filter>playGround\scene</Filter>
     </ClCompile>
     <ClCompile Include="tile.cpp">
-      <Filter>2DGameFrameWork\maptool</Filter>
-    </ClCompile>
-    <ClCompile Include="mapObject.cpp">
-      <Filter>playGround\object</Filter>
+      <Filter>2DGameFrameWork\tile</Filter>
     </ClCompile>
     <ClCompile Include="uiObject.cpp">
       <Filter>playGround\object</Filter>
@@ -147,6 +144,12 @@
     </ClCompile>
     <ClCompile Include="mapToolScene.cpp">
       <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="door.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor.cpp">
+      <Filter>playGround\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,10 +271,7 @@
       <Filter>playGround\scene</Filter>
     </ClInclude>
     <ClInclude Include="tile.h">
-      <Filter>2DGameFrameWork\maptool</Filter>
-    </ClInclude>
-    <ClInclude Include="mapObject.h">
-      <Filter>playGround\object</Filter>
+      <Filter>2DGameFrameWork\tile</Filter>
     </ClInclude>
     <ClInclude Include="uiObject.h">
       <Filter>playGround\object</Filter>
@@ -308,6 +308,12 @@
     </ClInclude>
     <ClInclude Include="mapToolScene.h">
       <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="door.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor.h">
+      <Filter>playGround\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -385,9 +391,6 @@
     <Filter Include="playGround\scene">
       <UniqueIdentifier>{45cd19d1-ccea-408a-a400-cd4ac57f4343}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2DGameFrameWork\maptool">
-      <UniqueIdentifier>{6aa0e5b8-b6e6-421f-9cff-fefac26f95a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\object">
       <UniqueIdentifier>{88fb07dc-f645-417f-855e-a8c992828645}</UniqueIdentifier>
     </Filter>
@@ -399,6 +402,9 @@
     </Filter>
     <Filter Include="enemyTest">
       <UniqueIdentifier>{00aba195-e801-49a1-9a0e-95460cae7d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\tile">
+      <UniqueIdentifier>{6aa0e5b8-b6e6-421f-9cff-fefac26f95a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
