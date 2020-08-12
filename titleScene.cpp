@@ -9,7 +9,6 @@ HRESULT titleScene::init()
 {
 	IMAGEMANAGER->addFrameImage("buttons", "images/title/button_title.bmp", 486, 360, 1, 5, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("leaTitle", "images/title/lea.bmp", 3312, 735, 6, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("title", "images/title/title.bmp", 1920, 1080, false, RGB(255, 0, 255));
 
 	IMAGEMANAGER->addImage("clouds1", "images/title/clouds-1.bmp", 1771, 439, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("clouds2", "images/title/clouds-2.bmp", 1920, 936, true, RGB(255, 0, 255));
@@ -35,6 +34,10 @@ HRESULT titleScene::init()
 	_rl.y = 1200;
 	_pl.x = 1300;
 	_pl.y = 710;
+	
+
+	IMAGEMANAGER->addImage("eq", "images/equip/eq.bmp", 1920, 1280, false, RGB(255, 0, 255));
+
 
 	return S_OK;
 }
@@ -95,7 +98,6 @@ void titleScene::update()
 
 void titleScene::render()
 {
-	//IMAGEMANAGER->findImage("title")->render(getMemDC());
 	IMAGEMANAGER->findImage("sky")->render(getMemDC(),0,0);
 	IMAGEMANAGER->findImage("planet")->render(getMemDC(), _mn.x, _mn.y);
 	IMAGEMANAGER->findImage("clouds1"	)->render(getMemDC(),_c1.x,_c1.y);
