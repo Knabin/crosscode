@@ -179,9 +179,6 @@ void mapToolScene::release()
 
 void mapToolScene::update()
 {
-	_ptMouseAbs.x = _ptMouse.x + CAMERA->getRect().left;
-	_ptMouseAbs.y = _ptMouse.y + CAMERA->getRect().top;
-
 	checkMapIndex();
 	moveMapView();
 
@@ -355,8 +352,11 @@ void mapToolScene::checkSelectSample()
 				swap(_sampleStart.x, _sampleEnd.x);
 			if (_sampleStart.y > _sampleEnd.y)
 				swap(_sampleStart.y, _sampleEnd.y);
-			_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
-			_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			if (_sampleStart.x != -1 && _sampleStart.y != -1)
+			{
+				_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
+				_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			}
 		}
 		// 지형 그리는 중
 		else
@@ -1342,6 +1342,27 @@ void mapToolScene::loadMap()
 	CloseHandle(file); */
 
 	redrawMap();
+}
+
+bool mapToolScene::isAutoTile(int frameX, int frameY, int page)
+{
+	switch (page)
+	{
+	case 0:
+		// 초록초록
+		break;
+	case 1:
+		// 마을
+		break;
+	case 2:
+		// 보스
+		break;
+	}
+	return false;
+}
+
+void mapToolScene::autotile()
+{
 }
 
 void mapToolScene::drawMap()

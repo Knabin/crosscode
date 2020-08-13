@@ -60,16 +60,6 @@ struct tagObject
 	int frameY;
 	int pageNum;
 	int objectType;
-
-
-	bool objectCompare(const tagObject & obj1, const tagObject & obj2)
-	{
-		if (obj1.tileY != obj2.tileY)
-			return obj1.tileY < obj2.tileY;
-		else
-			return obj1.tileX < obj2.tileX;
-	}
-
 };
 
 struct tagPoint
@@ -105,6 +95,8 @@ class mapToolScene : public scene
 private:
 	vector<vector<tile *>> _vTiles;
 	vector<tagEnemy> _vEnemies;
+	vector<POINT[16]> _vAutoIndexs;
+	//POINT
 	map<tagPoint, tagObject> _mObject;
 	map<tagPoint, tagObject>::iterator _miObject;
 	tile _sampleTiles[SAMPLENUMX * SAMPLENUMY];
@@ -135,8 +127,6 @@ private:
 	PENMODE _penMode;
 	int _page;
 
-	// 마우스 절대 좌표
-	POINT _ptMouseAbs;	
 	// 클리핑 좌표
 	POINT _clippingPoint;
 
@@ -186,6 +176,8 @@ public:
 	void saveMap();
 	void loadMap();
 	
+	bool isAutoTile(int frameX, int frameY, int page);
+	void autotile();
 	void drawMap();
 	void redrawMap();
 
