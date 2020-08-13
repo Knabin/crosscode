@@ -33,6 +33,7 @@ void collisionManager::collision()
 		enemy* e = dynamic_cast<enemy*>(temp[i]);
 
 		//에너미 렉트랑 플레이어의 공격렉트랑 충돌시
+		/*
 		if (isCollision(e->getRect(), _player->getPlayerAttackRect()))//에너미렉트랑 플레이어 공격렉트랑 충돌시
 		{
 			if (e->getEnemyAngle() * (180 / PI) >= 135 && e->getEnemyAngle() * (180 / PI) <= 225 && !e->getEnemyIsAttack())//왼쪽
@@ -193,6 +194,6 @@ void collisionManager::collision()
 			}
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-		
+		*/
 	}
 }
