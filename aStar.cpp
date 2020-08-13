@@ -53,6 +53,7 @@ void aStar::setTiles()
 			_vTotalList[i]->setIsOpen(true);
 		}
 	}
+
 }
 
 void aStar::pathFinder(tile* currentTile)
@@ -88,6 +89,7 @@ void aStar::pathFinder(tile* currentTile)
 
 			break;
 		}
+		
 
 		if (node->getOrderIndex() == 3 && _currentTile->getOrderIndex() == 1) continue;
 
@@ -110,7 +112,6 @@ void aStar::pathFinder(tile* currentTile)
 
 		_vOpenList.push_back(node);
 		_opensize = _vOpenList.size();
-
 	}
 
 	for (int i = 0; i < _opensize; ++i)
@@ -187,7 +188,8 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 	_vMove.clear();
 
 	_move = false;
-
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+	_vEnemy = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 	for (int i = 0; i < _totalSize; ++i)
 	{
 		if (_vTotalList[i]->getOrderIndex() == 5)	continue;
@@ -195,6 +197,7 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 
 		_vTotalList[i]->setIsOpen(true);
 		_vTotalList[i]->setParentTile(NULL);
+		
 		for (int j = 0; j < _vEnemy.size(); ++j)
 		{
 			if (PtInRect(&_vTotalList[i]->getRect().getRect(), PointMake(_vEnemy[j]->getX(), _vEnemy[j]->getY())))
@@ -205,7 +208,6 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 					_currentTile = _vTotalList[i];
 					_startTile = _currentTile;
 					_vTotalList[i]->setIsOpen(false);
-
 				}
 				else
 				{
@@ -265,12 +267,12 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 void aStar::render()
 {
 	//_player->getRect().render(getMemDC());
-	//for (int i = 0; i < _totalSize; ++i)
-	//{
-	//	char str[20];
-	//	sprintf_s(str, "%d", _vTotalList[i]->getOrderIndex());
-	//	//sprintf_s(str, "%d,%d,%d", _vTotalList[i]->getPlayer(), _vTotalList[i]->getStart(), _vTotalList[i]->getEnemy());
-	//	//sprintf_s(str, "%d,%d", _vTotalList[i]->getIdX(), _vTotalList[i]->getIdY());
-	//	TextOut(getMemDC(), _vTotalList[i]->getRect().left, _vTotalList[i]->getRect().top, str, strlen(str));
-	//}
+	for (int i = 0; i < _totalSize; ++i)
+	{
+		char str[20];
+		sprintf_s(str, "%d", _vTotalList[i]->getOrderIndex());
+		//sprintf_s(str, "%d,%d,%d", _vTotalList[i]->getPlayer(), _vTotalList[i]->getStart(), _vTotalList[i]->getEnemy());
+		//sprintf_s(str, "%d,%d", _vTotalList[i]->getIdX(), _vTotalList[i]->getIdY());
+		TextOut(getMemDC(), _vTotalList[i]->getRect().left, _vTotalList[i]->getRect().top, str, strlen(str));
+	}
 }
