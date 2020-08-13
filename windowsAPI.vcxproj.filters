@@ -151,6 +151,10 @@
     <ClCompile Include="vendor.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="mapObject.cpp" />
+    <ClCompile Include="nomalUI.cpp">
+      <Filter>playGround\uiController</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -314,6 +318,10 @@
     </ClInclude>
     <ClInclude Include="vendor.h">
       <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="mapObject.h" />
+    <ClInclude Include="nomalUI.h">
+      <Filter>playGround\uiController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

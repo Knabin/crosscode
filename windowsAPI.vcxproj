@@ -175,7 +175,9 @@
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
+    <ClInclude Include="nomalUI.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
@@ -230,7 +232,9 @@
     <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
+    <ClCompile Include="nomalUI.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerState.cpp" />

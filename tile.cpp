@@ -15,13 +15,14 @@ void tile::setTiles(int terX, int terY, int objX, int objY, int order)
 	_order = (ORDER)order;
 }
 
-void tile::setTiles(int terX, int terY, int objX, int objY, int pageNum, int order)
+void tile::setTiles(int terX, int terY, int objX, int objY, int pageNum, int objPagenum, int order)
 {
 	_terrainX = terX;
 	_terrainY = terY;
 	_objectX = objX;
 	_objectY = objY;
 	_terrainImageNum = pageNum;
+	_objectImageNum = objPagenum;
 	_order = (ORDER)order;
 }
 

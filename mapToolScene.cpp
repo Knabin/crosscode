@@ -121,6 +121,8 @@ HRESULT mapToolScene::init()
 
 	IMAGEMANAGER->addFrameImage("vendor", "images/object/vendor.bmp", 720, 288, 3, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("door prev", "images/tile/doorpreview.bmp", 288, 144, 3, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("tree", "images/object/tree.bmp", 720, 288, 3, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("grass", "images/object/grass.bmp", 432, 96, 3, 1, true, RGB(255, 0, 255));
 	
 	// 빈 타일
 	IMAGEMANAGER->addImage("tile null", "images/tile/tilenull.bmp", 48, 48, false, RGB(0, 0, 0));
@@ -177,9 +179,6 @@ void mapToolScene::release()
 
 void mapToolScene::update()
 {
-	_ptMouseAbs.x = _ptMouse.x + CAMERA->getRect().left;
-	_ptMouseAbs.y = _ptMouse.y + CAMERA->getRect().top;
-
 	checkMapIndex();
 	moveMapView();
 
@@ -353,8 +352,11 @@ void mapToolScene::checkSelectSample()
 				swap(_sampleStart.x, _sampleEnd.x);
 			if (_sampleStart.y > _sampleEnd.y)
 				swap(_sampleStart.y, _sampleEnd.y);
-			_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
-			_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			if (_sampleStart.x != -1 && _sampleStart.y != -1)
+			{
+				_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
+				_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			}
 		}
 		// 지형 그리는 중
 		else
@@ -426,6 +428,7 @@ void mapToolScene::checkSelectSample()
 							{
 								for (int j = 0; j <= _drawEnd.x - _drawStart.x; ++j)
 								{
+									int page = _penMode == PENMODE::PLUS ? _page : 0;
 									if (_editMode == EDITMODE::TERRAIN)
 									{
 										_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainX(_sampleStart.x);
@@ -445,35 +448,32 @@ void mapToolScene::checkSelectSample()
 								if (_penMode == PENMODE::PLUS)
 								{
 									bool b = true;
-
-									for (int i = 0; i < _vObject.size(); ++i)
+									_miObject = _mObject.find(tagPoint{_drawStart.x, _drawStart.y});
+									
+									//// 찾았으면
+									if (_miObject != _mObject.end())
 									{
-										if (_vObject[i].tileX == _drawStart.x && _vObject[i].tileY == _drawStart.y)
-										{
-											_vObject[i].frameX = _sampleStart.x;
-											_vObject[i].frameY = _sampleStart.y;
-											_vObject[i].objectType = _sampleStart.x;
-											b = false;
-											break;
-										}
+										_miObject->second.frameX = _sampleStart.x;
+										_miObject->second.frameY = _sampleStart.y;
+										_miObject->second.pageNum = _page;
+										_miObject->second.objectType = (_sampleStart.x > 2) ? 1 : 0;
 									}
-
-									if (b)
+									else
 									{
-										tagObject obj = { _drawStart.x, _drawStart.y, _sampleStart.x, _sampleStart.y, _sampleStart.x };
-										_vObject.push_back(obj);
+										tagObject obj = { _drawStart.x, _drawStart.y, _sampleStart.x, _sampleStart.y, _page, (_sampleStart.x > 2) ? 1 : 0 };
+										_mObject.insert(make_pair(tagPoint{_drawStart.x, _drawStart.y}, obj));
 									}
-
-									if (_sampleStart.x <= 2) setVendor();
+									
+									if (_sampleStart.y == 0 && _sampleStart.x <= 2) setVendor();
 								}
 								else
 								{
-									for (int i = 0; i < _vObject.size(); ++i)
+									_miObject = _mObject.find(tagPoint{ _drawStart.x, _drawStart.y });
+
+									// 찾았으면
+									if (_miObject != _mObject.end())
 									{
-										if (_vObject[i].tileX != _drawStart.x) continue;
-										if (_vObject[i].tileY != _drawStart.y) continue;
-										_vObject.erase(_vObject.begin() + i);
-										break;
+										_mObject.erase(_miObject);
 									}
 								}
 							}
@@ -935,21 +935,34 @@ void mapToolScene::renderPreviewTile()
 				int width = 0;
 				int height = 0;
 
-				switch (_sampleStart.x)
+				if (_sampleStart.y == 0)
 				{
-				case 0:
-				case 1:
-				case 2:
-					img = IMAGEMANAGER->findImage("vendor");
-					width = SIZE * 2;
-					height = SIZE * 2;
-					break;
-				case 3:
-				case 4:
-				case 5:
-					img = IMAGEMANAGER->findImage("door prev");
-					height = SIZE;
-					break;
+					if (_sampleStart.x <= 2)
+					{
+						img = IMAGEMANAGER->findImage("vendor");
+						width = SIZE * 2;
+						height = SIZE * 2;
+					}
+					else
+					{
+						img = IMAGEMANAGER->findImage("door prev");
+						height = SIZE;
+					}
+				}
+				else
+				{
+					if (_sampleStart.x <= 2)
+					{
+						img = IMAGEMANAGER->findImage("tree");
+						width = SIZE * 2;
+						height = SIZE * 5;
+					}
+					else
+					{
+						img = IMAGEMANAGER->findImage("grass");
+						width = SIZE;
+						height = SIZE;
+					}
 				}
 
 				for (int i = 0; i <= abs(_drawEnd.y - _drawStart.y); ++i)
@@ -1089,12 +1102,13 @@ void mapToolScene::saveMap()
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
 			ZeroMemory(str, sizeof(str));
-			sprintf_s(str, "%d,%d,%d,%d,%d,%d\n",
+			sprintf_s(str, "%d,%d,%d,%d,%d,%d,%d\n",
 			_vTiles[i][j]->getTerrainX(),
 			_vTiles[i][j]->getTerrainY(),
 			_vTiles[i][j]->getObjectX(),
 			_vTiles[i][j]->getObjectY(),
 			_vTiles[i][j]->getTerrainImageNum(),
+			_vTiles[i][j]->getObjectImageNum(),
 			_vTiles[i][j]->getOrderIndex());
 			WriteFile(file, str, strlen(str), &write, NULL);
 		}
@@ -1140,7 +1154,7 @@ void mapToolScene::saveMap()
 	CloseHandle(file);
 
 	// 상호작용하는 object 저장
-	s = "../object/";
+	/*s = "../object/";
 	s += name;
 
 	file = CreateFile(TEXT(s.c_str()), GENERIC_WRITE, NULL, NULL,
@@ -1153,16 +1167,17 @@ void mapToolScene::saveMap()
 	for (int i = 0; i < _vObject.size(); ++i)
 	{
 		ZeroMemory(str, sizeof(str));
-		sprintf_s(str, "%d,%d,%d,%d,%d\n",
+		sprintf_s(str, "%d,%d,%d,%d,%d,%d\n",
 			_vObject[i].tileX,
 			_vObject[i].tileY,
 			_vObject[i].frameX,
 			_vObject[i].frameY,
+			_vObject[i].pageNum,
 			_vObject[i].objectType);
 		WriteFile(file, str, strlen(str), &write, NULL);
 	}
 
-	CloseHandle(file);
+	CloseHandle(file);*/
 }
 
 void mapToolScene::loadMap()
@@ -1197,6 +1212,7 @@ void mapToolScene::loadMap()
 		_vTiles[i].clear();
 	}
 	_vTiles.clear();
+	_mObject.clear();
 
 	HANDLE file;
 	DWORD read;
@@ -1217,13 +1233,20 @@ void mapToolScene::loadMap()
 		{
 			if (tok != NULL)
 			{
-				int tx = -1, ty = -1, ox = -1, oy = -1, pn = 0, oi = 0;
-				sscanf_s(tok, "%d,%d,%d,%d,%d,%d", &tx, &ty, &ox, &oy, &pn, &oi);
+				int tx = -1, ty = -1, ox = -1, oy = -1, pn = 0, on = 0, oi = 0;
+				sscanf_s(tok, "%d,%d,%d,%d,%d,%d,%d", &tx, &ty, &ox, &oy, &pn, &on, &oi);
 
 				tile * t = new tile();
-				t->setTiles(tx, ty, ox, oy, pn, oi);
+				t->setTiles(tx, ty, ox, oy, pn, on, oi);
 				t->setTileRc(j * SIZE, i * SIZE);
 				v.push_back(t);
+
+				if (ox != -1 && oy != -1 && on == 3)
+				{
+					tagObject obj = { j, i, ox, oy, on, (ox > 2) ? 1 : 0 };
+					_mObject.insert(make_pair(tagPoint{ j, i }, obj));
+				}
+
 				tok = strtok_s(NULL, "\n", &context);
 			}
 		}
@@ -1280,7 +1303,7 @@ void mapToolScene::loadMap()
 	}
 
 	CloseHandle(file);
-
+	/*
 	char str3[500];
 
 	s = "../object/";
@@ -1289,8 +1312,8 @@ void mapToolScene::loadMap()
 	file = CreateFile(TEXT(s.c_str()), GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	/*if (file == INVALID_HANDLE_VALUE)
-		return;*/
+	//if (file == INVALID_HANDLE_VALUE)
+	//	return;
 
 	ReadFile(file, str3, strlen(str3), &read, NULL);
 
@@ -1307,18 +1330,39 @@ void mapToolScene::loadMap()
 	{
 		if (tok != NULL)
 		{
-			int tx = -1, ty = -1, fx = -1, fy = -1, ot = 0;
-			sscanf_s(tok, "%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &ot);
+			int tx = -1, ty = -1, fx = -1, fy = -1, pn = 0, ot = 0;
+			sscanf_s(tok, "%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &pn, &ot);
 
-			tagObject obj = { tx, ty, fx, fy, ot };
+			tagObject obj = { tx, ty, fx, fy, pn, ot };
 			_vObject.push_back(obj);
 			tok = strtok_s(NULL, "\n", &context);
 		}
 	}
 
-	CloseHandle(file);
+	CloseHandle(file); */
 
 	redrawMap();
+}
+
+bool mapToolScene::isAutoTile(int frameX, int frameY, int page)
+{
+	switch (page)
+	{
+	case 0:
+		// 초록초록
+		break;
+	case 1:
+		// 마을
+		break;
+	case 2:
+		// 보스
+		break;
+	}
+	return false;
+}
+
+void mapToolScene::autotile()
+{
 }
 
 void mapToolScene::drawMap()
@@ -1339,11 +1383,65 @@ void mapToolScene::redrawMap()
 			else
 				_vTiles[i][j]->getRect().render(getMapBufferDC());
 
+			// 오브젝트가 있는 경우
 			if (_vTiles[i][j]->getObjectX() != -1)
-				_objectImageBig[_vTiles[i][j]->getObjectImageNum()]->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
+			{
+				if (_vTiles[i][j]->getObjectImageNum() != 3)
+				{
+					// 일반 오브젝트인 경우
+					_objectImageBig[_vTiles[i][j]->getObjectImageNum()]->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
+				}
+				else
+				{
+					// 클래스화 시킬 오브젝트인 경우
+					int width = 0;
+					int height = 0;
+					int frameX = _vTiles[i][j]->getObjectX();
+					int frameY = _vTiles[i][j]->getObjectY();
 
-			if (_editMode == EDITMODE::TYPE)
-				_typeImage->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, 0, _vTiles[i][j]->getOrderIndex());
+					image* img = IMAGEMANAGER->findImage("vendor");
+
+					switch (frameX % 3)
+					{
+					case 0:
+						if (frameY == 0)
+						{
+							// 상인
+							img = IMAGEMANAGER->findImage("vendor");
+							width = SIZE * 2;
+							height = SIZE * 2;
+						}
+						else
+						{
+							// 나무
+							img = IMAGEMANAGER->findImage("tree");
+							width = SIZE * 2;
+							height = SIZE * 5;
+						}
+						break;
+					case 1:
+						if (frameY == 0)
+						{
+							// 문
+							img = IMAGEMANAGER->findImage("door prev");
+							height = SIZE;
+						}
+						else
+						{
+							// 풀
+							img = IMAGEMANAGER->findImage("grass");
+							width = SIZE;
+							height = SIZE;
+						}
+						frameX -= 3;
+						break;
+					}
+					img->frameRender(getMapBufferDC(),
+						_vTiles[i][j]->getRect().left - width,
+						_vTiles[i][j]->getRect().top - height,
+						frameX, 0);
+				}
+			}		
 		}
 	}
 
@@ -1355,12 +1453,62 @@ void mapToolScene::redrawMap()
 			_vEnemies[i].frameX, _vEnemies[i].frameY);
 	}
 
-	for (int i = 0; i < _vObject.size(); ++i)
+	_miObject = _mObject.begin();
+	for (; _miObject != _mObject.end(); ++_miObject)
 	{
-		_objectImageBig[OBJECT_FOUR]->frameRender(getMapBufferDC(),
-			_vTiles[_vObject[i].tileY][_vObject[i].tileX]->getRect().left,
-			_vTiles[_vObject[i].tileY][_vObject[i].tileX]->getRect().top,
-			_vObject[i].frameX, _vObject[i].frameY);
+		int width = 0;
+		int height = 0;
+		int frameX = _miObject->second.frameX;
+
+		image* img = IMAGEMANAGER->findImage("vendor");
+
+		switch (_miObject->second.objectType)
+		{
+		case 0:
+			if (_miObject->second.frameY == 0)
+			{
+				img = IMAGEMANAGER->findImage("vendor");
+				width = SIZE * 2;
+				height = SIZE * 2;
+			}
+			else
+			{
+				// 나무
+				img = IMAGEMANAGER->findImage("tree");
+				width = SIZE * 2;
+				height = SIZE * 5;
+			}
+			break;
+		case 1:
+			if (_miObject->second.frameY == 0)
+			{
+				// 문
+				img = IMAGEMANAGER->findImage("door prev");
+				height = SIZE;
+			}
+			else
+			{
+				// 풀
+				img = IMAGEMANAGER->findImage("grass");
+				width = SIZE;
+				height = SIZE;
+			}
+			frameX -= 3;
+			break;
+		}
+		img->frameRender(getMapBufferDC(),
+			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().left - width,
+			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().top - height,
+			frameX, 0);
+	}
+
+	if (_editMode != EDITMODE::TYPE) return;
+	for (int i = 0; i <= _nowIndex.y; ++i)
+	{
+		for (int j = 0; j <= _nowIndex.x; ++j)
+		{
+				_typeImage->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, 0, _vTiles[i][j]->getOrderIndex());
+		}
 	}
 }
 

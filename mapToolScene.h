@@ -58,7 +58,36 @@ struct tagObject
 	int tileY;
 	int frameX;
 	int frameY;
+	int pageNum;
 	int objectType;
+};
+
+struct tagPoint
+{
+	int x;
+	int y;
+
+	tagPoint(int px, int py)
+	{
+		x = px;
+		y = py;
+	}
+
+public:
+	bool operator()(const tagPoint& p1, const tagPoint& p2) const
+	{
+		if (p1.y != p2.y)
+			return p1.y < p2.y;
+		else
+			return p1.x < p2.x;
+	}
+	bool operator < (const tagPoint& p1) const
+	{
+		if (y != p1.y)
+			return y < p1.y;
+		else
+			return x < p1.x;
+	}
 };
 
 class mapToolScene : public scene
@@ -66,7 +95,10 @@ class mapToolScene : public scene
 private:
 	vector<vector<tile *>> _vTiles;
 	vector<tagEnemy> _vEnemies;
-	vector<tagObject> _vObject;
+	vector<POINT[16]> _vAutoIndexs;
+	//POINT
+	map<tagPoint, tagObject> _mObject;
+	map<tagPoint, tagObject>::iterator _miObject;
 	tile _sampleTiles[SAMPLENUMX * SAMPLENUMY];
 	image* _mapBuffer;
 	image* _uiImage;
@@ -95,8 +127,6 @@ private:
 	PENMODE _penMode;
 	int _page;
 
-	// 마우스 절대 좌표
-	POINT _ptMouseAbs;	
 	// 클리핑 좌표
 	POINT _clippingPoint;
 
@@ -146,6 +176,8 @@ public:
 	void saveMap();
 	void loadMap();
 	
+	bool isAutoTile(int frameX, int frameY, int page);
+	void autotile();
 	void drawMap();
 	void redrawMap();
 
