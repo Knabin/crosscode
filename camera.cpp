@@ -171,7 +171,7 @@ void camera::zoom(HDC hdc)
 	float zoomL = _rc.left + (WINSIZEX - width) * 0.5f;
 	float zoomT = _rc.top + (WINSIZEY - height) * 0.5f;
 
-	StretchBlt(hdc, 0, 0, WINSIZEX, WINSIZEY,
+	StretchBlt(hdc, _rc.left, _rc.top, WINSIZEX, WINSIZEY,
 		hdc, zoomL, zoomT, width, height, SRCCOPY);
 }
 

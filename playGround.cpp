@@ -89,7 +89,7 @@ void playGround::update()
 	}
 	if (KEYMANAGER->isOnceKeyDown('2'))
 	{
-		CAMERA->zoomStart(1.5f, 5.f);
+		CAMERA->zoomStart(3.0f, 5.f);
 	}
 
 	// 이벤트 재생 중에는 업데이트하지 않음
@@ -114,10 +114,10 @@ void playGround::render()
 
 	SCENEMANAGER->render();
 	OBJECTMANAGER->render();
+	CAMERA->zoom(getMemDC());
 	TIMEMANAGER->render(getMemDC());
 	_ui->render();
 	//_enemyManager->render();
-	CAMERA->zoom(getMemDC());
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);
