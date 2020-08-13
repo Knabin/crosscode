@@ -40,6 +40,8 @@ private:
 	float _shakeAmount;
 	float _shakeTime;
 	float _shakeNowTime;
+	float _shakeDirectionChangeTime;
+	float _shakeFlag;
 
 	// 카메라 줌용 변수(미구현)
 	bool _isZoom;
@@ -53,6 +55,10 @@ public:
 	void release();
 
 	void moveToTarget();
+	void moveToTargetSmooth();
+	void updateShake();
+	void updateZoom();
+	void zoom(HDC hdc);
 
 	void setCameraMode(CAMERASTATE state) { _state = state; }
 
@@ -63,6 +69,11 @@ public:
 	float getMapHeight() { return _mapHeight; }
 	void setMapSize(float mapWidth, float mapHeight) { _mapWidth = mapWidth; _mapHeight = mapHeight; }
 
+	void shakeStart(float amount, float time);
+	void zoomStart(float amount, float time);
+
 	RECT& getRect() { return _rc; }
+	bool getIsZoom() { return _isZoom; }
+	int getZoomAmount() { return _zoomAmount; }
 };
 

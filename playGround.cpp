@@ -83,13 +83,27 @@ void playGround::update()
 		SCENEMANAGER->loadScene("boss");
 	}
 
-	SCENEMANAGER->update();
-	OBJECTMANAGER->update();
+	if (KEYMANAGER->isOnceKeyDown('1'))
+	{
+		CAMERA->shakeStart(10.f, 1.f);
+	}
+	if (KEYMANAGER->isOnceKeyDown('2'))
+	{
+		CAMERA->zoomStart(1.5f, 5.f);
+	}
+
+	// 이벤트 재생 중에는 업데이트하지 않음
+	// TODO: UI 켜져 있을 때 화면 멈춰야 하므로 조건 추가
+	if (!EVENTMANAGER->isPlayingEvent())
+	{
+		SCENEMANAGER->update();
+		OBJECTMANAGER->update();
+		_collisionManager->update();
+		_enemyManager->update();
+	}
+
 	CAMERA->update();
 	_ui->update();
-
-	_collisionManager->update();
-	_enemyManager->update();
 }
 
 //그리기 전용
@@ -103,6 +117,7 @@ void playGround::render()
 	TIMEMANAGER->render(getMemDC());
 	_ui->render();
 	//_enemyManager->render();
+	CAMERA->zoom(getMemDC());
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);

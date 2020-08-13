@@ -39,6 +39,6 @@ void eventManager::addEvent(iEvent * pEvent)
 
 bool eventManager::isPlayingEvent()
 {
-//	if (_mEventQueue.size == 0) return false;
+	if (_mEventQueue.size() == 0) return false;
 	return true;
 }
