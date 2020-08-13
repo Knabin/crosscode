@@ -28,36 +28,36 @@ HRESULT meerkat::init()
 	//고슴도치 기본 애니메이션
 	_idleMotion_L = new animation;
 	_idleMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_idleMotion_L->setPlayFrame(49, 46, false, true);
+	_idleMotion_L->setPlayFrame(39, 36, false, true);
 	_idleMotion_L->setFPS(1);
 
 	_idleMotion_R = new animation;
 	_idleMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_idleMotion_R->setPlayFrame(53, 50, false, true);
+	_idleMotion_R->setPlayFrame(20, 23, false, true);
 	_idleMotion_R->setFPS(1);
 	//고슴도치 기본 애니메이션
 
 	//고슴도치 위쪽 기본 애니메이션
 	_idleMotion_U_L = new animation;
 	_idleMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_idleMotion_U_L->setPlayFrame(9, 6, false, true);
+	_idleMotion_U_L->setPlayFrame(19, 16, false, true);
 	_idleMotion_U_L->setFPS(1);
 
 	_idleMotion_U_R = new animation;
 	_idleMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_idleMotion_U_R->setPlayFrame(13, 10, false, true);
+	_idleMotion_U_R->setPlayFrame(0, 3, false, true);
 	_idleMotion_U_R->setFPS(1);
 	//고슴도치 위쪽 기본 애니메이션
 
 	//고슴도치 아래쪽 기본 애니메이션
 	_idleMotion_D_L = new animation;
 	_idleMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_idleMotion_D_L->setPlayFrame(29, 26, false, true);
+	_idleMotion_D_L->setPlayFrame(59, 56, false, true);
 	_idleMotion_D_L->setFPS(1);
 
 	_idleMotion_D_R = new animation;
 	_idleMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_idleMotion_D_R->setPlayFrame(33, 30, false, true);
+	_idleMotion_D_R->setPlayFrame(40, 43, false, true);
 	_idleMotion_D_R->setFPS(1);
 	//고슴도치 아래쪽 기본 애니메이션
 
@@ -107,7 +107,7 @@ HRESULT meerkat::init()
 
 	_hitMotion_R = new animation;
 	_hitMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_hitMotion_R->setPlayFrame(28, 29, false, false);
+	_hitMotion_R->setPlayFrame(29, 28, false, false);
 	_hitMotion_R->setFPS(1);
 	//고슴도치 공격당할때 애니메이션
 
@@ -118,8 +118,8 @@ HRESULT meerkat::init()
 	_hitMotion_U_L->setFPS(1);
 
 	_hitMotion_U_R = new animation;
-	_hitMotion_U_R->init(19, 18, false, false);
-	_hitMotion_U_R->setPlayFrame(8, 9, false, false);
+	_hitMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_U_R->setPlayFrame(9, 8, false, false);
 	_hitMotion_U_R->setFPS(1);
 	//고슴도치 위쪽 공격당할때 애니메이션
 
@@ -131,7 +131,7 @@ HRESULT meerkat::init()
 
 	_hitMotion_D_R = new animation;
 	_hitMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
-	_hitMotion_D_R->setPlayFrame(48, 49, false, false);
+	_hitMotion_D_R->setPlayFrame(49, 48, false, false);
 	_hitMotion_D_R->setFPS(1);
 	//고슴도치 아래쪽 공격당할때 애니메이션
 
