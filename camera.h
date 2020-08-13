@@ -40,6 +40,7 @@ private:
 	float _shakeAmount;
 	float _shakeTime;
 	float _shakeNowTime;
+	float _shakeChangeDirectionTime;
 
 	// 카메라 줌용 변수(미구현)
 	bool _isZoom;
