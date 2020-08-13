@@ -23,6 +23,7 @@ private:
 	//vector<tile*> _vEnemy;
 
 	class player* _player;
+	vector<class gameObject*> _vEnemy;
 
 	int _totalSize;
 	int _opensize;
@@ -33,15 +34,15 @@ private:
 	int _maxX;
 	int _maxY;
 
-	vector<floatRect> _enemyRect;
+	//vector<floatRect> _enemyRect;
 
 public:
 	HRESULT init();
 
 	void setTiles();
 	void pathFinder(tile* currentTile);
-	void clearEnemyRect() { _enemyRect.clear(); }
-	void enemyRectPush(floatRect enemyRC) { _enemyRect.push_back(enemyRC); }
+	//void clearEnemyRect() { _enemyRect.clear(); }
+	//void enemyRectPush(floatRect enemyRC) { _enemyRect.push_back(enemyRC); }
 	vector<tile*> pathChecking(floatRect enemyRC);
 	void setScene(scene* s) { _scene = s; }
 

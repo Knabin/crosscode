@@ -97,3 +97,10 @@ const floatRect & floatRect::operator=(const RECT & rc)
 	this->bottom = (float)rc.bottom;
 	return *this;
 }
+
+const bool floatRect::operator==(const floatRect & rc)
+{
+	if (this->left == rc.left && this->right == rc.right &&
+		this->top == rc.top && this->bottom == this->bottom) return true;
+	return false;
+}

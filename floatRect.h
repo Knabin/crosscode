@@ -55,6 +55,7 @@ public:
 	}
 
 	const floatRect& operator=(const RECT& rc);
+	const bool operator==(const floatRect& rc);
 };
 inline floatRect RectMakePivot(const floatPoint& position, const floatPoint& size, const pivot& pivot) {
 	floatRect result;

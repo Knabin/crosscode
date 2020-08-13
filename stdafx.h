@@ -57,11 +57,12 @@ using namespace MINTCHOCO_UTIL;
 
 // 여기서 프로그램에 필요한 추가 헤더를 참조합니다.
 #define WINNAME (LPCTSTR)(TEXT("프레임워크 테스트"))
-#define WINSTARTX	200
-#define WINSTARTY	50
+#define WINSTARTX	0
+#define WINSTARTY	0
 #define WINSIZEX	GetSystemMetrics(SM_CXSCREEN)		
 #define WINSIZEY	GetSystemMetrics(SM_CYSCREEN)
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
+
 
 #define RND randomFunction::getInstance()
 #define IMAGEMANAGER imageManager::getInstance()

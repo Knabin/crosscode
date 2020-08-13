@@ -4,6 +4,8 @@
 #include "hedgehag.h"
 #include "vendor.h"
 #include "door.h"
+#include "mapObject.h"
+//#include "tile.h"
 
 scene::~scene()
 {
@@ -30,7 +32,7 @@ void scene::getDataFromFile(string fileName)
 {
 	getTilesFromFile(fileName);
 	getEnemiesFromFile(fileName);
-	getObjectsFromFile(fileName);
+	//getObjectsFromFile(fileName);
 }
 
 void scene::getTilesFromFile(string fileName)
@@ -65,12 +67,63 @@ void scene::getTilesFromFile(string fileName)
 		{
 			if (tok != NULL)
 			{
-				int tx = -1, ty = -1, ox = -1, oy = -1, pn = 0, oi = 0;
-				sscanf_s(tok, "%d,%d,%d,%d,%d,%d", &tx, &ty, &ox, &oy, &pn, &oi);
+				int tx = -1, ty = -1, ox = -1, oy = -1, pn = 0, on = 0, oi = 0;
+				sscanf_s(tok, "%d,%d,%d,%d,%d,%d,%d", &tx, &ty, &ox, &oy, &pn, &on, &oi);
 				tile* t = new tile();
-				t->setTiles(tx, ty, ox, oy, pn, oi);
+				t->setTiles(tx, ty, ox, oy, pn, on, oi);
 				t->setTileRc(j * SIZE, i * SIZE);
 				v.push_back(t);
+
+				if (ox != -1 && oy != -1 && on == 3)
+				{
+					int type = ox / 3;
+					if (oy == 0)
+					{
+						switch (type)
+						{
+						case 0:
+						{
+							vendor* ven = new vendor();
+							ven->setType(ox % 3);
+							ven->setPosition(v[j]->getRect().getCenter());
+							ven->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(ven));
+						}
+						break;
+						case 1:
+						{
+							door* doo = new door();
+							doo->setType(ox % 3);
+							doo->setPosition(floatPoint{ v[j]->getRect().left, v[j]->getRect().top });
+							doo->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(doo));
+						}
+						break;
+						}
+					}
+					else
+					{
+						switch (type)
+						{
+						case 0:
+						{
+							mapObject* tree = new mapObject(0, ox % 3);
+							tree->setPosition(floatPoint{ v[j]->getRect().getCenter().x, v[j]->getRect().top - SIZE * 2 });
+							tree->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(tree));
+						}
+						break;
+						case 1:
+						{
+							mapObject* grass = new mapObject(1, ox % 3);
+							grass->setPosition(floatPoint{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
+							grass->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(grass));
+						}
+						break;
+						}
+					}
+				}
 				tok = strtok_s(NULL, "\n", &context);
 			}
 		}
@@ -150,33 +203,54 @@ void scene::getObjectsFromFile(string fileName)
 
 	for (int i = 0; i < maxNum; ++i)
 	{
-		int tx = -1, ty = -1, fx = -1, fy = -1, ot = 0;
-		sscanf_s(tok, "%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &ot);
+		int tx = -1, ty = -1, fx = -1, fy = -1, pn = 0, ot = 0;
+		sscanf_s(tok, "%d,%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &pn, &ot);
 
-		switch (ot)
+		if (fy == 0)
 		{
-		case 0:
-		case 1:
-		case 2:
-		{
-			vendor* ven = new vendor();
-			ven->setType(ot);
-			ven->setPosition(_vTiles[ty][tx]->getRect().getCenter());
-			ven->init();
-			OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(ven));
-		}
+			switch (ot)
+			{
+			case 0:
+			{
+				vendor* ven = new vendor();
+				ven->setType(ot);
+				ven->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+				ven->init();
+				OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(ven));
+			}
 			break;
-		case 3:
-		case 4:
-		case 5:
-		{
-			door* doo = new door();
-			doo->setType(ot);
-			doo->setPosition(floatPoint{ _vTiles[ty][tx]->getRect().left, _vTiles[ty][tx]->getRect().top });
-			doo->init();
-			OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(doo));
-		}
+			case 1:
+			{
+				door* doo = new door();
+				doo->setType(ot);
+				doo->setPosition(floatPoint{ _vTiles[ty][tx]->getRect().left, _vTiles[ty][tx]->getRect().top });
+				doo->init();
+				OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(doo));
+			}
 			break;
+			}
+		}
+		else
+		{
+			switch (ot)
+			{
+			case 0:
+			{
+				mapObject* tree = new mapObject(0, fx);
+				tree->setPosition(floatPoint{ _vTiles[ty][tx]->getRect().getCenter().x, _vTiles[ty][tx]->getRect().getCenter().y - SIZE * 2 });
+				tree->init();
+				OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(tree));
+			}
+			break;
+			case 1:
+			{
+				mapObject* grass = new mapObject(1, fx - 3);
+				grass->setPosition(floatPoint{ _vTiles[ty][tx]->getRect().getCenter().x, _vTiles[ty][tx]->getRect().top });
+				grass->init();
+				OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(grass));
+			}
+			break;
+			}
 		}
 		tok = strtok_s(NULL, "\n", &context);
 	}

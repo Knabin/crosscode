@@ -3,11 +3,15 @@
 
 class door : public gameObject
 {
-	// left top 기준으로 작성하기
+	image* _image;
 	int _type;
 
 public:
-	
 	void setType(int type) { _type = type; }
+
+	virtual HRESULT init();
+	virtual void release();
+	virtual void update();
+	virtual void render();
 };
 

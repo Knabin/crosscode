@@ -102,6 +102,7 @@ void playGround::render()
 	OBJECTMANAGER->render();
 	TIMEMANAGER->render(getMemDC());
 	_ui->render();
+	//_enemyManager->render();
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);

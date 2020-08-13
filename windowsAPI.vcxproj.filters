@@ -151,6 +151,7 @@
     <ClCompile Include="vendor.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="mapObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -315,6 +316,7 @@
     <ClInclude Include="vendor.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
+    <ClInclude Include="mapObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
