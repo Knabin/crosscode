@@ -17,13 +17,13 @@ void collisionManager::release()
 
 void collisionManager::update()
 {
-	collision();//플레이어와 에너미 충돌처리
+	//collision();//플레이어와 에너미 충돌처리
 }
 
 void collisionManager::render()
 {
 }
-
+/*
 void collisionManager::collision()
 {
 	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
@@ -194,6 +194,6 @@ void collisionManager::collision()
 			}
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-		*/
+		
 	}
-}
+}*/

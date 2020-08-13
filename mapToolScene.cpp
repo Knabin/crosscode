@@ -1070,7 +1070,7 @@ void mapToolScene::saveMap()
 {
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXTILEX * MAXTILEY * 16];
+	char str[100 + MAXTILEX * MAXTILEY * 18];
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
@@ -1184,7 +1184,7 @@ void mapToolScene::loadMap()
 {
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXTILEX * MAXTILEY * 16];
+	char str[100 + MAXTILEX * MAXTILEY * 18];
 	char* context = NULL;
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
