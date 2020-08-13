@@ -593,7 +593,7 @@ void guardState::update()
 	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
 	if (!_player->getAnimation()->isPlay())
 	{
-	
+		_player->getAnimation()->start();
 	}
 }
 
@@ -723,39 +723,32 @@ void dodgeState::update()
 	{
 	case PLAYERDIRECTION::TOP:
 		_player->setAnimation(_top);
-		_player->move(0,-8.0f);
 		break;
 	case PLAYERDIRECTION::LEFT_TOP:
 		_player->setAnimation(_left_top);
-		_player->moveAngle(PI*0.75, 8.0f);
 		break;
 	case PLAYERDIRECTION::LEFT:
 		_player->setAnimation(_left);
-		_player->move(-8.0f, 0);
 		break;
 	case PLAYERDIRECTION::LEFT_BOTTOM:
 		_player->setAnimation(_left_bottom);
-		_player->moveAngle(PI*1.25, 8.0f);
 		break;
 	case PLAYERDIRECTION::BOTTOM:
 		_player->setAnimation(_bottom);
-		_player->move(0, 8.0f);
 		break;
 	case PLAYERDIRECTION::RIGHT_BOTTOM:
 		_player->setAnimation(_right_bottom);
-		_player->moveAngle(PI*1.75, 8.0f);
 		break;
 	case PLAYERDIRECTION::RIGHT:
 		_player->setAnimation(_right);
-		_player->move(8.0f, 0);
 		break;
 	case PLAYERDIRECTION::RIGHT_TOP:
 		_player->setAnimation(_right_top);
-		_player->moveAngle(PI*0.25, 8.0f);
 		break;
 	default:
 		break;
 	}
+	_player->playerDodge();
 	if (!_player->getAnimation()->isPlay()) _player->getAnimation()->start();
 	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 30);
 }

@@ -21,8 +21,7 @@ enum PLAYERSTATE : int
 	JUMP,
 	GUARD,
 	DODGE,
-	LONGATTACKLEFT,
-	LONGATTACKRIGHT,
+	LONGATTACK,
 	END,
 };
 
@@ -30,10 +29,12 @@ class player : public gameObject
 {
 private:
 	image* _image;
-	image* _imgShield;
 	animation* _ani;
-	animation* _aniShield;
 	floatRect _tile;		// center x, bottom 기준으로 현재 밟고 있는 tile rect
+
+	floatRect rc1[10];
+	floatRect rc2[10];
+	float de;
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
@@ -42,6 +43,7 @@ private:
 	vector<playerState*>	_vState;
 
 	POINT tileIndex;
+	POINT _ptMouseAbs;
 	RECT rcCollision;
 	int _nowOrder;
 
@@ -59,6 +61,7 @@ public:
 	void render() override;
 
 	void playerMove();
+	void playerDodge();
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
 	void playerFire();

@@ -15,6 +15,7 @@ protected:
 
 	bool _long;
 	int _count;
+
 public:
 	virtual ~playerState() {};
 
