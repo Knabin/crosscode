@@ -58,7 +58,46 @@ struct tagObject
 	int tileY;
 	int frameX;
 	int frameY;
+	int pageNum;
 	int objectType;
+
+
+	bool objectCompare(const tagObject & obj1, const tagObject & obj2)
+	{
+		if (obj1.tileY != obj2.tileY)
+			return obj1.tileY < obj2.tileY;
+		else
+			return obj1.tileX < obj2.tileX;
+	}
+
+};
+
+struct tagPoint
+{
+	int x;
+	int y;
+
+	tagPoint(int px, int py)
+	{
+		x = px;
+		y = py;
+	}
+
+public:
+	bool operator()(const tagPoint& p1, const tagPoint& p2) const
+	{
+		if (p1.y != p2.y)
+			return p1.y < p2.y;
+		else
+			return p1.x < p2.x;
+	}
+	bool operator < (const tagPoint& p1) const
+	{
+		if (y != p1.y)
+			return y < p1.y;
+		else
+			return x < p1.x;
+	}
 };
 
 class mapToolScene : public scene
@@ -66,7 +105,8 @@ class mapToolScene : public scene
 private:
 	vector<vector<tile *>> _vTiles;
 	vector<tagEnemy> _vEnemies;
-	vector<tagObject> _vObject;
+	map<tagPoint, tagObject> _mObject;
+	map<tagPoint, tagObject>::iterator _miObject;
 	tile _sampleTiles[SAMPLENUMX * SAMPLENUMY];
 	image* _mapBuffer;
 	image* _uiImage;
