@@ -16,7 +16,6 @@ enum bossState //보스 상태패턴 enum문
 };
 struct tagBossPart  //보스 파츠별 구조체
 {
-	bossState _bossState;
 	image* _bossBodyImage;
 	floatRect _rectBody;
 
@@ -36,6 +35,7 @@ class boss : public gameObject
 private:
 
 	image* image;
+	bossState _bossState;
 
 	tagBossPart _Center;
 
@@ -76,6 +76,9 @@ public:
 	void update();
 	void render();
 
+	
+	void bossState();
+	void bossDraw();
 
 
 
