@@ -10,7 +10,7 @@ HRESULT meerkat::init()
 	_maxHP = 100;
 	_currentHP = _maxHP;
 
-	_speed = 5.0f;
+	_meerkatSpeed = 10.0f;
 	
 	_attackPower = RND->getFromIntTo(2, 6);
 
@@ -20,11 +20,15 @@ HRESULT meerkat::init()
 	_count = 0;
 	_attackCount = 0;
 	_hitCount = 0;
+	_reflectCount = 0;
 	_smallDistance = 250;
 	_bigDistance = 500;
 
 	_isAttack = false;
 	_isMove = false;
+	_reflect = false;
+	_isBigMove = false;
+	_oneAnimation = false;
 
 	//미어캣 기본 애니메이션
 	_idleMotion_L = new animation;
@@ -134,6 +138,30 @@ HRESULT meerkat::init()
 	_attackMotion_D_R->setFPS(1);
 	//미어캣 아래쪽 공격 애니메이션
 
+	//미어캣이 땅속으로 들어가는 애니메이션
+	_meerkatTunnelDownMotion_L = new animation;
+	_meerkatTunnelDownMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelDownMotion_L->setPlayFrame(71, 79, false, false);
+	_meerkatTunnelDownMotion_L->setFPS(1);
+
+	_meerkatTunnelDownMotion_R = new animation;
+	_meerkatTunnelDownMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelDownMotion_R->setPlayFrame(68, 60, false, false);
+	_meerkatTunnelDownMotion_R->setFPS(1);
+	//미어캣이 땅속으로 들어가는 애니메이션
+
+	//미어캣이 땅속에서 나오는 애니메이션
+	_meerkatTunnelUpMotion_L = new animation;
+	_meerkatTunnelUpMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelUpMotion_L->setPlayFrame(79, 71, false, false);
+	_meerkatTunnelUpMotion_L->setFPS(1);
+
+	_meerkatTunnelUpMotion_R = new animation;
+	_meerkatTunnelUpMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelUpMotion_R->setPlayFrame(60, 68, false, false);
+	_meerkatTunnelUpMotion_R->setFPS(1);
+	//미어캣이 땅속에서 나오는 애니메이션
+
 	//미어캣 무브 애니메이션
 	_meerkatMoveMotion = new animation;
 	_meerkatMoveMotion->init(_meerkatMoveImage->getWidth(), _meerkatMoveImage->getHeight(), _meerkatMoveImage->getFrameWidth(), _meerkatMoveImage->getFrameHeight());
@@ -162,7 +190,7 @@ void meerkat::update()
 	tileGet();//에너미의 타울검출 위치 업데이트
 	move();//에너미 무브
 	animationControl();//에너미 애니메이션 컨트롤
-	animationAngleControl();//에너미와 플레이어간의 앵글값에 따른 애니메이션 컨트롤
+	//animationAngleControl();//에너미와 플레이어간의 앵글값에 따른 애니메이션 컨트롤
 	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
 	angry();//에너미의 체력이 절반 이하가 되면 능력치 상승(스피드, 공격력, 공격딜레이)
 }
@@ -170,7 +198,7 @@ void meerkat::update()
 void meerkat::render()
 {
 	_attackRC.render(getMemDC());//에너미 공격렉트
-	if (_enemyDirection != ENEMY_MOVE)
+	if (_enemyDirection != ENEMY_TUNNEL_MOVE)
 	{
 		_enemyImage->aniRender(getMemDC(), _rc.getCenter().x - (_enemyImage->getFrameWidth() / 2), _rc.getCenter().y - (_enemyImage->getFrameHeight() / 2), _enemyMotion);
 	}
@@ -179,9 +207,9 @@ void meerkat::render()
 		_meerkatMoveImage->aniRender(getMemDC(), _rc.getCenter().x - (_meerkatMoveImage->getFrameWidth() / 2), _rc.getCenter().y - (_meerkatMoveImage->getFrameHeight() / 2), _enemyMotion);
 	}
 	//_rc.render(getMemDC());//에너미 렉트
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		RectangleMake(getMemDC(), _t[i]->getRect().getCenter().x, _t[i]->getRect().getCenter().y, SIZE, SIZE);
+		//RectangleMake(getMemDC(), _t[i]->getRect().getCenter().x, _t[i]->getRect().getCenter().y, SIZE, SIZE);
 	}
 }
 
@@ -202,38 +230,152 @@ void meerkat::move()
 			_enemyDirection != ENEMY_UP_RIGHT_HIT &&
 			_enemyDirection != ENEMY_DOWN_RIGHT_HIT)
 		{
-			if (_distance <= _smallDistance)//플레이어랑 에너미의 거리가 가까우면
+			if (_distance <= _smallDistance && !_isBigMove)//플레이어랑 에너미의 거리가 가까우면
 			{
-				if (tileMove())
+				if (tileMove())//미어캣 주변에 장애물이 없으면
 				{
-					if (!_isMove)
+					if (!_isMove)//플레이어의 반대방향으로 이동시키기 위해 연산을 한번만 하기위한 조건
 					{
-						_distanceSave = _distance;
 						_angleSave = _angle + PI;
 						_isMove = true;
 					}
+				}
 
-					if (_isMove)
+				if (!tileMove() && !_reflect && !_isBigMove)//미어캣 주변에 장애물이 있고 장애물의 반대방향으로 이동되게 하기위한 조건
+				{
+					_angleSave += PI;//장애물의 반대방향으로 이동
+					_reflect = true;
+				}
+			}
+
+			if (tileMove() && !_isBigMove)//장애물이 안부딪혔으면
+			{
+				if (_isMove && _distance <= _smallDistance + _smallDistance / 2)
+				{
+					if (_playerX < _x)
 					{
-						_x += cosf(_angleSave) * _speed;
-						_y += -sinf(_angleSave) * _speed;
+						if (_enemyDirection != ENEMY_DOWN_LEFT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
+						{
+							_enemyDirection = ENEMY_DOWN_LEFT_TUNNEL;
+						}
+					}
+					else
+					{
+						if (_enemyDirection != ENEMY_DOWN_RIGHT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
+						{
+							_enemyDirection = ENEMY_DOWN_RIGHT_TUNNEL;
+						}
+					}
+						
+					_reflect = false;
+
+					if (_enemyDirection == ENEMY_TUNNEL_MOVE)
+					{
+						_x += cosf(_angleSave) * _meerkatSpeed;
+						_y += -sinf(_angleSave) * _meerkatSpeed;
+					}
+					
+				}
+				else
+				{
+					cout << "2" << endl;
+
+					if (_playerX < _x)
+					{
+						if (_enemyDirection == ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL)
+						{
+							_enemyDirection = ENEMY_UP_LEFT_TUNNEL;
+						}
+					}
+					else
+					{
+						if (_enemyDirection == ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
+						{
+							_enemyDirection = ENEMY_UP_RIGHT_TUNNEL;
+						}
+					}
+					_isMove = false;
+				}
+			}
+
+			if (!tileMove() && _reflect && !_isBigMove)//미어캣 주변에 장애물이 있고 장애물의 반대방향으로 이동되게 하기위한 조건
+			{
+				if (_playerX < _x)
+				{
+					if (_enemyDirection != ENEMY_DOWN_LEFT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
+					{
+						_enemyDirection = ENEMY_DOWN_LEFT_TUNNEL;
 					}
 				}
-			}
-			else if (_distance > _smallDistance && _distance < _bigDistance)//플레이어랑 에너미의 거리가 일정거리이상 멀고 너무멀지 않으면
-			{
-				_isMove = false;
-				//투척공격
-				//투척공격
-			}
-			else//플레이어와 에너미의 거리가 너무 멀면
-			{
-				_isMove = false;
-				if (tileMove())
+				else
 				{
-					_x += cosf(_angle) * _speed;
-					_y += -sinf(_angle) * _speed;
+					if (_enemyDirection != ENEMY_DOWN_RIGHT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
+					{
+						_enemyDirection = ENEMY_DOWN_RIGHT_TUNNEL;
+					}
 				}
+					
+				if (_enemyDirection == ENEMY_TUNNEL_MOVE)
+				{
+					_x += cosf(_angleSave) * _meerkatSpeed;
+					_y += -sinf(_angleSave) * _meerkatSpeed;
+				}
+				_reflectCount++;//장애물에 부딪혔으니 장애물에 부딪힌 횟수 카운트증가
+			}
+
+			if (_reflectCount >= 2 && !_isBigMove)//벽에 부딪힌 횟수가 2번 이상이고 빅무브는 펄스인경우
+			{
+				_angleSave += PI / 2;//벽에 부딪혔으면 각도값을 90도 틀어주기 위한 연산
+				_reflectCount = 0;
+			}
+
+			if (_distance > _bigDistance)//플레이어와 미어캣간의 거리가 너무 먼경우
+			{
+				_isBigMove = true;//빅무브를 실행해라
+			}
+
+			if (_isBigMove)//빅무브
+			{
+				//에이스타 이동
+				if (_move.size() != NULL)
+				{
+					float d = getDistance(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+					float an = getAngle(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+
+					if (_playerX < _x)
+					{
+						if (_enemyDirection != ENEMY_DOWN_LEFT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
+						{
+							_enemyDirection = ENEMY_DOWN_LEFT_TUNNEL;
+						}
+					}
+					else
+					{
+						if (_enemyDirection != ENEMY_DOWN_RIGHT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
+						{
+							_enemyDirection = ENEMY_DOWN_RIGHT_TUNNEL;
+						}
+					}
+
+					if (_enemyDirection == ENEMY_TUNNEL_MOVE)
+					{
+						_x += cosf(an) * _meerkatSpeed;
+						_y += -sinf(an) * _meerkatSpeed;
+					}
+					
+					if (d < 5)
+					{
+						deleteMove();
+					}
+				}
+				//에이스타 이동
+			}
+
+			if (_distance <= _smallDistance + _smallDistance / 2)//플레이어와 미어캣의 거리가 일정거리 안이면
+			{
+				_isBigMove = false;//빅무브를 멈춰라
 			}
 		}
 	}
@@ -248,26 +390,56 @@ void meerkat::animationControl()
 	case ENEMY_LEFT_IDLE:
 		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_L;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_RIGHT_IDLE:
 		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_R;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_UP_LEFT_IDLE:
 		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_U_L;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_UP_RIGHT_IDLE:
 		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_U_R;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_DOWN_LEFT_IDLE:
 		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_D_L;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_IDLE:
 		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_D_R;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_LEFT_MOVE:
 		break;
@@ -291,6 +463,11 @@ void meerkat::animationControl()
 			_hitCount = 0;
 			_enemyDirection = ENEMY_LEFT_IDLE;
 		}
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_RIGHT_HIT:
 		_attackRC.set(0, 0, 0, 0);
@@ -301,6 +478,11 @@ void meerkat::animationControl()
 		{
 			_hitCount = 0;
 			_enemyDirection = ENEMY_RIGHT_IDLE;
+		}
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
 		}
 		break;
 	case ENEMY_UP_LEFT_HIT:
@@ -313,6 +495,11 @@ void meerkat::animationControl()
 			_hitCount = 0;
 			_enemyDirection = ENEMY_UP_LEFT_IDLE;
 		}
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_UP_RIGHT_HIT:
 		_attackRC.set(0, 0, 0, 0);
@@ -323,6 +510,11 @@ void meerkat::animationControl()
 		{
 			_hitCount = 0;
 			_enemyDirection = ENEMY_UP_RIGHT_IDLE;
+		}
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
 		}
 		break;
 	case ENEMY_DOWN_LEFT_HIT:
@@ -335,6 +527,11 @@ void meerkat::animationControl()
 			_hitCount = 0;
 			_enemyDirection = ENEMY_DOWN_LEFT_IDLE;
 		}
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_HIT:
 		_attackRC.set(0, 0, 0, 0);
@@ -346,35 +543,136 @@ void meerkat::animationControl()
 			_hitCount = 0;
 			_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 		}
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_LEFT_ATTACK:
 		_enemyMotion = _attackMotion_L;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_R;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK:
 		_enemyMotion = _attackMotion_U_L;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_U_R;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK:
 		_enemyMotion = _attackMotion_D_L;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_D_R;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
 		break;
-	case ENEMY_MOVE:
+	case ENEMY_TUNNEL_MOVE:
 		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _meerkatMoveMotion;
+
+		if (!_enemyMotion->isPlay())
+		{
+			_enemyMotion->start();
+		}
+		break;
+	case ENEMY_DOWN_LEFT_TUNNEL:
+		_attackRC.set(0, 0, 0, 0);
+		_enemyMotion = _meerkatTunnelDownMotion_L;
+
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
+		{
+			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_enemyDirection = ENEMY_TUNNEL_MOVE;
+		}
+		break;
+	case ENEMY_DOWN_RIGHT_TUNNEL:
+		_attackRC.set(0, 0, 0, 0);
+		_enemyMotion = _meerkatTunnelDownMotion_R;
+
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
+		{
+			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_enemyDirection = ENEMY_TUNNEL_MOVE;
+		}
+		break;
+	case ENEMY_UP_LEFT_TUNNEL:
+		_attackRC.set(0, 0, 0, 0);
+		_enemyMotion = _meerkatTunnelUpMotion_L;
+
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
+		{
+			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_enemyDirection = ENEMY_DOWN_LEFT_IDLE;
+		}
+		break;
+	case ENEMY_UP_RIGHT_TUNNEL:
+		_attackRC.set(0, 0, 0, 0);
+		_enemyMotion = _meerkatTunnelUpMotion_R;
+
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
+		{
+			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
+		}
 		break;
 	}
 
-	if (!_enemyMotion->isPlay())
-	{
-		_enemyMotion->start();
-	}
+	
 }
 
 void meerkat::animationAngleControl()
@@ -392,7 +690,7 @@ void meerkat::animationAngleControl()
 			{
 				if (_distance <= _smallDistance)//플레이어랑 에너미의 거리가 가까우면
 				{
-					_enemyDirection = ENEMY_MOVE;
+					_enemyDirection = ENEMY_TUNNEL_MOVE;
 
 				}
 				else if (_distance > _smallDistance && _distance < _bigDistance)//플레이어랑 에너미의 거리가 일정거리이상 멀고 너무멀지 않으면
@@ -429,7 +727,7 @@ void meerkat::animationAngleControl()
 				}
 				else//플레이어와 에너미의 거리가 너무 멀면
 				{
-					_enemyDirection = ENEMY_MOVE;
+					_enemyDirection = ENEMY_TUNNEL_MOVE;
 				}
 			}
 			else//공격상태값이 트루면
@@ -475,47 +773,14 @@ void meerkat::tileGet()
 	int k = 1;
 	currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };//현재에너미 위치에 타일
 
-	if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
-	{
-		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y };
-		nextTileIndex[1] = { currentTileIndex.x - k, currentTileIndex.y + k };
-		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y - k };
-	}
-
-	if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
-	{
-		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y - k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y - k };
-		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y - k };
-	}
-
-	if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
-	{
-		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y - k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y - k };
-		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y - k };
-	}
-
-	if (_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45 || _angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360)//오른쪽
-	{
-		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y };
-		nextTileIndex[1] = { currentTileIndex.x + k, currentTileIndex.y - k };
-		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y + k };
-	}
-
-	if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
-	{
-		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y + k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y + k };
-		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y + k };
-	}
-
-	if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래 오른쪽
-	{
-		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y + k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y + k };
-		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y + k };
-	}
+	nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y };//왼쪽
+	nextTileIndex[1] = { currentTileIndex.x - k, currentTileIndex.y + k };//왼쪽아래
+	nextTileIndex[2] = { currentTileIndex.x, currentTileIndex.y + k };//아래
+	nextTileIndex[3] = { currentTileIndex.x + k, currentTileIndex.y + k };//오른쪽 아래
+	nextTileIndex[4] = { currentTileIndex.x + k, currentTileIndex.y };//오른쪽
+	nextTileIndex[5] = { currentTileIndex.x + k, currentTileIndex.y - k };//오른쪽위
+	nextTileIndex[6] = { currentTileIndex.x, currentTileIndex.y - k };//위
+	nextTileIndex[7] = { currentTileIndex.x - k, currentTileIndex.y - k };//왼쪽위
 
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
@@ -540,12 +805,49 @@ void meerkat::tileGet()
 	if (nextTileIndex[2].y > maxTileY) nextTileIndex[2].y = maxTileY;
 	else if (nextTileIndex[2].y < 0) nextTileIndex[2].y = 0;
 	_t[2] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[2].y][nextTileIndex[2].x];
+
+	//다음 타일
+	if (nextTileIndex[3].x > maxTileX) nextTileIndex[3].x = maxTileX;
+	else if (nextTileIndex[3].x < 0) nextTileIndex[3].x = 0;
+	if (nextTileIndex[3].y > maxTileY) nextTileIndex[3].y = maxTileY;
+	else if (nextTileIndex[3].y < 0) nextTileIndex[3].y = 0;
+	_t[3] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[3].y][nextTileIndex[3].x];
+
+	//다음 타일
+	if (nextTileIndex[4].x > maxTileX) nextTileIndex[4].x = maxTileX;
+	else if (nextTileIndex[4].x < 0) nextTileIndex[4].x = 0;
+	if (nextTileIndex[4].y > maxTileY) nextTileIndex[4].y = maxTileY;
+	else if (nextTileIndex[4].y < 0) nextTileIndex[4].y = 0;
+	_t[4] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[4].y][nextTileIndex[4].x];
+
+	//다음 타일
+	if (nextTileIndex[5].x > maxTileX) nextTileIndex[5].x = maxTileX;
+	else if (nextTileIndex[5].x < 0) nextTileIndex[5].x = 0;
+	if (nextTileIndex[5].y > maxTileY) nextTileIndex[5].y = maxTileY;
+	else if (nextTileIndex[5].y < 0) nextTileIndex[5].y = 0;
+	_t[5] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[5].y][nextTileIndex[5].x];
+
+	//다음 타일
+	if (nextTileIndex[6].x > maxTileX) nextTileIndex[6].x = maxTileX;
+	else if (nextTileIndex[6].x < 0) nextTileIndex[6].x = 0;
+	if (nextTileIndex[6].y > maxTileY) nextTileIndex[6].y = maxTileY;
+	else if (nextTileIndex[6].y < 0) nextTileIndex[6].y = 0;
+	_t[6] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[6].y][nextTileIndex[6].x];
+
+	//다음 타일
+	if (nextTileIndex[7].x > maxTileX) nextTileIndex[7].x = maxTileX;
+	else if (nextTileIndex[7].x < 0) nextTileIndex[7].x = 0;
+	if (nextTileIndex[7].y > maxTileY) nextTileIndex[7].y = maxTileY;
+	else if (nextTileIndex[7].y < 0) nextTileIndex[7].y = 0;
+	_t[7] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[7].y][nextTileIndex[7].x];
 }
 
 bool meerkat::tileMove()
 {
 	//층이 같다면
-	if (_t[0]->getOrderIndex() == _nowOrder && _t[1]->getOrderIndex() == _nowOrder && _t[2]->getOrderIndex() == _nowOrder)
+	if (_t[0]->getOrderIndex() == _nowOrder && _t[1]->getOrderIndex() == _nowOrder && _t[2]->getOrderIndex() == _nowOrder &&
+		_t[3]->getOrderIndex() == _nowOrder && _t[4]->getOrderIndex() == _nowOrder && _t[5]->getOrderIndex() == _nowOrder &&
+		_t[6]->getOrderIndex() == _nowOrder && _t[7]->getOrderIndex() == _nowOrder)
 	{
 		return true;
 	}
