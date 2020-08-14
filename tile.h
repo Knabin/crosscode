@@ -22,6 +22,13 @@ enum class ORDER : int
 	END
 };
 
+enum
+{
+	NONE,
+	AUTOTILE1,
+	AUTOTILE2,
+};
+
 class tile : public gameObject
 {
 private:
@@ -75,6 +82,26 @@ public:
 	}
 
 	virtual void render();
+	void checkTerrainType()
+	{
+		switch (_terrainImageNum)
+		{
+		case 0:
+			_terrainType = NONE;
+			break;
+		case 1:
+			if (_terrainX >= 8 && _terrainX < 12 && _terrainY >= 0 && _terrainY <= 3)
+				_terrainType = AUTOTILE1;
+			else if (_terrainX >= 12 && _terrainX <= 15 && _terrainY >= 0 && _terrainY <= 3)
+				_terrainType = AUTOTILE2;
+			else
+				_terrainType = NONE;
+			break;
+		case 2:
+			_terrainType = NONE;
+			break;
+		}
+	}
 
 	// ======== getter / setter ========
 
@@ -82,10 +109,10 @@ public:
 	void setTerrainType(int type) { _terrainType = type; }
 
 	int getTerrainX() { return _terrainX; }
-	void setTerrainX(int x) { _terrainX = x; }
+	void setTerrainX(int x) { _terrainX = x; this->checkTerrainType(); }
 
 	int getTerrainY() { return _terrainY; }
-	void setTerrainY(int y) { _terrainY = y; }
+	void setTerrainY(int y) { _terrainY = y; this->checkTerrainType(); }
 
 	int getObjectX() { return _objectX; }
 	void setObjectX(int x) { _objectX = x; }

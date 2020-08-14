@@ -124,6 +124,8 @@ public:
 	void alphaRedRender(HDC hdc, BYTE alpha);
 	void alphaRedRender(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight, BYTE alpha);
 
+	void rotateRender(HDC hdc, float centerX, float centerY, float angle);
+
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 
 	//=======================================
