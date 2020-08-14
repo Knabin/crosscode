@@ -6,8 +6,8 @@ class hedgehag : public enemy
 private:
 	float _attackSpeed;//공격중에 움직이는 스피드
 	bool _effect;//공격상태에서 제자리에 있을때 실행할 이펙트의 조건을 위한 변수
-	POINT nextTileIndex;//현재 에너미 위치에서 근처에 장애물 위치를 파악할 타일
 
+	int _angleCount;
 
 public:
 	virtual HRESULT init();

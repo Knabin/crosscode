@@ -155,6 +155,9 @@
     <ClCompile Include="nomalUI.cpp">
       <Filter>playGround\uiController</Filter>
     </ClCompile>
+    <ClCompile Include="meerkat.cpp">
+      <Filter>enemyTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -322,6 +325,9 @@
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="nomalUI.h">
       <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="meerkat.h">
+      <Filter>enemyTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

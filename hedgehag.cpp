@@ -12,6 +12,7 @@ HRESULT hedgehag::init()
 	_currentHP = _maxHP;
 
 	_speed = 5.0f;
+	_noHitSpeed = 1.0f;
 	_attackSpeed = 10.0f;
 
 	_attackPower = RND->getFromIntTo(2, 6);
@@ -26,6 +27,7 @@ HRESULT hedgehag::init()
 	_isAttack = false;
 	_distanceChange = false;
 	_effect = false;
+	_idleMove = false;
 
 	//고슴도치 기본 애니메이션
 	_idleMotion_L = new animation;
@@ -167,6 +169,7 @@ HRESULT hedgehag::init()
 
 	_tile.set(0, 0, 48, 48);
 	_nowOrder = 1;
+	//_angleCount = 0;
 
 	return S_OK;
 }
@@ -177,8 +180,8 @@ void hedgehag::release()
 
 void hedgehag::update()
 {
-	move();//에너미 무브
 	tileGet();//에너미의 타일검출 위치 가져오기
+	move();//에너미 무브
 	animationControl();//에너미 애니메이션 컨트롤
 	animationAngleControl();//에너미와 플레이어간의 앵글값에 따른 애니메이션 컨트롤
 	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);//에너미 애니메이션 업데이트
@@ -193,17 +196,23 @@ void hedgehag::update()
 		EFFECTMANAGER->play("enemyHedgehogMoveDust", _rc.getCenter().x, _rc.getCenter().y);
 	}
 
-	_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
 
 }
 
 void hedgehag::render()
 {
 	_attackRC.render(getMemDC());//에너미 공격렉트
-	_rc.render(getMemDC());//에너미 렉트
-	//_tile.render(getMemDC());//에너미가 검출할 타일 렉트
 	_enemyImage->aniRender(getMemDC(), _rc.getCenter().x - (_enemyImage->getFrameWidth() / 2), _rc.getCenter().y - (_enemyImage->getFrameHeight() / 2), _enemyMotion);//에너미 애니메이션 재생
-	RectangleMake(getMemDC(), nextTileIndex.x * SIZE, nextTileIndex.y * SIZE, SIZE, SIZE);
+	_rc.render(getMemDC());//에너미 렉트
+	for (int i = 0; i < 3; i++)
+	{
+		RectangleMake(getMemDC(), _t[i]->getRect().getCenter().x, _t[i]->getRect().getCenter().y, SIZE, SIZE);
+	}
+
+	for (int i = 0; i < _move.size(); ++i)
+	{
+		_move[i]->getRect().render(getMemDC());
+	}
 	//RectangleMakeCenter(getMemDC(), _rc.getCenter().x, _rc.getCenter().y, 10, 10);
 	//RectangleMakeCenter(getMemDC(), _playerX, _playerY, 10, 10);
 }
@@ -218,6 +227,8 @@ void hedgehag::move()
 
 	if (_maxHP > _currentHP)//에너미의 현재 체력이 멕스hp보다 작아지면
 	{
+		_idleMove = false;
+
 		if (_enemyDirection != ENEMY_LEFT_HIT &&
 			_enemyDirection != ENEMY_UP_LEFT_HIT &&
 			_enemyDirection != ENEMY_DOWN_LEFT_HIT &&
@@ -227,10 +238,9 @@ void hedgehag::move()
 		{
 			if (!_distanceChange && !_isAttack)//플레이어와 에너미의 거리가 250보다 크면
 			{
-
 				if (_move.size() != NULL)
 				{
-					float d = getDistance(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x ,
+					float d = getDistance(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
 						_move[_move.size() - 1]->getRect().getCenter().y);
 					float an = getAngle(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
 						_move[_move.size() - 1]->getRect().getCenter().y);
@@ -238,13 +248,14 @@ void hedgehag::move()
 					_x += cosf(an) * _speed;
 					_y += -sinf(an) * _speed;
 
+
 					if (d < 5)
 					{
 						deleteMove();
 					}
 
 				}
-				
+
 			}
 			else if (_distanceChange)
 			{
@@ -282,10 +293,16 @@ void hedgehag::move()
 						}
 						else
 						{
+							//_angleSave += PI;
+							//_angleCount++;
+							//if (_angleCount % 10 == 0)
+							//{
 							_effect = false;
 							_isAttack = false;
 							_attackDelay = 0;//공격딜레이
 							_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+							//_angleCount = 0;
+						//}
 						}
 					}
 				}
@@ -307,11 +324,39 @@ void hedgehag::move()
 				_distanceChange = true;
 			}
 		}
-	}
 
-	if (!_isAttack)//에너미의 공격상태값이 펄스면
+		if (!_isAttack)//에너미의 공격상태값이 펄스면
+		{
+			_attackRC.set(0, 0, 0, 0);//에너미의 공격 렉트크기 0
+		}
+
+		if (!tileMove())
+		{
+			_x += cosf(_angle) * _speed;
+			_y += -sinf(_angle) * _speed;
+		}
+	}
+	else//데미지를 받지 않았을때
 	{
-		_attackRC.set(0, 0, 0, 0);//에너미의 공격 렉트크기 0
+		if (!_idleMove)
+		{
+			_playerSaveX = _x + RND->getFromIntTo(-50, 50);
+			_playerSaveY = _y + RND->getFromIntTo(-50, 50);
+			_idleMove = true;
+		}
+
+		_distanceSave = getDistance(_x, _y, _playerSaveX, _playerSaveY);
+		_angleSave = getAngle(_x, _y, _playerSaveX, _playerSaveY);
+
+		if (_distanceSave > 10 && tileMove())
+		{
+			_x += cosf(_angleSave) * _noHitSpeed;
+			_y += -sinf(_angleSave) * _noHitSpeed;
+		}
+		else
+		{
+			_idleMove = false;
+		}
 	}
 
 	_rc.setCenter(_x, _y);//에너미 렉트 위치 업데이트
@@ -320,72 +365,107 @@ void hedgehag::move()
 
 void hedgehag::tileGet()
 {
-	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };;//현재에너미 위치에 타일
+	_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+
+	int k = 1;
+	currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };//현재에너미 위치에 타일
 
 	if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
 	{
-		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y };
+		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y };
+		nextTileIndex[1] = { currentTileIndex.x - k, currentTileIndex.y + k };
+		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y - k };
 	}
 
 	if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
 	{
-		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
+		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y - k };
+		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y - k };
+		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y - k };
 	}
 
 	if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
 	{
-		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
+		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y - k };
+		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y - k };
+		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y - k };
 	}
 
 	if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
 	{
-		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y };
+		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y };
+		nextTileIndex[1] = { currentTileIndex.x + k, currentTileIndex.y - k };
+		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y + k };
 	}
 
 	if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
 	{
-		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y + k };
+		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y + k };
+		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y + k };
 	}
 
 	if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
 	{
-		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
+		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y + k };
+		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y + k };
+		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y + k };
 	}
 
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
 
 	//다음 타일
-	if (nextTileIndex.x > maxTileX) nextTileIndex.x = maxTileX;
-	else if (nextTileIndex.x < 0) nextTileIndex.x = 0;
-	if (nextTileIndex.y > maxTileY) nextTileIndex.y = maxTileY;
-	else if (nextTileIndex.y < 0) nextTileIndex.y = 0;
-	_t = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex.y][nextTileIndex.x];
+	if (nextTileIndex[0].x > maxTileX) nextTileIndex[0].x = maxTileX;
+	else if (nextTileIndex[0].x < 0) nextTileIndex[0].x = 0;
+	if (nextTileIndex[0].y > maxTileY) nextTileIndex[0].y = maxTileY;
+	else if (nextTileIndex[0].y < 0) nextTileIndex[0].y = 0;
+	_t[0] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[0].y][nextTileIndex[0].x];
+
+	//다음 타일
+	if (nextTileIndex[1].x > maxTileX) nextTileIndex[1].x = maxTileX;
+	else if (nextTileIndex[1].x < 0) nextTileIndex[1].x = 0;
+	if (nextTileIndex[1].y > maxTileY) nextTileIndex[1].y = maxTileY;
+	else if (nextTileIndex[1].y < 0) nextTileIndex[1].y = 0;
+	_t[1] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[1].y][nextTileIndex[1].x];
+
+	//다음 타일
+	if (nextTileIndex[2].x > maxTileX) nextTileIndex[2].x = maxTileX;
+	else if (nextTileIndex[2].x < 0) nextTileIndex[2].x = 0;
+	if (nextTileIndex[2].y > maxTileY) nextTileIndex[2].y = maxTileY;
+	else if (nextTileIndex[2].y < 0) nextTileIndex[2].y = 0;
+	_t[2] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[2].y][nextTileIndex[2].x];
 }
 
 bool hedgehag::tileMove()
 {
 	//층이 같다면
-	if (_t->getOrderIndex() == _nowOrder)
+	if (_t[0]->getOrderIndex() == _nowOrder && _t[1]->getOrderIndex() == _nowOrder && _t[2]->getOrderIndex() == _nowOrder)
 	{
 		return true;
 	}
-
-	//층이 플레이어보다 높다면
-	else if (_t->getOrderIndex() > _nowOrder)
-	{
-		//한 층 차이라면
-		if (_t->getOrderIndex() - _nowOrder == 1)
-		{
-			return false;
-		}
-		return false;
-	}
-	//층이 플레이어보다 낮다면
 	else
 	{
-		if (_nowOrder == 0) return false;
+		//_x = currentTileIndex.x * SIZE;
+		//_y = currentTileIndex.y * SIZE;
+		return false;
 	}
+
+	////층이 플레이어보다 높다면
+	//else if (_t[0]->getOrderIndex() > _nowOrder)
+	//{
+	//	//한 층 차이라면
+	//	if (_t[0]->getOrderIndex() - _nowOrder == 1)
+	//	{
+	//		return false;
+	//	}
+	//	return false;
+	//}
+	////층이 플레이어보다 낮다면
+	//else
+	//{
+	//	if (_nowOrder == 0) return false;
+	//}
 
 }
 
@@ -533,7 +613,7 @@ void hedgehag::animationControl()
 
 void hedgehag::animationAngleControl()
 {
-	if (_maxHP > _currentHP)//에너미의 현재 체력이 멕트HP보다 작아지면
+	if (_maxHP > _currentHP)//에너미의 현재 체력이 멕스HP보다 작아지면
 	{
 		if (!_distanceChange && !_isAttack)//플레이어와 에너미의 거리가 250보다 크면
 		{
@@ -661,6 +741,38 @@ void hedgehag::animationAngleControl()
 					}
 				}
 			}
+		}
+	}
+	else//데미지를 받지 않았을때
+	{
+		if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
+		{
+			_enemyDirection = ENEMY_LEFT_MOVE;
+		}
+
+		if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
+		{
+			_enemyDirection = ENEMY_UP_LEFT_MOVE;
+		}
+
+		if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
+		{
+			_enemyDirection = ENEMY_UP_RIGHT_MOVE;
+		}
+
+		if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
+		{
+			_enemyDirection = ENEMY_RIGHT_MOVE;
+		}
+
+		if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
+		{
+			_enemyDirection = ENEMY_DOWN_RIGHT_MOVE;
+		}
+
+		if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
+		{
+			_enemyDirection = ENEMY_DOWN_LEFT_MOVE;
 		}
 	}
 }

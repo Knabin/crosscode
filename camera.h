@@ -45,6 +45,8 @@ private:
 
 	// 카메라 줌용 변수(미구현)
 	bool _isZoom;
+	bool _isZoomOutSmooth;
+	float _nowZoomAmount;
 	float _zoomAmount;
 	float _zoomTime;
 
@@ -70,7 +72,7 @@ public:
 	void setMapSize(float mapWidth, float mapHeight) { _mapWidth = mapWidth; _mapHeight = mapHeight; }
 
 	void shakeStart(float amount, float time);
-	void zoomStart(float amount, float time);
+	void zoomStart(float amount, float time, bool isZoomOutSmooth = FALSE);
 
 	RECT& getRect() { return _rc; }
 	bool getIsZoom() { return _isZoom; }

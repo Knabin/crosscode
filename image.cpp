@@ -817,3 +817,62 @@ void image::alphaRedRender(HDC hdc, int destX, int destY, int sourX, int sourY, 
 	DeleteObject(redBitMap);
 	DeleteObject(redOrigin);
 }
+
+void image::rotateRender(HDC hdc, float centerX, float centerY, float angle)
+{
+	HDC tempDC = CreateCompatibleDC(_imageInfo->hMemDC);
+	HBITMAP tempBitMap = CreateCompatibleBitmap(_imageInfo->hMemDC, _imageInfo->width, _imageInfo->height);
+	HBITMAP tempOrigin = static_cast<HBITMAP>(SelectObject(tempDC, tempBitMap));
+
+	POINT rPoint[3];
+	int dist = sqrt((_imageInfo->width / 2)*(_imageInfo->width / 2) + (_imageInfo->height / 2)*(_imageInfo->height / 2));
+	float baseAngle[3];
+	baseAngle[0] = PI - atanf(((float)_imageInfo->height / 2) / ((float)_imageInfo->width / 2));
+	baseAngle[1] = atanf(((float)_imageInfo->height / 2) / ((float)_imageInfo->width / 2));
+	baseAngle[2] = PI + atanf(((float)_imageInfo->height / 2) / ((float)_imageInfo->width / 2));
+
+	for (int i = 0; i < 3; i++)
+	{
+		rPoint[i].x = (_imageInfo->width / 2 + cosf(baseAngle[i] + angle)*dist);
+		rPoint[i].y = (_imageInfo->height / 2 + -sinf(baseAngle[i] + angle)*dist);
+	}
+
+	if (_trans)
+	{
+		// 검은 색으로 채운다
+		BitBlt(tempDC, 0, 0,
+			_imageInfo->width, _imageInfo->height,
+			tempDC,
+			0, 0, BLACKNESS);
+
+		// 검은색과 1,1 점이 같으면 현재 브러쉬색(transColor)으로 채운다
+		HBRUSH hBrush = CreateSolidBrush(_transColor);
+		HBRUSH oBrush = (HBRUSH)SelectObject(tempDC, hBrush);
+		ExtFloodFill(tempDC, 1, 1, RGB(0, 0, 0), FLOODFILLSURFACE);
+		DeleteObject(hBrush);
+
+
+		PlgBlt(tempDC, rPoint, _imageInfo->hMemDC,
+			0,
+			0,
+			_imageInfo->width,
+			_imageInfo->height,
+			NULL, 0, 0);
+		GdiTransparentBlt(hdc,
+			centerX - _imageInfo->width / 2,
+			centerY - _imageInfo->height / 2,
+			_imageInfo->width,
+			_imageInfo->height,
+			tempDC,
+			0,
+			0,
+			_imageInfo->width,
+			_imageInfo->height,
+			_transColor);
+
+	}
+	else
+	{
+		PlgBlt(hdc, rPoint, _imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, NULL, 0, 0);
+	}
+}
