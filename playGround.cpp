@@ -30,7 +30,7 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-
+	
 
 	_ui = new uiController();
 	_ui->init();
@@ -85,7 +85,7 @@ void playGround::update()
 
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
-		CAMERA->shakeStart(10.f, 1.f);
+		CAMERA->shakeStart(5, 0.5f);
 	}
 	if (KEYMANAGER->isOnceKeyDown('2'))
 	{
@@ -118,6 +118,9 @@ void playGround::render()
 	TIMEMANAGER->render(getMemDC());
 	_ui->render();
 	//_enemyManager->render();
+
+	
+
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);

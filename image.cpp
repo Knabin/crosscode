@@ -210,7 +210,47 @@ HRESULT image::init(const char * fileName, int width, int height, int frameX, in
 	ReleaseDC(_hWnd, hdc);
 	return S_OK;
 }
+/////////////////
+HRESULT image::init(const char * fileName, int width, int height, BOOL trans, COLORREF transColor, float angle)
+{
 
+	if (_imageInfo != NULL) release();
+
+	HDC hdc = GetDC(_hWnd);
+
+	_imageInfo = new IMAGE_INFO;
+	_imageInfo->loadType = LOAD_FILE;
+	_imageInfo->resID = 0;
+	_imageInfo->hMemDC = CreateCompatibleDC(hdc);	
+	_imageInfo->hBit = (HBITMAP)LoadImage(_hInstance, fileName, IMAGE_BITMAP, width, height, LR_LOADFROMFILE);
+	_imageInfo->hBBIT = _imageInfo->hBit;
+	_imageInfo->width = width;
+	_imageInfo->height = height;
+	_imageInfo->angle = angle;
+	_imageInfo->hBit = GetRotatedBitmap(hdc, _imageInfo->hBit, 0, 0, _imageInfo->width, _imageInfo->height, angle, transColor);
+
+	_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
+
+	int len = strlen(fileName);
+
+	_fileName = new CHAR[len + 1];
+	strcpy_s(_fileName, len + 1, fileName);
+
+	_trans = trans;
+	_transColor = transColor;
+
+	if (_imageInfo->hBit == NULL)
+	{
+		release();
+
+		return E_FAIL;
+	}
+
+	ReleaseDC(_hWnd, hdc);
+	return S_OK;
+}
+
+////////////////
 void image::release()
 {
 	if (_imageInfo)
@@ -240,7 +280,31 @@ void image::setTransColor(BOOL trans, COLORREF transColor)
 	_trans = trans;
 	_transColor = transColor;
 }
+//////////////
+void image::render(HDC hdc, int destX, int destY, float angle)
+{	
+	if (_imageInfo->angle != angle)
+	{
+		_imageInfo->hBit = GetRotatedBitmap(_imageInfo->hMemDC, _imageInfo->hBBIT, 0, 0, _imageInfo->width, _imageInfo->height, angle, RGB(255, 0, 255));
+		_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
+	}
 
+	
+	GdiTransparentBlt(
+		hdc,					//복사될 영역 DC
+		destX,					//복사될 좌표 X
+		destY,					//복사될 좌표 Y
+		_imageInfo->width,		//복사될 크기 (가로)
+		_imageInfo->height,		//복사될 크기 (세로)
+		_imageInfo->hMemDC,		//복사해올 DC
+		0, 0,					//복사해올 좌표 X,Y
+		_imageInfo->width,		//복사할 가로크기
+		_imageInfo->height,		//복사할 세로크기
+		_transColor);			//복사할때 제외할 픽셀값
+
+	_imageInfo->angle = angle;
+}
+//////////////
 void image::render(HDC hdc)
 {
 	if (_trans)
@@ -817,3 +881,5 @@ void image::alphaRedRender(HDC hdc, int destX, int destY, int sourX, int sourY, 
 	DeleteObject(redBitMap);
 	DeleteObject(redOrigin);
 }
+
+

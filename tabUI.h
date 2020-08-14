@@ -1,16 +1,17 @@
 #pragma once
 #include "gameNode.h"
 
-class nomalUI : public gameNode
+class tabUI : public gameNode
 {
 private:
 	class player* _player;
 	int _hp;
 	int _exp;
-
+	bool _on;  //메뉴 키고 끄기
+	LPBYTE StateArray;
 public:
-	nomalUI() {};
-	~nomalUI() {};
+	tabUI() {};
+	~tabUI() {};
 
 
 	HRESULT init();
