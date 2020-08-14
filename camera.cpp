@@ -164,8 +164,8 @@ void camera::updateZoom()
 		{
 			if (_isZoomOutSmooth)
 			{
-				_zoomAmount -= 0.02f;
-				if (_zoomAmount <= 1.0f) _isZoomOutSmooth = false;
+				_nowZoomAmount -= 0.02f;
+				if (_nowZoomAmount <= 1.0f) _isZoomOutSmooth = false;
 			}
 			else
 				_isZoom = false;
