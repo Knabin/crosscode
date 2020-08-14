@@ -65,6 +65,28 @@ image * imageManager::addImage(string strKey, const char * fileName, int width, 
 	return img;
 }
 
+image * imageManager::addImage(string strKey, const char * fileName, int width, int height, bool trans, COLORREF transColor, float angle)
+{
+	image* img = findImage(strKey);
+
+	//만약에 내가 찾으려던 이미지가 이미 있으면 그것을 반환
+	if (img) return img;
+
+	img = new image;
+
+	if (FAILED(img->init(fileName, width, height, trans, transColor ,angle)))
+	{
+		SAFE_DELETE(img);
+
+		return nullptr;
+	}
+
+	//_mImageList.insert(pair<string, image*>(strKey, img));
+	_mImageList.insert(make_pair(strKey, img));
+
+	return img;
+}
+
 image * imageManager::addFrameImage(string strKey, const char * fileName, float x, float y, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor)
 {
 	image* img = findImage(strKey);
@@ -179,3 +201,6 @@ void imageManager::render(string strKey, HDC hdc, int destX, int destY, int sour
 
 	if (img) img->render(hdc, destX, destY, sourX, sourY, sourWidth, sourHeight);
 }
+
+
+

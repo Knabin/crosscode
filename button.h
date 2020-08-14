@@ -12,11 +12,12 @@ private:
 	BUTTONDIRECTION _direction;
 
 	const char* _imageName;
+	animation* _select;
 	image* _image;
 	POINT _frameDownPoint;
 	POINT _frameUpPoint;
 	POINT _ptMouseAbs;
-
+	bool _selectOn;
 	function<void(void)> _callbackFunction;
 
 public:

@@ -64,7 +64,7 @@ void sceneManager::loadScene(string sceneName)
 	if (iter == _mScenes.end()) return;
 	else if (iter->second == _currentScene) return;
 
-
+	_currentSceneName = sceneName;
 	if (_currentScene != NULL)
 		_currentScene->release();
 

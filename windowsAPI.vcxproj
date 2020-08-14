@@ -191,6 +191,7 @@
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="tabUI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testScene.h" />
     <ClInclude Include="testScene2.h" />
@@ -252,6 +253,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="tabUI.cpp" />
     <ClCompile Include="testScene.cpp" />
     <ClCompile Include="testScene2.cpp" />
     <ClCompile Include="textData.cpp" />

@@ -158,6 +158,9 @@
     <ClCompile Include="meerkat.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
+    <ClCompile Include="tabUI.cpp">
+      <Filter>playGround\uiController</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="meerkat.h">
       <Filter>enemyTest</Filter>
+    </ClInclude>
+    <ClInclude Include="tabUI.h">
+      <Filter>playGround\uiController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

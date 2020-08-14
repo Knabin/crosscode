@@ -171,15 +171,14 @@ void player::update()
 			_state->setState(_vState[PLAYERSTATE::GUARD]);
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
 	{
 		_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
 		_state->getState()->setLongAttack();
 		playerFire();
 	}
+	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACK])
 	
-
-	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
 		_state->setState(_vState[PLAYERSTATE::LONGATTACKMOVE]);
 	}

@@ -46,9 +46,11 @@ void testScene2::release()
 
 void testScene2::update()
 {
+
 }
 
 void testScene2::render()
 {
 	SCENEMANAGER->getTileBuffer()->render(getMemDC());
+
 }

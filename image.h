@@ -30,6 +30,8 @@ public:
 		int frameWidth;		//한 프레임의 가로크기
 		int frameHeight;	//한 프레임의 세로크기
 		BYTE loadType;	//이미지 불러올 타입
+		float angle;
+		HBITMAP hBBIT;
 
 		tagImageInfo()
 		{
@@ -78,11 +80,15 @@ public:
 		int frameX, int frameY,
 		BOOL trans = FALSE, COLORREF transColor = FALSE);
 
+	HRESULT init(const char * fileName, int width, int height, BOOL trans, COLORREF transColor, float angle);
+
 
 	void release();
 
 	//혹시 다른 픽셀값으로 날려야 할때 날려줄 픽셀값 변경할 함수
 	void setTransColor(BOOL trans, COLORREF transColor);
+
+	void render(HDC hdc, int destX, int destY, float angle);
 
 
 	//렌더함수(뿌려질DC)
@@ -125,6 +131,12 @@ public:
 	void alphaRedRender(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight, BYTE alpha);
 
 	void rotateRender(HDC hdc, float centerX, float centerY, float angle);
+
+	HBITMAP GetRotatedBitmap(HDC hdc, HBITMAP hBitmap, int source_x, int source_y, int dest_width, int dest_height, float angle, COLORREF bkColor);
+
+	void RotateBlt(HDC hdc, HDC hOffScreen, int dest_x, int dest_y, int dest_width, int dest_height, HBITMAP hBit, int source_x, int source_y, DWORD dFlag, float angle, COLORREF bkColor);
+
+	
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 
@@ -190,6 +202,6 @@ public:
 	inline int getFrameWidth() { return _imageInfo->frameWidth; }
 	inline int getFrameHeight() { return _imageInfo->frameHeight; }
 
-
+	inline HBITMAP getHBITMAP() { return _imageInfo->hOBit; }
 };
 

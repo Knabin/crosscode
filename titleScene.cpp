@@ -40,7 +40,13 @@ HRESULT titleScene::init()
 	
 
 	IMAGEMANAGER->addImage("eq", "images/equip/eq.bmp", 1920, 1280, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("select", "images/title/select.bmp", 481, 660, 1, 10, true, RGB(255, 0, 255));
 
+	_select = new animation;
+	_select->init(IMAGEMANAGER->findImage("select")->getWidth(), IMAGEMANAGER->findImage("select")->getHeight(), IMAGEMANAGER->findImage("select")->getFrameWidth(), IMAGEMANAGER->findImage("select")->getFrameHeight());
+	_select->setPlayFrame(0, 10, false, false);
+	_select->setFPS(1);
+	_select->start();
 
 	return S_OK;
 }
@@ -52,6 +58,7 @@ void titleScene::release()
 
 void titleScene::update()
 {
+	_select->frameUpdate(TIMEMANAGER->getElapsedTime() * 23);
 	_time++;
 
 	if (_time < 68 && _time % 2 == 0)
