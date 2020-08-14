@@ -4,6 +4,7 @@ class meerkat : public enemy
 {
 private:
 	image* _meerkatMoveImage;//미어캣 무브 이미지
+	image* _meerkatBallImage;//미어캣 공격 볼 이미지
 
 	animation* _meerkatMoveMotion;//미어캣이 땅속으로 들어간 상태에서 무브하는 애니메이션
 	animation* _meerkatTunnelDownMotion_L;//미어캣이 땅속으로 들어가는 애니메이션

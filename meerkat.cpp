@@ -6,6 +6,9 @@ HRESULT meerkat::init()
 {
 	_enemyImage = IMAGEMANAGER->addFrameImage("enemyMeerkat", "images/enemy/meerkat.bmp", 960, 1440, 10, 12, true, RGB(255, 0, 255));//기본, 히트, 공격모션 이미지
 	_meerkatMoveImage = IMAGEMANAGER->addFrameImage("enemyMeerkatMove", "images/enemy/meerkatMove.bmp", 576, 65, 9, 1, true, RGB(255, 0, 255));//무브 이미지
+	_meerkatBallImage = IMAGEMANAGER->addFrameImage("enemyMeerkatBall", "images/enemy/meerkatBall.bmp", 189, 60, 4, 1, true, RGB(255, 0, 255));//공격 볼 이미지
+	_meerkatBallImage->setFrameX(0);
+	_meerkatBallImage->setFrameY(0);
 
 	_maxHP = 100;
 	_currentHP = _maxHP;
@@ -193,11 +196,24 @@ void meerkat::update()
 	//animationAngleControl();//에너미와 플레이어간의 앵글값에 따른 애니메이션 컨트롤
 	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
 	angry();//에너미의 체력이 절반 이하가 되면 능력치 상승(스피드, 공격력, 공격딜레이)
+
+	if (_isAttack)//공격상태가 트루면
+	{
+		//총알파이어 함수
+	}
+	else
+	{
+		_attackRC.set(0, 0, 0, 0);
+	}
 }
 
 void meerkat::render()
 {
 	_attackRC.render(getMemDC());//에너미 공격렉트
+	if (_isAttack)//공격상태가 트루면
+	{
+		//_meerkatBallImage->frameRender(getMemDC(), _x, _y, _meerkatBallImage->getFrameX(), _meerkatBallImage->getFrameY());
+	}
 	if (_enemyDirection != ENEMY_TUNNEL_MOVE)
 	{
 		_enemyImage->aniRender(getMemDC(), _rc.getCenter().x - (_enemyImage->getFrameWidth() / 2), _rc.getCenter().y - (_enemyImage->getFrameHeight() / 2), _enemyMotion);
@@ -278,8 +294,6 @@ void meerkat::move()
 				}
 				else
 				{
-					cout << "2" << endl;
-
 					if (_playerX < _x)
 					{
 						if (_enemyDirection == ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL)
@@ -293,6 +307,48 @@ void meerkat::move()
 						{
 							_enemyDirection = ENEMY_UP_RIGHT_TUNNEL;
 						}
+					}
+
+					_count++;
+
+					if (_enemyDirection == ENEMY_DOWN_LEFT_IDLE && _count >= 50 ||
+						_enemyDirection == ENEMY_DOWN_RIGHT_IDLE && _count >= 50 ||
+						_enemyDirection == ENEMY_LEFT_IDLE && _count >= 50 ||
+						_enemyDirection == ENEMY_RIGHT_IDLE && _count >= 50 ||
+						_enemyDirection == ENEMY_UP_LEFT_IDLE && _count >= 50 ||
+						_enemyDirection == ENEMY_UP_RIGHT_IDLE && _count >= 50)
+					{
+						if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
+						{
+							_enemyDirection = ENEMY_LEFT_ATTACK;
+						}
+
+						if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
+						{
+							_enemyDirection = ENEMY_UP_LEFT_ATTACK;
+						}
+
+						if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
+						{
+							_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
+						}
+
+						if (_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45 || _angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360)//오른쪽
+						{
+							_enemyDirection = ENEMY_RIGHT_ATTACK;
+						}
+
+						if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
+						{
+							_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK;
+						}
+
+						if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
+						{
+							_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
+						}
+
+						_count = 0;
 					}
 					_isMove = false;
 				}
@@ -388,7 +444,6 @@ void meerkat::animationControl()
 	switch (_enemyDirection)
 	{
 	case ENEMY_LEFT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_L;
 
 		if (!_enemyMotion->isPlay())
@@ -397,7 +452,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_RIGHT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_R;
 
 		if (!_enemyMotion->isPlay())
@@ -406,7 +460,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_UP_LEFT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_U_L;
 
 		if (!_enemyMotion->isPlay())
@@ -415,7 +468,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_UP_RIGHT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_U_R;
 
 		if (!_enemyMotion->isPlay())
@@ -424,7 +476,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_LEFT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_D_L;
 
 		if (!_enemyMotion->isPlay())
@@ -433,7 +484,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_D_R;
 
 		if (!_enemyMotion->isPlay())
@@ -454,7 +504,6 @@ void meerkat::animationControl()
 	case ENEMY_DOWN_RIGHT_MOVE:
 		break;
 	case ENEMY_LEFT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_L;
 
 		_hitCount++;
@@ -470,7 +519,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_RIGHT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_R;
 
 		_hitCount++;
@@ -486,7 +534,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_UP_LEFT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_U_L;
 
 		_hitCount++;
@@ -502,7 +549,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_UP_RIGHT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_U_R;
 
 		_hitCount++;
@@ -518,7 +564,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_LEFT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_D_L;
 
 		_hitCount++;
@@ -534,7 +579,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_D_R;
 
 		_hitCount++;
@@ -552,53 +596,106 @@ void meerkat::animationControl()
 	case ENEMY_LEFT_ATTACK:
 		_enemyMotion = _attackMotion_L;
 
-		if (!_enemyMotion->isPlay())
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
 		{
 			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_attackRC.set(0, 0, 70, 70);
+			_isAttack = true;
+			_enemyDirection = ENEMY_LEFT_IDLE;
 		}
 		break;
 	case ENEMY_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_R;
 
-		if (!_enemyMotion->isPlay())
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
 		{
 			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_attackRC.set(0, 0, 70, 70);
+			_isAttack = true;
+			_enemyDirection = ENEMY_RIGHT_IDLE;
 		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK:
 		_enemyMotion = _attackMotion_U_L;
 
-		if (!_enemyMotion->isPlay())
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
 		{
 			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_attackRC.set(0, 0, 70, 70);
+			_isAttack = true;
+			_enemyDirection = ENEMY_UP_LEFT_IDLE;
 		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_U_R;
 
-		if (!_enemyMotion->isPlay())
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
 		{
 			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_attackRC.set(0, 0, 70, 70);
+			_isAttack = true;
+			_enemyDirection = ENEMY_UP_RIGHT_IDLE;
 		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK:
 		_enemyMotion = _attackMotion_D_L;
 
-		if (!_enemyMotion->isPlay())
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
 		{
 			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_attackRC.set(0, 0, 70, 70);
+			_isAttack = true;
+			_enemyDirection = ENEMY_DOWN_LEFT_IDLE;
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_D_R;
 
-		if (!_enemyMotion->isPlay())
+		if (!_enemyMotion->isPlay() && !_oneAnimation)
 		{
 			_enemyMotion->start();
+			_oneAnimation = true;
+		}
+
+		if (!_enemyMotion->isPlay() && _oneAnimation)
+		{
+			_oneAnimation = false;
+			_attackRC.set(0, 0, 70, 70);
+			_isAttack = true;
+			_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 		}
 		break;
 	case ENEMY_TUNNEL_MOVE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _meerkatMoveMotion;
 
 		if (!_enemyMotion->isPlay())
@@ -607,7 +704,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_LEFT_TUNNEL:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _meerkatTunnelDownMotion_L;
 
 		if (!_enemyMotion->isPlay() && !_oneAnimation)
@@ -623,7 +719,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_TUNNEL:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _meerkatTunnelDownMotion_R;
 
 		if (!_enemyMotion->isPlay() && !_oneAnimation)
@@ -639,7 +734,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_UP_LEFT_TUNNEL:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _meerkatTunnelUpMotion_L;
 
 		if (!_enemyMotion->isPlay() && !_oneAnimation)
@@ -655,7 +749,6 @@ void meerkat::animationControl()
 		}
 		break;
 	case ENEMY_UP_RIGHT_TUNNEL:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _meerkatTunnelUpMotion_R;
 
 		if (!_enemyMotion->isPlay() && !_oneAnimation)
@@ -671,8 +764,6 @@ void meerkat::animationControl()
 		}
 		break;
 	}
-
-	
 }
 
 void meerkat::animationAngleControl()
