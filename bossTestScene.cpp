@@ -16,6 +16,10 @@ HRESULT bossTestScene::init()
 	CAMERA->setMapSize(_maxX * SIZE, _maxY * SIZE);
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(floatPoint(_maxX * SIZE * 0.5f, (float)_maxY * SIZE - 100));
 
+	_boss = new boss;
+	_boss->init();
+	OBJECTMANAGER->addObject(objectType::BOSS, _boss);
+
 	if (_vTiles.size() != 0)
 	{
 		for (int i = 0; i <= _maxY; ++i)

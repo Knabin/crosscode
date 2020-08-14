@@ -30,7 +30,7 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-	
+
 
 	_ui = new uiController();
 	_ui->init();
@@ -85,11 +85,11 @@ void playGround::update()
 
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
-		CAMERA->shakeStart(5, 0.5f);
+		CAMERA->shakeStart(3.f, 0.5f);
 	}
 	if (KEYMANAGER->isOnceKeyDown('2'))
 	{
-		CAMERA->zoomStart(3.0f, 5.f);
+		CAMERA->zoomStart(1.2f, 5.f, true);
 	}
 
 	// 이벤트 재생 중에는 업데이트하지 않음
@@ -118,9 +118,6 @@ void playGround::render()
 	TIMEMANAGER->render(getMemDC());
 	_ui->render();
 	//_enemyManager->render();
-
-	
-
 
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);

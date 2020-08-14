@@ -153,9 +153,23 @@ void camera::updateZoom()
 {
 	if (_isZoom)
 	{
-		_zoomTime -= TIMEMANAGER->getElapsedTime();
-		if (_zoomTime <= 0.0f)
-			_isZoom = false;
+		if (_zoomTime > 0.0f)
+		{
+			_zoomTime -= TIMEMANAGER->getElapsedTime();
+
+			if (_nowZoomAmount >= _zoomAmount) _nowZoomAmount = _zoomAmount;
+			else _nowZoomAmount += 0.02f;
+		}
+		else
+		{
+			if (_isZoomOutSmooth)
+			{
+				_nowZoomAmount -= 0.02f;
+				if (_nowZoomAmount <= 1.0f) _isZoomOutSmooth = false;
+			}
+			else
+				_isZoom = false;
+		}
 	}
 }
 
@@ -165,8 +179,8 @@ void camera::zoom(HDC hdc)
 
 	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
 
-	float width = (float)WINSIZEX / _zoomAmount;
-	float height = (float)WINSIZEY / _zoomAmount;
+	float width = (float)WINSIZEX / _nowZoomAmount;
+	float height = (float)WINSIZEY / _nowZoomAmount;
 
 	float zoomL = _rc.left + (WINSIZEX - width) * 0.5f;
 	float zoomT = _rc.top + (WINSIZEY - height) * 0.5f;
@@ -185,14 +199,16 @@ void camera::shakeStart(float amount, float time)
 {
 	_shakeAmount = amount;
 	_shakeTime = time;
-	_shakeDirectionChangeTime = 0.03f;
+	_shakeDirectionChangeTime = 0.05f;
 	_shakeFlag = 1;
 	_isShake = true;
 }
 
-void camera::zoomStart(float amount, float time)
+void camera::zoomStart(float amount, float time, bool isZoomOutSmooth)
 {
+	_nowZoomAmount = 1.0f;
 	_zoomAmount = amount;
 	_zoomTime = time;
 	_isZoom = true;
+	_isZoomOutSmooth = isZoomOutSmooth;
 }

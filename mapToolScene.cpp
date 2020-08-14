@@ -158,6 +158,49 @@ HRESULT mapToolScene::init()
 			_sampleRc.top + SAMPLESIZE * (i / SAMPLENUMX));
 	}
 
+	// 오토타일 설정
+	{
+		vector<POINT> v;
+		v.push_back({ 8,0 });
+		v.push_back({ 8,3 });
+		v.push_back({ 11,0 });
+		v.push_back({ 11,3 });
+		v.push_back({ 9,0 });
+		v.push_back({ 9,3 });
+		v.push_back({ 10,0 });
+		v.push_back({ 10,3 });
+		v.push_back({ 8,1 });
+		v.push_back({ 8,2 });
+		v.push_back({ 11,1 });
+		v.push_back({ 11,2 });
+		v.push_back({ 9,1 });
+		v.push_back({ 9,2 });
+		v.push_back({ 10,1 });
+		v.push_back({ 10,2 });
+		_vAutoIndexs.push_back(v);
+	}
+
+	{
+		vector<POINT> v;
+		v.push_back({ 12,0 });
+		v.push_back({ 12,3 });
+		v.push_back({ 15,0 });
+		v.push_back({ 15,3 });
+		v.push_back({ 13,0 });
+		v.push_back({ 13,3 });
+		v.push_back({ 14,0 });
+		v.push_back({ 14,3 });
+		v.push_back({ 12,1 });
+		v.push_back({ 12,2 });
+		v.push_back({ 15,1 });
+		v.push_back({ 15,2 });
+		v.push_back({ 13,1 });
+		v.push_back({ 13,2 });
+		v.push_back({ 14,1 });
+		v.push_back({ 14,2 });
+		_vAutoIndexs.push_back(v);
+	}
+
 	redrawMap();
 
 	return S_OK;
@@ -431,9 +474,9 @@ void mapToolScene::checkSelectSample()
 									int page = _penMode == PENMODE::PLUS ? _page : 0;
 									if (_editMode == EDITMODE::TERRAIN)
 									{
+										_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainImageNum(_page);
 										_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainX(_sampleStart.x);
 										_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainY(_sampleStart.y);
-										_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainImageNum(_page);
 									}
 									else if (_editMode == EDITMODE::OBJECT)
 									{
@@ -488,9 +531,9 @@ void mapToolScene::checkSelectSample()
 							{
 								if (_editMode == EDITMODE::TERRAIN)
 								{
+									_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainImageNum(_page);
 									_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainX(_sampleStart.x + j);
 									_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainY(_sampleStart.y + i);
-									_vTiles[_drawStart.y + i][_drawStart.x + j]->setTerrainImageNum(_page);
 								}
 								else if (_editMode == EDITMODE::OBJECT)
 								{
@@ -525,8 +568,11 @@ void mapToolScene::checkSelectSample()
 					}
 				}
 			}
-			_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
-			_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			if (_sampleStart.x != -1)
+			{
+				_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
+				_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			}
 		}
 		else
 		{
@@ -1365,6 +1411,143 @@ void mapToolScene::autotile()
 {
 }
 
+void mapToolScene::checkAutoTile(int indexX, int indexY)
+{
+	int autoIndex = 0;
+	int type = _vTiles[indexY][indexX]->getTerrainType();
+	//// 좌측 상단
+	//if (indexX % _nowIndex.x != 0 && indexY != 0)
+	//{
+	//	// 오토타일이라면
+	//	if (_vTiles[indexY - 1][indexX - 1]->getTerrainType() == 1)
+	//	{
+	//		int temp = 1;
+	//		autoIndex += temp << AUTO_LT;
+	//	}
+	//}
+
+	// 상단
+	if (indexY != 0)
+	{
+		if (_vTiles[indexY - 1][indexX]->getTerrainType() == type)
+		autoIndex += 1 << AUTO_T;
+	}
+
+	//// 우측 상단
+	//if (indexX != _nowIndex.x && indexY != 0)
+	//{
+	//	if (_vTiles[indexY - 1][indexX + 1]->getTerrainType() == 1)
+	//	{
+	//		int temp = 1;
+	//		autoIndex += temp << AUTO_LT;
+	//	}
+	//}
+
+	// 좌측
+	if (indexX != 0)
+	{
+		if (_vTiles[indexY][indexX - 1]->getTerrainType() == type)
+		autoIndex += 1 << AUTO_L;
+	}
+
+	// 우측
+	if (indexX != _nowIndex.x)
+	{
+		if (_vTiles[indexY][indexX + 1]->getTerrainType() == type)
+		autoIndex += 1 << AUTO_R;
+	}
+
+	//// 좌측 하단
+	//if (indexX != 0 && indexY != _nowIndex.y)
+	//{
+	//	if (_vTiles[indexY + 1][indexX - 1]->getTerrainType() == 1)
+	//	{
+	//		int temp = 1;
+	//		autoIndex += temp << AUTO_LB;
+	//	}
+	//}
+
+	// 하단
+	if (indexY != _nowIndex.y)
+	{
+		if (_vTiles[indexY + 1][indexX]->getTerrainType() == type)
+		autoIndex += 1 << AUTO_B;
+	}
+
+	//// 우측 하단
+	//if (indexX != _nowIndex.x && indexY != _nowIndex.y)
+	//{
+	//	if (_vTiles[indexY + 1][indexX + 1]->getTerrainType() == 1)
+	//	{
+	//		int temp = 1;
+	//		autoIndex += temp << AUTO_RT;
+	//	}
+	//}
+
+	// 타일 설정
+
+	_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[type - 1][autoIndex].x);
+	_vTiles[indexY][indexX]->setTerrainY(_vAutoIndexs[type - 1][autoIndex].y);
+
+	/*switch (autoIndex)
+	{
+	case 0:
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][0].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][0].y);
+		break;
+	case 1:
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][1].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][1].y);
+		break;
+	case 2:
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][2].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][2].y);
+		break;
+	case 3:
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][3].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][3].y);
+		break;
+	case 4:
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][4].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][4].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][5].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][5].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][6].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][6].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][7].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][7].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][8].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][8].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][9].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][9].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][10].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][10].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][11].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][11].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][12].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][12].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][13].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][13].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][14].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][14].y);
+		break;
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][15].x);
+		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][15].y);
+		break;
+	}*/
+
+}
+
 void mapToolScene::drawMap()
 {
 	_mapBuffer->render(getMemDC(), _mapViewRc.left, _mapViewRc.top, _clippingPoint.x, _clippingPoint.y, _mapViewRc.getWidth(), _mapViewRc.getHeight());
@@ -1379,9 +1562,15 @@ void mapToolScene::redrawMap()
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
 			if (_vTiles[i][j]->getTerrainX() != -1)
+			{
+				if (_vTiles[i][j]->getTerrainType() > 0)
+					checkAutoTile(j, i);
 				_terrainImageBig[_vTiles[i][j]->getTerrainImageNum()]->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+			}
 			else
 				_vTiles[i][j]->getRect().render(getMapBufferDC());
+
+
 
 			// 오브젝트가 있는 경우
 			if (_vTiles[i][j]->getObjectX() != -1)

@@ -34,38 +34,37 @@ void enemyManager::update()
 		{
 			e->setMove(_as->pathChecking(e->getRect()));
 		}
-		_time == 0;
+		_time = 0;
 		_index++;
 		if (_index >= _vEnemy.size())
 			_index = 0;
+
 	}
-	
+
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		enemy* e = dynamic_cast<enemy*>(_vEnemy[i]);
 
 		if (e->getMove().size() != NULL)
-		for (int j = 0; j < _vEnemy.size(); j++)
-		{
-			if (i == j) continue;
-			if (PtInRect(&e->getMove()[e->getMove().size() - 1]->getRect().getRect(), PointMake(_vEnemy[j]->getRect().getCenter().x, _vEnemy[j]->getRect().getCenter().y)))
+			for (int j = 0; j < _vEnemy.size(); j++)
 			{
-				e->clearMove();
-				break;
+				if (i == j) continue;
+				if (PtInRect(&e->getMove()[e->getMove().size() - 1]->getRect().getRect(), PointMake(_vEnemy[j]->getRect().getCenter().x, _vEnemy[j]->getRect().getCenter().y)))
+				{
+					e->clearMove();
+					e->setMove(_as->pathChecking(e->getRect()));
+					break;
+				}
 			}
-		}
-		
 	}
 
-
-	
 
 	enemyDead();//에너미 사망
 }
 
 void enemyManager::render()
 {
-	//_as->render();
+	_as->render();
 }
 
 void enemyManager::enemyDead()
@@ -75,12 +74,24 @@ void enemyManager::enemyDead()
 		enemy* e = dynamic_cast<enemy*>(_vEnemy[i]);
 		if (e->getEnemyHP() <= 0)//에너미의 현재 체력이 0이하가 되면
 		{
+
 			_count++;
 			if (_count % 5 == 0)
 			{
-				e->setEnemyIsActive(false);//에너미 삭제
+				//e->setEnemyIsActive(false);//에너미 삭제
+				OBJECTMANAGER->removeObject(objectType::ENEMY, e);
+				//_vEnemy.erase(_vEnemy.begin() + i);
+
 				_count = 0;
+
+				break;
 			}
+
+
+
 		}
 	}
+
+	if (_index >= _vEnemy.size())
+		_index = 0;
 }

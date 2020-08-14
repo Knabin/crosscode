@@ -22,6 +22,7 @@ enum PLAYERSTATE : int
 	GUARD,
 	DODGE,
 	LONGATTACK,
+	LONGATTACKMOVE,
 	END,
 };
 
@@ -46,10 +47,10 @@ private:
 	POINT _ptMouseAbs;
 	RECT rcCollision;
 	int _nowOrder;
+	int _count;
 
 	float _jumpPower;
 	float _gravity;
-
 
 public:
 	player();
@@ -62,6 +63,7 @@ public:
 
 	void playerMove();
 	void playerDodge();
+	void playerLongAttackMove();
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
 	void playerFire();
