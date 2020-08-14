@@ -177,6 +177,7 @@
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
+    <ClInclude Include="meerkat.h" />
     <ClInclude Include="nomalUI.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
+    <ClCompile Include="meerkat.cpp" />
     <ClCompile Include="nomalUI.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
