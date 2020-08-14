@@ -85,11 +85,11 @@ void playGround::update()
 
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
-		CAMERA->shakeStart(10.f, 1.f);
+		CAMERA->shakeStart(3.f, 0.5f);
 	}
 	if (KEYMANAGER->isOnceKeyDown('2'))
 	{
-		CAMERA->zoomStart(3.0f, 5.f);
+		CAMERA->zoomStart(1.2f, 5.f, true);
 	}
 
 	// 이벤트 재생 중에는 업데이트하지 않음
