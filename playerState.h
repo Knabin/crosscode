@@ -13,7 +13,9 @@ protected:
 	animation* _right;
 	animation* _right_top;
 
-	bool _long;
+	bool _isLongAttack;
+	bool _isAttack;
+	bool _isLeft;
 	int _count;
 
 public:
@@ -24,7 +26,9 @@ public:
 	virtual void update() {};
 	virtual void exit() {};
 
-	//inline bool longAttack() { return _long; }
+	inline bool isAttack() { return _isAttack; }
+	inline bool isLongAttack() { return _isLongAttack; }
+	virtual void setLongAttack() { _isLongAttack = true; }
 };
 
 class idleState : public playerState
@@ -82,11 +86,23 @@ public:
 	void exit() override;
 };
 
-class defaltLongAttackState : public playerState
+class longAttackState : public playerState
 {
 public:
-	defaltLongAttackState(class player* player);
-	~defaltLongAttackState();
+	longAttackState(class player* player);
+	~longAttackState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+	void longAttack(animation* anim, int a, bool b);
+};
+
+class longAttackMoveState : public playerState
+{
+public:
+	longAttackMoveState(class player* player);
+	~longAttackMoveState();
 
 	void enter() override;
 	void update() override;

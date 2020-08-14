@@ -766,7 +766,8 @@ void dodgeState::exit()
 	_right_top->stop();
 }
 
-defaltLongAttackState::defaltLongAttackState(player * player)
+// =========================== 플레이어 원거리 공격 =========================== //
+longAttackState::longAttackState(player * player)
 {
 	_player = player;
 
@@ -774,52 +775,52 @@ defaltLongAttackState::defaltLongAttackState(player * player)
 	_top = new animation;
 	_top->init(1581, 720, 93, 90);
 	_top->setPlayFrame(top, 9, 0);
-	_top->setFPS(1);
-
-	int ltop[] = { 135,134,133,132,131,130,129,128,127 };
-	_left_top = new animation;
-	_left_top->init(1581, 720, 93, 90);
-	_left_top->setPlayFrame(ltop, 9, 0);
-	_left_top->setFPS(1);
-
-	int left[] = { 118,117,116,115,114,113,112,111,110 };
-	_left = new animation;
-	_left->init(1581, 720, 93, 90);
-	_left->setPlayFrame(left, 9, 0);
-	_left->setFPS(1);
-
-	int lbottom[] = { 101,100,99,98,97,96,95,94,93 };
-	_left_bottom = new animation;
-	_left_bottom->init(1581, 720, 93, 90);
-	_left_bottom->setPlayFrame(lbottom, 9, 0);
-	_left_bottom->setFPS(1);
-
-	int bottom[] = { 68,69,70,71,72,73,74,75,76 };
-	_bottom = new animation;
-	_bottom->init(1581, 720, 93, 90);
-	_bottom->setPlayFrame(bottom, 9, 0);
-	_bottom->setFPS(1);
-
-	int rbottom[] = { 51,52,53,54,55,56,57,58,59 };
-	_right_bottom = new animation;
-	_right_bottom->init(1581, 720, 93, 90);
-	_right_bottom->setPlayFrame(rbottom, 9, 0);
-	_right_bottom->setFPS(1);
-
-	int right[] = { 34,35,36,37,38,39,40,41,42 };
-	_right = new animation;
-	_right->init(1581, 720, 93, 90);
-	_right->setPlayFrame(right, 9, 0);
-	_right->setFPS(1);
+	_top->setFPS(2);
 
 	int rtop[] = { 17,18,19,20,21,22,23,24,25 };
 	_right_top = new animation;
 	_right_top->init(1581, 720, 93, 90);
 	_right_top->setPlayFrame(rtop, 9, 0);
-	_right_top->setFPS(1);
+	_right_top->setFPS(2);
+
+	int right[] = { 34,35,36,37,38,39,40,41,42 };
+	_right = new animation;
+	_right->init(1581, 720, 93, 90);
+	_right->setPlayFrame(right, 9, 0);
+	_right->setFPS(2);
+
+	int rbottom[] = { 51,52,53,54,55,56,57,58,59 };
+	_right_bottom = new animation;
+	_right_bottom->init(1581, 720, 93, 90);
+	_right_bottom->setPlayFrame(rbottom, 9, 0);
+	_right_bottom->setFPS(2);
+
+	int bottom[] = { 68,69,70,71,72,73,74,75,76 };
+	_bottom = new animation;
+	_bottom->init(1581, 720, 93, 90);
+	_bottom->setPlayFrame(bottom, 9, 0);
+	_bottom->setFPS(2);
+
+	int lbottom[] = { 101,100,99,98,97,96,95,94,93 };
+	_left_bottom = new animation;
+	_left_bottom->init(1581, 720, 93, 90);
+	_left_bottom->setPlayFrame(lbottom, 9, 0);
+	_left_bottom->setFPS(2);
+
+	int left[] = { 118,117,116,115,114,113,112,111,110 };
+	_left = new animation;
+	_left->init(1581, 720, 93, 90);
+	_left->setPlayFrame(left, 9, 0);
+	_left->setFPS(2);
+
+	int ltop[] = { 135,134,133,132,131,130,129,128,127 };
+	_left_top = new animation;
+	_left_top->init(1581, 720, 93, 90);
+	_left_top->setPlayFrame(ltop, 9, 0);
+	_left_top->setFPS(2);
 }
 
-defaltLongAttackState::~defaltLongAttackState()
+longAttackState::~longAttackState()
 {
 	SAFE_DELETE(_top);
 	SAFE_DELETE(_right_top);
@@ -831,115 +832,147 @@ defaltLongAttackState::~defaltLongAttackState()
 	SAFE_DELETE(_left_bottom);
 }
 
-void defaltLongAttackState::enter()
+void longAttackState::enter()
 {
 	cout << "longAttackState enter()" << endl;
 	_player->setImage("player longAttack");
 	_count = 0;
-	_long = true;
+	_isLongAttack = true;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
-	//{
-		_player->setAnimation(_top);
-	//	if (_long == false)
-	//	{
-	//		int top[] = { 0,1,2,3,4,5,6,7,8 };
-	//		_top->setPlayFrame(top, 9, 0);
-	//	}
-	//	
-	//}
-		break;
-	case PLAYERDIRECTION::BOTTOM:
-		_player->setAnimation(_bottom);
-		break;
-	case PLAYERDIRECTION::LEFT:
-		_player->setAnimation(_left);
-		break;
-	case PLAYERDIRECTION::RIGHT:
-		_player->setAnimation(_right);
-		break;
-	case PLAYERDIRECTION::LEFT_BOTTOM:
-		_player->setAnimation(_left_bottom);
-		break;
-	case PLAYERDIRECTION::RIGHT_BOTTOM:
-		_player->setAnimation(_right_bottom);
-		break;
-	case PLAYERDIRECTION::LEFT_TOP:
-		_player->setAnimation(_left_top);
+	{	
+		if (_isAttack == false)
+		{
+			int top[] = { 0,1,2,3,4,5,6,7,8};
+			_top->setPlayFrame(top, 9, false);
+			_player->setAnimation(_top);
+			_player->getAnimation()->start();
+		}			
+	}
 		break;
 	case PLAYERDIRECTION::RIGHT_TOP:
-		_player->setAnimation(_right_top);
+	{
+		if (_isAttack == false)
+		{
+			int rtop[] = { 17,18,19,20,21,22,23,24,25 };
+			_right_top->setPlayFrame(rtop,9,false);
+			_player->setAnimation(_right_top);
+			_player->getAnimation()->start();
+		}
+	}
+		break;
+	case PLAYERDIRECTION::RIGHT:
+	{
+		if (_isAttack == false)
+		{
+			int right[] = { 34,35,36,37,38,39,40,41,42 };
+			_right->setPlayFrame(right, 9, false);
+			_player->setAnimation(_right);
+			_player->getAnimation()->start();
+		}
+	}
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+	{
+		if (_isAttack == false)
+		{
+			int rbottom[] = { 51,52,53,54,55,56,57,58,59 };
+			_right_bottom->setPlayFrame(rbottom, 9, false);
+			_player->setAnimation(_right_bottom);
+			_player->getAnimation()->start();
+		}
+	}
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+	{
+		if (_isAttack == false)
+		{
+			int bottom[] = { 68,69,70,71,72,73,74,75,76 };
+			_bottom->setPlayFrame(bottom, 9, false);
+			_player->setAnimation(_bottom);
+			_player->getAnimation()->start();
+		}
+	}
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+	{
+		if (_isAttack == false)
+		{
+			int lbottom[] = { 101,100,99,98,97,96,95,94,93 };
+			_left_bottom->setPlayFrame(lbottom, 9, false);
+			_player->setAnimation(_left_bottom);
+			_player->getAnimation()->start();
+		}
+	}
+		break;
+	case PLAYERDIRECTION::LEFT:
+	{
+		if (_isAttack == false)
+		{
+			int left[] = { 118,117,116,115,114,113,112,111,110 };
+			_left->setPlayFrame(left, 9, false);
+			_player->setAnimation(_left);
+			_player->getAnimation()->start();
+		}
+	}
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+	{
+		if (_isAttack == false)
+		{
+			int ltop[] = { 135,134,133,132,131,130,129,128,127 };
+			_left_top->setPlayFrame(ltop, 9, false);
+			_player->setAnimation(_left_top);
+			_player->getAnimation()->start();
+		}
+	}
 		break;
 	}
 }
 
-void defaltLongAttackState::update()
+void longAttackState::update()
 {
-	cout << "longAttackState update()" << endl;
+	cout <<"longAttackState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
-	//{
 		_player->setAnimation(_top);
-		
-	//	count++;
-	//
-	//	if (animatioon.isplay == false)
-	//	{
-	//		if (count % 100 == 0)
-	//		{
-	//			long = false;
-	//		}
-	//	}
-	//
-	//	bool attack =false;
-	//
-	//	if (attack == false)
-	//	{
-	//		if (left == true)
-	//		{
-	//			int top[] = { 9,10,11 };
-	//			_top->setPlayFrame(top, 3, 0);
-	//			left ==false
-	//		}
-	//		else if (left == false)
-	//		{
-	//			int top[] = { 9,10,11 };
-	//			_top->setPlayFrame(top, 3, 0);
-	//			left == true;
-	//		}
-	//	}
-	//	
-	//}
-		break;
-	case PLAYERDIRECTION::BOTTOM:
-		_player->setAnimation(_bottom);
-		break;
-	case PLAYERDIRECTION::LEFT:
-		_player->setAnimation(_left);
-		break;
-	case PLAYERDIRECTION::RIGHT:
-		_player->setAnimation(_right);
-		break;
-	case PLAYERDIRECTION::LEFT_BOTTOM:
-		_player->setAnimation(_left_bottom);
-		break;
-	case PLAYERDIRECTION::RIGHT_BOTTOM:
-		_player->setAnimation(_right_bottom);
-		break;
-	case PLAYERDIRECTION::LEFT_TOP:
-		_player->setAnimation(_left_top);
+		longAttack(_top, 9, true);
 		break;
 	case PLAYERDIRECTION::RIGHT_TOP:
 		_player->setAnimation(_right_top);
+		longAttack(_right_top, 26, true);
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		_player->setAnimation(_right);
+		longAttack(_right, 43, true);
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		_player->setAnimation(_right_bottom);
+		longAttack(_right_bottom, 60, true);
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		_player->setAnimation(_bottom);
+		longAttack(_bottom, 77, true);
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		_player->setAnimation(_left_bottom);
+		longAttack(_left_bottom, 92, false);
+		break;
+	case PLAYERDIRECTION::LEFT:
+		_player->setAnimation(_left);
+		longAttack(_left, 109, false);
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		_player->setAnimation(_left_top);
+		longAttack(_left_top, 126, false);
 		break;
 	}
-	if (!_player->getAnimation()->isPlay()) _player->getAnimation()->start();
 	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 25);
 }
 
-void defaltLongAttackState::exit()
+void longAttackState::exit()
 {
 	cout << "longAttackState exit()" << endl;
 	_top->stop();
@@ -950,4 +983,219 @@ void defaltLongAttackState::exit()
 	_right_top->stop();
 	_left_bottom->stop();
 	_right_bottom->stop();
+}
+
+void longAttackState::longAttack(animation* anim,  int a, bool b)
+{
+	_count++;
+	
+	if (_player->getAnimation()->isPlay() == false && !_isAttack)
+	{
+		if (_count > 1)
+		{
+			_isAttack = true;
+			_isLongAttack = false;
+		}
+	}
+	if (_isAttack == true && _isLongAttack == true)
+	{
+		_isLeft = _isLeft == false ? true : false;
+
+		if (_isLeft == true)
+		{
+			if (b == true)
+			{
+				anim->setPlayFrame(a, a + 3, false);
+			}
+			else
+			{
+				anim->setPlayFrame(a, a - 3, false);
+			}		
+			_player->setAnimation(anim);
+			_player->getAnimation()->start();
+			_count = 0;
+			_isLongAttack = false;
+		}
+
+		else if (_isLeft == false)
+		{
+			
+			if (b == true)
+			{
+				anim->setPlayFrame(a + 4, a + 7, false);
+			}
+			else
+			{
+				anim->setPlayFrame(a - 4, a - 7, false);
+			}
+		
+			_player->setAnimation(anim);
+			_player->getAnimation()->start();
+			_count = 0;
+			_isLongAttack = false;
+		}
+	}
+	if (_count > 40 && _player->getAnimation()->isPlay() == false)
+	{
+		_isAttack = false;
+		_isLeft = false;
+	}
+}
+
+// =========================== 플레이어 원거리 조준 무브 =========================== //
+longAttackMoveState::longAttackMoveState(player * player)
+{
+	_player = player;
+
+	int top[] = { 0,1,2,3,4,5,6 };
+	_top = new animation;
+	_top->init(672, 768, 96, 96);
+	_top->setPlayFrame(top, 7, true);
+	_top->setFPS(1);
+
+	int rtop[] = { 7,8,9,10,11,12,13 };
+	_right_top = new animation;
+	_right_top->init(672, 768, 96, 96);
+	_right_top->setPlayFrame(rtop, 7, true);
+	_right_top->setFPS(1);
+
+	int right[] = { 14,15,16,17,18,19,20 };
+	_right = new animation;
+	_right->init(672, 768, 96, 96);
+	_right->setPlayFrame(right, 7, true);
+	_right->setFPS(1);
+
+	int rbottom[] = { 21,22,23,24,25,26,27 };
+	_right_bottom = new animation;
+	_right_bottom->init(672, 768, 96, 96);
+	_right_bottom->setPlayFrame(rbottom, 7, true);
+	_right_bottom->setFPS(1);
+
+	int bottom[] = { 28,29,30,31,32,33,34 };
+	_bottom = new animation;
+	_bottom->init(672, 768, 96, 96);
+	_bottom->setPlayFrame(bottom, 7, true);
+	_bottom->setFPS(1);
+
+	int ltop[] = { 41,40,39,38,37,36,35 }; 
+	_left_top = new animation;
+	_left_top->init(672, 768, 96, 96);
+	_left_top->setPlayFrame(ltop, 7, true);
+	_left_top->setFPS(1);
+
+	int left[] = { 48,47,46,45,44,43,42 };
+	_left = new animation;
+	_left->init(672, 768, 96, 96);
+	_left->setPlayFrame(left, 7, true);
+	_left->setFPS(1);
+
+	int lbottom[] = { 55,54,53,52,51,50,49 };
+	_left_bottom = new animation;
+	_left_bottom->init(672, 768, 96, 96);
+	_left_bottom->setPlayFrame(lbottom, 7, true);
+	_left_bottom->setFPS(1);
+}
+
+longAttackMoveState::~longAttackMoveState()
+{
+	SAFE_DELETE(_top);
+	SAFE_DELETE(_right_top);
+	SAFE_DELETE(_left_top);
+	SAFE_DELETE(_left);
+	SAFE_DELETE(_right);
+	SAFE_DELETE(_bottom);
+	SAFE_DELETE(_right_bottom);
+	SAFE_DELETE(_left_bottom);
+}
+
+void longAttackMoveState::enter()
+{
+	cout << "longAttackMoveState enter()" << endl;
+
+	_player->setImage("player longAttackMove");
+
+	switch (_player->getDirection())
+	{
+	case PLAYERDIRECTION::TOP:
+		_player->setAnimation(_top);
+
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		_player->setAnimation(_left_top);
+
+		break;
+	case PLAYERDIRECTION::LEFT:
+		_player->setAnimation(_left);
+
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		_player->setAnimation(_left_bottom);
+
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		_player->setAnimation(_bottom);
+
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		_player->setAnimation(_right_bottom);
+
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		_player->setAnimation(_right);
+
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		_player->setAnimation(_right_top);
+		break;
+	}
+}
+
+void longAttackMoveState::update()
+{
+	cout << "longAttackMoveState update()" << endl;
+	switch (_player->getDirection())
+	{
+	case PLAYERDIRECTION::TOP:
+		_player->setAnimation(_top);
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		_player->setAnimation(_left_top);
+		break;
+	case PLAYERDIRECTION::LEFT:
+		_player->setAnimation(_left);
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		_player->setAnimation(_left_bottom);
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		_player->setAnimation(_bottom);
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		_player->setAnimation(_right_bottom);
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		_player->setAnimation(_right);
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		_player->setAnimation(_right_top);
+		break;
+	default:
+		break;
+	}
+	_player->playerLongAttackMove();
+	if (!_player->getAnimation()->isPlay()) _player->getAnimation()->start();
+	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
+}
+
+void longAttackMoveState::exit()
+{
+	cout << "longAttackMoveState exit()" << endl;
+	_top->stop();
+	_left_top->stop();
+	_left->stop();
+	_left_bottom->stop();
+	_bottom->stop();
+	_right_bottom->stop();
+	_right->stop();
+	_right_top->stop();
 }

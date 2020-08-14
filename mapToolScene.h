@@ -43,6 +43,19 @@ enum
 	OBJECT_END,
 };
 
+enum
+{
+	//AUTO_LT,
+	AUTO_T,
+	//AUTO_RT,
+	AUTO_L,
+	AUTO_R,
+	//AUTO_LB,
+	AUTO_B,
+	//AUTO_RB,
+	AUTO_END
+};
+
 struct tagEnemy
 {
 	int tileX;
@@ -95,8 +108,8 @@ class mapToolScene : public scene
 private:
 	vector<vector<tile *>> _vTiles;
 	vector<tagEnemy> _vEnemies;
-	vector<POINT[16]> _vAutoIndexs;
-	//POINT
+	vector<vector<POINT>> _vAutoIndexs;
+	//POIN
 	map<tagPoint, tagObject> _mObject;
 	map<tagPoint, tagObject>::iterator _miObject;
 	tile _sampleTiles[SAMPLENUMX * SAMPLENUMY];
@@ -178,6 +191,7 @@ public:
 	
 	bool isAutoTile(int frameX, int frameY, int page);
 	void autotile();
+	void checkAutoTile(int indexX, int indexY);
 	void drawMap();
 	void redrawMap();
 

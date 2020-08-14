@@ -203,15 +203,15 @@ void hedgehag::render()
 {
 	_attackRC.render(getMemDC());//에너미 공격렉트
 	_enemyImage->aniRender(getMemDC(), _rc.getCenter().x - (_enemyImage->getFrameWidth() / 2), _rc.getCenter().y - (_enemyImage->getFrameHeight() / 2), _enemyMotion);//에너미 애니메이션 재생
-	_rc.render(getMemDC());//에너미 렉트
+	//_rc.render(getMemDC());//에너미 렉트
 	for (int i = 0; i < 3; i++)
 	{
-		RectangleMake(getMemDC(), _t[i]->getRect().getCenter().x, _t[i]->getRect().getCenter().y, SIZE, SIZE);
+		//RectangleMake(getMemDC(), _t[i]->getRect().getCenter().x, _t[i]->getRect().getCenter().y, SIZE, SIZE);
 	}
 
 	for (int i = 0; i < _move.size(); ++i)
 	{
-		_move[i]->getRect().render(getMemDC());
+		//_move[i]->getRect().render(getMemDC());
 	}
 	//RectangleMakeCenter(getMemDC(), _rc.getCenter().x, _rc.getCenter().y, 10, 10);
 	//RectangleMakeCenter(getMemDC(), _playerX, _playerY, 10, 10);
