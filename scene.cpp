@@ -2,6 +2,7 @@
 #include "scene.h"
 #include <commdlg.h>
 #include "hedgehag.h"
+#include "meerkat.h"
 #include "vendor.h"
 #include "door.h"
 #include "mapObject.h"
@@ -165,11 +166,21 @@ void scene::getEnemiesFromFile(string fileName)
 		switch (et)
 		{
 		case 0:
+		{
 			gameObject* hed = new hedgehag();
 			hed->init();
 			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
 			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
-			break;
+		}
+		break;
+		case 1:
+		{
+			gameObject* hed = new meerkat();
+			hed->init();
+			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
+		}
+		break;
 		}
 		tok = strtok_s(NULL, "\n", &context);
 	}

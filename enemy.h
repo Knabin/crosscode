@@ -40,7 +40,11 @@ enum ENEMYDIRECTION
 	ENEMY_DOWN_LEFT_ATTACK,
 	ENEMY_DOWN_RIGHT_ATTACK,
 
-	ENEMY_MOVE
+	ENEMY_TUNNEL_MOVE,//미어캣 땅속으로 들어간 상태에서 무브
+	ENEMY_DOWN_LEFT_TUNNEL,//미어캣이 땅속으로 들어가는 상태
+	ENEMY_DOWN_RIGHT_TUNNEL,
+	ENEMY_UP_LEFT_TUNNEL,//미어캣이 땅속에서 나오는 상태
+	ENEMY_UP_RIGHT_TUNNEL
 };
 
 class enemy : public gameObject
@@ -82,13 +86,13 @@ protected:
 
 	vector<tile*> _move;
 
-	floatPoint nextTileIndex[3];//현재 에너미 위치에서 근처에 장애물 위치를 파악할 타일
+	floatPoint nextTileIndex[8];//현재 에너미 위치에서 근처에 장애물 위치를 파악할 타일
 	floatPoint currentTileIndex;
 
 	floatRect _attackRC;//에너미 공격렉트
 
 	floatRect _tile;//에너미가 타일을 검출하기 위해 필요한 렉트
-	tile* _t[3];//검출할 타일
+	tile* _t[8];//검출할 타일
 
 	float _speed;//에너미 스피드
 	float _noHitSpeed;//데미지를 받기전의 움직일 이동속도
