@@ -525,8 +525,11 @@ void mapToolScene::checkSelectSample()
 					}
 				}
 			}
-			_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
-			_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			if (_sampleStart.x != -1)
+			{
+				_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
+				_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+			}
 		}
 		else
 		{
