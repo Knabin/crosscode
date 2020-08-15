@@ -32,6 +32,9 @@ player::player()
 	_name = "player";
 	_isActive = true;
 
+	_combo = 0;
+	_iscombo = false;
+
 	_state = new playerStateController(idle);
 	_position.y = 700;
 }
@@ -316,10 +319,13 @@ void player::update()
 		}
 	}
 
+
+	//========================================움직이고 나서 정지하는 모션 ====================================================
 	if (KEYMANAGER->isOnceKeyUp('A') || KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('D') || KEYMANAGER->isOnceKeyUp('S') ||
 		KEYMANAGER->isOnceKeyUp('A') && KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('D') && KEYMANAGER->isOnceKeyUp('W') ||
 		KEYMANAGER->isOnceKeyUp('A') && KEYMANAGER->isOnceKeyUp('S') || KEYMANAGER->isOnceKeyUp('D') && KEYMANAGER->isOnceKeyUp('S'))
 		_state->setState(_vState[PLAYERSTATE::MOVESTOP]);
+
 
 	if (KEYMANAGER->isOnceKeyUp('C')
 		|| (KEYMANAGER->isOnceKeyUp(VK_RBUTTON) && _state->getState() == _vState[PLAYERSTATE::GUARD])
@@ -465,7 +471,7 @@ void player::playerMove()
 	}
 }
 
-void player::playerDodge()
+void player::playerDodge()		//회피시 움직임
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
@@ -542,7 +548,7 @@ void player::playerDodge()
 	}
 }
 
-void player::playerLongAttackMove()
+void player::playerLongAttackMove()		//원거리 공격시 움직임
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
@@ -621,7 +627,7 @@ void player::playerLongAttackMove()
 	}
 }
 
-void player::playermeleeattackMove()
+void player::playermeleeattackMove()	// 근접공격+방향키 움직이면서 공격할때 타일체크
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
@@ -735,7 +741,7 @@ void player::playermeleeattackMove()
 	}
 }
 
-void player::playerfinalattackMove()
+void player::playerfinalattackMove() // 근접공격 마지막타 움직이는거 타일체크
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
@@ -784,65 +790,28 @@ void player::playerfinalattackMove()
 		switch (_direction)
 		{
 		case PLAYERDIRECTION::TOP:
-			if (KEYMANAGER->isStayKeyDown(VK_UP))
-			{
-				move(0, -moveSpeed);
-			}
+			move(0, -moveSpeed);
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
-
-			if (KEYMANAGER->isStayKeyDown(VK_UP))
-			{
-				if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-				{
-					moveAngle(PI*0.75, moveSpeed);
-				}
-			}
+			moveAngle(PI*0.75, moveSpeed);
 			break;
 		case PLAYERDIRECTION::LEFT:
-			if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-			{
-				move(-moveSpeed, 0);
-			}
+			move(-moveSpeed, 0);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-			{
-				if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-				{
-					moveAngle(PI*1.25, moveSpeed);
-				}
-			}
+			moveAngle(PI*1.25, moveSpeed);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-			{
-				move(0, moveSpeed);
-			}
+			move(0, moveSpeed);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-			{
-				if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-				{
-					moveAngle(PI*1.75, moveSpeed);
-				}
-			}
+			moveAngle(PI*1.75, moveSpeed);
 			break;
 		case PLAYERDIRECTION::RIGHT:
-			if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-			{
-				move(moveSpeed, 0);
-			}
+			move(moveSpeed, 0);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
-			if (KEYMANAGER->isStayKeyDown(VK_UP))
-			{
-				if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-				{
-					moveAngle(PI*0.25, moveSpeed);
-				}
-			}
+			moveAngle(PI*0.25, moveSpeed);
 			break;
 		}
 		_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);

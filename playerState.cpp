@@ -1674,6 +1674,7 @@ void leftattackState::exit()
 	_right_bottom->stop();
 }
 
+// =========================== 플레이어 근거리 마지막공격 =========================== //
 rightfinalattackState::rightfinalattackState(player * player)
 {
 	_player = player;
