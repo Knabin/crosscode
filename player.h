@@ -23,6 +23,10 @@ enum PLAYERSTATE : int
 	DODGE,
 	LONGATTACK,
 	LONGATTACKMOVE,
+	MOVESTOP,
+	LEFT_ATTACK,
+	RIGHT_ATTACK,
+	RIGHT_FINALATTACK,
 	END,
 };
 
@@ -39,7 +43,7 @@ private:
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
-	
+
 
 	vector<playerState*>	_vState;
 
@@ -47,6 +51,10 @@ private:
 	RECT rcCollision;
 	int _nowOrder;
 	int _count;
+
+	bool _iscombo;
+	int _combocount;
+	int _combo;
 
 	float _jumpPower;
 	float _gravity;
@@ -63,9 +71,12 @@ public:
 	void playerMove();
 	void playerDodge();
 	void playerLongAttackMove();
+	void playermeleeattackMove();
+	void playerfinalattackMove();
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
 	void playerFire();
+	void playerMeleeattack();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
@@ -75,4 +86,3 @@ public:
 
 	PLAYERDIRECTION getDirection() { return _direction; }
 };
-
