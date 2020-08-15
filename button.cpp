@@ -15,12 +15,12 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 	
 	_direction = BUTTONDIRECTION::NONE;
 
-	_position = Vector2(x* WINSIZERATEX, y* WINSIZERATEY);
+	_position = Vector2(x, y);
 
 	_imageName = imageName;
 	_image = IMAGEMANAGER->findImage(imageName);
 
-	_rc.update(Vector2(x* WINSIZERATEX, y* WINSIZERATEY), Vector2(_image->getFrameSize().x* WINSIZERATEX, _image->getFrameSize().y* WINSIZERATEY), pivot::LEFTTOP);
+	_rc.update(Vector2(x, y), Vector2(_image->getFrameSize().x * WINSIZERATEX, _image->getFrameSize().y * WINSIZERATEY), pivot::LEFTTOP);
 
 	_frameUpPoint.x = frameX;
 	_frameUpPoint.y = frameY;
