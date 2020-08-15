@@ -45,11 +45,6 @@ HRESULT playGround::init()
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
-	// 커서 추가해 놨는데 좌표가 어긋나요... 이유는 모르겠음
-	//SetCursor(LoadCursorFromFile("cursor/cursor-2.cur"));
-	//SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
-	SetCursor(LoadCursorFromFile("cursor/cursor-throw.cur"));
-
 	return S_OK;
 }
 

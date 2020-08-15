@@ -41,7 +41,6 @@ void uiController::render()
 	for (int i = 0; i < _vUiObjects.size(); ++i)
 	{
 		if (!_vUiObjects[i]->getIsActive()) continue;
-		//_vUiObjects[i]->renderRelative(CAMERA->getRect().left, CAMERA->getRect().top);
 		_vUiObjects[i]->render();
 	}
 

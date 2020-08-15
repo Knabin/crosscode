@@ -18,9 +18,6 @@ HRESULT mapToolScene::init()
 
 	_isStayKeyDown = false;
 
-	// 전체 타일 출력할 새로운 buffer 선언
-	_mapBuffer = IMAGEMANAGER->addImage("mapBuffer", L"images/tile/tilenull.bmp");
-
 	// ========== 각종 rect 초기화 ==========
 	_editUiRc.update(Vector2((float)WINSIZEX - 300, WINSIZEY * 0.5f), Vector2(600, 850), pivot::CENTER);
 
@@ -81,51 +78,52 @@ HRESULT mapToolScene::init()
 	_page = TERRAIN_ONE;
 
 	// 배경 이미지
-	IMAGEMANAGER->addImage("map bg", L"images/maptool/map_bg.bmp");
-	IMAGEMANAGER->addImage("map bg2", L"images/maptool/map_back.bmp");
+	IMAGEMANAGER->addImage("map bg", L"images/maptool/map_bg.png");
+	IMAGEMANAGER->addImage("map bg2", L"images/maptool/map_back.png");
 
 	// 버튼 이미지
-	IMAGEMANAGER->addFrameImage("saveload", L"images/maptool/button_saveload.bmp", 2, 2);
-	IMAGEMANAGER->addFrameImage("editmode", L"images/maptool/button_menu.bmp", 2, 4);
-	IMAGEMANAGER->addFrameImage("numbutton", L"images/maptool/button_num.bmp", 2, 3);
-	IMAGEMANAGER->addFrameImage("numobj", L"images/maptool/button_numobj.bmp", 2, 4);
-	IMAGEMANAGER->addFrameImage("backtotitle", L"images/maptool/button_backtotitle.bmp", 1, 1);
+	IMAGEMANAGER->addFrameImage("saveload", L"images/maptool/button_saveload.png", 2, 2);
+	IMAGEMANAGER->addFrameImage("editmode", L"images/maptool/button_menu.png", 2, 4);
+	IMAGEMANAGER->addFrameImage("numbutton", L"images/maptool/button_num.png", 2, 3);
+	IMAGEMANAGER->addFrameImage("numobj", L"images/maptool/button_numobj.png", 2, 4);
+	IMAGEMANAGER->addFrameImage("backtotitle", L"images/maptool/button_backtotitle.png", 1, 1);
 
 	// ui 전체 이미지
-	_uiImage = IMAGEMANAGER->addImage("edit ui", L"images/maptool/ui_edit.bmp");
+	_uiImage = IMAGEMANAGER->addImage("edit ui", L"images/maptool/ui_edit.png");
 
 	// 샘플 이미지
-	_terrainImage[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1", L"images/tile/terrain1_s.bmp", 16, 18);
-	_terrainImageBig[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1 b", L"images/tile/terrain1.bmp", 16, 18);
-	_terrainImage[TERRAIN_TWO] = IMAGEMANAGER->addFrameImage("terrain2", L"images/tile/terrain2_s.bmp", 16, 18);
-	_terrainImageBig[TERRAIN_TWO] = IMAGEMANAGER->addFrameImage("terrain2 b", L"images/tile/terrain2.bmp", 16, 18);
-	_terrainImage[TERRAIN_THREE] = IMAGEMANAGER->addFrameImage("terrain3", L"images/tile/terrain3_s.bmp", 16, 18);
-	_terrainImageBig[TERRAIN_THREE] = IMAGEMANAGER->addFrameImage("terrain3 b", L"images/tile/terrain3.bmp", 16, 18);
+	_terrainImage[TERRAIN_ONE] = IMAGEMANAGER->addImage("terrain1", L"images/tile/terrain1_s.png");
+	//_terrainImage[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1", L"images/tile/terrain1_s.png", 16, 18);
+	_terrainImageBig[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1 b", L"images/tile/terrain1.png", 16, 18);
+	_terrainImage[TERRAIN_TWO] = IMAGEMANAGER->addImage("terrain2", L"images/tile/terrain2_s.png");
+	_terrainImageBig[TERRAIN_TWO] = IMAGEMANAGER->addFrameImage("terrain2 b", L"images/tile/terrain2.png", 16, 18);
+	_terrainImage[TERRAIN_THREE] = IMAGEMANAGER->addImage("terrain3", L"images/tile/terrain3_s.png");
+	_terrainImageBig[TERRAIN_THREE] = IMAGEMANAGER->addFrameImage("terrain3 b", L"images/tile/terrain3.png", 16, 18);
 
-	_objectImage[OBJECT_ONE] = IMAGEMANAGER->addFrameImage("object1", L"images/tile/object1_s.bmp", 16, 18);
-	_objectImageBig[OBJECT_ONE] = IMAGEMANAGER->addFrameImage("object1 b", L"images/tile/object1.bmp", 16, 18);
-	_objectImage[OBJECT_TWO] = IMAGEMANAGER->addFrameImage("object2", L"images/tile/object2_s.bmp", 16, 18);
-	_objectImageBig[OBJECT_TWO] = IMAGEMANAGER->addFrameImage("object2 b", L"images/tile/object2.bmp", 16, 18);
-	_objectImage[OBJECT_THREE] = IMAGEMANAGER->addFrameImage("object3", L"images/tile/object3_s.bmp", 16, 18);
-	_objectImageBig[OBJECT_THREE] = IMAGEMANAGER->addFrameImage("object3 b", L"images/tile/object3.bmp", 16, 18);
-	_objectImage[OBJECT_FOUR] = IMAGEMANAGER->addFrameImage("object4", L"images/tile/object4_s.bmp", 16, 18);
-	_objectImageBig[OBJECT_FOUR] = IMAGEMANAGER->addFrameImage("object4 b", L"images/tile/object4.bmp", 16, 18);
+	_objectImage[OBJECT_ONE] = IMAGEMANAGER->addImage("object1", L"images/tile/object1_s.png");
+	_objectImageBig[OBJECT_ONE] = IMAGEMANAGER->addFrameImage("object1 b", L"images/tile/object1.png", 16, 18);
+	_objectImage[OBJECT_TWO] = IMAGEMANAGER->addImage("object2", L"images/tile/object2_s.png");
+	_objectImageBig[OBJECT_TWO] = IMAGEMANAGER->addFrameImage("object2 b", L"images/tile/object2.png", 16, 18);
+	_objectImage[OBJECT_THREE] = IMAGEMANAGER->addImage("object3", L"images/tile/object3_s.png");
+	_objectImageBig[OBJECT_THREE] = IMAGEMANAGER->addFrameImage("object3 b", L"images/tile/object3.png", 16, 18);
+	_objectImage[OBJECT_FOUR] = IMAGEMANAGER->addImage("object4", L"images/tile/object4_s.png");
+	_objectImageBig[OBJECT_FOUR] = IMAGEMANAGER->addFrameImage("object4 b", L"images/tile/object4.png", 16, 18);
 
-	_enemyImage = IMAGEMANAGER->addFrameImage("enemy", L"images/tile/tile_enemy.bmp", 16, 18);
-	_enemyImageBig = IMAGEMANAGER->addFrameImage("enemy b", L"images/tile/tile_enemy_big.bmp", 16, 18);
+	_enemyImage = IMAGEMANAGER->addImage("enemy", L"images/tile/tile_enemy.png");
+	_enemyImageBig = IMAGEMANAGER->addFrameImage("enemy b", L"images/tile/tile_enemy_big.png", 16, 18);
 
-	IMAGEMANAGER->addFrameImage("vendor", L"images/object/vendor.bmp", 3, 1);
-	IMAGEMANAGER->addFrameImage("door prev", L"images/tile/doorpreview.bmp", 3, 1);
-	IMAGEMANAGER->addFrameImage("tree", L"images/object/tree.bmp", 3, 1);
-	IMAGEMANAGER->addFrameImage("grass", L"images/object/grass.bmp", 3, 1);
+	IMAGEMANAGER->addFrameImage("vendor", L"images/object/vendor.png", 3, 1);
+	IMAGEMANAGER->addFrameImage("door prev", L"images/tile/doorpreview.png", 3, 1);
+	IMAGEMANAGER->addFrameImage("tree", L"images/object/tree.png", 3, 1);
+	IMAGEMANAGER->addFrameImage("grass", L"images/object/grass.png", 3, 1);
 	
 	// 빈 타일
-	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.bmp");
-	IMAGEMANAGER->addImage("tile change", L"images/tile/tilechange.bmp");
+	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
+	IMAGEMANAGER->addImage("tile change", L"images/tile/tilechange.png");
 
 	// 오더 버튼 이미지
-	IMAGEMANAGER->addFrameImage("type", L"images/maptool/button_type.bmp", 2, 6);
-	_typeImage = IMAGEMANAGER->addFrameImage("tile type", L"images/tile/typetile.bmp", 1, 6);
+	IMAGEMANAGER->addFrameImage("type", L"images/maptool/button_type.png", 2, 6);
+	_typeImage = IMAGEMANAGER->addFrameImage("tile type", L"images/tile/typetile.png", 1, 6);
 
 	// 버튼 추가
 	button* save = new button();
@@ -248,11 +246,11 @@ void mapToolScene::update()
 
 void mapToolScene::render()
 {
-	IMAGEMANAGER->findImage("map bg")->render(Vector2(0,0));
-	_uiImage->render(Vector2(_editUiRc.getCenter()), 1.0f);
-	//D2DRENDERER->DrawRectangle(_editUiRc);
-	//_mapViewRc.render(getMemDC());
-
+	IMAGEMANAGER->findImage("map bg")->render(Vector2(0, 0));
+	_uiImage->render(Vector2(_editUiRc.left, _editUiRc.top), 1.0f);
+	//D2DRENDERER->DrawRotationFillRectangle(_sampleRc, D2D1::ColorF::Red, 0);
+	D2DRENDERER->DrawRotationFillRectangle(_mapViewRc, D2D1::ColorF::White, 0);
+	redrawMap();
 	switch (_editMode)
 	{
 	case EDITMODE::TERRAIN:
@@ -262,7 +260,7 @@ void mapToolScene::render()
 				IMAGEMANAGER->findImage("numbutton")->frameRender(Vector2(_numButtonRc[i].getCenter()), 1, i);
 			else IMAGEMANAGER->findImage("numbutton")->frameRender(Vector2(_numButtonRc[i].getCenter()), 0, i);
 		}
-		_terrainImage[_page]->render(Vector2(_sampleRc.getCenter()));
+		_terrainImage[_page]->render(Vector2(_sampleRc.left, _sampleRc.top));
 		renderSelectTile();
 		break;
 	case EDITMODE::OBJECT:
@@ -272,11 +270,11 @@ void mapToolScene::render()
 				IMAGEMANAGER->findImage("numobj")->frameRender(Vector2(_numButtonObjRc[i].getCenter()), 1, i);
 			else IMAGEMANAGER->findImage("numobj")->frameRender(Vector2(_numButtonObjRc[i].getCenter()), 0, i);
 		}
-		_objectImage[_page]->render(Vector2(_sampleRc.getCenter()));
+		_objectImage[_page]->render(Vector2(_sampleRc.left, _sampleRc.top));
 		renderSelectTile();
 		break;
 	case EDITMODE::ENEMY:
-		_enemyImage->render(Vector2(_sampleRc.getCenter()));
+		_enemyImage->render(Vector2(_sampleRc.left, _sampleRc.top));
 		renderSelectTile();
 		break;
 	case EDITMODE::TYPE:
@@ -297,8 +295,6 @@ void mapToolScene::render()
 		else
 			IMAGEMANAGER->findImage("editmode")->frameRender(Vector2(_editButtonRc[i].getCenter()), 0, i);
 	}
-
-	drawMap();
 	renderChangeMap();
 
 	renderPreviewTile();
@@ -307,7 +303,7 @@ void mapToolScene::render()
 	if (PtInRect(&_mapViewRc.getRect(), _ptMouse))
 	{
 		char str[100];
-		sprintf_s(str, "[%d, %d]", _selectIndex.x, _selectIndex.y);
+		sprintf_s(str, "[%d, %d, %d, %d, %d, %d]", _selectIndex.x, _selectIndex.y, _drawStart.x, _drawStart.y, _drawEnd.x, _drawEnd.y);
 		string str2 = str;
 		wstring str3;
 		str3.assign(str2.begin(), str2.end());
@@ -752,19 +748,19 @@ void mapToolScene::moveMapView()
 	{
 		redrawMap();
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && _clippingPoint.x + 4 <= _mapBuffer->getWidth() - _mapViewRc.GetWidth())
+	if (KEYMANAGER->isStayKeyDown('D') && _clippingPoint.x + 4 <= MAXTILEX * SIZE - _mapViewRc.GetWidth())
 	{
 		_clippingPoint.x += 4;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT) && _clippingPoint.x - 4 >= 0)
+	if (KEYMANAGER->isStayKeyDown('A') && _clippingPoint.x - 4 >= 0)
 	{
 		_clippingPoint.x -= 4;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_UP) && _clippingPoint.y - 4 >= 0)
+	if (KEYMANAGER->isStayKeyDown('W') && _clippingPoint.y - 4 >= 0)
 	{
 		_clippingPoint.y -= 4;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && _clippingPoint.y + 4 <= _mapBuffer->getHeight() - _mapViewRc.GetHeight())
+	if (KEYMANAGER->isStayKeyDown('S') && _clippingPoint.y + 4 <= MAXTILEY * SIZE - _mapViewRc.GetHeight())
 	{
 		_clippingPoint.y += 4;
 	}
@@ -1004,9 +1000,10 @@ void mapToolScene::renderPreviewTile()
 					{
 						if (_penMode == PENMODE::PLUS)
 						{
-							img->setAlpha(150);
-							img->frameRender(Vector2(_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x - width,
-								_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y - height), _sampleStart.x % 3, 0);
+							img->setAlpha(0.7f);
+							img->frameRender(Vector2(_vTiles[drawY + i][drawX + j]->getRect().getCenter()) 
+								+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint,
+								_sampleStart.x % 3, 0);
 						}
 						if (drawX + j + 1 > _viewLastIndex.x) break;
 					}
@@ -1024,20 +1021,18 @@ void mapToolScene::renderPreviewTile()
 						{
 							if (_editMode == EDITMODE::TERRAIN)
 							{
-								_terrainImageBig[_page]->setAlpha(150);
+								_terrainImageBig[_page]->setAlpha(0.7f);
 								_terrainImageBig[_page]->frameRender(
-									Vector2(
-									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().top + _mapViewRc.top - _clippingPoint.y), 
+									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+										+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint), 
 									_sampleStart.x + j, _sampleStart.y + i);
 							}
 							else
 							{
-								_objectImageBig[_page]->setAlpha(150);
+								_objectImageBig[_page]->setAlpha(0.7f);
 								_objectImageBig[_page]->frameRender(
-									Vector2(
-									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+										+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 									_sampleStart.x + j, _sampleStart.y + i);
 							}
 						}
@@ -1065,18 +1060,18 @@ void mapToolScene::renderPreviewTile()
 						{
 							if (_editMode == EDITMODE::TERRAIN)
 							{
-								_terrainImageBig[_page]->setAlpha(150);
-								_terrainImageBig[_page]->frameRender(Vector2(
-									_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-									_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+								_terrainImageBig[_page]->setAlpha(0.7f);
+								_terrainImageBig[_page]->frameRender(
+									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+										+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 									_sampleStart.x, _sampleStart.y);
 							}
 							else
 							{
-								_objectImageBig[_page]->setAlpha(150);
-								_objectImageBig[_page]->frameRender(Vector2(
-									_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-									_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+								_objectImageBig[_page]->setAlpha(0.7f);
+								_objectImageBig[_page]->frameRender(
+									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+									+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 									_sampleStart.x, _sampleStart.y);
 							}
 						}
@@ -1089,10 +1084,10 @@ void mapToolScene::renderPreviewTile()
 		case EDITMODE::ENEMY:
 			if (_penMode == PENMODE::PLUS)
 			{
-				_enemyImageBig->setAlpha(150);
-				_enemyImageBig->frameRender(Vector2(
-					_vTiles[_drawStart.y][_drawStart.x]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-					_vTiles[_drawStart.y][_drawStart.x]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+				_enemyImageBig->setAlpha(0.7f);
+				_enemyImageBig->frameRender(
+					(Vector2(_vTiles[_drawStart.y][_drawStart.x]->getRect().getCenter())
+						+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 					_sampleStart.x, _sampleStart.y);
 			}
 			break;
@@ -1416,16 +1411,6 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 {
 	int autoIndex = 0;
 	int type = _vTiles[indexY][indexX]->getTerrainType();
-	//// 좌측 상단
-	//if (indexX % _nowIndex.x != 0 && indexY != 0)
-	//{
-	//	// 오토타일이라면
-	//	if (_vTiles[indexY - 1][indexX - 1]->getTerrainType() == 1)
-	//	{
-	//		int temp = 1;
-	//		autoIndex += temp << AUTO_LT;
-	//	}
-	//}
 
 	// 상단
 	if (indexY != 0)
@@ -1433,16 +1418,6 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 		if (_vTiles[indexY - 1][indexX]->getTerrainType() == type)
 		autoIndex += 1 << AUTO_T;
 	}
-
-	//// 우측 상단
-	//if (indexX != _nowIndex.x && indexY != 0)
-	//{
-	//	if (_vTiles[indexY - 1][indexX + 1]->getTerrainType() == 1)
-	//	{
-	//		int temp = 1;
-	//		autoIndex += temp << AUTO_LT;
-	//	}
-	//}
 
 	// 좌측
 	if (indexX != 0)
@@ -1458,16 +1433,6 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 		autoIndex += 1 << AUTO_R;
 	}
 
-	//// 좌측 하단
-	//if (indexX != 0 && indexY != _nowIndex.y)
-	//{
-	//	if (_vTiles[indexY + 1][indexX - 1]->getTerrainType() == 1)
-	//	{
-	//		int temp = 1;
-	//		autoIndex += temp << AUTO_LB;
-	//	}
-	//}
-
 	// 하단
 	if (indexY != _nowIndex.y)
 	{
@@ -1475,83 +1440,10 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 		autoIndex += 1 << AUTO_B;
 	}
 
-	//// 우측 하단
-	//if (indexX != _nowIndex.x && indexY != _nowIndex.y)
-	//{
-	//	if (_vTiles[indexY + 1][indexX + 1]->getTerrainType() == 1)
-	//	{
-	//		int temp = 1;
-	//		autoIndex += temp << AUTO_RT;
-	//	}
-	//}
-
 	// 타일 설정
 
 	_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[type - 1][autoIndex].x);
 	_vTiles[indexY][indexX]->setTerrainY(_vAutoIndexs[type - 1][autoIndex].y);
-
-	/*switch (autoIndex)
-	{
-	case 0:
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][0].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][0].y);
-		break;
-	case 1:
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][1].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][1].y);
-		break;
-	case 2:
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][2].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][2].y);
-		break;
-	case 3:
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][3].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][3].y);
-		break;
-	case 4:
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][4].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][4].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][5].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][5].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][6].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][6].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][7].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][7].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][8].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][8].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][9].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][9].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][10].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][10].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][11].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][11].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][12].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][12].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][13].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][13].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][14].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][14].y);
-		break;
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][15].x);
-		_vTiles[indexY][indexX]->setTerrainX(_vAutoIndexs[0][15].y);
-		break;
-	}*/
-
-}
-
-void mapToolScene::drawMap()
-{
-	//_mapBuffer->render(getMemDC(), _mapViewRc.left, _mapViewRc.top, _clippingPoint.x, _clippingPoint.y, _mapViewRc.getWidth(), _mapViewRc.getHeight());
 }
 
 void mapToolScene::redrawMap()
@@ -1562,14 +1454,15 @@ void mapToolScene::redrawMap()
 	{
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
+			if (_vTiles[i][j]->getRect().right < _clippingPoint.x ||
+				_vTiles[i][j]->getRect().left > _clippingPoint.x + _mapViewRc.getSize().y) continue;
+
 			if (_vTiles[i][j]->getTerrainX() != -1)
 			{
 				if (_vTiles[i][j]->getTerrainType() > 0)
 					checkAutoTile(j, i);
-				_terrainImageBig[_vTiles[i][j]->getTerrainImageNum()]->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+				_terrainImageBig[_vTiles[i][j]->getTerrainImageNum()]->frameRender(Vector2(_vTiles[i][j]->getRect().getCenter()) + Vector2(_mapViewRc.left, _mapViewRc.top), _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
 			}
-			else
-				D2DRENDERER->DrawRectangle(_vTiles[i][j]->getRect());
 
 
 			// 오브젝트가 있는 경우

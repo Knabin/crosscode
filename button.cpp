@@ -20,7 +20,7 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 	_imageName = imageName;
 	_image = IMAGEMANAGER->findImage(imageName);
 
-	_rc.update(Vector2(x, y), Vector2(_image->getFrameSize().x, _image->getFrameSize().y), pivot::LEFTTOP);
+	_rc.update(Vector2(x, y), Vector2(_image->getFrameSize()), pivot::CENTER);
 
 	_frameUpPoint.x = frameX;
 	_frameUpPoint.y = frameY;
@@ -31,8 +31,9 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 	IMAGEMANAGER->addFrameImage("select", L"images/title/select.png", 1, 10);
 
 	_select = new animation;
-	_select->init(IMAGEMANAGER->findImage("select")->getSize().x, IMAGEMANAGER->findImage("select")->getSize().y, IMAGEMANAGER->findImage("select")->getFrameSize().x, IMAGEMANAGER->findImage("select")->getFrameSize().y);
-	_select->setPlayFrame(0, 10, false, false);
+	_select->init(IMAGEMANAGER->findImage("select")->getSize().x, IMAGEMANAGER->findImage("select")->getSize().y, 
+		IMAGEMANAGER->findImage("select")->getFrameSize().x, IMAGEMANAGER->findImage("select")->getFrameSize().y);
+	_select->setPlayFrame(0, 9, false, false);
 	_select->setFPS(1);
 	
 	_selectOn = false;
@@ -76,16 +77,22 @@ void button::update()
 
 void button::render()
 {
+	D2DRENDERER->DrawRotationFillRectangle(_rc, D2D1::ColorF::AliceBlue, 0);
 	switch (_direction)
 	{
 	case BUTTONDIRECTION::NONE:	case BUTTONDIRECTION::UP:
-		_image->frameRender(Vector2(_rc.left, _rc.top),
+		_image->frameRender(Vector2(_rc.getCenter()),
 			_frameUpPoint.x, _frameUpPoint.y);
 		break;
 	case BUTTONDIRECTION::DOWN:
-		_image->frameRender(Vector2(_rc.left, _rc.top),
+		_image->frameRender(Vector2(_rc.getCenter()),
 			_frameDownPoint.x, _frameDownPoint.y);
 		break;
+	}
+
+	if (PtInRect(&_rc.getRect(), _ptMouse) && _imageName == "buttons")
+	{
+//		IMAGEMANAGER->findImage("select")->aniRender(Vector2(_rc.getCenter()), _select, 1.0f);
 	}
 }
 
@@ -103,8 +110,5 @@ void button::renderRelative(float x, float y)
 		break;
 	}
 
-	if (PtInRect(&_rc.getRect(), _ptMouse) &&_imageName == "buttons")
-	{
-		//IMAGEMANAGER->findImage("select")->aniRender(Vector2(_rc.left, _rc.top), _select, 1.0f);
-	}
+
 }
