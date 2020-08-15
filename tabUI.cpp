@@ -5,7 +5,7 @@
 HRESULT tabUI::init()
 {
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
-	IMAGEMANAGER->addImage("menu", "images/menu/menu.bmp", 1920, 1080, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("menu", L"images/menu/menu.png");
 
 	_on = false;
 
@@ -32,26 +32,26 @@ void tabUI::render()
 {
 	if (_on)
 	{
-		IMAGEMANAGER->findImage("menu")->render(getMemDC(), CAMERA->getRect().left , CAMERA->getRect().top);
+		IMAGEMANAGER->findImage("menu")->render(Vector2(0, 0));
 
-		int ltX = CAMERA->getRect().left + 291;
-		int tY = CAMERA->getRect().top + 187;
+		int ltX = 291;
+		int tY = 187;
 		int rtX = ltX + _hp;
 		int rbX = rtX + 12;
 		int bY = tY + 12;
 		int lbX = ltX + 12;
 
-		HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
-		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-		POINT polygon[5] = { ltX,tY,rtX ,tY,rbX,bY,lbX,bY,ltX,tY };
-		Polygon(getMemDC(), polygon, 5);
-		SelectObject(getMemDC(), oldBrush);
-		DeleteObject(brush);
+		//HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
+		//HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
+		//POINT polygon[5] = { ltX,tY,rtX ,tY,rbX,bY,lbX,bY,ltX,tY };
+		//Polygon(getMemDC(), polygon, 5);
+		//SelectObject(getMemDC(), oldBrush);
+		//DeleteObject(brush);
 
-		HBRUSH brush1 = CreateSolidBrush(RGB(243, 0, 243));
-		HBRUSH oldBrush1 = (HBRUSH)SelectObject(getMemDC(), brush1);
-		RectangleMake(getMemDC(), ltX + 17, bY + 3, _exp, 5);
-		SelectObject(getMemDC(), oldBrush1);
-		DeleteObject(brush1);
+		//HBRUSH brush1 = CreateSolidBrush(RGB(243, 0, 243));
+		//HBRUSH oldBrush1 = (HBRUSH)SelectObject(getMemDC(), brush1);
+		//RectangleMake(getMemDC(), ltX + 17, bY + 3, _exp, 5);
+		//SelectObject(getMemDC(), oldBrush1);
+		//DeleteObject(brush1);
 	}
 }

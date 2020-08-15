@@ -59,6 +59,8 @@ private:
 	int _attackEndCount;
 	int _mineAttackCount;
 
+	int _bossShieldOneFrameX;
+	int _bossShieldOneFrameY;
 
 
 	int _fireskill1Time;

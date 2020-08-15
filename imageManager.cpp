@@ -1,206 +1,150 @@
 #include "stdafx.h"
 #include "imageManager.h"
+#include "image.h"
 
+#include <io.h>
 
 imageManager::imageManager()
+	:mWicFactory(nullptr)
 {
+	//WIC 팩토리 생성
+	//Windows Imaging Component
+	//Direct2D는 이미지를 로드하는 기능이 없다. 
+	//고로 Direct2D는 WIC라는 라이브러리의 이미지로부터 이미지 데이터를 만들 수 있다.
+	CoInitialize(NULL);
+	HRESULT hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&mWicFactory));
+#ifdef _DEBUG
+	assert(SUCCEEDED(hr));
+#endif
 }
 
-
+/*********************************************************************
+## imageManager ##
+**********************************************************************/
 imageManager::~imageManager()
 {
+	this->DeleteAll();
+	NEW_SAFE_RELEASE(mWicFactory);
 }
-
-HRESULT imageManager::init()
+/*********************************************************************
+## addImage ##
+**********************************************************************/
+image * imageManager::addImage(const string& key, const wstring& file)
 {
-	return S_OK;
-}
+	image* img = this->findImage(key);
+	if (img)
+		return img;
 
-void imageManager::release()
-{
-	deleteAll();
-}
-
-image* imageManager::addImage(string strKey, int width, int height)
-{
-	image* img = findImage(strKey);
-
-	//만약에 내가 찾으려던 이미지가 이미 있으면 그것을 반환
-	if (img) return img;
-
-	img = new image;
-
-	if (FAILED(img->init(width, height)))
+	ID2D1Bitmap* bitmap = this->CreateD2DBitmapFromFile(file);
+	if (bitmap)
 	{
-		SAFE_DELETE(img);
-
-		return nullptr;
+		image::TagLoadedImageInfo loadInfo(key, file);
+		img = new image(bitmap, loadInfo);
+		mImageList.insert(make_pair(key, img));
+		return img;
 	}
+	else
+		assert(SUCCEEDED(E_FAIL));
 
-	//_mImageList.insert(pair<string, image*>(strKey, img));
-	_mImageList.insert(make_pair(strKey, img));
-
-	return img;
+	return nullptr;
 }
-
-image * imageManager::addImage(string strKey, const char * fileName, int width, int height, bool trans, COLORREF transColor)
+/*********************************************************************
+## addFrameImage ##
+**********************************************************************/
+image * imageManager::addFrameImage(const string& key, const wstring& file, const int maxFrameX, const int maxFrameY)
 {
-	image* img = findImage(strKey);
+	image* img = this->findImage(key);
+	if (img)
+		return img;
 
-	//만약에 내가 찾으려던 이미지가 이미 있으면 그것을 반환
-	if (img) return img;
-
-	img = new image;
-
-	if (FAILED(img->init(fileName, width, height, trans, transColor)))
+	ID2D1Bitmap* bitmap = CreateD2DBitmapFromFile(file);
+	if (bitmap)
 	{
-		SAFE_DELETE(img);
-
-		return nullptr;
-	}
-
-	//_mImageList.insert(pair<string, image*>(strKey, img));
-	_mImageList.insert(make_pair(strKey, img));
-
-	return img;
-}
-
-image * imageManager::addImage(string strKey, const char * fileName, int width, int height, bool trans, COLORREF transColor, float angle)
-{
-	image* img = findImage(strKey);
-
-	//만약에 내가 찾으려던 이미지가 이미 있으면 그것을 반환
-	if (img) return img;
-
-	img = new image;
-
-	if (FAILED(img->init(fileName, width, height, trans, transColor ,angle)))
-	{
-		SAFE_DELETE(img);
-
-		return nullptr;
-	}
-
-	//_mImageList.insert(pair<string, image*>(strKey, img));
-	_mImageList.insert(make_pair(strKey, img));
-
-	return img;
-}
-
-image * imageManager::addFrameImage(string strKey, const char * fileName, float x, float y, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor)
-{
-	image* img = findImage(strKey);
-
-	//만약에 내가 찾으려던 이미지가 이미 있으면 그것을 반환
-	if (img) return img;
-
-	img = new image;
-
-	if (FAILED(img->init(fileName, x, y, width, height, frameX, frameY, trans, transColor)))
-	{
-		SAFE_DELETE(img);
-
-		return nullptr;
-	}
-
-	//_mImageList.insert(pair<string, image*>(strKey, img));
-	_mImageList.insert(make_pair(strKey, img));
-
-	return img;
-}
-
-image * imageManager::addFrameImage(string strKey, const char * fileName, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor)
-{
-	image* img = findImage(strKey);
-
-	//만약에 내가 찾으려던 이미지가 이미 있으면 그것을 반환
-	if (img) return img;
-
-	img = new image;
-
-	if (FAILED(img->init(fileName, width, height, frameX, frameY, trans, transColor)))
-	{
-		SAFE_DELETE(img);
-
-		return nullptr;
-	}
-
-	//_mImageList.insert(pair<string, image*>(strKey, img));
-	_mImageList.insert(make_pair(strKey, img));
-
-	return img;
-}
-
-image * imageManager::findImage(string strKey)
-{
-	mapImageIter key = _mImageList.find(strKey);
-
-	//찾았다면
-	if (key != _mImageList.end())
-	{
-		return key->second;
+		image::TagLoadedImageInfo loadInfo(key, file);
+		img = new image(bitmap, loadInfo, maxFrameX, maxFrameY);
+		this->mImageList.insert(make_pair(key, img));
+		return img;
 	}
 
 	return nullptr;
 }
-
-BOOL imageManager::deleteImage(string strKey)
+/*********************************************************************
+## findImage ##
+**********************************************************************/
+image * imageManager::findImage(const string& key)
 {
-	mapImageIter key = _mImageList.find(strKey);
+	ImageIter iter = mImageList.find(key);
+	if (iter != mImageList.end())
+		return iter->second;
+	return nullptr;
+}
+/*********************************************************************
+## CreateD2DBitmapFromFile ##
+@@ wstring file : 파일 경로
+**********************************************************************/
+ID2D1Bitmap * imageManager::CreateD2DBitmapFromFile(const wstring & file)
+{
+	//디코더 생성
+	IWICBitmapDecoder* ipDecoder = nullptr;
+	HRESULT hr;
+	hr = mWicFactory->CreateDecoderFromFilename(file.c_str(), NULL, GENERIC_READ,
+		WICDecodeMetadataCacheOnDemand, &ipDecoder);
+#ifdef _DEBUG
+	assert(SUCCEEDED(hr));
+#endif
+	//디코더에서 프레임얻음
+	IWICBitmapFrameDecode* ipFrame = nullptr;
+	hr = ipDecoder->GetFrame(0, &ipFrame);
+#ifdef _DEBUG
+	assert(SUCCEEDED(hr));
+#endif
+	//프레임을 기반으로 포맷 컨버터 생성
+	IWICFormatConverter* convertedSrcBmp = nullptr;
+	hr = mWicFactory->CreateFormatConverter(&convertedSrcBmp);
+#ifdef _DEBUG
+	assert(SUCCEEDED(hr));
+#endif
+	//컨버터 초기화
+	hr = convertedSrcBmp->Initialize
+	(
+		ipFrame,
+		GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone,
+		nullptr,
+		0.0f,
+		WICBitmapPaletteTypeCustom
+	);
+#ifdef _DEBUG
+	assert(SUCCEEDED(hr));
+#endif
+	//컨버트된 데이터를 기반으로 실제 Direct2D용 비트맵을 생성
+	ID2D1Bitmap* ipResult = nullptr;
+	hr = D2DRENDERER->GetRenderTarget()->CreateBitmapFromWicBitmap
+	(
+		convertedSrcBmp,
+		nullptr,
+		&ipResult
+	);
+#ifdef _DEBUG
+	assert(SUCCEEDED(hr));
+#endif
 
-	if (key != _mImageList.end())
+	NEW_SAFE_RELEASE(convertedSrcBmp);
+	NEW_SAFE_RELEASE(ipFrame);
+	NEW_SAFE_RELEASE(ipDecoder);
+
+	return ipResult;
+}
+/*********************************************************************
+## DeleteAll ##
+**********************************************************************/
+void imageManager::DeleteAll()
+{
+	ImageIter iter = mImageList.begin();
+	for (; iter != mImageList.end(); ++iter)
 	{
-		key->second->release();
-		SAFE_DELETE(key->second);
-		_mImageList.erase(key);
-
-		return true;
+		SAFE_DELETE(iter->second);
 	}
-
-	return false;
+	mImageList.clear();
 }
-
-BOOL imageManager::deleteAll()
-{
-	mapImageIter iter = _mImageList.begin();
-
-	for (; iter != _mImageList.end();)
-	{
-		//맵 컨테이너 안에 image*가 있다면
-		if (iter->second != NULL)
-		{
-			iter->second->release();
-			SAFE_DELETE(iter->second);
-			iter = _mImageList.erase(iter);
-		}
-		else ++iter;
-	}
-
-	_mImageList.clear();
-
-	return true;
-}
-
-void imageManager::render(string strKey, HDC hdc)
-{
-	image* img = findImage(strKey);
-
-	if (img) img->render(hdc);
-}
-
-void imageManager::render(string strKey, HDC hdc, int destX, int destY)
-{
-	image* img = findImage(strKey);
-
-	if (img) img->render(hdc, destX, destY);
-}
-
-void imageManager::render(string strKey, HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight)
-{
-	image* img = findImage(strKey);
-
-	if (img) img->render(hdc, destX, destY, sourX, sourY, sourWidth, sourHeight);
-}
-
-
 

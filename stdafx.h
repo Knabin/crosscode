@@ -26,17 +26,28 @@ enum class pivot : int
 {
 	LEFTTOP, CENTER, BOTTOM
 };
+#pragma comment(lib,"d2d1.lib")
+#pragma comment(lib,"dwrite.lib")
+#pragma comment(lib, "dxguid.lib")
+//WIC 라이브러리
+#pragma comment(lib, "WindowsCodecs.lib")
 
+#include <D2D1.h>
+#include <d2d1helper.h>
+#include <d2d1.h>
+#include <dwrite.h>
+#include <wincodec.h>
 
-
+#include "Vector2.h"
+#include "floatRect.h"
 #include "utils.h"
 #include "floatPoint.h"
-#include "floatRect.h"
 #include "floatCircle.h"
 #include "collision.h"
 
 #include "commonMacroFunction.h"
 #include "randomFunction.h"
+#include "D2DRenderer.h"
 #include "imageManager.h"
 #include "timeManager.h"
 #include "keyManager.h"
@@ -74,10 +85,12 @@ using namespace MINTCHOCO_UTIL;
 #define TEXTDATA textData::getInstance()
 #define SCENEMANAGER sceneManager::getInstance()
 #define CAMERA camera::getInstance()
+#define D2DRENDERER D2DRenderer::getInstance()
 
 #define SAFE_DELETE(p)		{if(p) {delete(p); (p) = NULL;}}
 #define SAFE_RELEASE(p)		{if(p) {(p)->release(); (p) = NULL;}}
 #define SAFE_DELETE_ARRAY(p) {if(p) {delete[](p); (p) = NULL;}}
+#define NEW_SAFE_RELEASE(p)  {if(p) {(p)->Release(); (p) = NULL;}}
 
 //====================================
 // ## 20.05.29 ## Extern ##
@@ -86,3 +99,4 @@ using namespace MINTCHOCO_UTIL;
 extern HINSTANCE	_hInstance;
 extern HWND			_hWnd;
 extern POINT		_ptMouse;
+extern HDC			_hdc;

@@ -20,7 +20,7 @@ public:
 	HRESULT init();
 	void release();
 	void update(float lockFPS = 0.0f);
-	void render(HDC hdc);
+	void render();
 
 	inline float getElapsedTime() const { return _timer->getElapsedTime(); }
 	inline float getWorldTime() const { return _timer->getWorldTime(); }

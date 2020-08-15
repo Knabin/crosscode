@@ -5,6 +5,7 @@
 
 HINSTANCE _hInstance;
 HWND	  _hWnd;
+HDC		  _hdc;
 LPCTSTR _lpszClass = TEXT("프레임워크 테스트");
 
 POINT _ptMouse;

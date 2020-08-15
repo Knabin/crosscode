@@ -8,8 +8,8 @@ mapObject::mapObject(int type, int frameX)
 
 HRESULT mapObject::init()
 {
-	IMAGEMANAGER->addFrameImage("tree", "images/object/tree.bmp", 720, 288, 3, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("grass", "images/object/grass.bmp", 432, 96, 3, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("tree", L"images/object/tree.png", 3, 1);
+	IMAGEMANAGER->addFrameImage("grass", L"images/object/grass.png", 3, 1);
 
 	switch (_type)
 	{
@@ -22,12 +22,12 @@ HRESULT mapObject::init()
 		break;
 	}
 
-	_rc.set(0, 0, _image->getFrameWidth(), _image->getFrameHeight());
-	_rc.setCenter(_x, _y);
+	_rc.update(_position, Vector2(_image->getFrameSize().x, _image->getFrameSize().y), pivot::CENTER);
 	return S_OK;
 }
 
 void mapObject::render()
 {
-	_image->frameRender(getMemDC(), _rc.left, _rc.top, _frameX, 0);
+	_image->setSize(Vector2(_image->getFrameSize()) * CAMERA->getZoomAmount());
+	_image->frameRender(CAMERA->getRelativeVector2(_rc.getCenter()), _frameX, 0);
 }

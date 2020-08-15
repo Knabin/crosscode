@@ -109,16 +109,19 @@ void playGround::update()
 //그리기 전용
 void playGround::render()
 {	
-	PatBlt(getMemDC(), 0, 0, CAMERA->getMapWidth(), CAMERA->getMapHeight(), WHITENESS);
-	//=================================================
+	D2DRENDERER->BeginRender(D2D1::ColorF::White);
+	{
 
-	SCENEMANAGER->render();
-	OBJECTMANAGER->render();
-	CAMERA->zoom(getMemDC());
-	TIMEMANAGER->render(getMemDC());
-	_ui->render();
-	//_enemyManager->render();
+		//=================================================
 
-	//=============================================
-	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);
+		SCENEMANAGER->render();
+		OBJECTMANAGER->render();
+		//CAMERA->zoom(getMemDC());
+		TIMEMANAGER->render();
+		_ui->render();
+		//_enemyManager->render();
+
+		//=============================================
+	}
+	D2DRENDERER->EndRender();
 }

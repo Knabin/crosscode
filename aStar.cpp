@@ -120,8 +120,8 @@ void aStar::pathFinder(tile* currentTile)
 		_vOpenList[i]->setCostToGoal(
 			(abs(_endTile->getIdX() - _vOpenList[i]->getIdX()) + abs(_endTile->getIdY() - _vOpenList[i]->getIdY())) * 10);
 
-		floatPoint center1 = _vOpenList[i]->getParentTile()->getRect().getCenter();
-		floatPoint center2 = _vOpenList[i]->getRect().getCenter();
+		Vector2 center1 = _vOpenList[i]->getParentTile()->getRect().getCenter();
+		Vector2 center2 = _vOpenList[i]->getRect().getCenter();
 
 		_vOpenList[i]->setCostFromStart((getDistance(center1.x, center1.y, center2.x, center2.y) > SIZE) ? 14 : 10);
 
@@ -197,9 +197,9 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 		_vTotalList[i]->setParentTile(NULL);
 		for (int j = 0; j < _vEnemy.size(); ++j)
 		{
-			if (PtInRect(&_vTotalList[i]->getRect().getRect(), PointMake(_vEnemy[j]->getX(), _vEnemy[j]->getY())))
+			if (PtInRect(&_vTotalList[i]->getRect().getRect(), PointMake(_vEnemy[j]->getPosition().x, _vEnemy[j]->getPosition().y)))
 			{
-				if (_vEnemy[j]->getX() == enemyRC.getCenter().x && _vEnemy[j]->getY() == enemyRC.getCenter().y)
+				if (_vEnemy[j]->getPosition().x == enemyRC.getCenter().x && _vEnemy[j]->getPosition().y == enemyRC.getCenter().y)
 				{
 					_vTotalList[i]->setStart(true);
 					_currentTile = _vTotalList[i];
@@ -215,7 +215,7 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 			}
 		}
 
-		if (PtInRect(&_vTotalList[i]->getRect().getRect(), PointMake(_player->getX(), _player->getRect().bottom)))
+		if (PtInRect(&_vTotalList[i]->getRect().getRect(), PointMake(_player->getPosition().x, _player->getRect().bottom)))
 		{
 			if (_vTotalList[i]->getStart())
 				return _vMove;

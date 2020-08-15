@@ -15,13 +15,12 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 	
 	_direction = BUTTONDIRECTION::NONE;
 
-	_x = x;
-	_y = y;
+	_position = Vector2(x, y);
 
 	_imageName = imageName;
 	_image = IMAGEMANAGER->findImage(imageName);
 
-	_rc = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+	_rc.update(Vector2(x, y), Vector2(_image->getFrameSize().x, _image->getFrameSize().y), pivot::LEFTTOP);
 
 	_frameUpPoint.x = frameX;
 	_frameUpPoint.y = frameY;
@@ -29,10 +28,10 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 	_frameDownPoint.x = frameDownX;
 	_frameDownPoint.y = frameDownY;
 
-	IMAGEMANAGER->addFrameImage("select", "images/title/select.bmp", 481, 660, 1, 10, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("select", L"images/title/select.png", 1, 10);
 
 	_select = new animation;
-	_select->init(IMAGEMANAGER->findImage("select")->getWidth(), IMAGEMANAGER->findImage("select")->getHeight(), IMAGEMANAGER->findImage("select")->getFrameWidth(), IMAGEMANAGER->findImage("select")->getFrameHeight());
+	_select->init(IMAGEMANAGER->findImage("select")->getSize().x, IMAGEMANAGER->findImage("select")->getSize().y, IMAGEMANAGER->findImage("select")->getFrameSize().x, IMAGEMANAGER->findImage("select")->getFrameSize().y);
 	_select->setPlayFrame(0, 10, false, false);
 	_select->setFPS(1);
 	
@@ -80,11 +79,11 @@ void button::render()
 	switch (_direction)
 	{
 	case BUTTONDIRECTION::NONE:	case BUTTONDIRECTION::UP:
-		_image->frameRender(getMemDC(), _rc.left, _rc.top,
+		_image->frameRender(Vector2(_rc.left, _rc.top),
 			_frameUpPoint.x, _frameUpPoint.y);
 		break;
 	case BUTTONDIRECTION::DOWN:
-		_image->frameRender(getMemDC(), _rc.left, _rc.top,
+		_image->frameRender(Vector2(_rc.left, _rc.top),
 			_frameDownPoint.x, _frameDownPoint.y);
 		break;
 	}
@@ -95,17 +94,17 @@ void button::renderRelative(float x, float y)
 	switch (_direction)
 	{
 	case BUTTONDIRECTION::NONE:	case BUTTONDIRECTION::UP:
-		_image->frameRender(getMemDC(), _rc.left + x, _rc.top + y,
+		_image->frameRender(Vector2(_rc.left + x, _rc.top + y),
 			_frameUpPoint.x, _frameUpPoint.y);
 		break;
 	case BUTTONDIRECTION::DOWN:
-		_image->frameRender(getMemDC(), _rc.left + x, _rc.top + y,
+		_image->frameRender(Vector2(_rc.left + x, _rc.top + y),
 			_frameDownPoint.x, _frameDownPoint.y);
 		break;
 	}
 
 	if (PtInRect(&_rc.getRect(), _ptMouse) &&_imageName == "buttons")
 	{
-		IMAGEMANAGER->findImage("select")->aniRender(getMemDC(), _rc.left, _rc.top, _select);
+		//IMAGEMANAGER->findImage("select")->aniRender(Vector2(_rc.left, _rc.top), _select, 1.0f);
 	}
 }

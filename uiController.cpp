@@ -28,7 +28,7 @@ void uiController::update()
 	scene = SCENEMANAGER->getCurrentSceneName();
 	_vUiObjects = OBJECTMANAGER->getObjectList(objectType::UI);
 
-	if (scene != "title")
+	if (scene != "title" && scene != "maptool")
 	{
 		_nm->update();
 		_tu->update();
@@ -41,10 +41,11 @@ void uiController::render()
 	for (int i = 0; i < _vUiObjects.size(); ++i)
 	{
 		if (!_vUiObjects[i]->getIsActive()) continue;
-		_vUiObjects[i]->renderRelative(CAMERA->getRect().left, CAMERA->getRect().top);
+		//_vUiObjects[i]->renderRelative(CAMERA->getRect().left, CAMERA->getRect().top);
+		_vUiObjects[i]->render();
 	}
 
-	if (scene != "title")
+	if (scene != "title" && scene != "maptool")
 	{
 		_nm->render();
 		_tu->render();

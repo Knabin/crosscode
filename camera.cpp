@@ -6,11 +6,11 @@
 camera::camera()
 	: _state(CAMERASTATE::NONE), _position(0.0f, 0.0f)
 {
-	_mapWidth = WINSIZEX;
-	_mapHeight = WINSIZEY;
+	_mapSize = Vector2(WINSIZEX, WINSIZEY);
 	_width = WINSIZEX;
 	_height = WINSIZEY;
 	_isZoom = false;
+	_nowZoomAmount = 1.0f;
 }
 
 camera::~camera()
@@ -23,7 +23,7 @@ void camera::update()
 	switch (_state)
 	{
 	case CAMERASTATE::NONE:
-		_rc = RectMake(0, 0, WINSIZEX, WINSIZEY);
+		_rc = RectMake(0, 0, WINSIZEX / _nowZoomAmount, WINSIZEY / _nowZoomAmount);
 		break;
 	case CAMERASTATE::TARGET:
 		if (_isShake) 
@@ -48,40 +48,18 @@ void camera::release()
 void camera::moveToTarget()
 {
 	if (_target == NULL) return;
-	
-	/*floatPoint position = _position;
-	float length = getDistance(_target->getPosition().x, _target->getPosition().y, _position.x, _position.y);
-	float angle = getAngle(_position.x, _position.y, _target->getPosition().x, _target->getPosition().y);
-	if (length > 5.f)
-	{
-		_speed = 200;
-		position.x += cosf(angle) * _speed * TIMEMANAGER->getElapsedTime();
-		position.y -= sinf(angle) * _speed * TIMEMANAGER->getElapsedTime();
-	}*/
+
 	_position = _target->getPosition();
-	//_position = position;
-	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
 
-	if (_rc.left < 0.0f)
-		_position.x -= _rc.left;
-	else if (_rc.right > _mapWidth)
-		_position.x -= _rc.right - _mapWidth;
-	
-	if (_rc.top < 0.0f)
-		_position.y -= _rc.top;
-	else if (_rc.bottom > _mapHeight)
-		_position.y -= _rc.bottom - _mapHeight;
-
-	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
-
-	
+	updateRect();
+	checkRect();
 }
 
 void camera::moveToTargetSmooth()
 {
 	if (_target == NULL) return;
 
-	floatPoint position = _position;
+	Vector2 position = _position;
 	float length = getDistance(_target->getPosition().x, _target->getPosition().y, _position.x, _position.y);
 	float angle = getAngle(_position.x, _position.y, _target->getPosition().x, _target->getPosition().y);
 	if (length > 4.5f)
@@ -94,22 +72,10 @@ void camera::moveToTargetSmooth()
 	{
 		position = _target->getPosition();
 	}
-	//_position = _target->getPosition();
+
 	_position = position;
-	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
-
-	if (_rc.left < 0.0f)
-		_position.x -= _rc.left;
-	else if (_rc.right > _mapWidth)
-		_position.x -= _rc.right - _mapWidth;
-
-	if (_rc.top < 0.0f)
-		_position.y -= _rc.top;
-	else if (_rc.bottom > _mapHeight)
-		_position.y -= _rc.bottom - _mapHeight;
-
-	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
-
+	updateRect();
+	checkRect();
 }
 
 void camera::updateShake()
@@ -132,20 +98,8 @@ void camera::updateShake()
 			_isShake = false;
 		}
 
-
-		_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
-
-		if (_rc.left < 0.0f)
-			_position.x -= _rc.left;
-		else if (_rc.right > _mapWidth)
-			_position.x -= _rc.right - _mapWidth;
-
-		if (_rc.top < 0.0f)
-			_position.y -= _rc.top;
-		else if (_rc.bottom > _mapHeight)
-			_position.y -= _rc.bottom - _mapHeight;
-
-		_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
+		updateRect();
+		checkRect();
 	}
 }
 
@@ -158,35 +112,47 @@ void camera::updateZoom()
 			_zoomTime -= TIMEMANAGER->getElapsedTime();
 
 			if (_nowZoomAmount >= _zoomAmount) _nowZoomAmount = _zoomAmount;
-			else _nowZoomAmount += 0.02f;
+			else _nowZoomAmount += 0.01f;
+			_position = _target->getPosition();
 		}
 		else
 		{
 			if (_isZoomOutSmooth)
 			{
-				_nowZoomAmount -= 0.02f;
-				if (_nowZoomAmount <= 1.0f) _isZoomOutSmooth = false;
+				_nowZoomAmount -= 0.01f;
+				if (_nowZoomAmount <= 1.0f)
+				{
+					_nowZoomAmount = 1.0f;
+					_isZoomOutSmooth = false;
+				}
 			}
 			else
 				_isZoom = false;
+			_position = _target->getPosition();
 		}
+		updateRect();
+		checkRect();
 	}
 }
 
-void camera::zoom(HDC hdc)
+void camera::checkRect()
 {
-	if (!_isZoom) return;
+	if (_rc.left < 0.0f)
+		_position.x -= (float)_rc.left;
+	else if (_rc.right > _mapSize.x)
+		_position.x -= (float)_rc.right - _mapSize.x;
 
-	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX, WINSIZEY);
+	if (_rc.top < 0.0f)
+		_position.y -= (float)_rc.top;
+	else if (_rc.bottom > _mapSize.y)
+		_position.y -= (float)_rc.bottom - _mapSize.y;
+	
+	updateRect();
+}
 
-	float width = (float)WINSIZEX / _nowZoomAmount;
-	float height = (float)WINSIZEY / _nowZoomAmount;
-
-	float zoomL = _rc.left + (WINSIZEX - width) * 0.5f;
-	float zoomT = _rc.top + (WINSIZEY - height) * 0.5f;
-
-	StretchBlt(hdc, _rc.left, _rc.top, WINSIZEX, WINSIZEY,
-		hdc, zoomL, zoomT, width, height, SRCCOPY);
+void camera::updateRect()
+{
+	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX / _nowZoomAmount, WINSIZEY / _nowZoomAmount);
 }
 
 void camera::changeTarget(gameObject* gameObject)
@@ -211,4 +177,49 @@ void camera::zoomStart(float amount, float time, bool isZoomOutSmooth)
 	_zoomTime = time;
 	_isZoom = true;
 	_isZoomOutSmooth = isZoomOutSmooth;
+}
+
+RECT camera::getRelativeRect(RECT rc)
+{
+	rc.left -= _rc.left;
+	rc.top -= _rc.top;
+	rc.right -= _rc.left;
+	rc.bottom -= _rc.top;
+
+	rc.left *= _nowZoomAmount;
+	rc.top *= _nowZoomAmount;
+	rc.right *= _nowZoomAmount;
+	rc.bottom *= _nowZoomAmount;
+
+	return rc;
+}
+
+floatRect camera::getRelativeRect(floatRect rc)
+{
+	rc.left -= _rc.left;
+	rc.top -= _rc.top;
+	rc.right -= _rc.left;
+	rc.bottom -= _rc.top;
+
+	rc.left *= _nowZoomAmount;
+	rc.top *= _nowZoomAmount;
+	rc.right *= _nowZoomAmount;
+	rc.bottom *= _nowZoomAmount;
+
+	return rc;
+}
+
+Vector2 camera::getRelativeVector2(Vector2 vector)
+{
+	vector.x -= _rc.left;
+	vector.y -= _rc.top;
+	vector = vector * _nowZoomAmount;
+
+	return vector;
+}
+
+Vector2 camera::getRelativeVector2(float x, float y)
+{
+	Vector2 v = Vector2(x - _rc.left, y - _rc.top) * _nowZoomAmount;
+	return v;
 }

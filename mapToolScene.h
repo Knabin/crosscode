@@ -167,7 +167,6 @@ private:
 	POINT _selectStartIndex;	// ¼±ÅÃµÆÀ» ´ç½Ã TILEÀÇ ÀÎµ¦½º
 
 public:
-	HDC getMapBufferDC() { return _mapBuffer->getMemDC(); }
 
 	virtual HRESULT init();
 	virtual void release();

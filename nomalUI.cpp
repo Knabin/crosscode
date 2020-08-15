@@ -4,7 +4,7 @@
 
 HRESULT nomalUI::init()
 {
-	IMAGEMANAGER->addImage("nomalUI", "images/menu/nomalUI.bmp", 400, 108, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("nomalUI", L"images/menu/nomalUI.png");
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	//_hp = _player.
 
@@ -24,7 +24,7 @@ void nomalUI::update()
 
 void nomalUI::render()
 {
-	IMAGEMANAGER->findImage("nomalUI")->render(getMemDC(),CAMERA->getRect().left + 15, CAMERA->getRect().top + 15);
+	IMAGEMANAGER->findImage("nomalUI")->render(Vector2(15, 15));
 
 	int ltX = CAMERA->getRect().left + 117;
 	int tY = CAMERA->getRect().top + 43;
@@ -33,7 +33,7 @@ void nomalUI::render()
 	int bY = CAMERA->getRect().top + 53;
 	int lbX = ltX+ 12;
 
-	HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
+	/*HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
 	HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
 	POINT polygon[5] = { ltX,tY,rtX ,tY,rbX,bY,lbX,bY,ltX,tY };
 	Polygon(getMemDC(), polygon, 5);
@@ -44,5 +44,5 @@ void nomalUI::render()
 	HBRUSH oldBrush1 = (HBRUSH)SelectObject(getMemDC(), brush1);
 	RectangleMake(getMemDC(), ltX +17, bY +3, _exp, 5);
 	SelectObject(getMemDC(), oldBrush1);
-	DeleteObject(brush1);
+	DeleteObject(brush1);*/
 }

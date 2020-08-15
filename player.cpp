@@ -25,7 +25,7 @@ player::player()
 	_isActive = true;
 
 	_state = new playerStateController(idle);
-	_y = 700;
+	_position.y = 700;
 }
 
 player::~player()
@@ -34,17 +34,17 @@ player::~player()
 
 HRESULT player::init()
 {
-	_image = IMAGEMANAGER->addFrameImage("p", "images/player/player_move.bmp", 1152, 768, 12, 8, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("player guard", "images/player/player_guard.bmp", 288, 768, 3, 8, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("player jump", "images/player/playerjump.bmp", 192, 768, 2, 8, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("player dodge", "images/player/player_dodge.bmp", 711,696, 9, 8, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("player longAttack", "images/player/player_longAttack.bmp", 1581, 720, 17, 8, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("player longAttackMove", "images/player/player_longAttackMove.bmp", 672, 768, 7, 8, true, RGB(255, 0, 255));
+	_image = IMAGEMANAGER->addFrameImage("p", L"images/player/player_move.png", 12, 8);
+	IMAGEMANAGER->addFrameImage("player guard", L"images/player/player_guard.png", 3, 8);
+	IMAGEMANAGER->addFrameImage("player jump", L"images/player/player_jump.png", 2, 8);
+	IMAGEMANAGER->addFrameImage("player dodge", L"images/player/player_dodge.png", 9, 8);
+	IMAGEMANAGER->addFrameImage("player longAttack", L"images/player/player_longAttack.png", 17, 8);
+	IMAGEMANAGER->addFrameImage("player longAttackMove", L"images/player/player_longAttackMove.png", 7, 8);
 
 	_width = _height = 96;
 	_pivot = pivot::CENTER;
-	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
-	_tile.set(0, 0, 48, 48);
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
+	_tile.update(Vector2(0, 0), Vector2(48, 48), pivot::LEFTTOP);
 	_nowOrder = 1;
 
 	return S_OK;
@@ -56,9 +56,6 @@ void player::release()
 
 void player::update()
 {
-	_ptMouseAbs.x = _ptMouse.x + CAMERA->getRect().left;
-	_ptMouseAbs.y = _ptMouse.y + CAMERA->getRect().top;
-
 	if (KEYMANAGER->isStayKeyDown('A'))
 	{
 		// KEYDOWN 시 이동 상태로 변경
@@ -199,7 +196,7 @@ void player::update()
 	// ==================== 가드상태 또는 원거리 공격시 마우스 방향으로 플레이어의 방향 바뀜 ==================== //
 	if (_state->getState() == _vState[PLAYERSTATE::GUARD] || _state->getState() == _vState[PLAYERSTATE::LONGATTACK])
 	{
-		float angle = getAngle(_x, _y, _ptMouseAbs.x, _ptMouseAbs.y);
+		float angle = getAngle(_position.x, _position.y, _ptMouse.x, _ptMouse.y);
 	
 		for (int i = 0; i < 8; i++)
 		{
@@ -228,7 +225,7 @@ void player::update()
 
 	if (_state->getState() == _vState[LONGATTACK])
 	{
-		float angle = getAngle(_x, _y, _ptMouseAbs.x, _ptMouseAbs.y);
+		float angle = getAngle(_position.x, _position.y, _ptMouse.x, _ptMouse.y);
 	
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))	de -= PI / 50;
 		if (de < 0)	de = 0;
@@ -239,13 +236,11 @@ void player::update()
 	
 		for (int i = 0; i < 10; i++)
 		{
-			rc1[i].set(0, 0, 10, 10);
-			rc1[i].setCenter(_x + cosf(d1) * 20 * i, _y + -sinf(d1) * 20 * i);
+			rc1[i].update(Vector2(_position.x + cosf(d1) * 20 * i, _position.y + -sinf(d1) * 20 * i), Vector2(10, 10), pivot::CENTER);
 		}
 		for (int i = 0; i < 10; i++)
 		{
-			rc2[i].set(0, 0, 10, 10);
-			rc2[i].setCenter(_x + cosf(d2) * 20 * i, _y + -sinf(d2) * 20 * i);
+			rc2[i].update(Vector2(_position.x + cosf(d2) * 20 * i, _position.y + -sinf(d2) * 20 * i), Vector2(10, 10), pivot::CENTER);
 		}
 	}
 
@@ -265,22 +260,24 @@ void player::update()
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 	}
 
-	_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	_state->updateState();
 }
 
 void player::render()
 {
 	//_rc.render(getMemDC());
-	_tile.render(getMemDC());
-	_image->aniRender(getMemDC(), _rc.left, _rc.top, _ani);
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_tile));
+	_image->setSize(Vector2(96, 96) * CAMERA->getZoomAmount());
+	_image->aniRender(CAMERA->getRelativeVector2(_position.x, _position.y), _ani, 1.0f);
 	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
-	Rectangle(getMemDC(), rcCollision);
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
 
 	for (int i = 0; i < 10; ++i)
 	{
-		rc1[i].render(getMemDC());
-		rc2[i].render(getMemDC());
+		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc1[i]));
+		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc2[i]));
 	}
 }
 
@@ -372,8 +369,8 @@ void player::playerMove()
 			moveAngle(PI * 0.25, moveSpeed);
 			break;
 		}
-		_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
-		_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+		_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
+		_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	}
 	// 층이 플레이어보다 높다면
 	else if(t->getOrderIndex() > _nowOrder)
@@ -465,8 +462,8 @@ void player::playerDodge()
 			moveAngle(PI * 0.25, moveSpeed);
 			break;
 		}
-		_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
-		_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+		_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
+		_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	}
 }
 
@@ -544,23 +541,24 @@ void player::playerLongAttackMove()
 			moveAngle(PI * 0.25, moveSpeed);
 			break;
 		}
-		_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
-		_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+		_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
+		_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	}
 }
 
 void player::move(const float & x, const float & y)
 {
-	_x += x;
-	_y += y;
-	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
+	
+	_position.x += x;
+	_position.y += y;
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 }
 
 void player::moveAngle(const float & cangle, const float & speed)
 {
-	_x += cosf(cangle) * speed;
-	_y -= sinf(cangle) * speed;
-	_rc = RectMakePivot(floatPoint(_x, _y), floatPoint(_width, _height), _pivot);
+	_position.x += cosf(cangle) * speed;
+	_position.y -= sinf(cangle) * speed;
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 }
 
 void player::playerFire()

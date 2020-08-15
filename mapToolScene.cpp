@@ -19,53 +19,48 @@ HRESULT mapToolScene::init()
 	_isStayKeyDown = false;
 
 	// 전체 타일 출력할 새로운 buffer 선언
-	_mapBuffer = IMAGEMANAGER->addImage("mapBuffer", "images/tile/tilenull.bmp", MAXTILEX * SIZE, MAXTILEY * SIZE, false, RGB(0,0,0));
+	_mapBuffer = IMAGEMANAGER->addImage("mapBuffer", L"images/tile/tilenull.bmp");
 
 	// ========== 각종 rect 초기화 ==========
-	_editUiRc.set(0, 0, 600, 850);
-	_editUiRc.setCenter(WINSIZEX - _editUiRc.getSize().x * 0.5f, WINSIZEY * 0.5f);
+	_editUiRc.update(Vector2((float)WINSIZEX - 300, WINSIZEY * 0.5f), Vector2(600, 850), pivot::CENTER);
 
-	_mapViewRc.set(0, 0, 1104, 912);
-	_mapViewRc.setLeftTop(50, 130);
+	_mapViewRc.update(Vector2(50, 130), Vector2(1104, 912), pivot::LEFTTOP);
+
 	_clippingPoint.x = 0;
 	_clippingPoint.y = 0;
 
 	for (int i = 0; i < 4; ++i)
 	{
-		_editButtonRc[i].set(0, 0, 132, 57);
-		_numButtonObjRc[i].set(0, 0, 147, 52);
+		_editButtonRc[i].update(Vector2(0, 0), Vector2(132, 57), pivot::LEFTTOP);
+		_numButtonObjRc[i].update(Vector2(0, 0), Vector2(147, 52), pivot::LEFTTOP);
 	}
 
 	for (int i = 0; i < 3; ++i)
 	{
-		_numButtonRc[i].set(0, 0, 192, 52);
+
+		_numButtonRc[i].update(Vector2(0, 0), Vector2(192, 52), pivot::LEFTTOP);
 	}
 
-	_plusRc.set(0, 0, 90, 72);
-	_minusRc.set(0, 0, 90, 72);
+	_editButtonRc[0].set(Vector2(_editUiRc.left + 6, _editUiRc.top), pivot::LEFTTOP);
+	_editButtonRc[1].set(Vector2(_editButtonRc[0].right, _editButtonRc[0].top), pivot::LEFTTOP);
+	_editButtonRc[2].set(Vector2(_editButtonRc[1].right, _editButtonRc[1].top), pivot::LEFTTOP);
+	_editButtonRc[3].set(Vector2(_editButtonRc[2].right, _editButtonRc[2].top), pivot::LEFTTOP);
+	_numButtonRc[0].set(Vector2(_editButtonRc[0].left, _editButtonRc[0].bottom + 8), pivot::LEFTTOP);
+	_numButtonRc[1].set(Vector2(_numButtonRc[0].right, _editButtonRc[0].bottom + 8), pivot::LEFTTOP);
+	_numButtonRc[2].set(Vector2(_numButtonRc[1].right, _editButtonRc[0].bottom + 8), pivot::LEFTTOP);
+	_numButtonObjRc[0].set(Vector2(_editButtonRc[0].left, _editButtonRc[0].bottom + 8), pivot::LEFTTOP);
+	_numButtonObjRc[1].set(Vector2(_numButtonObjRc[0].right, _editButtonRc[0].bottom + 8), pivot::LEFTTOP);
+	_numButtonObjRc[2].set(Vector2(_numButtonObjRc[1].right, _editButtonRc[0].bottom + 8), pivot::LEFTTOP);
+	_numButtonObjRc[3].set(Vector2(_numButtonObjRc[2].right, _editButtonRc[0].bottom + 8), pivot::LEFTTOP);
 
-	_editButtonRc[0].setLeftTop(_editUiRc.left + 6, _editUiRc.top);
-	_editButtonRc[1].setLeftTop(_editButtonRc[0].right, _editButtonRc[0].top);
-	_editButtonRc[2].setLeftTop(_editButtonRc[1].right, _editButtonRc[1].top);
-	_editButtonRc[3].setLeftTop(_editButtonRc[2].right, _editButtonRc[2].top);
-	_numButtonRc[0].setLeftTop(_editButtonRc[0].left, _editButtonRc[0].bottom + 8);
-	_numButtonRc[1].setLeftTop(_numButtonRc[0].right, _editButtonRc[0].bottom + 8);
-	_numButtonRc[2].setLeftTop(_numButtonRc[1].right, _editButtonRc[0].bottom + 8);
-	_numButtonObjRc[0].setLeftTop(_editButtonRc[0].left, _editButtonRc[0].bottom + 8);
-	_numButtonObjRc[1].setLeftTop(_numButtonObjRc[0].right, _editButtonRc[0].bottom + 8);
-	_numButtonObjRc[2].setLeftTop(_numButtonObjRc[1].right, _editButtonRc[0].bottom + 8);
-	_numButtonObjRc[3].setLeftTop(_numButtonObjRc[2].right, _editButtonRc[0].bottom + 8);
+	_plusRc.update(Vector2(_editUiRc.left, _editUiRc.bottom - 72), Vector2(90, 72), pivot::LEFTTOP);
+	_minusRc.update(Vector2(_plusRc.right, _plusRc.top), Vector2(90, 72), pivot::LEFTTOP);
 
-	_plusRc.setLeftTop(_editUiRc.left, _editUiRc.bottom - 72);
-	_minusRc.setLeftTop(_plusRc.right, _plusRc.top);
-
-	_sampleRc.set(0, 0, 512, 576);
-	_sampleRc.setCenter(_editUiRc.getCenter().x, _editUiRc.getCenter().y + 20);
+	_sampleRc.update(Vector2(_editUiRc.getCenter().x, _editUiRc.getCenter().y + 20), Vector2(512, 576), pivot::CENTER);
 
 	for (int i = 0; i < 6; ++i)
 	{
-		_typeRcs[i].set(0, 0, 512, 96);
-		_typeRcs[i].setLeftTop(_sampleRc.left, i == 0 ? _sampleRc.top : _typeRcs[i - 1].bottom);
+		_typeRcs[i].update(Vector2(_sampleRc.left, i == 0 ? _sampleRc.top : _typeRcs[i - 1].bottom), Vector2(512, 96), pivot::LEFTTOP);
 	}
 	// ===============================
 
@@ -86,51 +81,51 @@ HRESULT mapToolScene::init()
 	_page = TERRAIN_ONE;
 
 	// 배경 이미지
-	IMAGEMANAGER->addImage("map bg", "images/maptool/map_bg.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("map bg2", "images/maptool/map_back.bmp", 1200, 1200, false, RGB(0, 0, 0));
+	IMAGEMANAGER->addImage("map bg", L"images/maptool/map_bg.bmp");
+	IMAGEMANAGER->addImage("map bg2", L"images/maptool/map_back.bmp");
 
 	// 버튼 이미지
-	IMAGEMANAGER->addFrameImage("saveload", "images/maptool/button_saveload.bmp", 264, 126, 2, 2, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addFrameImage("editmode", "images/maptool/button_menu.bmp", 264, 248, 2, 4, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("numbutton", "images/maptool/button_num.bmp", 392, 156, 2, 3, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("numobj", "images/maptool/button_numobj.bmp", 294, 208, 2, 4, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("backtotitle", "images/maptool/button_backtotitle.bmp", 486, 72, 1, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("saveload", L"images/maptool/button_saveload.bmp", 2, 2);
+	IMAGEMANAGER->addFrameImage("editmode", L"images/maptool/button_menu.bmp", 2, 4);
+	IMAGEMANAGER->addFrameImage("numbutton", L"images/maptool/button_num.bmp", 2, 3);
+	IMAGEMANAGER->addFrameImage("numobj", L"images/maptool/button_numobj.bmp", 2, 4);
+	IMAGEMANAGER->addFrameImage("backtotitle", L"images/maptool/button_backtotitle.bmp", 1, 1);
 
 	// ui 전체 이미지
-	_uiImage = IMAGEMANAGER->addImage("edit ui", "images/maptool/ui_edit.bmp", 600, 850, true, RGB(255, 0, 255));
+	_uiImage = IMAGEMANAGER->addImage("edit ui", L"images/maptool/ui_edit.bmp");
 
 	// 샘플 이미지
-	_terrainImage[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1", "images/tile/terrain1_s.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_terrainImageBig[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1 b", "images/tile/terrain1.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
-	_terrainImage[TERRAIN_TWO] = IMAGEMANAGER->addFrameImage("terrain2", "images/tile/terrain2_s.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_terrainImageBig[TERRAIN_TWO] = IMAGEMANAGER->addFrameImage("terrain2 b", "images/tile/terrain2.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
-	_terrainImage[TERRAIN_THREE] = IMAGEMANAGER->addFrameImage("terrain3", "images/tile/terrain3_s.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_terrainImageBig[TERRAIN_THREE] = IMAGEMANAGER->addFrameImage("terrain3 b", "images/tile/terrain3.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
+	_terrainImage[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1", L"images/tile/terrain1_s.bmp", 16, 18);
+	_terrainImageBig[TERRAIN_ONE] = IMAGEMANAGER->addFrameImage("terrain1 b", L"images/tile/terrain1.bmp", 16, 18);
+	_terrainImage[TERRAIN_TWO] = IMAGEMANAGER->addFrameImage("terrain2", L"images/tile/terrain2_s.bmp", 16, 18);
+	_terrainImageBig[TERRAIN_TWO] = IMAGEMANAGER->addFrameImage("terrain2 b", L"images/tile/terrain2.bmp", 16, 18);
+	_terrainImage[TERRAIN_THREE] = IMAGEMANAGER->addFrameImage("terrain3", L"images/tile/terrain3_s.bmp", 16, 18);
+	_terrainImageBig[TERRAIN_THREE] = IMAGEMANAGER->addFrameImage("terrain3 b", L"images/tile/terrain3.bmp", 16, 18);
 
-	_objectImage[OBJECT_ONE] = IMAGEMANAGER->addFrameImage("object1", "images/tile/object1_s.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_objectImageBig[OBJECT_ONE] = IMAGEMANAGER->addFrameImage("object1 b", "images/tile/object1.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
-	_objectImage[OBJECT_TWO] = IMAGEMANAGER->addFrameImage("object2", "images/tile/object2_s.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_objectImageBig[OBJECT_TWO] = IMAGEMANAGER->addFrameImage("object2 b", "images/tile/object2.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
-	_objectImage[OBJECT_THREE] = IMAGEMANAGER->addFrameImage("object3", "images/tile/object3_s.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_objectImageBig[OBJECT_THREE] = IMAGEMANAGER->addFrameImage("object3 b", "images/tile/object3.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
-	_objectImage[OBJECT_FOUR] = IMAGEMANAGER->addFrameImage("object4", "images/tile/object4_s.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_objectImageBig[OBJECT_FOUR] = IMAGEMANAGER->addFrameImage("object4 b", "images/tile/object4.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
+	_objectImage[OBJECT_ONE] = IMAGEMANAGER->addFrameImage("object1", L"images/tile/object1_s.bmp", 16, 18);
+	_objectImageBig[OBJECT_ONE] = IMAGEMANAGER->addFrameImage("object1 b", L"images/tile/object1.bmp", 16, 18);
+	_objectImage[OBJECT_TWO] = IMAGEMANAGER->addFrameImage("object2", L"images/tile/object2_s.bmp", 16, 18);
+	_objectImageBig[OBJECT_TWO] = IMAGEMANAGER->addFrameImage("object2 b", L"images/tile/object2.bmp", 16, 18);
+	_objectImage[OBJECT_THREE] = IMAGEMANAGER->addFrameImage("object3", L"images/tile/object3_s.bmp", 16, 18);
+	_objectImageBig[OBJECT_THREE] = IMAGEMANAGER->addFrameImage("object3 b", L"images/tile/object3.bmp", 16, 18);
+	_objectImage[OBJECT_FOUR] = IMAGEMANAGER->addFrameImage("object4", L"images/tile/object4_s.bmp", 16, 18);
+	_objectImageBig[OBJECT_FOUR] = IMAGEMANAGER->addFrameImage("object4 b", L"images/tile/object4.bmp", 16, 18);
 
-	_enemyImage = IMAGEMANAGER->addFrameImage("enemy", "images/tile/tile_enemy.bmp", 512, 576, 16, 18, true, RGB(255, 0, 255));
-	_enemyImageBig = IMAGEMANAGER->addFrameImage("enemy b", "images/tile/tile_enemy_big.bmp", 768, 864, 16, 18, true, RGB(255, 0, 255));
+	_enemyImage = IMAGEMANAGER->addFrameImage("enemy", L"images/tile/tile_enemy.bmp", 16, 18);
+	_enemyImageBig = IMAGEMANAGER->addFrameImage("enemy b", L"images/tile/tile_enemy_big.bmp", 16, 18);
 
-	IMAGEMANAGER->addFrameImage("vendor", "images/object/vendor.bmp", 720, 288, 3, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("door prev", "images/tile/doorpreview.bmp", 288, 144, 3, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("tree", "images/object/tree.bmp", 720, 288, 3, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("grass", "images/object/grass.bmp", 432, 96, 3, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("vendor", L"images/object/vendor.bmp", 3, 1);
+	IMAGEMANAGER->addFrameImage("door prev", L"images/tile/doorpreview.bmp", 3, 1);
+	IMAGEMANAGER->addFrameImage("tree", L"images/object/tree.bmp", 3, 1);
+	IMAGEMANAGER->addFrameImage("grass", L"images/object/grass.bmp", 3, 1);
 	
 	// 빈 타일
-	IMAGEMANAGER->addImage("tile null", "images/tile/tilenull.bmp", 48, 48, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("tile change", "images/tile/tilechange.bmp", SIZE * MAXTILEX, SIZE * MAXTILEY, false, RGB(0, 0, 0));
+	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.bmp");
+	IMAGEMANAGER->addImage("tile change", L"images/tile/tilechange.bmp");
 
 	// 오더 버튼 이미지
-	IMAGEMANAGER->addFrameImage("type", "images/maptool/button_type.bmp", 1024, 576, 2, 6, true, RGB(255, 0, 255));
-	_typeImage = IMAGEMANAGER->addFrameImage("tile type", "images/tile/typetile.bmp", 48, 288, 1, 6, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("type", L"images/maptool/button_type.bmp", 2, 6);
+	_typeImage = IMAGEMANAGER->addFrameImage("tile type", L"images/tile/typetile.bmp", 1, 6);
 
 	// 버튼 추가
 	button* save = new button();
@@ -153,9 +148,8 @@ HRESULT mapToolScene::init()
 	{
 		_sampleTiles[i].setTerrainX(i % SAMPLENUMX);
 		_sampleTiles[i].setTerrainY(i / SAMPLENUMX);
-		_sampleTiles[i].getRect().set(0, 0, SAMPLESIZE, SAMPLESIZE);
-		_sampleTiles[i].getRect().setLeftTop(_sampleRc.left + SAMPLESIZE * (i % SAMPLENUMX),
-			_sampleRc.top + SAMPLESIZE * (i / SAMPLENUMX));
+		_sampleTiles[i].getRect().update(Vector2(_sampleRc.left + SAMPLESIZE * (i % SAMPLENUMX),
+			_sampleRc.top + SAMPLESIZE * (i / SAMPLENUMX)), Vector2(SAMPLESIZE, SAMPLESIZE), pivot::LEFTTOP);
 	}
 
 	// 오토타일 설정
@@ -254,9 +248,10 @@ void mapToolScene::update()
 
 void mapToolScene::render()
 {
-	IMAGEMANAGER->findImage("map bg")->render(getMemDC());
-	_uiImage->render(getMemDC(), _editUiRc.left, _editUiRc.top);
-	_mapViewRc.render(getMemDC());
+	IMAGEMANAGER->findImage("map bg")->render(Vector2(0,0));
+	_uiImage->render(Vector2(_editUiRc.getCenter()), 1.0f);
+	//D2DRENDERER->DrawRectangle(_editUiRc);
+	//_mapViewRc.render(getMemDC());
 
 	switch (_editMode)
 	{
@@ -264,33 +259,33 @@ void mapToolScene::render()
 		for (int i = 0; i < 3; ++i)
 		{
 			if (_page == i)
-				IMAGEMANAGER->findImage("numbutton")->frameRender(getMemDC(), _numButtonRc[i].left, _numButtonRc[i].top, 1, i);
-			else IMAGEMANAGER->findImage("numbutton")->frameRender(getMemDC(), _numButtonRc[i].left, _numButtonRc[i].top, 0, i);
+				IMAGEMANAGER->findImage("numbutton")->frameRender(Vector2(_numButtonRc[i].getCenter()), 1, i);
+			else IMAGEMANAGER->findImage("numbutton")->frameRender(Vector2(_numButtonRc[i].getCenter()), 0, i);
 		}
-		_terrainImage[_page]->render(getMemDC(), _sampleRc.left, _sampleRc.top);
+		_terrainImage[_page]->render(Vector2(_sampleRc.getCenter()));
 		renderSelectTile();
 		break;
 	case EDITMODE::OBJECT:
 		for (int i = 0; i < 4; ++i)
 		{
 			if (_page == i)
-				IMAGEMANAGER->findImage("numobj")->frameRender(getMemDC(), _numButtonObjRc[i].left, _numButtonObjRc[i].top, 1, i);
-			else IMAGEMANAGER->findImage("numobj")->frameRender(getMemDC(), _numButtonObjRc[i].left, _numButtonObjRc[i].top, 0, i);
+				IMAGEMANAGER->findImage("numobj")->frameRender(Vector2(_numButtonObjRc[i].getCenter()), 1, i);
+			else IMAGEMANAGER->findImage("numobj")->frameRender(Vector2(_numButtonObjRc[i].getCenter()), 0, i);
 		}
-		_objectImage[_page]->render(getMemDC(), _sampleRc.left, _sampleRc.top);
+		_objectImage[_page]->render(Vector2(_sampleRc.getCenter()));
 		renderSelectTile();
 		break;
 	case EDITMODE::ENEMY:
-		_enemyImage->render(getMemDC(), _sampleRc.left, _sampleRc.top);
+		_enemyImage->render(Vector2(_sampleRc.getCenter()));
 		renderSelectTile();
 		break;
 	case EDITMODE::TYPE:
 		for (int i = 0; i < 6; ++i)
 		{
 			if (_selectType == i)
-				IMAGEMANAGER->findImage("type")->frameRender(getMemDC(), _typeRcs[i].left, _typeRcs[i].top, 1, i);
+				IMAGEMANAGER->findImage("type")->frameRender(Vector2(_typeRcs[i].getCenter()), 1, i);
 			else
-				IMAGEMANAGER->findImage("type")->frameRender(getMemDC(), _typeRcs[i].left, _typeRcs[i].top, 0, i);
+				IMAGEMANAGER->findImage("type")->frameRender(Vector2(_typeRcs[i].getCenter()), 0, i);
 		}
 		break;
 	}
@@ -298,9 +293,9 @@ void mapToolScene::render()
 	for (int i = 0; i < (int)EDITMODE::END; ++i)
 	{
 		if ((int)_editMode == i && _penMode == PENMODE::PLUS)
-			IMAGEMANAGER->findImage("editmode")->frameRender(getMemDC(), _editButtonRc[i].left, _editButtonRc[i].top, 1, i);
+			IMAGEMANAGER->findImage("editmode")->frameRender(Vector2(_editButtonRc[i].getCenter()), 1, i);
 		else
-			IMAGEMANAGER->findImage("editmode")->frameRender(getMemDC(), _editButtonRc[i].left, _editButtonRc[i].top, 0, i);
+			IMAGEMANAGER->findImage("editmode")->frameRender(Vector2(_editButtonRc[i].getCenter()), 0, i);
 	}
 
 	drawMap();
@@ -311,12 +306,12 @@ void mapToolScene::render()
 	// 마우스를 기준으로 현재 가리키고 있는 인덱스 출력
 	if (PtInRect(&_mapViewRc.getRect(), _ptMouse))
 	{
-		COLORREF oldColor = GetTextColor(getMemDC());
-		SetTextColor(getMemDC(), RGB(0, 0, 0));
 		char str[100];
 		sprintf_s(str, "[%d, %d]", _selectIndex.x, _selectIndex.y);
-		TextOut(getMemDC(), _ptMouse.x - 15, _ptMouse.y - 15, str, strlen(str));
-		SetTextColor(getMemDC(), oldColor);
+		string str2 = str;
+		wstring str3;
+		str3.assign(str2.begin(), str2.end());
+		D2DRENDERER->RenderText(_ptMouse.x - 15, _ptMouse.y - 15, str3, 20);
 	}
 }
 
@@ -397,8 +392,8 @@ void mapToolScene::checkSelectSample()
 				swap(_sampleStart.y, _sampleEnd.y);
 			if (_sampleStart.x != -1 && _sampleStart.y != -1)
 			{
-				_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
-				_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+				_sampleViewRc.update(Vector2(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top),
+					Vector2((_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE), pivot::LEFTTOP);
 			}
 		}
 		// 지형 그리는 중
@@ -570,8 +565,8 @@ void mapToolScene::checkSelectSample()
 			}
 			if (_sampleStart.x != -1)
 			{
-				_sampleViewRc.set(0, 0, (_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE);
-				_sampleViewRc.setLeftTop(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top);
+				_sampleViewRc.update(Vector2(_sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().left, _sampleTiles[_sampleStart.y * SAMPLENUMX + _sampleStart.x].getRect().top),
+					Vector2((_sampleEnd.x - _sampleStart.x + 1) * SAMPLESIZE, (_sampleEnd.y - _sampleStart.y + 1) * SAMPLESIZE), pivot::LEFTTOP);
 			}
 		}
 		else
@@ -757,7 +752,7 @@ void mapToolScene::moveMapView()
 	{
 		redrawMap();
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && _clippingPoint.x + 4 <= _mapBuffer->getWidth() - _mapViewRc.getWidth())
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && _clippingPoint.x + 4 <= _mapBuffer->getWidth() - _mapViewRc.GetWidth())
 	{
 		_clippingPoint.x += 4;
 	}
@@ -769,7 +764,7 @@ void mapToolScene::moveMapView()
 	{
 		_clippingPoint.y -= 4;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && _clippingPoint.y + 4 <= _mapBuffer->getHeight() - _mapViewRc.getHeight())
+	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && _clippingPoint.y + 4 <= _mapBuffer->getHeight() - _mapViewRc.GetHeight())
 	{
 		_clippingPoint.y += 4;
 	}
@@ -932,8 +927,8 @@ void mapToolScene::renderChangeMap()
 			height = _vTiles[_selectIndex.y][_selectIndex.x]->getRect().bottom - _clippingPoint.y;
 		}
 
-		IMAGEMANAGER->findImage("tile change")->alphaRender(getMemDC(),
-			_mapViewRc.left, _mapViewRc.top, 0, 0, width, height, 100);
+		IMAGEMANAGER->findImage("tile change")->setAlpha(100);
+		IMAGEMANAGER->findImage("tile change")->render(Vector2(_mapViewRc.left, _mapViewRc.top));
 	}
 }
 
@@ -941,15 +936,7 @@ void mapToolScene::renderSelectTile()
 {
 	if (_sampleViewRc.left > _editUiRc.left)
 	{
-		HBRUSH brush = (HBRUSH)GetStockObject(NULL_BRUSH);
-		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-		HPEN pen = (HPEN)CreatePen(PS_SOLID, 3, RGB(255, 150, 0));
-		HPEN oldPen = (HPEN)SelectObject(getMemDC(), pen);
-		_sampleViewRc.render(getMemDC());
-		SelectObject(getMemDC(), oldBrush);
-		DeleteObject(brush);
-		SelectObject(getMemDC(), oldPen);
-		DeleteObject(pen);
+		D2DRENDERER->DrawRectangle(_sampleViewRc, D2DRenderer::DefaultBrush::Green, 2.0f);
 	}
 }
 
@@ -1017,10 +1004,9 @@ void mapToolScene::renderPreviewTile()
 					{
 						if (_penMode == PENMODE::PLUS)
 						{
-							img->alphaFrameRender(getMemDC(),
-									_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x - width,
-									_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y - height,
-									_sampleStart.x % 3, 0, 150);
+							img->setAlpha(150);
+							img->frameRender(Vector2(_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x - width,
+								_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y - height), _sampleStart.x % 3, 0);
 						}
 						if (drawX + j + 1 > _viewLastIndex.x) break;
 					}
@@ -1037,15 +1023,23 @@ void mapToolScene::renderPreviewTile()
 						if (_penMode == PENMODE::PLUS)
 						{
 							if (_editMode == EDITMODE::TERRAIN)
-								_terrainImageBig[_page]->alphaFrameRender(getMemDC(),
+							{
+								_terrainImageBig[_page]->setAlpha(150);
+								_terrainImageBig[_page]->frameRender(
+									Vector2(
 									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().top + _mapViewRc.top - _clippingPoint.y,
-									_sampleStart.x + j, _sampleStart.y + i, 150);
+									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().top + _mapViewRc.top - _clippingPoint.y), 
+									_sampleStart.x + j, _sampleStart.y + i);
+							}
 							else
-								_objectImageBig[_page]->alphaFrameRender(getMemDC(),
+							{
+								_objectImageBig[_page]->setAlpha(150);
+								_objectImageBig[_page]->frameRender(
+									Vector2(
 									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().top + _mapViewRc.top - _clippingPoint.y,
-									_sampleStart.x + j, _sampleStart.y + i, 150);
+									_vTiles[_drawEnd.y + i][_drawEnd.x + j]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+									_sampleStart.x + j, _sampleStart.y + i);
+							}
 						}
 						if (_drawEnd.x + j + 1 > _viewLastIndex.x) break;
 					}
@@ -1069,16 +1063,22 @@ void mapToolScene::renderPreviewTile()
 					{
 						if (_penMode == PENMODE::PLUS)
 						{
-							if(_editMode == EDITMODE::TERRAIN)
-								_terrainImageBig[_page]->alphaFrameRender(getMemDC(),
+							if (_editMode == EDITMODE::TERRAIN)
+							{
+								_terrainImageBig[_page]->setAlpha(150);
+								_terrainImageBig[_page]->frameRender(Vector2(
 									_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-									_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y,
-									_sampleStart.x, _sampleStart.y, 150);
+									_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+									_sampleStart.x, _sampleStart.y);
+							}
 							else
-							_objectImageBig[_page]->alphaFrameRender(getMemDC(),
-								_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-								_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y,
-								_sampleStart.x, _sampleStart.y, 150);
+							{
+								_objectImageBig[_page]->setAlpha(150);
+								_objectImageBig[_page]->frameRender(Vector2(
+									_vTiles[drawY + i][drawX + j]->getRect().left + _mapViewRc.left - _clippingPoint.x,
+									_vTiles[drawY + i][drawX + j]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+									_sampleStart.x, _sampleStart.y);
+							}
 						}
 						if (drawX + j + 1 > _viewLastIndex.x) break;
 					}
@@ -1089,10 +1089,11 @@ void mapToolScene::renderPreviewTile()
 		case EDITMODE::ENEMY:
 			if (_penMode == PENMODE::PLUS)
 			{
-				_enemyImageBig->alphaFrameRender(getMemDC(),
+				_enemyImageBig->setAlpha(150);
+				_enemyImageBig->frameRender(Vector2(
 					_vTiles[_drawStart.y][_drawStart.x]->getRect().left + _mapViewRc.left - _clippingPoint.x,
-					_vTiles[_drawStart.y][_drawStart.x]->getRect().top + _mapViewRc.top - _clippingPoint.y,
-					_sampleStart.x, _sampleStart.y, 150);
+					_vTiles[_drawStart.y][_drawStart.x]->getRect().top + _mapViewRc.top - _clippingPoint.y),
+					_sampleStart.x, _sampleStart.y);
 			}
 			break;
 		case EDITMODE::TYPE:
@@ -1108,7 +1109,7 @@ void mapToolScene::renderPreviewTile()
 void mapToolScene::resetSample()
 {
 	_sampleStart.x = _sampleStart.y = _sampleEnd.x = _sampleEnd.y = -1;
-	_sampleViewRc.set(0, 0, 0, 0);
+	_sampleViewRc.update(Vector2(0, 0), Vector2(0, 0), pivot::LEFTTOP);
 }
 
 
@@ -1550,12 +1551,12 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 
 void mapToolScene::drawMap()
 {
-	_mapBuffer->render(getMemDC(), _mapViewRc.left, _mapViewRc.top, _clippingPoint.x, _clippingPoint.y, _mapViewRc.getWidth(), _mapViewRc.getHeight());
+	//_mapBuffer->render(getMemDC(), _mapViewRc.left, _mapViewRc.top, _clippingPoint.x, _clippingPoint.y, _mapViewRc.getWidth(), _mapViewRc.getHeight());
 }
 
 void mapToolScene::redrawMap()
 {
-	StretchBlt(getMapBufferDC(), 0, 0, _mapBuffer->getWidth(), _mapBuffer->getHeight(), IMAGEMANAGER->findImage("map bg2")->getMemDC(), 0, 0, 1200, 1200, SRCCOPY);
+	//StretchBlt(getMapBufferDC(), 0, 0, _mapBuffer->getWidth(), _mapBuffer->getHeight(), IMAGEMANAGER->findImage("map bg2")->getMemDC(), 0, 0, 1200, 1200, SRCCOPY);
 
 	for (int i = 0; i <= _nowIndex.y; ++i)
 	{
@@ -1565,11 +1566,10 @@ void mapToolScene::redrawMap()
 			{
 				if (_vTiles[i][j]->getTerrainType() > 0)
 					checkAutoTile(j, i);
-				_terrainImageBig[_vTiles[i][j]->getTerrainImageNum()]->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+				_terrainImageBig[_vTiles[i][j]->getTerrainImageNum()]->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
 			}
 			else
-				_vTiles[i][j]->getRect().render(getMapBufferDC());
-
+				D2DRENDERER->DrawRectangle(_vTiles[i][j]->getRect());
 
 
 			// 오브젝트가 있는 경우
@@ -1578,7 +1578,7 @@ void mapToolScene::redrawMap()
 				if (_vTiles[i][j]->getObjectImageNum() != 3)
 				{
 					// 일반 오브젝트인 경우
-					_objectImageBig[_vTiles[i][j]->getObjectImageNum()]->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
+					_objectImageBig[_vTiles[i][j]->getObjectImageNum()]->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
 				}
 				else
 				{
@@ -1625,9 +1625,9 @@ void mapToolScene::redrawMap()
 						frameX -= 3;
 						break;
 					}
-					img->frameRender(getMapBufferDC(),
+					img->frameRender(Vector2(
 						_vTiles[i][j]->getRect().left - width,
-						_vTiles[i][j]->getRect().top - height,
+						_vTiles[i][j]->getRect().top - height),
 						frameX, 0);
 				}
 			}		
@@ -1636,9 +1636,9 @@ void mapToolScene::redrawMap()
 
 	for (int i = 0; i < _vEnemies.size(); ++i)
 	{
-		_enemyImageBig->frameRender(getMapBufferDC(),
+		_enemyImageBig->frameRender(Vector2(
 			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().left,
-			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().top,
+			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().top),
 			_vEnemies[i].frameX, _vEnemies[i].frameY);
 	}
 
@@ -1685,9 +1685,9 @@ void mapToolScene::redrawMap()
 			frameX -= 3;
 			break;
 		}
-		img->frameRender(getMapBufferDC(),
+		img->frameRender(Vector2(
 			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().left - width,
-			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().top - height,
+			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().top - height),
 			frameX, 0);
 	}
 
@@ -1696,7 +1696,7 @@ void mapToolScene::redrawMap()
 	{
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
-				_typeImage->frameRender(getMapBufferDC(), _vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top, 0, _vTiles[i][j]->getOrderIndex());
+				_typeImage->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), 0, _vTiles[i][j]->getOrderIndex());
 		}
 	}
 }
