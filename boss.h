@@ -21,10 +21,11 @@ struct tagBossPart  //보스 파츠별 구조체
 
 	float _x, _y;
 	float _angle;
+	float _realAngle;	//실질적으로 이미지를 회전시켜주는 각도
 	float _speed;
 
-	POINT _center;
-	POINT _centerEnd;
+	floatPoint _center;
+	floatPoint _centerEnd;
 	float _centerMeter;
 };
 
@@ -66,8 +67,6 @@ private:
 	int _fireskill1Time;
 
 
-
-
 public:
 
 	boss();
@@ -78,11 +77,10 @@ public:
 	void update();
 	void render();
 
-	
 
-	void bossDraw();
-
-
+	void bossState();		//보스 현재 상태패턴 
+	void bossMove();		//보스 실시간 움직임 
+	void bossDraw();		//보스 전신 렌더 이미지
 
 };
 
