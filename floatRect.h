@@ -34,23 +34,24 @@ inline floatRect RectMakePivot(const Vector2& pos, const Vector2& size, const pi
 	switch (pivot)
 	{
 	case pivot::LEFTTOP:
-		result.left = pos.x	 *GetSystemMetrics(SM_CXSCREEN) / 1920;
-		result.top = pos.y	*GetSystemMetrics(SM_CYSCREEN) / 1080;
-		result.right = pos.x  *GetSystemMetrics(SM_CXSCREEN) / 1920 + size.x *GetSystemMetrics(SM_CXSCREEN) / 1920;
-		result.bottom = pos.y  *GetSystemMetrics(SM_CYSCREEN) / 1080 + size.y *GetSystemMetrics(SM_CYSCREEN) / 1080;
+		result.left = pos.x;
+		result.top = pos.y;
+		result.right = pos.x + size.x;
+		result.bottom = pos.y + size.y;
 		return result;
 	case pivot::CENTER:
-		result.left = pos.x *GetSystemMetrics(SM_CXSCREEN) / 1920 - size.x / 2.f *GetSystemMetrics(SM_CXSCREEN) / 1920;
-		result.top = pos.y *GetSystemMetrics(SM_CYSCREEN) / 1080 - size.y / 2.f*GetSystemMetrics(SM_CYSCREEN) / 1080;
+		result.left = pos.x - size.x / 2.f;
+		result.top = pos.y - size.y / 2.f;
 		result.right = pos.x + size.x / 2.f;
-		result.bottom = pos.y *GetSystemMetrics(SM_CYSCREEN) / 1080 + size.y / 2.f*GetSystemMetrics(SM_CYSCREEN) / 1080;
+		result.bottom = pos.y + size.y / 2.f;
 		return result;
 	case pivot::BOTTOM:
-		result.left = pos.x *GetSystemMetrics(SM_CXSCREEN) / 1920 - size.x / 2.f*GetSystemMetrics(SM_CXSCREEN) / 1920;
-		result.top = pos.y*GetSystemMetrics(SM_CYSCREEN) / 1080 - size.y*GetSystemMetrics(SM_CYSCREEN) / 1080;
-		result.right = pos.x *GetSystemMetrics(SM_CXSCREEN) / 1920 + size.x / 2.f*GetSystemMetrics(SM_CXSCREEN) / 1920;
-		result.bottom = pos.y*GetSystemMetrics(SM_CYSCREEN) / 1080;
+		result.left = pos.x - size.x / 2.f;
+		result.top = pos.y - size.y;
+		result.right = pos.x + size.x / 2.f;
+		result.bottom = pos.y;
 		return result;
 	}
 	return result;
 }
+

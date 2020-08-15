@@ -74,8 +74,6 @@ using namespace MINTCHOCO_UTIL;
 #define WINSIZEY	GetSystemMetrics(SM_CYSCREEN)
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 
-#define WINSIZERATEX GetSystemMetrics(SM_CXSCREEN)/1920	
-#define WINSIZERATEY GetSystemMetrics(SM_CYSCREEN)/1080
 
 #define RND randomFunction::getInstance()
 #define IMAGEMANAGER imageManager::getInstance()
