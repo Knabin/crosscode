@@ -1,13 +1,9 @@
 #pragma once
 #include "image.h"
 
-static image* _backBuffer = imageManager::getInstance()->addImage("backBuffer", 9600, 9600);
-
-
 class gameNode
 {
 private:
-	HDC _hdc;
 	bool _managerInit;		//매니저들 초기화할꺼니
 
 public:
@@ -24,8 +20,6 @@ public:
 	virtual void render();			//그리기 전용
 
 	//백버퍼 DC메모리 접근자
-	HDC getMemDC() { return _backBuffer->getMemDC(); }
-	HDC getHDC() { return _hdc; }
 
 	LRESULT MainProc(HWND, UINT, WPARAM, LPARAM);
 };

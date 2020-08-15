@@ -101,7 +101,7 @@ void objectManager::render()
 	vector<gameObject*>& objectList = _mObjectContainer.find(objectType::TILEOBJECT)->second;
 	for (int i = 0; i < objectList.size(); ++i)
 	{
-		if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getY())
+		if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y)
 			objectList[i]->render();
 	}
 }

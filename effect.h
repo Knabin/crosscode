@@ -13,12 +13,12 @@ protected:
 	animation*	_effectAnimation;
 	BOOL		_isRunning;
 	float		_elapsedTime;
-
+	float		_scale;
 public:
 	effect();
 	~effect();
 
-	virtual HRESULT init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime);
+	virtual HRESULT init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, float scale);
 	virtual void release();
 	virtual void update();
 	virtual void render();

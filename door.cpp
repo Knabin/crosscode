@@ -3,9 +3,8 @@
 
 HRESULT door::init()
 {
-	_image = IMAGEMANAGER->addFrameImage("vendor", "images/object/vendor.bmp", 720, 288, 3, 1, true, RGB(255, 0, 255));
-	_rc.set(0, 0, _image->getFrameWidth(), _image->getFrameHeight());
-	_rc.setCenter(_x, _y);
+	_image = IMAGEMANAGER->addFrameImage("vendor", L"images/object/vendor.png", 3, 1);
+	_rc.update(_position, _image->getFrameSize(), pivot::CENTER);
 	return S_OK;
 }
 

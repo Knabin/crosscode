@@ -86,8 +86,8 @@ protected:
 
 	vector<tile*> _move;
 
-	floatPoint nextTileIndex[8];//현재 에너미 위치에서 근처에 장애물 위치를 파악할 타일
-	floatPoint currentTileIndex;
+	Vector2 nextTileIndex[8];//현재 에너미 위치에서 근처에 장애물 위치를 파악할 타일
+	Vector2 currentTileIndex;
 
 	floatRect _attackRC;//에너미 공격렉트
 
@@ -149,9 +149,9 @@ public:
 	//설정자
 	void setEnemyHP(int currentHP) { _currentHP -= currentHP; }//에너미의 현재 체력깍기
 	void setEnemyDirection(ENEMYDIRECTION enemyDirection) { _enemyDirection = enemyDirection; }//에너미의 상태값 변경
-	void setEnemyX(float x) { _x = x; }//에너미의 x좌표 변경
-	void setEnemyY(float y) { _y = y; }//에너미의 y좌표 변경
-	void setEnemyAttackRect() { _attackRC.set(0, 0, 0, 0); }//에너미의 공격렉트 지우기
+	void setEnemyX(float x) { _position.x = x; }//에너미의 x좌표 변경
+	void setEnemyY(float y) { _position.y = y; }//에너미의 y좌표 변경
+	void setEnemyAttackRect() { _attackRC.update(Vector2(0,0), Vector2(0,0), pivot::CENTER); }//에너미의 공격렉트 지우기
 	void setEnemyIsActive(bool isActive) { _isActive = isActive; }//에너미 사망
 	//설정자
 

@@ -1,4 +1,6 @@
 #pragma once
+#include "animation.h"
+
 class playerState
 {
 protected:

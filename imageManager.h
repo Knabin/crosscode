@@ -1,49 +1,34 @@
 #pragma once
-#include "image.h"
-#include <map>
 
-class imageManager
+/****************************************************************************
+## ImageRenderer ##
+*****************************************************************************/
+class imageManager final
 {
 public:
 	static imageManager* getInstance()
 	{
-		static imageManager instance;
-		return &instance;
+		static imageManager istance;
+		return &istance;
 	}
-
+	//unordered_map : 해시테이블 알고리즘으로 이루어져 있다
+	//map : 레드블랙바이너리트리 알고리즘으로 이루어져 있다
 private:
-	imageManager();
-	~imageManager();
-
+	typedef map<string, class image*>::iterator ImageIter;
 private:
-	typedef map<string, image*>				mapImageList;
-	typedef map<string, image*>::iterator	mapImageIter;
+	map<string, class image*> mImageList;
 
-private:
-	mapImageList _mImageList;
-
+	class IWICImagingFactory* mWicFactory;
 public:
-	HRESULT init();
-	void release();
+	imageManager();
+	virtual ~imageManager();
 
-	image* addImage(string strKey, int width, int height);
-	image* addImage(string strKey, const char* fileName, int width, int height, bool trans, COLORREF transColor);
-
-	image * addImage(string strKey, const char * fileName, int width, int height, bool trans, COLORREF transColor, float angle);
-
-	image* addFrameImage(string strKey, const char* fileName, float x, float y, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor);
-	image* addFrameImage(string strKey, const char* fileName, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor);
-
-	//이미지 찾는 함수 (중요)
-	image* findImage(string strKey);
-
-	BOOL deleteImage(string strKey);
-	
-	BOOL deleteAll();
-
-	void render(string strKey, HDC hdc);
-	void render(string strKey, HDC hdc, int destX, int destY);
-	void render(string strKey, HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight);
-
+	class image* addImage(const string& key, const wstring& file);
+	class image* addFrameImage(const string& key, const wstring& file, const int maxFrameX, const int maxFrameY);
+	class image* findImage(const string& key);
+private:
+	ID2D1Bitmap* CreateD2DBitmapFromFile(const wstring& file);
+	void DeleteAll();
 };
 
+#define _ImageManager imageManager::Get()
