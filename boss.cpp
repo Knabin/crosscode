@@ -14,9 +14,6 @@ HRESULT boss::init()
 
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
-	_appearanceCount = 0;
-	_attackCount = 0;
-	_attackEndCount = 0;
 	_fireskill1Time = 0;
 	_mineAttackCount = 0;
 
@@ -36,7 +33,7 @@ HRESULT boss::init()
 	IMAGEMANAGER->addImage("왼팔", L"images/boss/left_arm.png");
 	IMAGEMANAGER->addImage("왼손", L"images/boss/left_hand.png");
 
-	//IMAGEMANAGER->addFrameImage("왼손공격", L"images/boss/left_hand_attack.png", 39, 1);
+	IMAGEMANAGER->addFrameImage("왼손공격", L"images/boss/left_hand_attack.png", 20, 1);
 
 	IMAGEMANAGER->addImage("오른팔", L"images/boss/right_arm.png");
 	IMAGEMANAGER->addImage("오른손", L"images/boss/right_hand.png");
@@ -46,11 +43,11 @@ HRESULT boss::init()
 	//보스 몸통 선언
 
 	_Center._x = (WINSIZEX / 2 - 85);
-	_Center._y = (WINSIZEY / 2 + 450);
+	_Center._y = (WINSIZEY / 2 + 250);
 	_Center._angle = 0;
 
 	_Center._center.x = (WINSIZEX / 2 - 85);
-	_Center._center.y = (WINSIZEY / 2 + 450);
+	_Center._center.y = (WINSIZEY / 2 + 250);
 	_Center._centerMeter = 100;
 
 	_Center._speed = 2.0f;
@@ -59,7 +56,7 @@ HRESULT boss::init()
 
 	//_bossState = APPEARANCE;
 	//_bossState = STOP;
-	_bossState = LEFTHAND_ATTACK_READY;
+	_bossState = ICETHROWER_READY1;
 	//_bossState = CENTER_ATTACK_READY;
 
 	//================================================================================================================================================================//
@@ -176,6 +173,10 @@ void boss::render()
 
 void boss::bossState()
 {
+	//모든 행동 패턴은 
+	//보스의 어느 렉트 부위가 
+	//어느 지점에 도달했을 시 발동합니다.
+
 	switch (_bossState)
 	{
 		/*
@@ -218,8 +219,6 @@ void boss::bossState()
 			_bossState = LEFTHAND_ATTACK_READY;
 		}
 
-
-
 	}
 	break;
 	*/
@@ -236,97 +235,129 @@ void boss::bossState()
 	//왼손 얼음포물선 발사 모션
 
 
-	case LEFTHAND_ATTACK_READY:
+	case ICETHROWER_READY1:
 	{
-		_appearanceCount = 0;
-		_attackCount++;
-		_attackEndCount = 0;
 
-		_LeftArm._angle -= 0.001f;
-		_RightArm._angle += 0.001f;
+		_RightArm._angle -= 0.012f;
+		_RightHand._angle -= 0.012f;
+		_RightArm._realAngle += 0.6f;
+		_RightHand._realAngle += 1.2f;
 
-		_LeftArm._realAngle += 0.05f;
-		_RightArm._realAngle -= 0.05f;
+		_LeftArm._angle -= 0.024f;
+		_LeftHand._angle -= 0.032f;
+		_LeftArm._realAngle += 1.2f;
+		_LeftHand._realAngle += 0.8f;
 
-		_LeftHand._angle -= 0.001f;
-		_RightHand._angle += 0.001f;
 
-		_LeftHand._realAngle += 0.05f;
-		_RightHand._realAngle -= 0.05f;
+		_Center._angle += 0.2f;
+
+		if (_LeftHand._rectBody.top < _Center._y + 100)
+		{
+			_attackDelay++;
+
+			if (_attackDelay < 20)
+			{
+				_RightArm._angle += 0.012f;
+				_RightHand._angle += 0.012f;
+				_RightArm._realAngle -= 0.6f;
+				_RightHand._realAngle -= 1.2f;
+
+				_LeftArm._angle += 0.024f;
+				_LeftHand._angle += 0.032f;
+				_LeftArm._realAngle -= 1.2f;
+				_LeftHand._realAngle -= 0.8f;
+
+				_Center._angle -= 0.2f;
+			}
+
+			if (_attackDelay >= 20)
+			{
+				_attackDelay = 0;
+				_bossState = ICETHROWER_READY2;
+			}
+		}
 	}
 	break;
 
-	case LEFTHAND_ATTACK:
+	case ICETHROWER_READY2:
 	{
-		_attackCount = 0;
+		_LeftArm._center.x += 1.5f;
+		_LeftArm._center.y += 2.0f;
 
+
+		_RightArm._angle += 0.012f;
+		_RightHand._angle += 0.012f;
+		_RightArm._realAngle -= 0.6f;
+		_RightHand._realAngle -= 1.2f;
+
+
+		_LeftArm._angle += 0.024f;
+		_LeftHand._angle += 0.032f;
+		_LeftArm._realAngle -= 1.2f;
+		_LeftHand._realAngle -= 0.8f;
+
+
+		_Center._angle -= 0.2f;
+
+		if (_RightHand._rectBody.top < _Center._y + 50)
+		{
+			_bossState = ICETHROWER;
+		}
+
+	}
+	break;
+
+	case ICETHROWER:
+	{
 		/*
 		if (_fireskill1Time % 3 == 0)
 		{
 			_BossAttack->attackFire();
 
 		}
-		*/
+		*/	
 
-		/*
-		IMAGEMANAGER->findImage("왼손공격")->setFrameY(0);
+		_bossLeftHandAttackFrameY = 0;
 
-		if (_frameCount % 2 == 0)
+		if (_frameCount % 5 == 0)
 		{
-			if (_currentFrameX > IMAGEMANAGER->findImage("왼손공격")->getMaxFrameX())
+			if (_currentFrameX >= IMAGEMANAGER->findImage("왼손공격")->getMaxFrameX())
 			{
-				_bossState = LEFTHAND_ATTACK_END;
+				_currentFrameX = 0;
+				_bossState = ICETHROWER_END;
 			}
-			IMAGEMANAGER->findImage("왼손공격")->setFrameX(_currentFrameX);
+			_bossLeftHandAttackFrameX = _currentFrameX;
 			_currentFrameX++;
 			_frameCount = 0;
-		}
-		*/
-
+		}		
 	}
 	break;
 
-	case LEFTHAND_ATTACK_END:
+	case ICETHROWER_END:
 	{
 
-		_currentFrameX = 0;
-		_attackEndCount++;
+		_LeftArm._center.x -= 1.5f;
+		_LeftArm._center.y -= 2.0f;
 
-		if (_attackEndCount < 5)
+
+		_RightArm._angle -= 0.012f;
+		_RightHand._angle -= 0.012f;
+		_RightArm._realAngle += 0.6f;
+		_RightHand._realAngle += 1.2f;
+
+
+		_LeftArm._angle -= 0.016f;
+		_LeftHand._angle -= 0.024f;
+		_LeftArm._realAngle += 0.8f;
+		_LeftHand._realAngle += 0.6f;
+
+		_Center._angle += 0.15f;
+
+		if (_RightHand._rectBody.top >= _LeftHand._rectBody.top)
 		{
-			_LeftArm._angle -= 0.02f * 2;
-			_LeftHand._angle -= 0.02f * 2;
-			_RightArm._angle -= 0.02f;
-			_RightHand._angle -= 0.02f;
-			_Center._angle -= 0.01f;
-
-			_LeftArm._center.y -= 2;
-			_LeftArm._center.x += 2;
-		}
-
-		if (_attackEndCount >= 5)
-		{
-			_RightArm._angle -= 0.02f;
-			_RightHand._angle -= 0.02f;
-			_LeftArm._angle -= 0.02f * 2;
-			_LeftHand._angle -= 0.02f * 2;
-			_Center._angle -= 0.01f;
-
-			_RightArm._center.x += 2;
-			_RightArm._center.y += 2;
-
-			_LeftArm._center.x -= 2;
-			_LeftArm._center.y -= 2;
-
-		}
-
-		if (_attackEndCount >= 15)
-		{
-			_attackEndCount = 0;
 			_bossState = STOP;
-
 		}
-
+		
 	}
 	break;
 
@@ -335,7 +366,7 @@ void boss::bossState()
 
 	case CENTER_ATTACK_READY:
 	{
-
+		/*
 		_LeftArm._angle += 0.005f * 6;
 		_RightArm._angle -= 0.005f * 6;
 		_LeftHand._angle += 0.015f * 6;
@@ -346,7 +377,7 @@ void boss::bossState()
 
 			_bossState = CENTER_ATTACK;
 		}
-
+		*/
 		/*
 		IMAGEMANAGER->findImage("보스몸통움직임")->setFrameY(0);
 
@@ -382,7 +413,7 @@ void boss::bossState()
 
 		}
 		*/
-
+		/*
 		_LeftHand._centerEnd.y -= 25;
 		_RightHand._centerEnd.y -= 25;
 		_Center._y += 0.5f;
@@ -396,11 +427,13 @@ void boss::bossState()
 			_bossState = CENTER_ATTACK_END;
 
 		}
+		*/
 	}
 	break;
 
 	case CENTER_ATTACK_END:
 	{
+		/*
 		_mineAttackCount++;
 
 		_LeftHand._centerEnd.x -= 15;
@@ -413,6 +446,8 @@ void boss::bossState()
 			//_Mine->MineFire();
 
 		}
+
+		*/
 	}
 	break;
 
@@ -486,8 +521,8 @@ void boss::bossDraw()
 	// 중점에 렌더하는 거라면 floatRect의 getCenter()에 렌더하길 바람!
 	// ex) 이미지->render(CAMERA->getRelativeVector2(_Bottom._rectBody.getCenter()));
 
-	//보스 모든 클래스 랜더는 floatRect의 left와, top을 중점렌더로 통일
-
+	//자주 움직이는 양팔과 양손은 중점 x,y 를 기준으로 렌더
+	//그 외는 rect left,top에 렌더를 했습니다.
 
 	IMAGEMANAGER->findImage("보스바텀")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left - 175, _Bottom._rectBody.top - 60)));
 
@@ -496,9 +531,9 @@ void boss::bossDraw()
 
 
 	IMAGEMANAGER->findImage("왼팔")->setAngle(_LeftArm._realAngle);
-	IMAGEMANAGER->findImage("왼팔")->render(CAMERA->getRelativeVector2(Vector2(_LeftArm._centerEnd.x - 200, _LeftArm._centerEnd.y - 75)));
+	IMAGEMANAGER->findImage("왼팔")->render(CAMERA->getRelativeVector2(Vector2(_LeftArm._centerEnd.x - 225, _LeftArm._centerEnd.y - 75)));
 	IMAGEMANAGER->findImage("오른팔")->setAngle(_RightArm._realAngle);
-	IMAGEMANAGER->findImage("오른팔")->render(CAMERA->getRelativeVector2(Vector2(_RightArm._centerEnd.x - 125, _RightArm._centerEnd.y - 75)));
+	IMAGEMANAGER->findImage("오른팔")->render(CAMERA->getRelativeVector2(Vector2(_RightArm._centerEnd.x - 100, _RightArm._centerEnd.y - 75)));
 
 
 	if (_bossState == CENTER_ATTACK_READY || _bossState == CENTER_ATTACK || _bossState == CENTER_ATTACK_END)
@@ -507,46 +542,44 @@ void boss::bossDraw()
 	}
 
 	IMAGEMANAGER->findImage("보스몸통")->setAngle(_Center._angle);
-	IMAGEMANAGER->findImage("보스몸통")->render(CAMERA->getRelativeVector2(Vector2(_Center._rectBody.left - 184, _Center._rectBody.top - 200)));
+	IMAGEMANAGER->findImage("보스몸통")->render(CAMERA->getRelativeVector2(Vector2(_Center._rectBody.left - 191, _Center._rectBody.top - 200)));
 
 
-	/*
-	if (_Center._BossState == IDLE || _Center._BossState == APPEARANCE || _Center._BossState == MOVEDOWN || _Center._BossState == MOVEUP || _Center._BossState == LEFTHAND_ATTACK_END || _Center._BossState == LEFTHAND_ATTACK_READY)
-	{
-		_LeftHand._Image->RotateRender(getMemDC(), _LeftHand._centerEnd.x + 75, _LeftHand._centerEnd.y, _LeftHand._angle + 25);
-	}
-	*/
-
-	IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
-	IMAGEMANAGER->findImage("왼손")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 250, _LeftHand._centerEnd.y - 75)));
+	
 	IMAGEMANAGER->findImage("오른손")->setAngle(_RightHand._realAngle);
 	IMAGEMANAGER->findImage("오른손")->render(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x - 200, _RightHand._centerEnd.y - 50)));
 
-	if (_bossState == LEFTHAND_ATTACK)
+	if (_bossState == ICETHROWER)
 	{
-		//IMAGEMANAGER->findImage("왼손공격")->frameRender(getMemDC(), _LeftHand._centerEnd.x - 175, _LeftHand._centerEnd.y - 200);
+		IMAGEMANAGER->findImage("왼손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 50, _LeftHand._centerEnd.y + 225)),
+		_bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY);
 	}
 	else
 	{
-		//_LeftHand._Image->RotateRender(getMemDC(), _LeftHand._centerEnd.x + 75, _LeftHand._centerEnd.y, _LeftHand._angle + 25);
+		IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
+		IMAGEMANAGER->findImage("왼손")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 250, _LeftHand._centerEnd.y - 100)));
 	}
+
 
 
 
 
 	//================================================================================================================================================================//
 
-	//양손, 양팔 관절 렉트
+	//위치 확인용 몸통, 바텀 렉트
 
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_Center._rectBody));
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_Bottom._rectBody));
+
+	//위치 확인용 양손, 양팔 관절 렉트
+
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_LeftArm._rectBody));
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_RightArm._rectBody));
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_LeftHand._rectBody));
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_RightHand._rectBody));
 
 
-	//양손, 양팔 점선
+	//위치 확인용 양손, 양팔 점선
 
 	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_LeftArm._center.x, _LeftArm._center.y))),
 		(CAMERA->getRelativeVector2(Vector2(_LeftArm._centerEnd.x, _LeftArm._centerEnd.y))),

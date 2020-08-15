@@ -3,13 +3,22 @@
 
 enum bossState //보스 상태패턴 enum문
 {
+	//======================================등장할 것이오======================================//
+
 	APPEARANCE = 0,
+
+	//======================================이동할 것이오======================================//
+
 	STOP,
 	MOVEUP,
 	MOVEDOWN,
-	LEFTHAND_ATTACK_READY,
-	LEFTHAND_ATTACK,
-	LEFTHAND_ATTACK_END,
+
+	//======================================공격할 것이오======================================//
+
+	ICETHROWER_READY1,
+	ICETHROWER_READY2,
+	ICETHROWER,
+	ICETHROWER_END,
 	CENTER_ATTACK_READY,
 	CENTER_ATTACK,
 	CENTER_ATTACK_END,
@@ -20,9 +29,20 @@ struct tagBossPart  //보스 파츠별 구조체
 	floatRect _rectBody;
 
 	float _x, _y;
-	float _angle;
-	float _realAngle;	//실질적으로 이미지를 회전시켜주는 각도
 	float _speed;
+
+
+	//현재의 이미지회전은 이미지의 가운데를 중점으로 회전하고 있습니다. 그래서
+	//가상의 렉트1개와 선을 생성 후 선 끝 부분에 이미지를 렌더 해줍니다. 
+	//선언해 둔 각도값 대로 이미지가 아닌 선 끝 부분만 회전을 시키면
+	//이미지가 360도 원을 그리면서 이동합니다. 동시에
+	//이때 선언해둔 또 다른 각도값으로 이미지 가운데 중점을 회전시켜주면~!
+
+	float _angle;
+	float _realAngle;	
+
+	
+	//위치 확인용에 필요한 선 그리기
 
 	floatPoint _center;
 	floatPoint _centerEnd;
@@ -36,17 +56,17 @@ class boss : public gameObject
 private:
 
 	image* image;
-	bossState _bossState;
+	bossState _bossState;		//상태 패턴
 
-	tagBossPart _Center;
+	tagBossPart _Center;		//몸통
 
-	tagBossPart _LeftArm;
-	tagBossPart _RightArm;
+	tagBossPart _LeftArm;		//왼팔
+	tagBossPart _RightArm;		//오른팔
 
-	tagBossPart _LeftHand;
-	tagBossPart _RightHand;
+	tagBossPart _LeftHand;		//왼손
+	tagBossPart _RightHand;		//오른손
 
-	tagBossPart _Bottom;
+	tagBossPart _Bottom;		//바텀
 
 	int _currentFrameX, _currentFrameY;
 	int _frameCount;
@@ -54,15 +74,15 @@ private:
 	int _protectCurrentFrameX, _protectCurrentFrameY;
 	int _protectFrameCount;
 
-	int _appearanceCount;
+	int _attackDelay;
 
-	int _attackCount;
-	int _attackEndCount;
 	int _mineAttackCount;
 
-	int _bossShieldOneFrameX;
-	int _bossShieldOneFrameY;
+	//방어막 프레임
+	int _bossShieldOneFrameX, _bossShieldOneFrameY;
 
+	//왼손공격1 프레임
+	int _bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY;
 
 	int _fireskill1Time;
 
