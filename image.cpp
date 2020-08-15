@@ -11,8 +11,8 @@
 image::image(ID2D1Bitmap * const bitmap, const TagLoadedImageInfo & loadinfo)
 	:mBitmap(bitmap), mLoadInfo(loadinfo), mScale(1.f), mAlpha(1.f), mAngle(0.f), mMaxFrameX(1), mMaxFrameY(1)
 {
-	this->mSize.x = (float)this->mBitmap->GetPixelSize().width;
-	this->mSize.y = (float)this->mBitmap->GetPixelSize().height;
+	this->mSize.x = (float)this->mBitmap->GetPixelSize().width  * WINSIZERATEX;
+	this->mSize.y = (float)this->mBitmap->GetPixelSize().height * WINSIZERATEY;
 
 	FrameRect rc;
 	rc.x = 0;
@@ -34,8 +34,8 @@ image::image(ID2D1Bitmap * const bitmap, const TagLoadedImageInfo & loadinfo)
 image::image(ID2D1Bitmap *const bitmap, const TagLoadedImageInfo & loadinfo, const int  maxFrameX, const int  maxFrameY)
 	:mBitmap(bitmap), mLoadInfo(loadinfo), mMaxFrameX(maxFrameX), mMaxFrameY(maxFrameY), mScale(1.f), mAlpha(1.f), mAngle(0.f)
 {
-	this->mSize.x = (float)mBitmap->GetPixelSize().width;
-	this->mSize.y = (float)mBitmap->GetPixelSize().height;
+	this->mSize.x = (float)mBitmap->GetPixelSize().width	* WINSIZERATEX;
+	this->mSize.y = (float)mBitmap->GetPixelSize().height	* WINSIZERATEY;
 
 	float frameX = mSize.x / (float)this->mMaxFrameX;
 	float frameY = mSize.y / (float)this->mMaxFrameY;
