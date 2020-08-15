@@ -11,6 +11,10 @@ button::~button()
 
 HRESULT button::init(const char * imageName, float x, float y, int frameX, int frameY, int frameDownX, int frameDownY, function<void(void)> cbFunction)
 {
+	x *= WINSIZERATEX;
+	y *= WINSIZERATEY;
+
+
 	_callbackFunction = cbFunction;
 	
 	_direction = BUTTONDIRECTION::NONE;
@@ -20,7 +24,7 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 	_imageName = imageName;
 	_image = IMAGEMANAGER->findImage(imageName);
 
-	_rc.update(Vector2(x, y), Vector2(_image->getFrameSize().x * WINSIZERATEX, _image->getFrameSize().y * WINSIZERATEY), pivot::CENTER);
+	_rc.update(Vector2(x, y), Vector2(_image->getFrameSize().x *WINSIZERATEX, _image->getFrameSize().y *WINSIZERATEY), pivot::CENTER);
 
 	_frameUpPoint.x = frameX;
 	_frameUpPoint.y = frameY;
