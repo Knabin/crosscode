@@ -52,22 +52,5 @@ void testScene::update()
 
 void testScene::render()
 {
-	if (_vTiles.size() <= 0) return;
-	for (int i = 0; i <= _maxY; ++i)
-	{
-		for (int j = 0; j <= _maxX; ++j)
-		{
-			if(CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
-				CAMERA->getRect().right <= _vTiles[i][j]->getRect().left ||
-				CAMERA->getRect().bottom <= _vTiles[i][j]->getRect().top ||
-				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;
-
-			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
-			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->frameRender(
-				CAMERA->getRelativeVector2(_vTiles[i][j]->getRect().getCenter()), 
-				_vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
-		}
-	}
-	// 타일 이미지를 렌더해 줌, 전체 렌더해도 프레임 안 떨어지더라구요
-	//SCENEMANAGER->getTileBuffer()->render(getMemDC());
+	scene::render();
 }

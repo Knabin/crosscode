@@ -45,39 +45,40 @@ HRESULT boss::init()
 
 	//보스 몸통 선언
 
-	_Center._x = WINSIZEX / 2 - 95;
-	_Center._y = WINSIZEY / 2 + 150;
+	_Center._x = (WINSIZEX / 2 - 85);
+	_Center._y = (WINSIZEY / 2 + 450);
 	_Center._angle = 0;
 
-	_Center._center.x = WINSIZEX / 2 - 95;
-	_Center._center.y = WINSIZEY / 2 + 150;
+	_Center._center.x = (WINSIZEX / 2 - 85);
+	_Center._center.y = (WINSIZEY / 2 + 450);
 	_Center._centerMeter = 100;
 
 	_Center._speed = 2.0f;
 
-	_Center._rectBody.update(Vector2(_Center._x + 210, _Center._y + 200), Vector2(615, 400), pivot::CENTER);
+	_Center._rectBody.update(Vector2(_Center._x + 210, _Center._y + 200), Vector2(600, 400), pivot::CENTER);
 
 	//_bossState = APPEARANCE;
-	_bossState = STOP;
-	//_bossState = LEFTHAND_ATTACK_READY;
+	//_bossState = STOP;
+	_bossState = LEFTHAND_ATTACK_READY;
 	//_bossState = CENTER_ATTACK_READY;
 
 	//================================================================================================================================================================//
 
 	//왼팔 선언
 
-	_LeftArm._x = _Center._x - 245;
-	_LeftArm._y = _Center._y + 5;
-	_LeftArm._angle = 0;
+	_LeftArm._x = (_Center._x - 125) + 100;
+	_LeftArm._y = (_Center._y + 25);
+	_LeftArm._angle = PI2 - (PI / 4);
+	_LeftArm._realAngle = PI2 - (PI / 4);
 
-	_LeftArm._center.x = _Center._x - 245;
-	_LeftArm._center.y = _Center._y + 5;
-	_LeftArm._centerMeter = 270;
+	_LeftArm._center.x = (_Center._x - 125) + 100;
+	_LeftArm._center.y = (_Center._y + 25);
+	_LeftArm._centerMeter = 170;
 
 
 	//왼팔 관절 렉트 선언
 
-	_LeftArm._rectBody.update(Vector2(_LeftArm._center.x, _LeftArm._center.y), Vector2(10, 10), pivot::CENTER);
+	_LeftArm._rectBody.update(Vector2(_LeftArm._center.x, _LeftArm._center.y), Vector2(50, 50), pivot::CENTER);
 
 	//================================================================================================================================================================//
 
@@ -85,33 +86,35 @@ HRESULT boss::init()
 
 	_LeftHand._x = _LeftArm._x - 100;
 	_LeftHand._y = _LeftArm._y + 100;
-	_LeftHand._angle = 0;
+	_LeftHand._angle = PI2 - (PI / 4);
+	_LeftHand._realAngle = PI2 - (PI / 4);
 
 	_LeftHand._center.x = sinf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.x;
 	_LeftHand._center.y = cosf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.y;
-	_LeftHand._centerMeter = 150;
+	_LeftHand._centerMeter = 170;
 
 
 	//왼손 관절 렉트 선언
 
-	_LeftHand._rectBody.update(Vector2(_LeftHand._center.x, _LeftHand._center.y), Vector2(10, 10), pivot::CENTER);
+	_LeftHand._rectBody.update(Vector2(_LeftHand._center.x, _LeftHand._center.y), Vector2(50, 50), pivot::CENTER);
 
 	//================================================================================================================================================================//
 
 	//오른팔 선언
 
-	_RightArm._x = _Center._x + 395;
-	_RightArm._y = _Center._y + 275;
-	_RightArm._angle = 0;
+	_RightArm._x = (_Center._x + 545) - 100;
+	_RightArm._y = (_Center._y + 25);
+	_RightArm._angle = PI2 - (PI / 4);
+	_RightArm._realAngle = PI2 - (PI / 4);
 
-	_RightArm._center.x = _Center._x + 395;
-	_RightArm._center.y = _Center._y + 275;
-	_RightArm._centerMeter = 270;
+	_RightArm._center.x = (_Center._x + 545) - 100;
+	_RightArm._center.y = (_Center._y + 25);
+	_RightArm._centerMeter = 170;
 
 
 	//오른팔 관절 렉트 선언
 
-	_RightArm._rectBody.update(Vector2(_RightArm._center.x, _RightArm._center.y), Vector2(10, 10), pivot::CENTER);
+	_RightArm._rectBody.update(Vector2(_RightArm._center.x, _RightArm._center.y), Vector2(50, 50), pivot::CENTER);
 
 	//================================================================================================================================================================//
 
@@ -119,24 +122,25 @@ HRESULT boss::init()
 
 	_RightHand._x = _RightArm._x + 100;
 	_RightHand._y = _RightArm._y + 100;
-	_RightHand._angle = 0;
+	_RightHand._angle = PI2 - (PI / 4);
+	_RightHand._realAngle = PI2 - (PI / 4);
 
 	_RightHand._center.x = cosf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.x;
 	_RightHand._center.y = -sinf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.y;
-	_RightHand._centerMeter = 150;
+	_RightHand._centerMeter = 170;
 
 
 	//오른손 관절 렉트 선언
-	_RightHand._rectBody.update(Vector2(_RightHand._center.x + 200, _RightHand._center.y + 200), Vector2(10, 10), pivot::CENTER);
+	_RightHand._rectBody.update(Vector2(_RightHand._center.x, _RightHand._center.y), Vector2(50, 50), pivot::CENTER);
 
 	//================================================================================================================================================================//
 
 	//바텀 선언
 
-	_Bottom._x = _Center._x + 162;
+	_Bottom._x = _Center._x + 160;
 	_Bottom._y = _Center._y + 450;
 
-	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y), Vector2(150, 80), pivot::CENTER);
+	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y), Vector2(150, 70), pivot::CENTER);
 
 	//================================================================================================================================================================//
 
@@ -151,78 +155,15 @@ void boss::release()
 void boss::update()
 {
 
-	//================================================================================================================================================================//
-
-	
-	//몸통, 바텀 실시간 업데이트
-
-	
-	_Center._rectBody.update(Vector2(_Center._x + 210, _Center._y + 200), Vector2(615, 400), pivot::CENTER);
-
-	_Center._centerEnd.x = cosf(_Center._angle) * _Center._centerMeter + _Center._center.x;
-	_Center._centerEnd.y = -sinf(_Center._angle) * _Center._centerMeter + _Center._center.y;
-
-	_Center._angle += 0.02f;
-
-	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y), Vector2(150, 80), pivot::CENTER);
-
-	_bossShieldOneFrameY = 0;
-
-	if (_protectFrameCount % 5 == 0)
-	{
-		if (_protectCurrentFrameX >= IMAGEMANAGER->findImage("보스바텀방어막1")->getMaxFrameX()) _protectCurrentFrameX = 0;
-		_bossShieldOneFrameX = _protectCurrentFrameX;
-		_protectCurrentFrameX++;
-		_protectFrameCount = 0;
-	}
-	
-
-	//================================================================================================================================================================//
-
-	
-	//왼팔, 왼손 실시간 업데이트
-
-	_LeftArm._rectBody.update(Vector2(_LeftArm._center.x, _LeftArm._center.y), Vector2(10, 10), pivot::CENTER);
-	_LeftHand._rectBody.update(Vector2(_LeftHand._center.x, _LeftHand._center.y), Vector2(10, 10), pivot::CENTER);
-
-	_LeftArm._centerEnd.x = sinf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.x;
-	_LeftArm._centerEnd.y = cosf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.y;
-
-	_LeftHand._center.x = sinf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.x;
-	_LeftHand._center.y = cosf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.y;
-
-	_LeftHand._centerEnd.x = sinf(_LeftHand._angle) * _LeftHand._centerMeter + _LeftArm._centerEnd.x;
-	_LeftHand._centerEnd.y = cosf(_LeftHand._angle) * _LeftHand._centerMeter + _LeftArm._centerEnd.y;
-
-	//================================================================================================================================================================//
-
-	//오른팔, 오른손 실시간 업데이트
-
-	_RightArm._rectBody.update(Vector2(_RightArm._center.x, _RightArm._center.y), Vector2(10, 10), pivot::CENTER);
-	_RightHand._rectBody.update(Vector2(_RightHand._center.x + 200, _RightHand._center.y + 200), Vector2(10, 10), pivot::CENTER);
-
-	_RightHand._center.x = cosf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.x;
-	_RightHand._center.y = -sinf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.y;
-
-	_RightArm._centerEnd.x = cosf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.x;
-	_RightArm._centerEnd.y = -sinf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.y;
-
-	_RightHand._centerEnd.x = cosf(_RightHand._angle) * _RightHand._centerMeter + _RightArm._centerEnd.x;
-	_RightHand._centerEnd.y = -sinf(_RightHand._angle) * _RightHand._centerMeter + _RightArm._centerEnd.y;
-
-	//================================================================================================================================================================//
-	
 	_frameCount++;
+
 	_protectFrameCount++;
+
 	_fireskill1Time++;
-	//BossMove();
-	  bossState();
-	//================================================================================================================================================================//
 
-	  
-	//collision();
+	bossMove();
 
-	 
+	bossState();
 
 }
 
@@ -231,24 +172,6 @@ void boss::render()
 
 	bossDraw();
 
-	
-	/*
-	_LeftArm._rectBody.render(getMemDC());
-
-	_LeftHand._rectBody.render(getMemDC());
-
-	_RightArm._rectBody.render(getMemDC());
-
-	_RightHand._rectBody.render(getMemDC());
-
-	LineMake(getMemDC(), _LeftArm._center.x, _LeftArm._center.y, _LeftArm._centerEnd.x, _LeftArm._centerEnd.y);
-
-	LineMake(getMemDC(), _LeftHand._center.x, _LeftHand._center.y, _LeftHand._centerEnd.x, _LeftHand._centerEnd.y);
-
-	LineMake(getMemDC(), _RightArm._center.x, _RightArm._center.y, _RightArm._centerEnd.x, _RightArm._centerEnd.y);
-
-	LineMake(getMemDC(), _RightHand._center.x, _RightHand._center.y, _RightHand._centerEnd.x, _RightHand._centerEnd.y);
-	*/
 }
 
 void boss::bossState()
@@ -319,40 +242,17 @@ void boss::bossState()
 		_attackCount++;
 		_attackEndCount = 0;
 
-		if (_attackCount < 50)
-		{
-			_RightArm._angle += 0.002f;
-			_RightHand._angle += 0.002f;
-			_LeftArm._angle += 0.002f * 2;
-			_LeftHand._angle += 0.002f * 2;
-			_Center._angle += 0.001f;
+		_LeftArm._angle -= 0.001f;
+		_RightArm._angle += 0.001f;
 
-			_RightArm._center.x -= 0.5f;
-			_RightArm._center.y -= 0.5f;
+		_LeftArm._realAngle += 0.05f;
+		_RightArm._realAngle -= 0.05f;
 
-			_LeftArm._center.x += 0.5f;
-			_LeftArm._center.y += 0.5f;
-		}
+		_LeftHand._angle -= 0.001f;
+		_RightHand._angle += 0.001f;
 
-		if (_attackCount >= 50)
-		{
-
-			_LeftArm._angle += 0.002f * 2;
-			_LeftHand._angle += 0.002f * 2;
-			_RightArm._angle += 0.002f;
-			_RightHand._angle += 0.002f;
-			_Center._angle += 0.001f;
-
-			_LeftArm._center.y += 0.5f;
-			_LeftArm._center.x -= 0.5f;
-		}
-
-		if (_attackCount >= 75)
-		{
-			_attackCount = 0;
-			_bossState = LEFTHAND_ATTACK;
-		}
-
+		_LeftHand._realAngle += 0.05f;
+		_RightHand._realAngle -= 0.05f;
 	}
 	break;
 
@@ -519,6 +419,66 @@ void boss::bossState()
 	}
 }
 
+void boss::bossMove()
+{
+
+	//================================================================================================================================================================//
+
+	//몸통, 바텀 실시간 업데이트
+
+	_Center._rectBody.update(Vector2(_Center._x + 210, _Center._y + 200), Vector2(600, 400), pivot::CENTER);
+
+	_Center._centerEnd.x = cosf(_Center._angle) * _Center._centerMeter + _Center._center.x;
+	_Center._centerEnd.y = -sinf(_Center._angle) * _Center._centerMeter + _Center._center.y;
+
+	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y), Vector2(150, 70), pivot::CENTER);
+
+	//바텀 방어막 프레임
+
+	_bossShieldOneFrameY = 0;
+
+	if (_protectFrameCount % 5 == 0)
+	{
+		if (_protectCurrentFrameX >= IMAGEMANAGER->findImage("보스바텀방어막1")->getMaxFrameX()) _protectCurrentFrameX = 0;
+		_bossShieldOneFrameX = _protectCurrentFrameX;
+		_protectCurrentFrameX++;
+		_protectFrameCount = 0;
+	}
+
+	//================================================================================================================================================================//
+
+
+	//왼팔, 왼손 실시간 업데이트
+
+	_LeftArm._rectBody.update(Vector2(_LeftArm._center.x, _LeftArm._center.y), Vector2(50, 50), pivot::CENTER);
+	_LeftHand._rectBody.update(Vector2(_LeftHand._center.x, _LeftHand._center.y), Vector2(50, 50), pivot::CENTER);
+
+	_LeftArm._centerEnd.x = sinf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.x;
+	_LeftArm._centerEnd.y = cosf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.y;
+
+	_LeftHand._center.x = sinf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.x;
+	_LeftHand._center.y = cosf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.y;
+
+	_LeftHand._centerEnd.x = sinf(_LeftHand._angle) * _LeftHand._centerMeter + _LeftArm._centerEnd.x;
+	_LeftHand._centerEnd.y = cosf(_LeftHand._angle) * _LeftHand._centerMeter + _LeftArm._centerEnd.y;
+
+	//================================================================================================================================================================//
+
+	//오른팔, 오른손 실시간 업데이트
+
+	_RightArm._rectBody.update(Vector2(_RightArm._center.x, _RightArm._center.y), Vector2(50, 50), pivot::CENTER);
+	_RightHand._rectBody.update(Vector2(_RightHand._center.x, _RightHand._center.y), Vector2(50, 50), pivot::CENTER);
+
+	_RightHand._center.x = cosf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.x;
+	_RightHand._center.y = -sinf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.y;
+
+	_RightArm._centerEnd.x = cosf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.x;
+	_RightArm._centerEnd.y = -sinf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.y;
+
+	_RightHand._centerEnd.x = cosf(_RightHand._angle) * _RightHand._centerMeter + _RightArm._centerEnd.x;
+	_RightHand._centerEnd.y = -sinf(_RightHand._angle) * _RightHand._centerMeter + _RightArm._centerEnd.y;
+}
+
 void boss::bossDraw()
 {
 	// ~~~~나빈 주석~~~~ 읽고 나서 필요 없으면 지우세용
@@ -526,14 +486,19 @@ void boss::bossDraw()
 	// 중점에 렌더하는 거라면 floatRect의 getCenter()에 렌더하길 바람!
 	// ex) 이미지->render(CAMERA->getRelativeVector2(_Bottom._rectBody.getCenter()));
 
+	//보스 모든 클래스 랜더는 floatRect의 left와, top을 중점렌더로 통일
 
-	IMAGEMANAGER->findImage("보스바텀")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left - 173, _Bottom._rectBody.top - 50)));
 
-	IMAGEMANAGER->findImage("보스바텀방어막1")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left, _Bottom._rectBody.top + 35)), 
+	IMAGEMANAGER->findImage("보스바텀")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left - 175, _Bottom._rectBody.top - 60)));
+
+	IMAGEMANAGER->findImage("보스바텀방어막1")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 75, _Bottom._rectBody.top + 60)),
 		_bossShieldOneFrameX, _bossShieldOneFrameY);
 
-	//IMAGEMANAGER->findImage("왼팔")->rotateRender(getMemDC(), _LeftHand._rectBody.left + 100, _LeftHand._rectBody.top - 75, _LeftArm._angle);
-	//IMAGEMANAGER->findImage("오른팔")->rotateRender(getMemDC(), _RightHand._rectBody.left - 100, _RightHand._rectBody.top - 75, _RightArm._angle);
+
+	IMAGEMANAGER->findImage("왼팔")->setAngle(_LeftArm._realAngle);
+	IMAGEMANAGER->findImage("왼팔")->render(CAMERA->getRelativeVector2(Vector2(_LeftArm._centerEnd.x - 200, _LeftArm._centerEnd.y - 75)));
+	IMAGEMANAGER->findImage("오른팔")->setAngle(_RightArm._realAngle);
+	IMAGEMANAGER->findImage("오른팔")->render(CAMERA->getRelativeVector2(Vector2(_RightArm._centerEnd.x - 125, _RightArm._centerEnd.y - 75)));
 
 
 	if (_bossState == CENTER_ATTACK_READY || _bossState == CENTER_ATTACK || _bossState == CENTER_ATTACK_END)
@@ -542,10 +507,8 @@ void boss::bossDraw()
 	}
 
 	IMAGEMANAGER->findImage("보스몸통")->setAngle(_Center._angle);
-	IMAGEMANAGER->findImage("보스몸통")->render(CAMERA->getRelativeVector2(Vector2(_Center._x + 210, _Center._y + 140)));
-	
+	IMAGEMANAGER->findImage("보스몸통")->render(CAMERA->getRelativeVector2(Vector2(_Center._rectBody.left - 184, _Center._rectBody.top - 200)));
 
-	//_Bottom._rectBody.render(getMemDC());
 
 	/*
 	if (_Center._BossState == IDLE || _Center._BossState == APPEARANCE || _Center._BossState == MOVEDOWN || _Center._BossState == MOVEUP || _Center._BossState == LEFTHAND_ATTACK_END || _Center._BossState == LEFTHAND_ATTACK_READY)
@@ -553,8 +516,11 @@ void boss::bossDraw()
 		_LeftHand._Image->RotateRender(getMemDC(), _LeftHand._centerEnd.x + 75, _LeftHand._centerEnd.y, _LeftHand._angle + 25);
 	}
 	*/
-	//IMAGEMANAGER->findImage("왼손")->rotateRender(getMemDC(), _LeftHand._centerEnd.x + 25, _LeftHand._centerEnd.y + 75, _LeftHand._angle);
-//	IMAGEMANAGER->findImage("오른손")->rotateRender(getMemDC(), _RightHand._centerEnd.x - 175, _RightHand._centerEnd.y + 200, _RightHand._angle);
+
+	IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
+	IMAGEMANAGER->findImage("왼손")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 250, _LeftHand._centerEnd.y - 75)));
+	IMAGEMANAGER->findImage("오른손")->setAngle(_RightHand._realAngle);
+	IMAGEMANAGER->findImage("오른손")->render(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x - 200, _RightHand._centerEnd.y - 50)));
 
 	if (_bossState == LEFTHAND_ATTACK)
 	{
@@ -567,5 +533,41 @@ void boss::bossDraw()
 
 
 
+
+	//================================================================================================================================================================//
+
+	//양손, 양팔 관절 렉트
+
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_Center._rectBody));
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_Bottom._rectBody));
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_LeftArm._rectBody));
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_RightArm._rectBody));
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_LeftHand._rectBody));
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_RightHand._rectBody));
+
+
+	//양손, 양팔 점선
+
+	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_LeftArm._center.x, _LeftArm._center.y))),
+		(CAMERA->getRelativeVector2(Vector2(_LeftArm._centerEnd.x, _LeftArm._centerEnd.y))),
+		D2D1::ColorF::Black, 1, 2.0f);
+
+	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_RightArm._center.x, _RightArm._center.y))),
+		(CAMERA->getRelativeVector2(Vector2(_RightArm._centerEnd.x, _RightArm._centerEnd.y))),
+		D2D1::ColorF::Black, 1, 2.0f);
+
+	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_LeftHand._center.x, _LeftHand._center.y))),
+		(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x, _LeftHand._centerEnd.y))),
+		D2D1::ColorF::Black, 1, 2.0f);
+
+	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_RightHand._center.x, _RightHand._center.y))),
+		(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y))),
+		D2D1::ColorF::Black, 1, 2.0f);
+
+
+
+
 }
+
+
 

@@ -14,12 +14,12 @@ void sceneManager::init()
 {
 	_currentScene = NULL;
 	//_tileBuffer = IMAGEMANAGER->addImage("tileBuffer", 2400, 2400);
-	_tileImages[0] = IMAGEMANAGER->addFrameImage("terrain1 b", L"images/tile/terrain1.bmp", 16, 18);
-	_tileImages[1] = IMAGEMANAGER->addFrameImage("terrain2 b", L"images/tile/terrain2.bmp", 16, 18);
-	_tileImages[2] = IMAGEMANAGER->addFrameImage("terrain3 b", L"images/tile/terrain3.bmp", 16, 18);
-	_objectImages[0] = IMAGEMANAGER->addFrameImage("object1 b", L"images/tile/object1.bmp", 16, 18);
-	_objectImages[1] = IMAGEMANAGER->addFrameImage("object2 b", L"images/tile/object2.bmp", 16, 18);
-	_objectImages[2] = IMAGEMANAGER->addFrameImage("object3 b", L"images/tile/object3.bmp", 16, 18);
+	_tileImages[0] = IMAGEMANAGER->addFrameImage("terrain1 b", L"images/tile/terrain1.png", 16, 18);
+	_tileImages[1] = IMAGEMANAGER->addFrameImage("terrain2 b", L"images/tile/terrain2.png", 16, 18);
+	_tileImages[2] = IMAGEMANAGER->addFrameImage("terrain3 b", L"images/tile/terrain3.png", 16, 18);
+	_objectImages[0] = IMAGEMANAGER->addFrameImage("object1 b", L"images/tile/object1.png", 16, 18);
+	_objectImages[1] = IMAGEMANAGER->addFrameImage("object2 b", L"images/tile/object2.png", 16, 18);
+	_objectImages[2] = IMAGEMANAGER->addFrameImage("object3 b", L"images/tile/object3.png", 16, 18);
 }
 
 void sceneManager::release()
