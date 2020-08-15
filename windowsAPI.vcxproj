@@ -153,10 +153,10 @@
     <ClInclude Include="bossTestScene.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
-    <ClInclude Include="CCaptureScreen.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="door.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
@@ -203,6 +203,7 @@
     <ClInclude Include="uiController.h" />
     <ClInclude Include="uiObject.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Vector2.h" />
     <ClInclude Include="vendor.h" />
     <ClInclude Include="windowsAPI.h" />
   </ItemGroup>
@@ -213,9 +214,10 @@
     <ClCompile Include="bossTestScene.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
-    <ClCompile Include="CCaptureScreen.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collisionManager.cpp" />
+    <ClCompile Include="D2DRenderer+Draw.cpp" />
+    <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="door.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
@@ -264,6 +266,7 @@
     <ClCompile Include="uiController.cpp" />
     <ClCompile Include="uiObject.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="vendor.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
   </ItemGroup>

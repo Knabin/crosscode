@@ -1,95 +1,92 @@
 #include "stdafx.h"
 #include "floatRect.h"
 
+
+/**************************************************************************************************
+## floatRect::floatRect ##
+**************************************************************************************************/
 floatRect::floatRect()
-	: left(0.0f), top(0.0f), right(0.0f), bottom(0.0f)
+	:left(0.f), top(0.f), right(0.f), bottom(0.f) {}
+
+floatRect::floatRect(const float& left, const float& top, const float& right, const float& bottom)
+	: left(left), top(top), right(right), bottom(bottom) {}
+
+floatRect::floatRect(const int& left, const int& top, const int& right, const int& bottom)
+	: left((float)left), top((float)top), right((float)right), bottom((float)bottom) {}
+
+floatRect::floatRect(const Vector2& pos, const Vector2& size, const pivot& pivot)
 {
+	*this = RectMakePivot(pos, size, pivot);
 }
 
-floatRect::floatRect(const float & left, const float & top, const float & right, const float & bottom)
-	: left(left), top(top), right(right), bottom(bottom)
-{
-}
+floatRect::floatRect(const RECT& rc)
+	:left((float)rc.left), top((float)rc.top), right((float)rc.right), bottom((float)rc.bottom) {}
 
-floatRect::floatRect(const int & left, const int & top, const int & right, const int & bottom)
-	: left((float)left), top((float)top), right((float)right), bottom((float)bottom)
-{
-}
-
-floatRect::floatRect(const float & x, const float & y, const float & width, const float & height, const pivot & pivot)
-{
-	*this = RectMakePivot(floatPoint(x, y), floatPoint(width, height), pivot);
-}
-
-floatRect::floatRect(const RECT & rc)
-	: left((float)rc.left), top((float)rc.top), right((float)rc.right), bottom((float)rc.bottom)
-{
-}
-
+/**************************************************************************************************
+## floatRect::getRect ##
+@@ return RECT : LONG형 RECT로 변환 후 반환
+**************************************************************************************************/
 const RECT floatRect::getRect()
 {
-	return { (LONG)left, (LONG)top, (LONG)right, (LONG)bottom };
+	return { (LONG)left,(LONG)top,(LONG)right,(LONG)bottom };
 }
-
-float floatRect::getWidth()
+float floatRect::GetWidth()
 {
 	return right - left;
 }
-
-float floatRect::getHeight()
+float floatRect::GetHeight()
 {
 	return bottom - top;
 }
-
-floatPoint floatRect::getCenter()
+/**************************************************************************************************
+## floatRect::getCenter ##
+@@ return Vector2 : 중심 좌표
+**************************************************************************************************/
+Vector2 floatRect::getCenter()
 {
-	return floatPoint(left + (right - left) * 0.5f, top + (bottom - top) * 0.5f);
+	return Vector2(left + (right - left) / 2.f, top + (bottom - top) / 2.f);
+}
+Vector2 floatRect::GetBottom()
+{
+	return Vector2(left + (right - left) / 2.f, bottom);
+}
+Vector2 floatRect::getSize()
+{
+	return Vector2((right - left), (bottom - top));
+}
+/**************************************************************************************************
+## floatRect::update ##
+@@ Vector2 pos : 좌표
+@@ Vector2 size : 사이즈
+@@ Pivot pivot : 피봇
+
+floatRect 정보 갱신
+**************************************************************************************************/
+void floatRect::update(const Vector2& pos, const Vector2& size, const pivot& pivot)
+{
+	*this = ::RectMakePivot(pos, size, pivot);
+}
+void floatRect::set(const Vector2 & pos, const pivot& pivot)
+{
+	*this = ::RectMakePivot(pos, Vector2(right - left, bottom - top), pivot);
+}
+/**************************************************************************************************
+## floatRect::Move ##
+@@ Vector2 moveValue : 이동방향 * 이동량
+**************************************************************************************************/
+void floatRect::Move(const Vector2& moveValue)
+{
+	left += moveValue.x;
+	right += moveValue.x;
+	top += moveValue.y;
+	bottom += moveValue.y;
 }
 
-floatPoint floatRect::getSize()
-{
-	return floatPoint((right - left), (bottom - top));
-}
-
-void floatRect::set(const float & x, const float & y, const float & width, const float & height)
-{
-	left = x - width * 0.5f;
-	top = y - height * 0.5f;
-	right = left + width;
-	bottom = top + height;
-}
-
-void floatRect::setLeftTop(float _left, float _top)
-{
-	float w = getWidth();
-	float h = getHeight();
-
-	left = _left;
-	top = _top;
-	right = _left + w;
-	bottom = _top + h;
-}
-
-void floatRect::setCenter(float centerX, float centerY)
-{
-	float w = getWidth() * 0.5f;
-	float h = getHeight() * 0.5f;
-
-	left = centerX - w;
-	top = centerY - h;
-	right = centerX + w;
-	bottom = centerY + h;
-}
-
-void floatRect::move(const float & moveX, const float & moveY)
-{
-	left += moveX;
-	right += moveX;
-	top += moveY;
-	bottom += moveY;
-}
-
-const floatRect & floatRect::operator=(const RECT & rc)
+/**************************************************************************************************
+## floatRect::operator = ##
+@@ RECT rc : RECT
+***************************************************************************************************/
+const floatRect& ::floatRect::operator=(const RECT& rc)
 {
 	this->left = (float)rc.left;
 	this->right = (float)rc.right;
@@ -98,9 +95,3 @@ const floatRect & floatRect::operator=(const RECT & rc)
 	return *this;
 }
 
-const bool floatRect::operator==(const floatRect & rc)
-{
-	if (this->left == rc.left && this->right == rc.right &&
-		this->top == rc.top && this->bottom == this->bottom) return true;
-	return false;
-}

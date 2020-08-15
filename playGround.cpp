@@ -45,11 +45,6 @@ HRESULT playGround::init()
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
-	// 커서 추가해 놨는데 좌표가 어긋나요... 이유는 모르겠음
-	//SetCursor(LoadCursorFromFile("cursor/cursor-2.cur"));
-	//SetCursor(LoadCursorFromFile("cursor/cursor-melee.cur"));
-	SetCursor(LoadCursorFromFile("cursor/cursor-throw.cur"));
-
 	return S_OK;
 }
 
@@ -109,16 +104,19 @@ void playGround::update()
 //그리기 전용
 void playGround::render()
 {	
-	PatBlt(getMemDC(), 0, 0, CAMERA->getMapWidth(), CAMERA->getMapHeight(), WHITENESS);
-	//=================================================
+	D2DRENDERER->BeginRender(D2D1::ColorF::White);
+	{
 
-	SCENEMANAGER->render();
-	OBJECTMANAGER->render();
-	CAMERA->zoom(getMemDC());
-	TIMEMANAGER->render(getMemDC());
-	_ui->render();
-	//_enemyManager->render();
+		//=================================================
 
-	//=============================================
-	_backBuffer->render(getHDC(), 0, 0, CAMERA->getRect().left, CAMERA->getRect().top, WINSIZEX, WINSIZEY);
+		SCENEMANAGER->render();
+		OBJECTMANAGER->render();
+		//CAMERA->zoom(getMemDC());
+		TIMEMANAGER->render();
+		_ui->render();
+		//_enemyManager->render();
+
+		//=============================================
+	}
+	D2DRENDERER->EndRender();
 }

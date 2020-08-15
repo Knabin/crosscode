@@ -4,9 +4,9 @@
 
 HRESULT hedgehag::init()
 {
-	_enemyImage = IMAGEMANAGER->addFrameImage("enemyHedgehog", "images/enemy/hedgehog.bmp", 1200, 672, 10, 7, true, RGB(255, 0, 255));//에너미 이미지
-	EFFECTMANAGER->addEffect("enemyHedgehogDust", "images/enemy/hedgehogDust.bmp", 240, 102, 48, 102, 1.0f, 0.5f, 200);//공격상태에서 제자리에 나오는 먼지 이펙트
-	EFFECTMANAGER->addEffect("enemyHedgehogMoveDust", "images/enemy/hedgehogMoveDust.bmp", 240, 51, 48, 51, 1.0f, 0.5f, 200);//공격상태에서 움직이는중에 나오는 먼지 이펙트
+	_enemyImage = IMAGEMANAGER->addFrameImage("enemyHedgehog", L"images/enemy/hedgehog.png", 10, 7);//에너미 이미지
+	EFFECTMANAGER->addEffect("enemyHedgehogDust", "images/enemy/hedgehogDust.png", 240, 102, 48, 102, 1.0f, 0.5f, 200, 1.0f);//공격상태에서 제자리에 나오는 먼지 이펙트
+	EFFECTMANAGER->addEffect("enemyHedgehogMoveDust", "images/enemy/hedgehogMoveDust.png", 240, 51, 48, 51, 1.0f, 0.5f, 200, 1.0f);//공격상태에서 움직이는중에 나오는 먼지 이펙트
 
 	_maxHP = 100;
 	_currentHP = _maxHP;
@@ -31,143 +31,143 @@ HRESULT hedgehag::init()
 
 	//고슴도치 기본 애니메이션
 	_idleMotion_L = new animation;
-	_idleMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_L->setPlayFrame(49, 46, false, true);
 	_idleMotion_L->setFPS(1);
 
 	_idleMotion_R = new animation;
-	_idleMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_R->setPlayFrame(53, 50, false, true);
 	_idleMotion_R->setFPS(1);
 	//고슴도치 기본 애니메이션
 
 	//고슴도치 위쪽 기본 애니메이션
 	_idleMotion_U_L = new animation;
-	_idleMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_U_L->setPlayFrame(9, 6, false, true);
 	_idleMotion_U_L->setFPS(1);
 
 	_idleMotion_U_R = new animation;
-	_idleMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_U_R->setPlayFrame(13, 10, false, true);
 	_idleMotion_U_R->setFPS(1);
 	//고슴도치 위쪽 기본 애니메이션
 
 	//고슴도치 아래쪽 기본 애니메이션
 	_idleMotion_D_L = new animation;
-	_idleMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_D_L->setPlayFrame(29, 26, false, true);
 	_idleMotion_D_L->setFPS(1);
 
 	_idleMotion_D_R = new animation;
-	_idleMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_D_R->setPlayFrame(33, 30, false, true);
 	_idleMotion_D_R->setFPS(1);
 	//고슴도치 아래쪽 기본 애니메이션
 
 	//고슴도치 무브 애니메이션
 	_moveMotion_L = new animation;
-	_moveMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_moveMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_moveMotion_L->setPlayFrame(45, 42, false, true);
 	_moveMotion_L->setFPS(1);
 
 	_moveMotion_R = new animation;
-	_moveMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_moveMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_moveMotion_R->setPlayFrame(57, 54, false, true);
 	_moveMotion_R->setFPS(1);
 	//고슴도치 무브 애니메이션
 
 	//고슴도치 위쪽 무브 애니메이션
 	_moveMotion_U_L = new animation;
-	_moveMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_moveMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_moveMotion_U_L->setPlayFrame(5, 2, false, true);
 	_moveMotion_U_L->setFPS(1);
 
 	_moveMotion_U_R = new animation;
-	_moveMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_moveMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_moveMotion_U_R->setPlayFrame(17, 14, false, true);
 	_moveMotion_U_R->setFPS(1);
 	//고슴도치 위쪽 무브 애니메이션
 
 	//고슴도치 아래쪽 무브 애니메이션
 	_moveMotion_D_L = new animation;
-	_moveMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_moveMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_moveMotion_D_L->setPlayFrame(25, 22, false, true);
 	_moveMotion_D_L->setFPS(1);
 
 	_moveMotion_D_R = new animation;
-	_moveMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_moveMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_moveMotion_D_R->setPlayFrame(37, 34, false, true);
 	_moveMotion_D_R->setFPS(1);
 	//고슴도치 아래쪽 무브 애니메이션
 
 	//고슴도치 공격당할때 애니메이션
 	_hitMotion_L = new animation;
-	_hitMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_L->setPlayFrame(41, 40, false, false);
 	_hitMotion_L->setFPS(1);
 
 	_hitMotion_R = new animation;
-	_hitMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_R->setPlayFrame(59, 58, false, false);
 	_hitMotion_R->setFPS(1);
 	//고슴도치 공격당할때 애니메이션
 
 	//고슴도치 위쪽 공격당할때 애니메이션
 	_hitMotion_U_L = new animation;
-	_hitMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_U_L->setPlayFrame(1, 0, false, false);
 	_hitMotion_U_L->setFPS(1);
 
 	_hitMotion_U_R = new animation;
-	_hitMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_U_R->setPlayFrame(19, 18, false, false);
 	_hitMotion_U_R->setFPS(1);
 	//고슴도치 위쪽 공격당할때 애니메이션
 
 	//고슴도치 아래쪽 공격당할때 애니메이션
 	_hitMotion_D_L = new animation;
-	_hitMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_D_L->setPlayFrame(21, 20, false, false);
 	_hitMotion_D_L->setFPS(1);
 
 	_hitMotion_D_R = new animation;
-	_hitMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_D_R->setPlayFrame(39, 38, false, false);
 	_hitMotion_D_R->setFPS(1);
 	//고슴도치 아래쪽 공격당할때 애니메이션
 
 	//고슴도치 공격 애니메이션
 	_attackMotion_L = new animation;
-	_attackMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_L->setPlayFrame(63, 62, false, true);
 	_attackMotion_L->setFPS(1);
 
 	_attackMotion_R = new animation;
-	_attackMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_R->setPlayFrame(65, 64, false, true);
 	_attackMotion_R->setFPS(1);
 	//고슴도치 공격 애니메이션
 
 	//고슴도치 위아래 공격 애니메이션
 	_attackMotion_U_L = new animation;
-	_attackMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_U_L->setPlayFrame(61, 60, false, true);
 	_attackMotion_U_L->setFPS(1);
 
 	_attackMotion_U_R = new animation;
-	_attackMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_U_R->setPlayFrame(67, 66, false, true);
 	_attackMotion_U_R->setFPS(1);
 	//고슴도치 위아래 공격 애니메이션
 
-	_rc.set(0, 0, 70, 70);
-	_rc.setCenter(_x, _y);
+	_rc.update(_position, Vector2(70, 70), pivot::CENTER);
 
 	_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 	_enemyMotion = _idleMotion_D_R;
 
-	_tile.set(0, 0, 48, 48);
+	_tile.update(Vector2(0, 0), Vector2(48, 48), pivot::LEFTTOP);
+	
 	_nowOrder = 1;
 	//_angleCount = 0;
 
@@ -201,8 +201,9 @@ void hedgehag::update()
 
 void hedgehag::render()
 {
-	_attackRC.render(getMemDC());//에너미 공격렉트
-	_enemyImage->aniRender(getMemDC(), _rc.getCenter().x - (_enemyImage->getFrameWidth() / 2), _rc.getCenter().y - (_enemyImage->getFrameHeight() / 2), _enemyMotion);//에너미 애니메이션 재생
+	D2DRENDERER->DrawRectangle(_attackRC, D2DRenderer::DefaultBrush::Black, 2.f);
+	_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
+	_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//에너미 애니메이션 재생
 	//_rc.render(getMemDC());//에너미 렉트
 	for (int i = 0; i < 3; i++)
 	{
@@ -219,8 +220,8 @@ void hedgehag::render()
 
 void hedgehag::move()
 {
-	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getX();
-	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getY();
+	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x;
+	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y;
 
 	_distance = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
 	_angle = getAngle(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
@@ -240,13 +241,12 @@ void hedgehag::move()
 			{
 				if (_move.size() != NULL)
 				{
-					float d = getDistance(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
+					float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
 						_move[_move.size() - 1]->getRect().getCenter().y);
-					float an = getAngle(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
+					float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
 						_move[_move.size() - 1]->getRect().getCenter().y);
-
-					_x += cosf(an) * _speed;
-					_y += -sinf(an) * _speed;
+					_position.x += cosf(an) * _speed;
+					_position.y += -sinf(an) * _speed;
 
 
 					if (d < 5)
@@ -279,7 +279,7 @@ void hedgehag::move()
 				_effect = true;
 				_attackCount++;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
 				_distanceSave = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerSaveX, _playerSaveY) + 200;//일시적으로 저장해놓은 플레이어 좌표와 에너미간의 거리값을 업데이트 하는 변수
-				_attackRC.set(0, 0, 70, 70);//에너미 공격렉트
+				_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);//에너미 공격렉트
 
 				if (_distanceSave > 10 && _distanceSave < 450)//에너미와 플레이어간의 임시적으로 저장해놨던 거리값이 10보다 크면 계속 이동
 				{
@@ -287,8 +287,8 @@ void hedgehag::move()
 					{
 						if (tileMove())
 						{
-							_x += cosf(_angleSave) * _attackSpeed;
-							_y -= sinf(_angleSave) * _attackSpeed;
+							_position.x += cosf(_angleSave) * _attackSpeed;
+							_position.y -= sinf(_angleSave) * _attackSpeed;
 							_effect = false;
 						}
 						else
@@ -327,31 +327,31 @@ void hedgehag::move()
 
 		if (!_isAttack)//에너미의 공격상태값이 펄스면
 		{
-			_attackRC.set(0, 0, 0, 0);//에너미의 공격 렉트크기 0
+			_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);//에너미의 공격 렉트크기 0
 		}
 
 		if (!tileMove())
 		{
-			_x += cosf(_angle) * _speed;
-			_y += -sinf(_angle) * _speed;
+			_position.x += cosf(_angle) * _speed;
+			_position.y += -sinf(_angle) * _speed;
 		}
 	}
 	else//데미지를 받지 않았을때
 	{
 		if (!_idleMove)
 		{
-			_playerSaveX = _x + RND->getFromIntTo(-50, 50);
-			_playerSaveY = _y + RND->getFromIntTo(-50, 50);
+			_playerSaveX = _position.x + RND->getFromIntTo(-50, 50);
+			_playerSaveY = _position.y + RND->getFromIntTo(-50, 50);
 			_idleMove = true;
 		}
 
-		_distanceSave = getDistance(_x, _y, _playerSaveX, _playerSaveY);
-		_angleSave = getAngle(_x, _y, _playerSaveX, _playerSaveY);
+		_distanceSave = getDistance(_position.x, _position.y, _playerSaveX, _playerSaveY);
+		_angleSave = getAngle(_position.x, _position.y, _playerSaveX, _playerSaveY);
 
 		if (_distanceSave > 10 && tileMove())
 		{
-			_x += cosf(_angleSave) * _noHitSpeed;
-			_y += -sinf(_angleSave) * _noHitSpeed;
+			_position.x += cosf(_angleSave) * _noHitSpeed;
+			_position.y += -sinf(_angleSave) * _noHitSpeed;
 		}
 		else
 		{
@@ -359,57 +359,57 @@ void hedgehag::move()
 		}
 	}
 
-	_rc.setCenter(_x, _y);//에너미 렉트 위치 업데이트
-	_attackRC.setCenter(_x, _y);//에너미 공격 렉트 위치 업데이트
+	_rc.set(_position, pivot::CENTER);//에너미 렉트 위치 업데이트
+	_attackRC.set(_position, pivot::CENTER);//에너미 공격 렉트 위치 업데이트
 }
 
 void hedgehag::tileGet()
 {
-	_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 
 	int k = 1;
-	currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };//현재에너미 위치에 타일
+	currentTileIndex = Vector2(_tile.left / SIZE, _tile.top / SIZE);//현재에너미 위치에 타일
 
 	if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
 	{
-		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y };
-		nextTileIndex[1] = { currentTileIndex.x - k, currentTileIndex.y + k };
-		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y - k };
+		nextTileIndex[0] = Vector2(currentTileIndex.x - k, currentTileIndex.y);
+		nextTileIndex[1] = Vector2(currentTileIndex.x - k, currentTileIndex.y + k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x - k, currentTileIndex.y - k);
 	}
 
 	if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
 	{
-		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y - k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y - k };
-		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y - k };
+		nextTileIndex[0] = Vector2(currentTileIndex.x - k, currentTileIndex.y - k);
+		nextTileIndex[1] = Vector2(currentTileIndex.x, currentTileIndex.y - k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x + k, currentTileIndex.y - k);
 	}
 
 	if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
 	{
-		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y - k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y - k };
-		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y - k };
+		nextTileIndex[0] = Vector2(currentTileIndex.x + k, currentTileIndex.y - k);
+		nextTileIndex[1] = Vector2(currentTileIndex.x, currentTileIndex.y - k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x - k, currentTileIndex.y - k);
 	}
 
 	if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
 	{
-		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y };
-		nextTileIndex[1] = { currentTileIndex.x + k, currentTileIndex.y - k };
-		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y + k };
+		nextTileIndex[0] = Vector2(currentTileIndex.x + k, currentTileIndex.y);
+		nextTileIndex[1] = Vector2(currentTileIndex.x + k, currentTileIndex.y - k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x + k, currentTileIndex.y + k);
 	}
 
 	if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
 	{
-		nextTileIndex[0] = { currentTileIndex.x + k, currentTileIndex.y + k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y + k };
-		nextTileIndex[2] = { currentTileIndex.x - k, currentTileIndex.y + k };
+		nextTileIndex[0] = Vector2(currentTileIndex.x + k, currentTileIndex.y + k);
+		nextTileIndex[1] = Vector2(currentTileIndex.x, currentTileIndex.y + k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x - k, currentTileIndex.y + k);
 	}
 
 	if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
 	{
-		nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y + k };
-		nextTileIndex[1] = { currentTileIndex.x, currentTileIndex.y + k };
-		nextTileIndex[2] = { currentTileIndex.x + k, currentTileIndex.y + k };
+		nextTileIndex[0] = Vector2(currentTileIndex.x - k, currentTileIndex.y + k);
+		nextTileIndex[1] = Vector2(currentTileIndex.x, currentTileIndex.y + k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x + k, currentTileIndex.y + k);
 	}
 
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
@@ -471,58 +471,46 @@ bool hedgehag::tileMove()
 
 void hedgehag::animationControl()
 {
+	_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);
 	switch (_enemyDirection)
 	{
 	case ENEMY_LEFT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_L;
 		break;
 	case ENEMY_RIGHT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_R;
 		break;
 	case ENEMY_UP_LEFT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_U_L;
 		break;
 	case ENEMY_UP_RIGHT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_U_R;
 		break;
 	case ENEMY_DOWN_LEFT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_D_L;
 		break;
 	case ENEMY_DOWN_RIGHT_IDLE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _idleMotion_D_R;
 		break;
 	case ENEMY_LEFT_MOVE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _moveMotion_L;
 		break;
 	case ENEMY_RIGHT_MOVE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _moveMotion_R;
 		break;
 	case ENEMY_UP_LEFT_MOVE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _moveMotion_U_L;
 		break;
 	case ENEMY_UP_RIGHT_MOVE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _moveMotion_U_R;
 		break;
 	case ENEMY_DOWN_LEFT_MOVE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _moveMotion_D_L;
 		break;
 	case ENEMY_DOWN_RIGHT_MOVE:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _moveMotion_D_R;
 		break;
 	case ENEMY_LEFT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_L;
 		_hitCount++;
 
@@ -533,7 +521,6 @@ void hedgehag::animationControl()
 		}
 		break;
 	case ENEMY_RIGHT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_R;
 		_hitCount++;
 
@@ -544,7 +531,6 @@ void hedgehag::animationControl()
 		}
 		break;
 	case ENEMY_UP_LEFT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_U_L;
 		_hitCount++;
 
@@ -555,7 +541,6 @@ void hedgehag::animationControl()
 		}
 		break;
 	case ENEMY_UP_RIGHT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_U_R;
 		_hitCount++;
 
@@ -566,7 +551,6 @@ void hedgehag::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_LEFT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_D_L;
 		_hitCount++;
 
@@ -577,7 +561,6 @@ void hedgehag::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_HIT:
-		_attackRC.set(0, 0, 0, 0);
 		_enemyMotion = _hitMotion_D_R;
 		_hitCount++;
 

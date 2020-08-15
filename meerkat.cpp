@@ -4,11 +4,11 @@
 
 HRESULT meerkat::init()
 {
-	_enemyImage = IMAGEMANAGER->addFrameImage("enemyMeerkat", "images/enemy/meerkat.bmp", 960, 1440, 10, 12, true, RGB(255, 0, 255));//기본, 히트, 공격모션 이미지
-	_meerkatMoveImage = IMAGEMANAGER->addFrameImage("enemyMeerkatMove", "images/enemy/meerkatMove.bmp", 576, 65, 9, 1, true, RGB(255, 0, 255));//무브 이미지
-	_meerkatBallImage = IMAGEMANAGER->addFrameImage("enemyMeerkatBall", "images/enemy/meerkatBall.bmp", 189, 60, 4, 1, true, RGB(255, 0, 255));//공격 볼 이미지
-	_meerkatBallImage->setFrameX(0);
-	_meerkatBallImage->setFrameY(0);
+	_enemyImage = IMAGEMANAGER->addFrameImage("enemyMeerkat", L"images/enemy/meerkat.png", 10, 12);//기본, 히트, 공격모션 이미지
+	_meerkatMoveImage = IMAGEMANAGER->addFrameImage("enemyMeerkatMove", L"images/enemy/meerkatMove.png", 9, 1);//무브 이미지
+	_meerkatBallImage = IMAGEMANAGER->addFrameImage("enemyMeerkatBall", L"images/enemy/meerkatBall.png", 189, 60);//공격 볼 이미지
+	_meerkatBallFrameX = 0;
+	_meerkatBallFrameY = 0;
 
 	_maxHP = 100;
 	_currentHP = _maxHP;
@@ -35,150 +35,149 @@ HRESULT meerkat::init()
 
 	//미어캣 기본 애니메이션
 	_idleMotion_L = new animation;
-	_idleMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_L->setPlayFrame(39, 36, false, true);
 	_idleMotion_L->setFPS(1);
 
 	_idleMotion_R = new animation;
-	_idleMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_R->setPlayFrame(20, 23, false, true);
 	_idleMotion_R->setFPS(1);
 	//미어캣 기본 애니메이션
 
 	//미어캣 위쪽 기본 애니메이션
 	_idleMotion_U_L = new animation;
-	_idleMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_U_L->setPlayFrame(19, 16, false, true);
 	_idleMotion_U_L->setFPS(1);
 
 	_idleMotion_U_R = new animation;
-	_idleMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_U_R->setPlayFrame(0, 3, false, true);
 	_idleMotion_U_R->setFPS(1);
 	//미어캣 위쪽 기본 애니메이션
 
 	//미어캣 아래쪽 기본 애니메이션
 	_idleMotion_D_L = new animation;
-	_idleMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_D_L->setPlayFrame(59, 56, false, true);
 	_idleMotion_D_L->setFPS(1);
 
 	_idleMotion_D_R = new animation;
-	_idleMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_idleMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_idleMotion_D_R->setPlayFrame(40, 43, false, true);
 	_idleMotion_D_R->setFPS(1);
 	//미어캣 아래쪽 기본 애니메이션
 
 	//미어캣 공격당할때 애니메이션
 	_hitMotion_L = new animation;
-	_hitMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_L->setPlayFrame(31, 30, false, false);
 	_hitMotion_L->setFPS(1);
 
 	_hitMotion_R = new animation;
-	_hitMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_R->setPlayFrame(29, 28, false, false);
 	_hitMotion_R->setFPS(1);
 	//미어캣 공격당할때 애니메이션
 
 	//미어캣 위쪽 공격당할때 애니메이션
 	_hitMotion_U_L = new animation;
-	_hitMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_U_L->setPlayFrame(11, 10, false, false);
 	_hitMotion_U_L->setFPS(1);
 
 	_hitMotion_U_R = new animation;
-	_hitMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_U_R->setPlayFrame(9, 8, false, false);
 	_hitMotion_U_R->setFPS(1);
 	//미어캣 위쪽 공격당할때 애니메이션
 
 	//미어캣 아래쪽 공격당할때 애니메이션
 	_hitMotion_D_L = new animation;
-	_hitMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_D_L->setPlayFrame(51, 50, false, false);
 	_hitMotion_D_L->setFPS(1);
 
 	_hitMotion_D_R = new animation;
-	_hitMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_hitMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_hitMotion_D_R->setPlayFrame(49, 48, false, false);
 	_hitMotion_D_R->setFPS(1);
 	//미어캣 아래쪽 공격당할때 애니메이션
 
 	//미어캣 공격 애니메이션
 	_attackMotion_L = new animation;
-	_attackMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_L->setPlayFrame(35, 32, false, false);
 	_attackMotion_L->setFPS(1);
 
 	_attackMotion_R = new animation;
-	_attackMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_R->setPlayFrame(24, 27, false, false);
 	_attackMotion_R->setFPS(1);
 	//미어캣 공격 애니메이션
 
 	//미어캣 위쪽 공격 애니메이션
 	_attackMotion_U_L = new animation;
-	_attackMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_U_L->setPlayFrame(15, 12, false, false);
 	_attackMotion_U_L->setFPS(1);
 
 	_attackMotion_U_R = new animation;
-	_attackMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_U_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_U_R->setPlayFrame(4, 7, false, false);
 	_attackMotion_U_R->setFPS(1);
 	//미어캣 위쪽 공격 애니메이션
 
 	//미어캣 아래쪽 공격 애니메이션
 	_attackMotion_D_L = new animation;
-	_attackMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_D_L->setPlayFrame(55, 52, false, false);
 	_attackMotion_D_L->setFPS(1);
 
 	_attackMotion_D_R = new animation;
-	_attackMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_attackMotion_D_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_attackMotion_D_R->setPlayFrame(44, 47, false, false);
 	_attackMotion_D_R->setFPS(1);
 	//미어캣 아래쪽 공격 애니메이션
 
 	//미어캣이 땅속으로 들어가는 애니메이션
 	_meerkatTunnelDownMotion_L = new animation;
-	_meerkatTunnelDownMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelDownMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelDownMotion_L->setPlayFrame(71, 79, false, false);
 	_meerkatTunnelDownMotion_L->setFPS(1);
 
 	_meerkatTunnelDownMotion_R = new animation;
-	_meerkatTunnelDownMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelDownMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelDownMotion_R->setPlayFrame(68, 60, false, false);
 	_meerkatTunnelDownMotion_R->setFPS(1);
 	//미어캣이 땅속으로 들어가는 애니메이션
 
 	//미어캣이 땅속에서 나오는 애니메이션
 	_meerkatTunnelUpMotion_L = new animation;
-	_meerkatTunnelUpMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelUpMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelUpMotion_L->setPlayFrame(79, 71, false, false);
 	_meerkatTunnelUpMotion_L->setFPS(1);
 
 	_meerkatTunnelUpMotion_R = new animation;
-	_meerkatTunnelUpMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameWidth(), _enemyImage->getFrameHeight());
+	_meerkatTunnelUpMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelUpMotion_R->setPlayFrame(60, 68, false, false);
 	_meerkatTunnelUpMotion_R->setFPS(1);
 	//미어캣이 땅속에서 나오는 애니메이션
 
 	//미어캣 무브 애니메이션
 	_meerkatMoveMotion = new animation;
-	_meerkatMoveMotion->init(_meerkatMoveImage->getWidth(), _meerkatMoveImage->getHeight(), _meerkatMoveImage->getFrameWidth(), _meerkatMoveImage->getFrameHeight());
+	_meerkatMoveMotion->init(_meerkatMoveImage->getWidth(), _meerkatMoveImage->getHeight(), _meerkatMoveImage->getFrameSize().x, _meerkatMoveImage->getFrameSize().y);
 	_meerkatMoveMotion->setPlayFrame(0, 8, false, true);
 	_meerkatMoveMotion->setFPS(1);
 	//미어캣 무브 애니메이션
 
-	_rc.set(0, 0, 70, 70);
-	_rc.setCenter(_x, _y);
+	_rc.update(_position, Vector2(70, 70), pivot::CENTER);
 
 	_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 	_enemyMotion = _idleMotion_D_R;
 
-	_tile.set(0, 0, 48, 48);
+	_tile.update(Vector2(0, 0), Vector2(48, 48), pivot::LEFTTOP);
 	_nowOrder = 1;
 
 	return S_OK;
@@ -203,24 +202,26 @@ void meerkat::update()
 	}
 	else
 	{
-		_attackRC.set(0, 0, 0, 0);
+		_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);
 	}
 }
 
 void meerkat::render()
 {
-	_attackRC.render(getMemDC());//에너미 공격렉트
+	D2DRENDERER->DrawRectangle(_attackRC);//에너미 공격렉트
 	if (_isAttack)//공격상태가 트루면
 	{
 		//_meerkatBallImage->frameRender(getMemDC(), _x, _y, _meerkatBallImage->getFrameX(), _meerkatBallImage->getFrameY());
 	}
 	if (_enemyDirection != ENEMY_TUNNEL_MOVE)
 	{
-		_enemyImage->aniRender(getMemDC(), _rc.getCenter().x - (_enemyImage->getFrameWidth() / 2), _rc.getCenter().y - (_enemyImage->getFrameHeight() / 2), _enemyMotion);
+		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
+		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter()), _enemyMotion, 1.0f);
 	}
 	else
 	{
-		_meerkatMoveImage->aniRender(getMemDC(), _rc.getCenter().x - (_meerkatMoveImage->getFrameWidth() / 2), _rc.getCenter().y - (_meerkatMoveImage->getFrameHeight() / 2), _enemyMotion);
+		_meerkatMoveImage->setSize(Vector2(_meerkatMoveImage->getFrameSize()) * CAMERA->getZoomAmount());
+		_meerkatMoveImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter()), _enemyMotion, 1.0f);
 	}
 	//_rc.render(getMemDC());//에너미 렉트
 	for (int i = 0; i < 8; i++)
@@ -231,8 +232,8 @@ void meerkat::render()
 
 void meerkat::move()
 {
-	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getX();
-	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getY();
+	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x;
+	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y;
 
 	_distance = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
 	_angle = getAngle(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
@@ -268,7 +269,7 @@ void meerkat::move()
 			{
 				if (_isMove && _distance <= _smallDistance + _smallDistance / 2)
 				{
-					if (_playerX < _x)
+					if (_playerX < _position.x)
 					{
 						if (_enemyDirection != ENEMY_DOWN_LEFT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
 						{
@@ -287,14 +288,14 @@ void meerkat::move()
 
 					if (_enemyDirection == ENEMY_TUNNEL_MOVE)
 					{
-						_x += cosf(_angleSave) * _meerkatSpeed;
-						_y += -sinf(_angleSave) * _meerkatSpeed;
+						_position.x += cosf(_angleSave) * _meerkatSpeed;
+						_position.y += -sinf(_angleSave) * _meerkatSpeed;
 					}
 					
 				}
 				else
 				{
-					if (_playerX < _x)
+					if (_playerX < _position.x)
 					{
 						if (_enemyDirection == ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL)
 						{
@@ -356,7 +357,7 @@ void meerkat::move()
 
 			if (!tileMove() && _reflect && !_isBigMove)//미어캣 주변에 장애물이 있고 장애물의 반대방향으로 이동되게 하기위한 조건
 			{
-				if (_playerX < _x)
+				if (_playerX < _position.x)
 				{
 					if (_enemyDirection != ENEMY_DOWN_LEFT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
 					{
@@ -373,8 +374,8 @@ void meerkat::move()
 					
 				if (_enemyDirection == ENEMY_TUNNEL_MOVE)
 				{
-					_x += cosf(_angleSave) * _meerkatSpeed;
-					_y += -sinf(_angleSave) * _meerkatSpeed;
+					_position.x += cosf(_angleSave) * _meerkatSpeed;
+					_position.y += -sinf(_angleSave) * _meerkatSpeed;
 				}
 				_reflectCount++;//장애물에 부딪혔으니 장애물에 부딪힌 횟수 카운트증가
 			}
@@ -395,12 +396,12 @@ void meerkat::move()
 				//에이스타 이동
 				if (_move.size() != NULL)
 				{
-					float d = getDistance(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
+					float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
 						_move[_move.size() - 1]->getRect().getCenter().y);
-					float an = getAngle(_x, _y, _move[_move.size() - 1]->getRect().getCenter().x,
+					float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
 						_move[_move.size() - 1]->getRect().getCenter().y);
 
-					if (_playerX < _x)
+					if (_playerX < _position.x)
 					{
 						if (_enemyDirection != ENEMY_DOWN_LEFT_TUNNEL && _enemyDirection != ENEMY_TUNNEL_MOVE && _enemyDirection != ENEMY_UP_LEFT_TUNNEL && _enemyDirection != ENEMY_UP_RIGHT_TUNNEL)
 						{
@@ -417,8 +418,8 @@ void meerkat::move()
 
 					if (_enemyDirection == ENEMY_TUNNEL_MOVE)
 					{
-						_x += cosf(an) * _meerkatSpeed;
-						_y += -sinf(an) * _meerkatSpeed;
+						_position.x += cosf(an) * _meerkatSpeed;
+						_position.y += -sinf(an) * _meerkatSpeed;
 					}
 					
 					if (d < 5)
@@ -436,7 +437,7 @@ void meerkat::move()
 		}
 	}
 
-	_rc.setCenter(_x, _y);
+	_rc.set(_position, pivot::CENTER);
 }
 
 void meerkat::animationControl()
@@ -605,7 +606,7 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.set(0, 0, 70, 70);
+			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_LEFT_IDLE;
 		}
@@ -622,7 +623,7 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.set(0, 0, 70, 70);
+			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_RIGHT_IDLE;
 		}
@@ -639,7 +640,7 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.set(0, 0, 70, 70);
+			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_UP_LEFT_IDLE;
 		}
@@ -656,7 +657,7 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.set(0, 0, 70, 70);
+			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_UP_RIGHT_IDLE;
 		}
@@ -673,7 +674,7 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.set(0, 0, 70, 70);
+			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_DOWN_LEFT_IDLE;
 		}
@@ -690,7 +691,7 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.set(0, 0, 70, 70);
+			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 		}
@@ -859,19 +860,19 @@ void meerkat::animationAngleControl()
 
 void meerkat::tileGet()
 {
-	_tile.setLeftTop(((int)_x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE);
+	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 
 	int k = 1;
-	currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };//현재에너미 위치에 타일
+	currentTileIndex = Vector2(_tile.left / SIZE, _tile.top / SIZE);//현재에너미 위치에 타일
 
-	nextTileIndex[0] = { currentTileIndex.x - k, currentTileIndex.y };//왼쪽
-	nextTileIndex[1] = { currentTileIndex.x - k, currentTileIndex.y + k };//왼쪽아래
-	nextTileIndex[2] = { currentTileIndex.x, currentTileIndex.y + k };//아래
-	nextTileIndex[3] = { currentTileIndex.x + k, currentTileIndex.y + k };//오른쪽 아래
-	nextTileIndex[4] = { currentTileIndex.x + k, currentTileIndex.y };//오른쪽
-	nextTileIndex[5] = { currentTileIndex.x + k, currentTileIndex.y - k };//오른쪽위
-	nextTileIndex[6] = { currentTileIndex.x, currentTileIndex.y - k };//위
-	nextTileIndex[7] = { currentTileIndex.x - k, currentTileIndex.y - k };//왼쪽위
+	nextTileIndex[0] = Vector2(currentTileIndex.x - k, currentTileIndex.y);//왼쪽
+	nextTileIndex[1] = Vector2(currentTileIndex.x - k, currentTileIndex.y + k);//왼쪽아래
+	nextTileIndex[2] = Vector2(currentTileIndex.x, currentTileIndex.y + k);//아래
+	nextTileIndex[3] = Vector2(currentTileIndex.x + k, currentTileIndex.y + k);//오른쪽 아래
+	nextTileIndex[4] = Vector2(currentTileIndex.x + k, currentTileIndex.y);//오른쪽
+	nextTileIndex[5] = Vector2(currentTileIndex.x + k, currentTileIndex.y - k);//오른쪽위
+	nextTileIndex[6] = Vector2(currentTileIndex.x, currentTileIndex.y - k);//위
+	nextTileIndex[7] = Vector2(currentTileIndex.x - k, currentTileIndex.y - k);//왼쪽위
 
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();

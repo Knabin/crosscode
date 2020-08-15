@@ -23,11 +23,10 @@ private:
 private:
 	CAMERASTATE _state;		// 현재 카메라의 상태
 	RECT _rc;				// 현재 카메라의 RECT
-	floatPoint _position;	// 카메라의 중점
+	Vector2 _position;	// 카메라의 중점
 	float _width;			// 카메라의 가로 길이
 	float _height;			// 카메라의 세로 길이
-	float _mapWidth;		// 백버퍼의 가로 길이
-	float _mapHeight;		// 백버퍼의 세로 길이
+	Vector2 _mapSize;		// 맵의 크기
 	float _speed;			// 카메라 이동 속도
 
 	// 이벤트용 변수(미구현)
@@ -43,7 +42,7 @@ private:
 	float _shakeDirectionChangeTime;
 	float _shakeFlag;
 
-	// 카메라 줌용 변수(미구현)
+	// 카메라 줌용 변수
 	bool _isZoom;
 	bool _isZoomOutSmooth;
 	float _nowZoomAmount;
@@ -60,22 +59,27 @@ public:
 	void moveToTargetSmooth();
 	void updateShake();
 	void updateZoom();
-	void zoom(HDC hdc);
+	void checkRect();
+	void updateRect();
 
 	void setCameraMode(CAMERASTATE state) { _state = state; }
 
 	// 타겟팅될 게임 오브젝트 변경
 	void changeTarget(class gameObject* gameObject);
 
-	float getMapWidth() { return _mapWidth; }
-	float getMapHeight() { return _mapHeight; }
-	void setMapSize(float mapWidth, float mapHeight) { _mapWidth = mapWidth; _mapHeight = mapHeight; }
+	Vector2 getMapSize() { return _mapSize; }
+	void setMapSize(Vector2 vector) { _mapSize = vector; }
 
 	void shakeStart(float amount, float time);
 	void zoomStart(float amount, float time, bool isZoomOutSmooth = FALSE);
 
+	RECT getRelativeRect(RECT rc);
+	floatRect getRelativeRect(floatRect rc);
+	Vector2 getRelativeVector2(Vector2 vector);
+	Vector2 getRelativeVector2(float x, float y);
+
 	RECT& getRect() { return _rc; }
 	bool getIsZoom() { return _isZoom; }
-	int getZoomAmount() { return _zoomAmount; }
+	float getZoomAmount() { return _nowZoomAmount; }
 };
 

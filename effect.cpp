@@ -15,13 +15,14 @@ effect::~effect()
 {
 }
 
-HRESULT effect::init(image * effectImage, int frameW, int frameH, int fps, float elapsedTime)
+HRESULT effect::init(image * effectImage, int frameW, int frameH, int fps, float elapsedTime, float scale)
 {
 	if (!effectImage) return E_FAIL;
 
 	_isRunning = false;
 	_effectImage = effectImage;
 	_elapsedTime = elapsedTime;
+	_scale = scale;
 
 	//이펙트 애니메이션이 없으면 생성해라
 	if (!_effectAnimation) _effectAnimation = new animation;
@@ -55,7 +56,7 @@ void effect::render()
 {
 	if (!_isRunning) return;
 
-	_effectImage->aniRender(getMemDC(), _x, _y, _effectAnimation);
+	_effectImage->aniRender(Vector2(_x, _y), _effectAnimation, _scale);
 }
 
 void effect::startEffect(int x, int y)

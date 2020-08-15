@@ -11,11 +11,11 @@ public:
 class iMoveToTarget final : public iEvent
 {
 	class gameObject* _targetObject;
-	floatPoint _targetLocation;
+	Vector2 _targetLocation;
 	float _speed;
 
 public:
-	iMoveToTarget(class gameObject* targetObject, floatPoint targetLocation, float speed);
+	iMoveToTarget(class gameObject* targetObject, Vector2 targetLocation, float speed);
 
 	void eventStart() override;
 	bool eventUpdate() override;
@@ -24,11 +24,11 @@ public:
 class iObjectMove final : public iEvent
 {
 	class gameObject* _targetObject;
-	floatPoint _targetLocation;
+	Vector2 _targetLocation;
 	float _speed;
 
 public:
-	iObjectMove(gameObject* targetObject, floatPoint targetLocation, float speed);
+	iObjectMove(gameObject* targetObject, Vector2 targetLocation, float speed);
 
 	void eventStart() override;
 	bool eventUpdate() override;

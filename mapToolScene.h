@@ -45,14 +45,10 @@ enum
 
 enum
 {
-	//AUTO_LT,
 	AUTO_T,
-	//AUTO_RT,
 	AUTO_L,
 	AUTO_R,
-	//AUTO_LB,
 	AUTO_B,
-	//AUTO_RB,
 	AUTO_END
 };
 
@@ -113,7 +109,6 @@ private:
 	map<tagPoint, tagObject> _mObject;
 	map<tagPoint, tagObject>::iterator _miObject;
 	tile _sampleTiles[SAMPLENUMX * SAMPLENUMY];
-	image* _mapBuffer;
 	image* _uiImage;
 	image* _terrainImage[TERRAIN_END];
 	image* _terrainImageBig[TERRAIN_END];
@@ -141,7 +136,7 @@ private:
 	int _page;
 
 	// 클리핑 좌표
-	POINT _clippingPoint;
+	Vector2 _clippingPoint;
 
 	// 현재 위치
 	POINT _nowIndex;
@@ -167,7 +162,6 @@ private:
 	POINT _selectStartIndex;	// 선택됐을 당시 TILE의 인덱스
 
 public:
-	HDC getMapBufferDC() { return _mapBuffer->getMemDC(); }
 
 	virtual HRESULT init();
 	virtual void release();
@@ -192,7 +186,6 @@ public:
 	bool isAutoTile(int frameX, int frameY, int page);
 	void autotile();
 	void checkAutoTile(int indexX, int indexY);
-	void drawMap();
 	void redrawMap();
 
 	void backToTitle();

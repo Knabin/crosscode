@@ -124,9 +124,6 @@
     <ClCompile Include="testScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
-    <ClCompile Include="CCaptureScreen.cpp">
-      <Filter>2DGameFrameWork\utils</Filter>
-    </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
@@ -151,7 +148,6 @@
     <ClCompile Include="vendor.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
-    <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="nomalUI.cpp">
       <Filter>playGround\uiController</Filter>
     </ClCompile>
@@ -160,6 +156,18 @@
     </ClCompile>
     <ClCompile Include="tabUI.cpp">
       <Filter>playGround\uiController</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DRenderer.cpp">
+      <Filter>2DGameFrameWork\D2DRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DRenderer+Draw.cpp">
+      <Filter>2DGameFrameWork\D2DRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="mapObject.cpp">
+      <Filter>playGround\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,9 +306,6 @@
     <ClInclude Include="testScene.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
-    <ClInclude Include="CCaptureScreen.h">
-      <Filter>2DGameFrameWork\utils</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>enemyTest</Filter>
     </ClInclude>
@@ -325,7 +330,6 @@
     <ClInclude Include="vendor.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
-    <ClInclude Include="mapObject.h" />
     <ClInclude Include="nomalUI.h">
       <Filter>playGround\uiController</Filter>
     </ClInclude>
@@ -334,6 +338,15 @@
     </ClInclude>
     <ClInclude Include="tabUI.h">
       <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DRenderer.h">
+      <Filter>2DGameFrameWork\D2DRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>2DGameFrameWork\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="mapObject.h">
+      <Filter>playGround\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -425,6 +438,9 @@
     </Filter>
     <Filter Include="2DGameFrameWork\tile">
       <UniqueIdentifier>{6aa0e5b8-b6e6-421f-9cff-fefac26f95a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFrameWork\D2DRenderer">
+      <UniqueIdentifier>{29a4ec4d-c4fa-4bbb-912d-cfe6c0381347}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

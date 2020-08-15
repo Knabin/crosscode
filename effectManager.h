@@ -36,7 +36,7 @@ public:
 
 	void addEffect(string effectName, const char* imageName,
 		int imageWidth, int imageHeight, int effectWidth, int effectHeight,
-		int fps, float elapsedTime, int buffer);
+		int fps, float elapsedTime, int buffer, float scale);
 
 	void play(string effectName, int x, int y);
 

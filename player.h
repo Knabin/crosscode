@@ -44,7 +44,6 @@ private:
 	vector<playerState*>	_vState;
 
 	POINT tileIndex;
-	POINT _ptMouseAbs;
 	RECT rcCollision;
 	int _nowOrder;
 	int _count;

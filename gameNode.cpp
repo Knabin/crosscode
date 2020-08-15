@@ -13,8 +13,6 @@ gameNode::~gameNode()
 
 HRESULT gameNode::init()
 {
-
-	_hdc = GetDC(_hWnd);
 	_managerInit = false;
 
 
@@ -23,13 +21,11 @@ HRESULT gameNode::init()
 
 HRESULT gameNode::init(bool managerInit)
 {
-	_hdc = GetDC(_hWnd);
 	_managerInit = managerInit;
 
 	if (_managerInit)
 	{
 		//SetTimer(_hWnd, 1, 10, NULL);
-		IMAGEMANAGER->init();
 		TIMEMANAGER->init();
 		KEYMANAGER->init();
 		EFFECTMANAGER->init();
@@ -47,7 +43,6 @@ void gameNode::release()
 	if (_managerInit)
 	{
 		//	KillTimer(_hWnd, 1);
-		IMAGEMANAGER->release();
 		TIMEMANAGER->release();
 		KEYMANAGER->release();
 		EFFECTMANAGER->release();

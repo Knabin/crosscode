@@ -8,21 +8,21 @@ titleScene::~titleScene()
 HRESULT titleScene::init()
 {
 	CAMERA->setCameraMode(CAMERASTATE::NONE);
-	CAMERA->setMapSize(WINSIZEX, WINSIZEY);
+	CAMERA->setMapSize(Vector2(WINSIZEX, WINSIZEY));
 
-	IMAGEMANAGER->addFrameImage("buttons", "images/title/button_title.bmp", 486, 360, 1, 5, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("leaTitle", "images/title/lea.bmp", 3312, 735, 6, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("buttons", L"images/title/button_title.png", 1, 5);
+	IMAGEMANAGER->addFrameImage("leaTitle", L"images/title/lea.png", 6, 1);
 
-	IMAGEMANAGER->addImage("clouds1", "images/title/clouds-1.bmp", 1771, 439, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("clouds2", "images/title/clouds-2.bmp", 1920, 936, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("ground", "images/title/ground.bmp", 1920, 548, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("planet", "images/title/planet.bmp", 608, 1064, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("railings", "images/title/railings.bmp", 1920, 213, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("sky", "images/title/sky.bmp", 1920, 1335, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("logo", "images/title/logo.bmp", 1056, 768, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("clouds1", L"images/title/clouds-1.png");
+	IMAGEMANAGER->addImage("clouds2", L"images/title/clouds-2.png");
+	IMAGEMANAGER->addImage("ground", L"images/title/ground.png");
+	IMAGEMANAGER->addImage("planet", L"images/title/planet.png");
+	IMAGEMANAGER->addImage("railings", L"images/title/railings.png");
+	IMAGEMANAGER->addImage("sky", L"images/title/sky.png");
+	IMAGEMANAGER->addImage("logo", L"images/title/logo.png");
 
 	//로딩이미지
-	//IMAGEMANAGER->addFrameImage("load", "images/loading.bmp", 4371, 141, 31, 1, true, RGB(255, 0, 255));
+	//IMAGEMANAGER->addFrameImage("load", "images/loading.png", 4371, 141, 31, 1, true, RGB(255, 0, 255));
 	
 	_index = _time = 0;
 	_c1.x = 150;
@@ -35,15 +35,15 @@ HRESULT titleScene::init()
 	_mn.y = -150;
 	_rl.x = 0;
 	_rl.y = 1200;
-	_pl.x = 1300;
-	_pl.y = 710;
+	_pl.x = 1300 + 200;
+	_pl.y = 710 + 370;
 	
 
-	IMAGEMANAGER->addImage("eq", "images/equip/eq.bmp", 1920, 1280, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("select", "images/title/select.bmp", 481, 660, 1, 10, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("eq", L"images/equip/eq.png");
+	IMAGEMANAGER->addFrameImage("select", L"images/title/select.png", 1, 10);
 
 	_select = new animation;
-	_select->init(IMAGEMANAGER->findImage("select")->getWidth(), IMAGEMANAGER->findImage("select")->getHeight(), IMAGEMANAGER->findImage("select")->getFrameWidth(), IMAGEMANAGER->findImage("select")->getFrameHeight());
+	_select->init(IMAGEMANAGER->findImage("select")->getWidth(), IMAGEMANAGER->findImage("select")->getHeight(), IMAGEMANAGER->findImage("select")->getFrameSize().x, IMAGEMANAGER->findImage("select")->getFrameSize().y);
 	_select->setPlayFrame(0, 10, false, false);
 	_select->setFPS(1);
 	_select->start();
@@ -107,15 +107,15 @@ void titleScene::update()
 
 void titleScene::render()
 {
-	IMAGEMANAGER->findImage("sky")->render(getMemDC(),0,0);
-	IMAGEMANAGER->findImage("planet")->render(getMemDC(), _mn.x, _mn.y);
-	IMAGEMANAGER->findImage("clouds1")->render(getMemDC(),_c1.x,_c1.y);
-	IMAGEMANAGER->findImage("clouds2")->render(getMemDC(),_c2.x,_c2.y);
-	IMAGEMANAGER->findImage("ground")->render(getMemDC(),_gr.x,_gr.y);
-	IMAGEMANAGER->findImage("logo")->render(getMemDC(), 400, _rl.y - 1000);
-	IMAGEMANAGER->findImage("railings"	)->render(getMemDC(),_rl.x,_rl.y);
+	IMAGEMANAGER->findImage("sky")->render(Vector2(0,0));
+	IMAGEMANAGER->findImage("planet")->render(Vector2(_mn.x, _mn.y));
+	IMAGEMANAGER->findImage("clouds1")->render(Vector2(_c1.x,_c1.y));
+	IMAGEMANAGER->findImage("clouds2")->render(Vector2(_c2.x,_c2.y));
+	IMAGEMANAGER->findImage("ground")->render(Vector2(_gr.x,_gr.y));
+	IMAGEMANAGER->findImage("logo")->render(Vector2(400, _rl.y - 1000));
+	IMAGEMANAGER->findImage("railings")->render(Vector2(_rl.x,_rl.y));
 
-	IMAGEMANAGER->findImage("leaTitle")->frameRender(getMemDC(), _pl.x, _pl.y, _index, 0);
+	IMAGEMANAGER->findImage("leaTitle")->frameRender(Vector2(_pl.x, _pl.y), _index, 0);
 }
 
 void titleScene::cbStart()
