@@ -72,7 +72,7 @@ void image::render(const Vector2& position)
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale * WINSIZERATEX, mScale * WINSIZERATEY, D2D1::Point2F(0, 0));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x* WINSIZERATEX, position.y* WINSIZERATEY);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.f, 0.f, mSize.x* WINSIZERATEX, mSize.y* WINSIZERATEY);
 
@@ -88,7 +88,7 @@ void image::render(const Vector2 & position, float scale)
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale* WINSIZERATEX, mScale* WINSIZERATEY, D2D1::Point2F(0, 0));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x* WINSIZERATEX, position.y* WINSIZERATEY);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.f, 0.f, mSize.x* WINSIZERATEX, mSize.y* WINSIZERATEY);
 
@@ -103,7 +103,7 @@ void image::topRender(const Vector2 & position)
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale* WINSIZERATEX, mScale* WINSIZERATEY, D2D1::Point2F(0, 0));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, 0.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x* WINSIZERATEX, position.y* WINSIZERATEY);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.f, 0.f, mSize.x* WINSIZERATEX, mSize.y* WINSIZERATEY);
 
@@ -122,7 +122,7 @@ void image::aniRender(const Vector2& position, animation* ani, float scale)
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(scale* WINSIZERATEX, scale* WINSIZERATEY, D2D1::Point2F(0, 0));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x - size.x / 2.f, position.y - size.y / 2.f);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation((position.x - size.x / 2.f)* WINSIZERATEX, (position.y - size.y / 2.f)* WINSIZERATEY);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.0f, 0.0f, mSize.x* WINSIZERATEX, mSize.y* WINSIZERATEY);
 	D2D1_RECT_F dxSrc = D2D1::RectF((float)ani->getFramePos().x, (float)ani->getFramePos().y,
@@ -146,7 +146,7 @@ void image::frameRender(const Vector2& position, const int frameX, const int fra
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale* WINSIZERATEX, mScale* WINSIZERATEY, D2D1::Point2F(0, 0));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x - size.x / 2.f, position.y - size.y / 2.f);
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation((position.x - size.x / 2.f)* WINSIZERATEX, (position.y - size.y / 2.f)* WINSIZERATEY);
 
 	//그릴 영역 세팅 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.0f, 0.0f, mSize.x* WINSIZERATEX, mSize.y* WINSIZERATEY);
@@ -182,7 +182,7 @@ void image::frameTopRender(const Vector2 & position, const int frameX, const int
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale* WINSIZERATEX, mScale* WINSIZERATEY, D2D1::Point2F(0, 0));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, 0.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x - size.x / 2.f, position.y - size.y / 2.f);
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation((position.x - size.x / 2.f)* WINSIZERATEX, (position.y - size.y / 2.f)* WINSIZERATEY);
 
 	//그릴 영역 세팅 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.0f, 0.0f, mSize.x* WINSIZERATEX, mSize.y* WINSIZERATEY);
@@ -206,7 +206,7 @@ void image::frameRender(const Vector2 & position, const int frameX, const int fr
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale* WINSIZERATEX, mScale* WINSIZERATEY, D2D1::Point2F(0, 0));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x - size.x / 2.f, position.y - size.y / 2.f);
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation((position.x - size.x / 2.f)* WINSIZERATEX, (position.y - size.y / 2.f)* WINSIZERATEY);
 
 	//그릴 영역 세팅 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.0f, 0.0f, mSize.x* WINSIZERATEX, mSize.y* WINSIZERATEY);
