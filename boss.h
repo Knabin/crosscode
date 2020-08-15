@@ -77,7 +77,7 @@ public:
 	void render();
 
 	
-	void bossState();
+
 	void bossDraw();
 
 
