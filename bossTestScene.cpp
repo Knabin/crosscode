@@ -58,20 +58,5 @@ void bossTestScene::update()
 
 void bossTestScene::render()
 {
-	if (_vTiles.size() <= 0) return;
-	for (int i = 0; i <= _maxY; ++i)
-	{
-		for (int j = 0; j <= _maxX; ++j)
-		{
-			if (CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
-				CAMERA->getRect().right <= _vTiles[i][j]->getRect().left ||
-				CAMERA->getRect().bottom <= _vTiles[i][j]->getRect().top ||
-				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;
-
-			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->frameRender(
-				CAMERA->getRelativeVector2(_vTiles[i][j]->getRect().getCenter()), 
-				_vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
-		}
-	}
-	//SCENEMANAGER->getTileBuffer()->render(getMemDC());
+	scene::render();
 }
