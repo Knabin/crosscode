@@ -37,7 +37,7 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 	_select->setFPS(1);
 	
 	_selectOn = false;
-
+	_index = _time = 0;
 	return S_OK;
 }
 
@@ -72,6 +72,16 @@ void button::update()
 		if (_imageName == "buttons")
 		_selectOn = false;
 		_direction = BUTTONDIRECTION::NONE;
+		_index = 0;
+	}
+
+	_time++;
+
+	if (_time % 1 == 0)
+	{
+		if(_index < 9)
+		_index++;
+		_time = 0;
 	}
 }
 
@@ -92,7 +102,7 @@ void button::render()
 
 	if (PtInRect(&_rc.getRect(), _ptMouse) && _imageName == "buttons")
 	{
-//		IMAGEMANAGER->findImage("select")->aniRender(Vector2(_rc.getCenter()), _select, 1.0f);
+		IMAGEMANAGER->findImage("select")->frameRender(Vector2(_rc.getCenter()), 0 , _index , 1.f);
 	}
 }
 

@@ -19,7 +19,8 @@ private:
 	POINT _ptMouseAbs;
 	bool _selectOn;
 	function<void(void)> _callbackFunction;
-
+	int _index;
+	int _time;
 public:
 	button();
 	~button();
