@@ -169,6 +169,7 @@
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="hedgehag.h" />
+    <ClInclude Include="icethrower.h" />
     <ClInclude Include="iEvent.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="hedgehag.cpp" />
+    <ClCompile Include="icethrower.cpp" />
     <ClCompile Include="iEvent.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />

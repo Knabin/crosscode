@@ -27,6 +27,28 @@ void scene::update()
 
 void scene::render()
 {
+	if (_vTiles.size() <= 0) return;
+	for (int i = 0; i <= _maxY; ++i)
+	{
+		for (int j = 0; j <= _maxX; ++j)
+		{
+			if (CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
+				CAMERA->getRect().right <= _vTiles[i][j]->getRect().left ||
+				CAMERA->getRect().bottom <= _vTiles[i][j]->getRect().top ||
+				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;
+
+			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
+			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->frameRender(
+				CAMERA->getRelativeVector2(_vTiles[i][j]->getRect().getCenter()),
+				_vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+
+			if (_vTiles[i][j]->getObjectX() < 0 || _vTiles[i][j]->getObjectImageNum() == 3) continue;
+			SCENEMANAGER->getObjectImage(_vTiles[i][j]->getObjectImageNum())->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
+			SCENEMANAGER->getObjectImage(_vTiles[i][j]->getObjectImageNum())->frameRender(
+				CAMERA->getRelativeVector2(_vTiles[i][j]->getRect().getCenter()),
+				_vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
+		}
+	}
 }
 
 void scene::getDataFromFile(string fileName)

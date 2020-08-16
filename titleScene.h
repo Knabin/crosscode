@@ -8,10 +8,6 @@ private:
 	int _index;
 	int _time;
 	
-	animation* _select;
-
-	image* img;
-
 	POINT _c1, _c2, _gr, _mn, _rl, _pl;	
 public:
 	virtual ~titleScene() override;

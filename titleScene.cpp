@@ -37,16 +37,6 @@ HRESULT titleScene::init()
 	_rl.y = 1200;
 	_pl.x = 1300 + 200;
 	_pl.y = 710 + 370;
-	
-
-	IMAGEMANAGER->addImage("eq", L"images/equip/eq.png");
-	IMAGEMANAGER->addFrameImage("select", L"images/title/select.png", 1, 10);
-
-	_select = new animation;
-	_select->init(IMAGEMANAGER->findImage("select")->getWidth(), IMAGEMANAGER->findImage("select")->getHeight(), IMAGEMANAGER->findImage("select")->getFrameSize().x, IMAGEMANAGER->findImage("select")->getFrameSize().y);
-	_select->setPlayFrame(0, 10, false, false);
-	_select->setFPS(1);
-	_select->start();
 
 	return S_OK;
 }
@@ -58,7 +48,6 @@ void titleScene::release()
 
 void titleScene::update()
 {
-	_select->frameUpdate(TIMEMANAGER->getElapsedTime() * 23);
 	_time++;
 
 	if (_time < 68 && _time % 2 == 0)

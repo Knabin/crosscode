@@ -249,7 +249,8 @@ void mapToolScene::render()
 	IMAGEMANAGER->findImage("map bg")->render(Vector2(0, 0));
 	_uiImage->render(Vector2(_editUiRc.left, _editUiRc.top), 1.0f);
 	//D2DRENDERER->DrawRotationFillRectangle(_sampleRc, D2D1::ColorF::Red, 0);
-	D2DRENDERER->DrawRotationFillRectangle(_mapViewRc, D2D1::ColorF::White, 0);
+	//D2DRENDERER->DrawRotationFillRectangle(_mapViewRc, D2D1::ColorF::White, 0);
+	IMAGEMANAGER->findImage("map bg2")->render(Vector2(_mapViewRc.left, _mapViewRc.top));
 	redrawMap();
 	switch (_editMode)
 	{
@@ -303,12 +304,14 @@ void mapToolScene::render()
 	if (PtInRect(&_mapViewRc.getRect(), _ptMouse))
 	{
 		char str[100];
-		sprintf_s(str, "[%d, %d, %d, %d, %d, %d]", _selectIndex.x, _selectIndex.y, _drawStart.x, _drawStart.y, _drawEnd.x, _drawEnd.y);
+		sprintf_s(str, "[%d, %d]", _selectIndex.x, _selectIndex.y);
 		string str2 = str;
 		wstring str3;
 		str3.assign(str2.begin(), str2.end());
-		D2DRENDERER->RenderText(_ptMouse.x - 15, _ptMouse.y - 15, str3, 20);
+		D2DRENDERER->RenderText(_ptMouse.x - 50, _ptMouse.y - 30, str3, 20);
 	}
+
+	D2DRENDERER->DrawLine(Vector2(_clippingPoint.x, 0.f), Vector2(_clippingPoint.x, (float)WINSIZEY), D2D1::ColorF::Red, 5.f);
 }
 
 void mapToolScene::checkMapIndex()
@@ -737,6 +740,7 @@ void mapToolScene::changeMapSize()
 				_vEnemies.erase(_vEnemies.begin() + i);
 			}
 		}
+		checkMapIndex();
 		redrawMap();
 		_controlMode = NOWMODE::NONE;
 	}
@@ -744,25 +748,22 @@ void mapToolScene::changeMapSize()
 
 void mapToolScene::moveMapView()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
-	{
-		redrawMap();
-	}
 	if (KEYMANAGER->isStayKeyDown('D') && _clippingPoint.x + 4 <= MAXTILEX * SIZE - _mapViewRc.GetWidth())
 	{
-		_clippingPoint.x += 4;
+		_clippingPoint.x += 48;
 	}
+
 	if (KEYMANAGER->isStayKeyDown('A') && _clippingPoint.x - 4 >= 0)
 	{
-		_clippingPoint.x -= 4;
+		_clippingPoint.x -= 48;
 	}
 	if (KEYMANAGER->isStayKeyDown('W') && _clippingPoint.y - 4 >= 0)
 	{
-		_clippingPoint.y -= 4;
+		_clippingPoint.y -= 48;
 	}
 	if (KEYMANAGER->isStayKeyDown('S') && _clippingPoint.y + 4 <= MAXTILEY * SIZE - _mapViewRc.GetHeight())
 	{
-		_clippingPoint.y += 4;
+		_clippingPoint.y += 48;
 	}
 
 }
@@ -923,8 +924,10 @@ void mapToolScene::renderChangeMap()
 			height = _vTiles[_selectIndex.y][_selectIndex.x]->getRect().bottom - _clippingPoint.y;
 		}
 
-		IMAGEMANAGER->findImage("tile change")->setAlpha(100);
-		IMAGEMANAGER->findImage("tile change")->render(Vector2(_mapViewRc.left, _mapViewRc.top));
+		D2DRENDERER->DrawRotationFillRectangle(
+			floatRect(_mapViewRc.left, _mapViewRc.top, (_selectIndex.x + 1) * SIZE + _mapViewRc.left - _clippingPoint.x, (_selectIndex.y + 1) * SIZE + _mapViewRc.top - _clippingPoint.y),
+			D2D1::ColorF::LightSkyBlue, 0
+		);
 	}
 }
 
@@ -1062,7 +1065,7 @@ void mapToolScene::renderPreviewTile()
 							{
 								_terrainImageBig[_page]->setAlpha(0.7f);
 								_terrainImageBig[_page]->frameRender(
-									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+									(Vector2(_vTiles[drawY + i][drawX + j]->getRect().getCenter())
 										+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 									_sampleStart.x, _sampleStart.y);
 							}
@@ -1070,7 +1073,7 @@ void mapToolScene::renderPreviewTile()
 							{
 								_objectImageBig[_page]->setAlpha(0.7f);
 								_objectImageBig[_page]->frameRender(
-									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+									(Vector2(_vTiles[drawY + i][drawX + j]->getRect().getCenter())
 									+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 									_sampleStart.x, _sampleStart.y);
 							}
@@ -1345,43 +1348,7 @@ void mapToolScene::loadMap()
 	}
 
 	CloseHandle(file);
-	/*
-	char str3[500];
-
-	s = "../object/";
-	s += name;
-
-	file = CreateFile(TEXT(s.c_str()), GENERIC_READ, NULL, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	//if (file == INVALID_HANDLE_VALUE)
-	//	return;
-
-	ReadFile(file, str3, strlen(str3), &read, NULL);
-
-	int maxNum2 = 0;
-
-	context = NULL;
-	tok = strtok_s(str3, "\n", &context);
-	sscanf_s(tok, "object number: %d", &maxNum2);
-	tok = strtok_s(NULL, "\n", &context);
-
-	_vObject.clear();
-
-	for (int i = 0; i < maxNum2; ++i)
-	{
-		if (tok != NULL)
-		{
-			int tx = -1, ty = -1, fx = -1, fy = -1, pn = 0, ot = 0;
-			sscanf_s(tok, "%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &pn, &ot);
-
-			tagObject obj = { tx, ty, fx, fy, pn, ot };
-			_vObject.push_back(obj);
-			tok = strtok_s(NULL, "\n", &context);
-		}
-	}
-
-	CloseHandle(file); */
+	_clippingPoint = Vector2(0, 0);
 
 	redrawMap();
 }
@@ -1448,20 +1415,28 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 
 void mapToolScene::redrawMap()
 {
-	//StretchBlt(getMapBufferDC(), 0, 0, _mapBuffer->getWidth(), _mapBuffer->getHeight(), IMAGEMANAGER->findImage("map bg2")->getMemDC(), 0, 0, 1200, 1200, SRCCOPY);
-
-	for (int i = 0; i <= _nowIndex.y; ++i)
+	//for (int i = 0; i <= _nowIndex.y; ++i)
+	for(int i = 0; i <= _viewLastIndex.y; ++i)
 	{
-		for (int j = 0; j <= _nowIndex.x; ++j)
+		for (int j = 0; j <= _viewLastIndex.x; ++j)
+		//for (int j = 0; j <= _nowIndex.x; ++j)
 		{
-			if (_vTiles[i][j]->getRect().right < _clippingPoint.x ||
-				_vTiles[i][j]->getRect().left > _clippingPoint.x + _mapViewRc.getSize().y) continue;
+			if (_vTiles[i][j]->getRect().getCenter().x < _clippingPoint.x ||
+				_vTiles[i][j]->getRect().getCenter().x > _clippingPoint.x + _mapViewRc.getSize().x ||
+				_vTiles[i][j]->getRect().getCenter().y < _clippingPoint.y ||
+				_vTiles[i][j]->getRect().getCenter().y > _clippingPoint.y + _mapViewRc.getSize().y) continue;
 
 			if (_vTiles[i][j]->getTerrainX() != -1)
 			{
 				if (_vTiles[i][j]->getTerrainType() > 0)
 					checkAutoTile(j, i);
-				_terrainImageBig[_vTiles[i][j]->getTerrainImageNum()]->frameRender(Vector2(_vTiles[i][j]->getRect().getCenter()) + Vector2(_mapViewRc.left, _mapViewRc.top), _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+				_terrainImageBig[_vTiles[i][j]->getTerrainImageNum()]->frameRender(
+					Vector2(_vTiles[i][j]->getRect().getCenter()) + Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint, _vTiles[i][j]->getTerrainX(), _vTiles[i][j]->getTerrainY());
+			}
+			else
+			{
+				IMAGEMANAGER->findImage("tile null")->render(
+					Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top) + Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint);
 			}
 
 
@@ -1471,73 +1446,35 @@ void mapToolScene::redrawMap()
 				if (_vTiles[i][j]->getObjectImageNum() != 3)
 				{
 					// 일반 오브젝트인 경우
-					_objectImageBig[_vTiles[i][j]->getObjectImageNum()]->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
-				}
-				else
-				{
-					// 클래스화 시킬 오브젝트인 경우
-					int width = 0;
-					int height = 0;
-					int frameX = _vTiles[i][j]->getObjectX();
-					int frameY = _vTiles[i][j]->getObjectY();
-
-					image* img = IMAGEMANAGER->findImage("vendor");
-
-					switch (frameX % 3)
-					{
-					case 0:
-						if (frameY == 0)
-						{
-							// 상인
-							img = IMAGEMANAGER->findImage("vendor");
-							width = SIZE * 2;
-							height = SIZE * 2;
-						}
-						else
-						{
-							// 나무
-							img = IMAGEMANAGER->findImage("tree");
-							width = SIZE * 2;
-							height = SIZE * 5;
-						}
-						break;
-					case 1:
-						if (frameY == 0)
-						{
-							// 문
-							img = IMAGEMANAGER->findImage("door prev");
-							height = SIZE;
-						}
-						else
-						{
-							// 풀
-							img = IMAGEMANAGER->findImage("grass");
-							width = SIZE;
-							height = SIZE;
-						}
-						frameX -= 3;
-						break;
-					}
-					img->frameRender(Vector2(
-						_vTiles[i][j]->getRect().left - width,
-						_vTiles[i][j]->getRect().top - height),
-						frameX, 0);
+					_objectImageBig[_vTiles[i][j]->getObjectImageNum()]->frameRender(
+						Vector2(_vTiles[i][j]->getRect().getCenter()) + Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint, _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
 				}
 			}		
 		}
 	}
 
+	// 에너미 렌더
 	for (int i = 0; i < _vEnemies.size(); ++i)
 	{
+		if (_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().getCenter().x < _clippingPoint.x ||
+			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().getCenter().x > _clippingPoint.x + _mapViewRc.getSize().x ||
+			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().getCenter().y < _clippingPoint.y ||
+			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().getCenter().y > _clippingPoint.y + _mapViewRc.getSize().y) continue;
+
 		_enemyImageBig->frameRender(Vector2(
-			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().left,
-			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().top),
+			_vTiles[_vEnemies[i].tileY][_vEnemies[i].tileX]->getRect().getCenter()) + Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint,
 			_vEnemies[i].frameX, _vEnemies[i].frameY);
 	}
 
+	// 오브젝트 렌더
 	_miObject = _mObject.begin();
 	for (; _miObject != _mObject.end(); ++_miObject)
 	{
+		if (_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().getCenter().x < _clippingPoint.x ||
+			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().getCenter().x > _clippingPoint.x + _mapViewRc.getSize().x ||
+			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().getCenter().y < _clippingPoint.y ||
+			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().getCenter().y > _clippingPoint.y + _mapViewRc.getSize().y) continue;
+
 		int width = 0;
 		int height = 0;
 		int frameX = _miObject->second.frameX;
@@ -1550,15 +1487,12 @@ void mapToolScene::redrawMap()
 			if (_miObject->second.frameY == 0)
 			{
 				img = IMAGEMANAGER->findImage("vendor");
-				width = SIZE * 2;
-				height = SIZE * 2;
 			}
 			else
 			{
 				// 나무
 				img = IMAGEMANAGER->findImage("tree");
-				width = SIZE * 2;
-				height = SIZE * 5;
+				height = SIZE * 3;
 			}
 			break;
 		case 1:
@@ -1566,21 +1500,17 @@ void mapToolScene::redrawMap()
 			{
 				// 문
 				img = IMAGEMANAGER->findImage("door prev");
-				height = SIZE;
 			}
 			else
 			{
 				// 풀
 				img = IMAGEMANAGER->findImage("grass");
-				width = SIZE;
-				height = SIZE;
 			}
 			frameX -= 3;
 			break;
 		}
-		img->frameRender(Vector2(
-			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().left - width,
-			_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().top - height),
+		img->frameRender(
+			Vector2(_vTiles[_miObject->second.tileY][_miObject->second.tileX]->getRect().getCenter()) + Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint - Vector2(width, height),
 			frameX, 0);
 	}
 
@@ -1589,7 +1519,13 @@ void mapToolScene::redrawMap()
 	{
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
-				_typeImage->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), 0, _vTiles[i][j]->getOrderIndex());
+			if (_vTiles[i][j]->getRect().getCenter().x < _clippingPoint.x ||
+				_vTiles[i][j]->getRect().getCenter().x > _clippingPoint.x + _mapViewRc.getSize().x ||
+				_vTiles[i][j]->getRect().getCenter().y < _clippingPoint.y ||
+				_vTiles[i][j]->getRect().getCenter().y > _clippingPoint.y + _mapViewRc.getSize().y) continue;
+				_typeImage->frameRender(
+					Vector2(_vTiles[i][j]->getRect().getCenter()) + Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint
+					, 0, _vTiles[i][j]->getOrderIndex());
 		}
 	}
 }
