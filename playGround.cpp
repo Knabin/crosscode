@@ -6,6 +6,7 @@
 #include "testScene2.h"
 #include "bossTestScene.h"
 #include "puzzleScene.h"
+#include "mountainScene.h"
 
 
 playGround::playGround()
@@ -42,6 +43,7 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
 	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
 	SCENEMANAGER->addScene("puzzle", new puzzleScene());
+	SCENEMANAGER->addScene("mountain", new mountainScene());
 	SCENEMANAGER->loadScene("title");
 
 	_enemyManager = new enemyManager;
@@ -82,6 +84,10 @@ void playGround::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{
 		SCENEMANAGER->loadScene("puzzle");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		SCENEMANAGER->loadScene("mountain");
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('1'))

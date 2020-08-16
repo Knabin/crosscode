@@ -178,6 +178,9 @@
     <ClCompile Include="bullets.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
+    <ClCompile Include="mountainScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -365,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="bullets.h">
       <Filter>enemyTest</Filter>
+    </ClInclude>
+    <ClInclude Include="mountainScene.h">
+      <Filter>playGround\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
