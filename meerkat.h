@@ -1,10 +1,13 @@
 #pragma once
 #include "enemy.h"
+#include "bullets.h"
+
 class meerkat : public enemy
 {
 private:
+	bullets* _bullet;
+
 	image* _meerkatMoveImage;//미어캣 무브 이미지
-	image* _meerkatBallImage;//미어캣 공격 볼 이미지
 
 	animation* _meerkatMoveMotion;//미어캣이 땅속으로 들어간 상태에서 무브하는 애니메이션
 	animation* _meerkatTunnelDownMotion_L;//미어캣이 땅속으로 들어가는 애니메이션
@@ -36,5 +39,7 @@ public:
 	void animationAngleControl();
 	void tileGet();//타일위치 가져오기
 	bool tileMove();//에너미의 타일무브
+
+	bullets* getBullets() { return _bullet; }
 };
 

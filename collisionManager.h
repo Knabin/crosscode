@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "player.h"
+#include "meerkat.h"
 
 class collisionManager : public gameNode
 {
@@ -20,5 +21,6 @@ public:
 
 	void enemyCollision();
 	void playerCollision();
+	void bulletCollision();
 };
 
