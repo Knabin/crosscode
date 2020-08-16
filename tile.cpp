@@ -30,5 +30,7 @@ void tile::setTiles(int terX, int terY, int objX, int objY, int pageNum, int obj
 
 void tile::render()
 {
-	SCENEMANAGER->getObjectImage(_objectImageNum)->frameRender(Vector2(_rc.left, _rc.top), _objectX, _objectY);
+	SCENEMANAGER->getObjectImage(_objectImageNum)->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
+	SCENEMANAGER->getObjectImage(_objectImageNum)->frameRender(
+		CAMERA->getRelativeVector2(_rc.getCenter()), _objectX, _objectY);
 }
