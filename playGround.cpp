@@ -32,8 +32,6 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-
-
 	_ui = new uiController();
 	_ui->init();
 

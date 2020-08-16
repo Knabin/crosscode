@@ -11,6 +11,7 @@ protected:
 	floatRect _rc;		// 오브젝트 RECT(float type)
 	floatRect _bulletRc;// 플레이어 마사일RECT
 	bool _isActive;		// 오브젝트 활성화 여부, 화면에 표시할 것인지
+	bool _isAlive;		// 오브젝트가 살아 있는지
 	pivot _pivot;		// 오브젝트 RECT 기준(pivot)
 
 public:
@@ -47,5 +48,8 @@ public:
 
 	void setIsActive(bool isActive) { _isActive = isActive; }
 	bool getIsActive() const { return _isActive; }
+
+	void setIsAlive(bool isAlive) { _isAlive = isAlive; }
+	bool getIsAlive() const { return _isAlive; }
 };
 
