@@ -355,6 +355,8 @@ void hedgehag::move()
 		}
 		else
 		{
+			_position.x += cosf(_angleSave + PI) * _noHitSpeed;
+			_position.y += -sinf(_angleSave + PI) * _noHitSpeed;
 			_idleMove = false;
 		}
 	}
