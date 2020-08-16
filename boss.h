@@ -1,5 +1,6 @@
 #pragma once
 #include "gameObject.h"
+#include "icethrower.h"
 
 enum bossState //보스 상태패턴 enum문
 {
@@ -55,6 +56,8 @@ class boss : public gameObject
 
 private:
 
+	icethrower* _icethrower;
+
 	image* image;
 	bossState _bossState;		//상태 패턴
 
@@ -74,7 +77,7 @@ private:
 	int _protectCurrentFrameX, _protectCurrentFrameY;
 	int _protectFrameCount;
 
-	int _attackDelay;
+	int _motionDelay;
 
 	int _mineAttackCount;
 
@@ -84,7 +87,7 @@ private:
 	//왼손공격1 프레임
 	int _bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY;
 
-	int _fireskill1Time;
+	int _icethrowerDelay;
 
 
 public:
@@ -101,6 +104,8 @@ public:
 	void bossState();		//보스 현재 상태패턴 
 	void bossMove();		//보스 실시간 움직임 
 	void bossDraw();		//보스 전신 렌더 이미지
+
+	void fireCollision();
 
 };
 

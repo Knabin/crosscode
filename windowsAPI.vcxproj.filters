@@ -169,6 +169,9 @@
     <ClCompile Include="mapObject.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="icethrower.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -348,6 +351,9 @@
     <ClInclude Include="mapObject.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
+    <ClInclude Include="icethrower.h">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -441,6 +447,9 @@
     </Filter>
     <Filter Include="2DGameFrameWork\D2DRenderer">
       <UniqueIdentifier>{29a4ec4d-c4fa-4bbb-912d-cfe6c0381347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="enemyTest\bossPattern">
+      <UniqueIdentifier>{5be1332e-68f7-4292-bd6b-b0f375f1c9ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

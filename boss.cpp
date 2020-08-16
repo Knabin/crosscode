@@ -12,9 +12,13 @@ boss::~boss()
 HRESULT boss::init()
 {
 
+	_icethrower = new icethrower;
+	_icethrower->init();
+
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
-	_fireskill1Time = 0;
+	_motionDelay = 0;
+	_icethrowerDelay = 0;
 	_mineAttackCount = 0;
 
 	//================================================================================================================================================================//
@@ -33,7 +37,7 @@ HRESULT boss::init()
 	IMAGEMANAGER->addImage("¿ÞÆÈ", L"images/boss/left_arm.png");
 	IMAGEMANAGER->addImage("¿Þ¼Õ", L"images/boss/left_hand.png");
 
-	IMAGEMANAGER->addFrameImage("¿Þ¼Õ°ø°Ý", L"images/boss/left_hand_attack.png", 20, 1);
+	IMAGEMANAGER->addFrameImage("¿Þ¼Õ°ø°Ý", L"images/boss/left_hand_attack.png", 20, 2);
 
 	IMAGEMANAGER->addImage("¿À¸¥ÆÈ", L"images/boss/right_arm.png");
 	IMAGEMANAGER->addImage("¿À¸¥¼Õ", L"images/boss/right_hand.png");
@@ -43,11 +47,11 @@ HRESULT boss::init()
 	//º¸½º ¸öÅë ¼±¾ð
 
 	_Center._x = (WINSIZEX / 2 - 85);
-	_Center._y = (WINSIZEY / 2 + 250);
+	_Center._y = (WINSIZEY / 2 - 100);
 	_Center._angle = 0;
 
 	_Center._center.x = (WINSIZEX / 2 - 85);
-	_Center._center.y = (WINSIZEY / 2 + 250);
+	_Center._center.y = (WINSIZEY / 2 - 100);
 	_Center._centerMeter = 100;
 
 	_Center._speed = 2.0f;
@@ -151,21 +155,23 @@ void boss::release()
 
 void boss::update()
 {
+	_icethrower->update();
 
 	_frameCount++;
 
 	_protectFrameCount++;
 
-	_fireskill1Time++;
-
 	bossMove();
 
 	bossState();
+
+	//fireCollision();
 
 }
 
 void boss::render()
 {
+	_icethrower->render();
 
 	bossDraw();
 
@@ -253,9 +259,9 @@ void boss::bossState()
 
 		if (_LeftHand._rectBody.top < _Center._y + 100)
 		{
-			_attackDelay++;
+			_motionDelay++;
 
-			if (_attackDelay < 20)
+			if (_motionDelay < 20)
 			{
 				_RightArm._angle += 0.012f;
 				_RightHand._angle += 0.012f;
@@ -270,9 +276,9 @@ void boss::bossState()
 				_Center._angle -= 0.2f;
 			}
 
-			if (_attackDelay >= 20)
+			if (_motionDelay >= 20)
 			{
-				_attackDelay = 0;
+				_motionDelay = 0;
 				_bossState = ICETHROWER_READY2;
 			}
 		}
@@ -309,24 +315,29 @@ void boss::bossState()
 
 	case ICETHROWER:
 	{
-		/*
-		if (_fireskill1Time % 3 == 0)
+		_icethrowerDelay++;
+
+		if (_icethrowerDelay % 5 == 0)
 		{
-			_BossAttack->attackFire();
+			_icethrower->fire();
 
 		}
-		*/	
+		
 
-		_bossLeftHandAttackFrameY = 0;
-
-		if (_frameCount % 5 == 0)
+		if (_frameCount % 3 == 0)
 		{
 			if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý")->getMaxFrameX())
 			{
 				_currentFrameX = 0;
+				_currentFrameY++;
+			}
+			if (_currentFrameY >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý")->getMaxFrameY())
+			{
+				_currentFrameY = 0;
 				_bossState = ICETHROWER_END;
 			}
 			_bossLeftHandAttackFrameX = _currentFrameX;
+			_bossLeftHandAttackFrameY = _currentFrameY;
 			_currentFrameX++;
 			_frameCount = 0;
 		}		
@@ -335,6 +346,7 @@ void boss::bossState()
 
 	case ICETHROWER_END:
 	{
+		_icethrowerDelay = 0;
 
 		_LeftArm._center.x -= 1.5f;
 		_LeftArm._center.y -= 2.0f;
@@ -353,8 +365,9 @@ void boss::bossState()
 
 		_Center._angle += 0.15f;
 
-		if (_RightHand._rectBody.top >= _LeftHand._rectBody.top)
+		if (_RightHand._rectBody.top >= _LeftHand._rectBody.top - 22)
 		{
+
 			_bossState = STOP;
 		}
 		
@@ -370,6 +383,7 @@ void boss::bossState()
 		_LeftArm._angle += 0.005f * 6;
 		_RightArm._angle -= 0.005f * 6;
 		_LeftHand._angle += 0.015f * 6;
+
 		_RightHand._angle -= 0.015f * 6;
 
 		if (_LeftHand._rectBody.right > WINSIZEX / 2 - 450)
@@ -474,7 +488,10 @@ void boss::bossMove()
 
 	if (_protectFrameCount % 5 == 0)
 	{
-		if (_protectCurrentFrameX >= IMAGEMANAGER->findImage("º¸½º¹ÙÅÒ¹æ¾î¸·1")->getMaxFrameX()) _protectCurrentFrameX = 0;
+		if (_protectCurrentFrameX >= IMAGEMANAGER->findImage("º¸½º¹ÙÅÒ¹æ¾î¸·1")->getMaxFrameX())
+		{
+			_protectCurrentFrameX = 0;
+		}
 		_bossShieldOneFrameX = _protectCurrentFrameX;
 		_protectCurrentFrameX++;
 		_protectFrameCount = 0;
@@ -597,6 +614,24 @@ void boss::bossDraw()
 		(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y))),
 		D2D1::ColorF::Black, 1, 2.0f);
 
+
+
+
+}
+
+void boss::fireCollision()
+{
+
+	for (int i = 0; i < _icethrower->getIcethrowerVector().size(); i++)
+	{
+
+		if (WINSIZEY + 600 < _icethrower->getIcethrowerVector()[i]._rc.top)
+		{
+			_icethrower->removeFire(i);
+			break;
+		}
+
+	}
 
 
 
