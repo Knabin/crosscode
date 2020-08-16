@@ -34,6 +34,7 @@ player::player()
 
 	_combo = 0;
 	_iscombo = false;
+	_fullCount = 0;
 
 	_state = new playerStateController(idle);
 	_position.y = 700;
@@ -49,7 +50,7 @@ HRESULT player::init()
 	IMAGEMANAGER->addFrameImage("player guard", L"images/player/player_guard.png", 3, 8);
 	IMAGEMANAGER->addFrameImage("player jump", L"images/player/player_jump.png", 2, 8);
 	IMAGEMANAGER->addFrameImage("player dodge", L"images/player/player_dodge.png", 9, 8);
-	IMAGEMANAGER->addFrameImage("player longAttack", L"images/player/player_longAttack.png", 17, 8);
+	IMAGEMANAGER->addFrameImage("player longAttack", L"images/player/player_longAttack1.png", 17, 8);
 	IMAGEMANAGER->addFrameImage("player longAttackMove", L"images/player/player_longAttackMove.png", 7, 8);
 	IMAGEMANAGER->addFrameImage("p_meleeattack_left", L"images/player/meleeattack_left1.png", 8, 7);
 	IMAGEMANAGER->addFrameImage("p_meleeattack_right", L"images/player/meleeattack_right1.png", 8, 7);
@@ -84,22 +85,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::LEFT;
 		}
-		// ==================근접 공격 처리==================
+		// ================== 공격 처리==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================회피 처리==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&_state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -120,22 +116,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::RIGHT;
 		}
-		// ==================근접 공격 처리==================
+		// ================== 공격 처리==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================회피 처리==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -156,22 +147,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::TOP;
 		}
-		// ==================근접 공격 처리==================
+		// ================== 공격 처리==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================회피 처리==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -192,22 +178,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::BOTTOM;
 		}
-		// ==================근접 공격 처리==================
+		// ================== 공격 처리==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================회피 처리==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -231,28 +212,40 @@ void player::update()
 	}
 	// =============================================================================
 
-	if (KEYMANAGER->isOnceKeyDown('V'))		// 근접공격키
-	{
-		playerMeleeattack();
-	}
 
 	if (_state->getState() == _vState[IDLE] &&
 		(KEYMANAGER->isStayKeyDown('C') || KEYMANAGER->isStayKeyDown(VK_RBUTTON)))
 	{
 		_state->setState(_vState[PLAYERSTATE::GUARD]);
 	}
-
-
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
+	if (KEYMANAGER->isOnceKeyDown('V')) //근접공격키
 	{
-		_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
-		_state->getState()->setLongAttack();
-		playerFire();
+		playerMeleeattack();
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))	// 가까우면 근접 , 멀면 원거리 공격
+	{
+		_fullCount = 0;
+
+		if (getDistance(_position.x, _position.y, _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150)
+		{
+			playerMeleeattack();
+		}
+		else if (getDistance(_position.x, _position.y, _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top) >= 100 && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
+		{
+			_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
+			_state->getState()->setLongAttack();
+			playerFire();
+		}
 	}
 	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACK])
-
+	
 	{
-		_state->setState(_vState[PLAYERSTATE::LONGATTACKMOVE]);
+		_fullCount++;
+		if (_fullCount > 10)
+		{
+			_state->setState(_vState[PLAYERSTATE::LONGATTACKMOVE]);
+		}
 	}
 
 
@@ -271,7 +264,9 @@ void player::update()
 	// ==================== 가드상태 또는 원거리 공격시 마우스 방향으로 플레이어의 방향 바뀜 ==================== //
 	if (_state->getState() == _vState[PLAYERSTATE::GUARD] || _state->getState() == _vState[PLAYERSTATE::LONGATTACK])
 	{
-		float angle = getAngle(_position.x, _position.y, _ptMouse.x, _ptMouse.y);
+		float angle = getAngle(_position.x, _position.y,
+			_ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
+			_ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
 
 		for (int i = 0; i < 8; i++)
 		{
@@ -631,7 +626,7 @@ void player::playermeleeattackMove()	// 근접공격+방향키 움직이면서 공격할때 타일
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
-	float moveSpeed = 2.0f;
+	float moveSpeed = 1.0f;
 
 	switch (_direction)
 	{
@@ -675,61 +670,61 @@ void player::playermeleeattackMove()	// 근접공격+방향키 움직이면서 공격할때 타일
 		switch (_direction)
 		{
 		case PLAYERDIRECTION::TOP:
-			if (KEYMANAGER->isStayKeyDown(VK_UP))
+			if (KEYMANAGER->isStayKeyDown('W'))
 			{
 				move(0, -moveSpeed);
 			}
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
 
-			if (KEYMANAGER->isStayKeyDown(VK_UP))
+			if (KEYMANAGER->isStayKeyDown('W'))
 			{
-				if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+				if (KEYMANAGER->isStayKeyDown('A'))
 				{
 					moveAngle(PI*0.75, moveSpeed);
 				}
 			}
 			break;
 		case PLAYERDIRECTION::LEFT:
-			if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+			if (KEYMANAGER->isStayKeyDown('A'))
 			{
 				move(-moveSpeed, 0);
 			}
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+			if (KEYMANAGER->isStayKeyDown('S'))
 			{
-				if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+				if (KEYMANAGER->isStayKeyDown('A'))
 				{
 					moveAngle(PI*1.25, moveSpeed);
 				}
 			}
 			break;
 		case PLAYERDIRECTION::BOTTOM:
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+			if (KEYMANAGER->isStayKeyDown('S'))
 			{
 				move(0, moveSpeed);
 			}
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+			if (KEYMANAGER->isStayKeyDown('S'))
 			{
-				if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+				if (KEYMANAGER->isStayKeyDown('D'))
 				{
 					moveAngle(PI*1.75, moveSpeed);
 				}
 			}
 			break;
 		case PLAYERDIRECTION::RIGHT:
-			if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+			if (KEYMANAGER->isStayKeyDown('D'))
 			{
 				move(moveSpeed, 0);
 			}
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
-			if (KEYMANAGER->isStayKeyDown(VK_UP))
+			if (KEYMANAGER->isStayKeyDown('W'))
 			{
-				if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+				if (KEYMANAGER->isStayKeyDown('D'))
 				{
 					moveAngle(PI*0.25, moveSpeed);
 				}
@@ -745,7 +740,7 @@ void player::playerfinalattackMove() // 근접공격 마지막타 움직이는거 타일체크
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
-	float moveSpeed = 5.0f;
+	float moveSpeed = 4.0f;
 
 	switch (_direction)
 	{

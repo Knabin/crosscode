@@ -1,14 +1,12 @@
 #include "stdafx.h"
 #include "meerkat.h"
 #include "scene.h"
+#include "bullets.h"
 
 HRESULT meerkat::init()
 {
 	_enemyImage = IMAGEMANAGER->addFrameImage("enemyMeerkat", L"images/enemy/meerkat.png", 10, 12);//기본, 히트, 공격모션 이미지
 	_meerkatMoveImage = IMAGEMANAGER->addFrameImage("enemyMeerkatMove", L"images/enemy/meerkatMove.png", 9, 1);//무브 이미지
-	_meerkatBallImage = IMAGEMANAGER->addFrameImage("enemyMeerkatBall", L"images/enemy/meerkatBall.png", 189, 60);//공격 볼 이미지
-	_meerkatBallFrameX = 0;
-	_meerkatBallFrameY = 0;
 
 	_maxHP = 100;
 	_currentHP = _maxHP;
@@ -145,24 +143,24 @@ HRESULT meerkat::init()
 	_meerkatTunnelDownMotion_L = new animation;
 	_meerkatTunnelDownMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelDownMotion_L->setPlayFrame(71, 79, false, false);
-	_meerkatTunnelDownMotion_L->setFPS(1);
+	_meerkatTunnelDownMotion_L->setFPS(2);
 
 	_meerkatTunnelDownMotion_R = new animation;
 	_meerkatTunnelDownMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelDownMotion_R->setPlayFrame(68, 60, false, false);
-	_meerkatTunnelDownMotion_R->setFPS(1);
+	_meerkatTunnelDownMotion_R->setFPS(2);
 	//미어캣이 땅속으로 들어가는 애니메이션
 
 	//미어캣이 땅속에서 나오는 애니메이션
 	_meerkatTunnelUpMotion_L = new animation;
 	_meerkatTunnelUpMotion_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelUpMotion_L->setPlayFrame(79, 71, false, false);
-	_meerkatTunnelUpMotion_L->setFPS(1);
+	_meerkatTunnelUpMotion_L->setFPS(2);
 
 	_meerkatTunnelUpMotion_R = new animation;
 	_meerkatTunnelUpMotion_R->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
 	_meerkatTunnelUpMotion_R->setPlayFrame(60, 68, false, false);
-	_meerkatTunnelUpMotion_R->setFPS(1);
+	_meerkatTunnelUpMotion_R->setFPS(2);
 	//미어캣이 땅속에서 나오는 애니메이션
 
 	//미어캣 무브 애니메이션
@@ -179,6 +177,9 @@ HRESULT meerkat::init()
 
 	_tile.update(Vector2(0, 0), Vector2(48, 48), pivot::LEFTTOP);
 	_nowOrder = 1;
+
+	_bullet = new bullets;
+	_bullet->init();
 
 	return S_OK;
 }
@@ -198,21 +199,22 @@ void meerkat::update()
 
 	if (_isAttack)//공격상태가 트루면
 	{
-		//총알파이어 함수
+		_bullet->fire(_position.x, _position.y, _angle, _meerkatSpeed);
+		_isAttack = false;
 	}
-	else
+	ballTileGet();//볼타일의 위치 업데이트
+	_bullet->update();//미어캣 총알 업데이트
+	for (int i = 0; i < _bullet->getvEnemyBullet().size(); i++)
 	{
-		_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);
+		if (!ballTileMove())//미어캣의 볼이 장애물에 충돌시
+		{
+			_bullet->remove(i);//미어캣 볼 벡터 제거
+		}
 	}
 }
 
 void meerkat::render()
 {
-	D2DRENDERER->DrawRectangle(_attackRC);//에너미 공격렉트
-	if (_isAttack)//공격상태가 트루면
-	{
-		//_meerkatBallImage->frameRender(getMemDC(), _x, _y, _meerkatBallImage->getFrameX(), _meerkatBallImage->getFrameY());
-	}
 	if (_enemyDirection != ENEMY_TUNNEL_MOVE)
 	{
 		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
@@ -223,11 +225,12 @@ void meerkat::render()
 		_meerkatMoveImage->setSize(Vector2(_meerkatMoveImage->getFrameSize()) * CAMERA->getZoomAmount());
 		_meerkatMoveImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter()), _enemyMotion, 1.0f);
 	}
-	//_rc.render(getMemDC());//에너미 렉트
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//에너미 렉트
 	for (int i = 0; i < 8; i++)
 	{
-		//RectangleMake(getMemDC(), _t[i]->getRect().getCenter().x, _t[i]->getRect().getCenter().y, SIZE, SIZE);
+		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
 	}
+	_bullet->render();
 }
 
 void meerkat::move()
@@ -257,12 +260,19 @@ void meerkat::move()
 						_isMove = true;
 					}
 				}
-
+				/*
 				if (!tileMove() && !_reflect && !_isBigMove)//미어캣 주변에 장애물이 있고 장애물의 반대방향으로 이동되게 하기위한 조건
 				{
 					_angleSave += PI;//장애물의 반대방향으로 이동
 					_reflect = true;
 				}
+				*/
+			}
+
+			if (!tileMove() && !_reflect && !_isBigMove)//미어캣 주변에 장애물이 있고 장애물의 반대방향으로 이동되게 하기위한 조건
+			{
+				_angleSave += PI;//장애물의 반대방향으로 이동
+				_reflect = true;
 			}
 
 			if (tileMove() && !_isBigMove)//장애물이 안부딪혔으면
@@ -310,14 +320,14 @@ void meerkat::move()
 						}
 					}
 
-					_count++;
+					_attackDelay++;
 
-					if (_enemyDirection == ENEMY_DOWN_LEFT_IDLE && _count >= 50 ||
-						_enemyDirection == ENEMY_DOWN_RIGHT_IDLE && _count >= 50 ||
-						_enemyDirection == ENEMY_LEFT_IDLE && _count >= 50 ||
-						_enemyDirection == ENEMY_RIGHT_IDLE && _count >= 50 ||
-						_enemyDirection == ENEMY_UP_LEFT_IDLE && _count >= 50 ||
-						_enemyDirection == ENEMY_UP_RIGHT_IDLE && _count >= 50)
+					if (_enemyDirection == ENEMY_DOWN_LEFT_IDLE && _attackDelay >= _maxAttackDelay ||
+						_enemyDirection == ENEMY_DOWN_RIGHT_IDLE && _attackDelay >= _maxAttackDelay ||
+						_enemyDirection == ENEMY_LEFT_IDLE && _attackDelay >= _maxAttackDelay ||
+						_enemyDirection == ENEMY_RIGHT_IDLE && _attackDelay >= _maxAttackDelay ||
+						_enemyDirection == ENEMY_UP_LEFT_IDLE && _attackDelay >= _maxAttackDelay ||
+						_enemyDirection == ENEMY_UP_RIGHT_IDLE && _attackDelay >= _maxAttackDelay)
 					{
 						if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
 						{
@@ -349,7 +359,7 @@ void meerkat::move()
 							_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
 						}
 
-						_count = 0;
+						_attackDelay = 0;
 					}
 					_isMove = false;
 				}
@@ -382,7 +392,7 @@ void meerkat::move()
 
 			if (_reflectCount >= 2 && !_isBigMove)//벽에 부딪힌 횟수가 2번 이상이고 빅무브는 펄스인경우
 			{
-				_angleSave += PI / 2;//벽에 부딪혔으면 각도값을 90도 틀어주기 위한 연산
+				_angleSave += PI / RND->getFromIntTo(1, 4);//벽에 부딪혔으면 각도값을 90도 틀어주기 위한 연산
 				_reflectCount = 0;
 			}
 
@@ -606,7 +616,6 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_LEFT_IDLE;
 		}
@@ -623,7 +632,6 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_RIGHT_IDLE;
 		}
@@ -640,7 +648,6 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_UP_LEFT_IDLE;
 		}
@@ -657,7 +664,6 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_UP_RIGHT_IDLE;
 		}
@@ -674,7 +680,6 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_DOWN_LEFT_IDLE;
 		}
@@ -691,7 +696,6 @@ void meerkat::animationControl()
 		if (!_enemyMotion->isPlay() && _oneAnimation)
 		{
 			_oneAnimation = false;
-			_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);
 			_isAttack = true;
 			_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 		}
@@ -855,6 +859,100 @@ void meerkat::animationAngleControl()
 				}
 			}
 		}
+	}
+}
+
+void meerkat::ballTileGet()
+{
+	for (int i = 0; i < _bullet->getvEnemyBullet().size(); i++)
+	{
+		_ballTile.set(Vector2(((int)_bullet->getvEnemyBullet()[i].position.x / SIZE) * SIZE, ((int)(_bullet->getvEnemyBullet()[i].rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
+
+		int k = 1;
+		ballCurrentTileIndex = Vector2(_ballTile.left / SIZE, _ballTile.top / SIZE);//현재에너미 위치에 타일
+
+		ballNextTileIndex[0] = Vector2(ballCurrentTileIndex.x - k, ballCurrentTileIndex.y);//왼쪽
+		ballNextTileIndex[1] = Vector2(ballCurrentTileIndex.x - k, ballCurrentTileIndex.y + k);//왼쪽아래
+		ballNextTileIndex[2] = Vector2(ballCurrentTileIndex.x, ballCurrentTileIndex.y + k);//아래
+		ballNextTileIndex[3] = Vector2(ballCurrentTileIndex.x + k, ballCurrentTileIndex.y + k);//오른쪽 아래
+		ballNextTileIndex[4] = Vector2(ballCurrentTileIndex.x + k, ballCurrentTileIndex.y);//오른쪽
+		ballNextTileIndex[5] = Vector2(ballCurrentTileIndex.x + k, ballCurrentTileIndex.y - k);//오른쪽위
+		ballNextTileIndex[6] = Vector2(ballCurrentTileIndex.x, ballCurrentTileIndex.y - k);//위
+		ballNextTileIndex[7] = Vector2(ballCurrentTileIndex.x - k, ballCurrentTileIndex.y - k);//왼쪽위
+
+		int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
+		int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
+
+		//다음 타일
+		if (ballNextTileIndex[0].x > maxTileX) ballNextTileIndex[0].x = maxTileX;
+		else if (ballNextTileIndex[0].x < 0) ballNextTileIndex[0].x = 0;
+		if (ballNextTileIndex[0].y > maxTileY) ballNextTileIndex[0].y = maxTileY;
+		else if (ballNextTileIndex[0].y < 0) ballNextTileIndex[0].y = 0;
+		_ballT[0] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[0].y][ballNextTileIndex[0].x];
+
+		//다음 타일
+		if (ballNextTileIndex[1].x > maxTileX) ballNextTileIndex[1].x = maxTileX;
+		else if (ballNextTileIndex[1].x < 0) ballNextTileIndex[1].x = 0;
+		if (ballNextTileIndex[1].y > maxTileY) ballNextTileIndex[1].y = maxTileY;
+		else if (ballNextTileIndex[1].y < 0) ballNextTileIndex[1].y = 0;
+		_ballT[1] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[1].y][ballNextTileIndex[1].x];
+
+		//다음 타일
+		if (ballNextTileIndex[2].x > maxTileX) ballNextTileIndex[2].x = maxTileX;
+		else if (ballNextTileIndex[2].x < 0) ballNextTileIndex[2].x = 0;
+		if (ballNextTileIndex[2].y > maxTileY) ballNextTileIndex[2].y = maxTileY;
+		else if (ballNextTileIndex[2].y < 0) ballNextTileIndex[2].y = 0;
+		_ballT[2] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[2].y][ballNextTileIndex[2].x];
+
+		//다음 타일
+		if (ballNextTileIndex[3].x > maxTileX) ballNextTileIndex[3].x = maxTileX;
+		else if (ballNextTileIndex[3].x < 0) ballNextTileIndex[3].x = 0;
+		if (ballNextTileIndex[3].y > maxTileY) ballNextTileIndex[3].y = maxTileY;
+		else if (ballNextTileIndex[3].y < 0) ballNextTileIndex[3].y = 0;
+		_ballT[3] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[3].y][ballNextTileIndex[3].x];
+
+		//다음 타일
+		if (ballNextTileIndex[4].x > maxTileX) ballNextTileIndex[4].x = maxTileX;
+		else if (ballNextTileIndex[4].x < 0) ballNextTileIndex[4].x = 0;
+		if (ballNextTileIndex[4].y > maxTileY) ballNextTileIndex[4].y = maxTileY;
+		else if (ballNextTileIndex[4].y < 0) ballNextTileIndex[4].y = 0;
+		_ballT[4] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[4].y][ballNextTileIndex[4].x];
+
+		//다음 타일
+		if (ballNextTileIndex[5].x > maxTileX) ballNextTileIndex[5].x = maxTileX;
+		else if (ballNextTileIndex[5].x < 0) ballNextTileIndex[5].x = 0;
+		if (ballNextTileIndex[5].y > maxTileY) ballNextTileIndex[5].y = maxTileY;
+		else if (ballNextTileIndex[5].y < 0) ballNextTileIndex[5].y = 0;
+		_ballT[5] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[5].y][ballNextTileIndex[5].x];
+
+		//다음 타일
+		if (ballNextTileIndex[6].x > maxTileX) ballNextTileIndex[6].x = maxTileX;
+		else if (ballNextTileIndex[6].x < 0) ballNextTileIndex[6].x = 0;
+		if (ballNextTileIndex[6].y > maxTileY) ballNextTileIndex[6].y = maxTileY;
+		else if (ballNextTileIndex[6].y < 0) ballNextTileIndex[6].y = 0;
+		_ballT[6] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[6].y][ballNextTileIndex[6].x];
+
+		//다음 타일
+		if (ballNextTileIndex[7].x > maxTileX) ballNextTileIndex[7].x = maxTileX;
+		else if (ballNextTileIndex[7].x < 0) ballNextTileIndex[7].x = 0;
+		if (ballNextTileIndex[7].y > maxTileY) ballNextTileIndex[7].y = maxTileY;
+		else if (ballNextTileIndex[7].y < 0) ballNextTileIndex[7].y = 0;
+		_ballT[7] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[7].y][ballNextTileIndex[7].x];
+	}
+}
+
+bool meerkat::ballTileMove()
+{
+	//층이 같다면
+	if (_ballT[0]->getOrderIndex() == _nowOrder && _ballT[1]->getOrderIndex() == _nowOrder && _ballT[2]->getOrderIndex() == _nowOrder &&
+		_ballT[3]->getOrderIndex() == _nowOrder && _ballT[4]->getOrderIndex() == _nowOrder && _ballT[5]->getOrderIndex() == _nowOrder &&
+		_ballT[6]->getOrderIndex() == _nowOrder && _ballT[7]->getOrderIndex() == _nowOrder)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

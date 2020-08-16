@@ -972,13 +972,10 @@ void mapToolScene::renderPreviewTile()
 					if (_sampleStart.x <= 2)
 					{
 						img = IMAGEMANAGER->findImage("vendor");
-						width = SIZE * 2;
-						height = SIZE * 2;
 					}
 					else
 					{
 						img = IMAGEMANAGER->findImage("door prev");
-						height = SIZE;
 					}
 				}
 				else
@@ -986,14 +983,12 @@ void mapToolScene::renderPreviewTile()
 					if (_sampleStart.x <= 2)
 					{
 						img = IMAGEMANAGER->findImage("tree");
-						width = SIZE * 2;
-						height = SIZE * 5;
+						height = SIZE * 2.5f;
 					}
 					else
 					{
 						img = IMAGEMANAGER->findImage("grass");
-						width = SIZE;
-						height = SIZE;
+						height = SIZE * 0.5f;
 					}
 				}
 
@@ -1005,7 +1000,7 @@ void mapToolScene::renderPreviewTile()
 						{
 							img->setAlpha(0.7f);
 							img->frameRender(Vector2(_vTiles[drawY + i][drawX + j]->getRect().getCenter()) 
-								+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint,
+								+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint - Vector2(width,height),
 								_sampleStart.x % 3, 0);
 						}
 						if (drawX + j + 1 > _viewLastIndex.x) break;
@@ -1247,9 +1242,9 @@ void mapToolScene::loadMap()
 
 	if (GetOpenFileName(&ofn) == FALSE) return;
 
-	for (int i = 0; i <= _nowIndex.y; ++i)
+	for (int i = 0; i < _vTiles.size(); ++i)
 	{
-		for (int j = 0; j <= _nowIndex.x; ++j)
+		for (int j = 0; j < _vTiles[i].size(); ++j)
 		{
 			_vTiles[i][j]->release();
 			SAFE_DELETE(_vTiles[i][j]);
@@ -1492,7 +1487,7 @@ void mapToolScene::redrawMap()
 			{
 				// ³ª¹«
 				img = IMAGEMANAGER->findImage("tree");
-				height = SIZE * 3;
+				height = SIZE * 2.5f;
 			}
 			break;
 		case 1:
@@ -1505,6 +1500,7 @@ void mapToolScene::redrawMap()
 			{
 				// Ç®
 				img = IMAGEMANAGER->findImage("grass");
+				height = SIZE * 0.5f;
 			}
 			frameX -= 3;
 			break;

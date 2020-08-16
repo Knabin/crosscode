@@ -43,8 +43,20 @@ void objectManager::update()
 			if (objectList[i]->getIsActive())
 			{
 				objectList[i]->update();
-				if(iter->first != objectType::UI && iter->first != objectType::TILEOBJECT)
-					_vZOrderRender.push_back(objectList[i]);
+				if (iter->first != objectType::UI && iter->first != objectType::TILEOBJECT)
+				{
+					if (!objectList[i]->getIsAlive())
+					{
+						objectList[i]->release();
+						SAFE_DELETE(objectList[i]);
+						objectList.erase(objectList.begin() + i);
+						i--;
+					}
+					else
+					{
+						_vZOrderRender.push_back(objectList[i]);
+					}
+				}
 			}
 		}
 	}

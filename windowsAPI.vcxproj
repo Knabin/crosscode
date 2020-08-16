@@ -151,6 +151,7 @@
     <ClInclude Include="aStar.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossTestScene.h" />
+    <ClInclude Include="bullets.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
@@ -179,7 +180,7 @@
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="meerkat.h" />
-    <ClInclude Include="mine.h" />
+    <ClInclude Include="mountainScene.h" />
     <ClInclude Include="nomalUI.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="playerStateController.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="progressBar.h" />
+    <ClInclude Include="puzzleScene.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="scene.h" />
@@ -214,6 +216,7 @@
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossTestScene.cpp" />
+    <ClCompile Include="bullets.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
@@ -242,7 +245,7 @@
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="meerkat.cpp" />
-    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="mountainScene.cpp" />
     <ClCompile Include="nomalUI.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
@@ -250,6 +253,7 @@
     <ClCompile Include="playerStateController.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="progressBar.cpp" />
+    <ClCompile Include="puzzleScene.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />

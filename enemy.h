@@ -89,10 +89,16 @@ protected:
 	Vector2 nextTileIndex[8];//현재 에너미 위치에서 근처에 장애물 위치를 파악할 타일
 	Vector2 currentTileIndex;
 
+	Vector2 ballNextTileIndex[8];//현재 미어캣 위치에서 근처에 장애물 위치를 파악할 타일
+	Vector2 ballCurrentTileIndex;
+
 	floatRect _attackRC;//에너미 공격렉트
 
 	floatRect _tile;//에너미가 타일을 검출하기 위해 필요한 렉트
+	floatRect _ballTile;//미어캣의 볼 렉트의 타일검사용 렉트
+
 	tile* _t[8];//검출할 타일
+	tile* _ballT[8];//미어캣의 볼타일
 
 	float _speed;//에너미 스피드
 	float _noHitSpeed;//데미지를 받기전의 움직일 이동속도

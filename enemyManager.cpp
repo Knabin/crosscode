@@ -78,8 +78,9 @@ void enemyManager::enemyDead()
 			_count++;
 			if (_count % 5 == 0)
 			{
-				//e->setEnemyIsActive(false);//에너미 삭제
-				OBJECTMANAGER->removeObject(objectType::ENEMY, e);
+				e->setIsAlive(false);//에너미 삭제
+				//OBJECTMANAGER->removeObject(objectType::ENEMY, e);
+				// 이거 켜면 터짐??? 잠만
 				//_vEnemy.erase(_vEnemy.begin() + i);
 
 				_count = 0;
