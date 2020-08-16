@@ -20,5 +20,6 @@ public:
 
 	void enemyCollision();
 	void playerCollision();
+	void bulletCollision();
 };
 

@@ -84,22 +84,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::LEFT;
 		}
-		// ==================辟立 傍拜 贸府==================
+		// ================== 傍拜 贸府==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================雀乔 贸府==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&_state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -120,22 +115,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::RIGHT;
 		}
-		// ==================辟立 傍拜 贸府==================
+		// ================== 傍拜 贸府==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================雀乔 贸府==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -156,22 +146,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::TOP;
 		}
-		// ==================辟立 傍拜 贸府==================
+		// ================== 傍拜 贸府==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================雀乔 贸府==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -192,22 +177,17 @@ void player::update()
 		{
 			_direction = PLAYERDIRECTION::BOTTOM;
 		}
-		// ==================辟立 傍拜 贸府==================
+		// ================== 傍拜 贸府==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK])
-		{
-			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}
-		// ==================雀乔 贸府==================
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
