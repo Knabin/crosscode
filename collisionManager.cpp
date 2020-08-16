@@ -2,6 +2,8 @@
 #include "collisionManager.h"
 #include "player.h"
 #include "enemy.h"
+#include "meerkat.h"
+#include "bullets.h"
 
 HRESULT collisionManager::init()
 {
@@ -19,6 +21,7 @@ void collisionManager::update()
 {
 	enemyCollision();//에너미렉트에 플레이어 렉트가 충돌시
 	playerCollision();//플레이어렉트에 에너미 렉트가 충돌시
+	bulletCollision();
 }
 
 void collisionManager::render()
@@ -97,6 +100,42 @@ void collisionManager::playerCollision()
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
 	//에너미 공격렉트랑 플레이어가 충돌시*/
+}
+
+void collisionManager::bulletCollision()
+{
+	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+		meerkat* m = dynamic_cast<meerkat*>(temp[i]);
+		if (m == NULL) continue;
+		// 미어캣의 getBullets() 반환 -> bullets 포인터
+		// => 인데 지섭이가 쓴 건 bullets 포인터에 0번째 방에 접근하라  m->getBullets()[i] << 여기서 윈도우가 뭐지??? 왜 포인터의 0번방에 접근하라 그러지?????? 이 상황이었던것임~~
+		// 이거 어케 끊어
+
+		// bullets의 getvEnemyBullet() 반환 -> 구조체의 벡터
+		// 됏네!!!!!!!!
+
+		vector<tagBullet> bullet = m->getBullets()->getvEnemyBullet();
+		if (bullet.size() == NULL) continue;		// 이거는 이제 필요 없겠다 아래 j for문이 bullet.size()만큼 돌아가니까
+		for (int j = 0; j < bullet.size(); ++j)
+		{
+			//cout << m->getBullets()->getvEnemyBullet()[j].position.x << endl;
+			if (isCollision(_player->getRect(), m->getBullets()->getvEnemyBullet()[j].rc))//미어캣의 총알이 플레이어 렉트에 충돌했으면
+			{
+				m->getBullets()->remove(j);//해당 총알의 벡터를 삭제
+				break;
+			}
+		}
+		/*
+		지금 위에 i로 돌아가는 for문은 해당 "에너미"에 접근하기 위한 거잖아
+		근데 그 i를 
+		ㅋㅋㅋㅋㅋㅋ
+		for문을 한번 더 돌려야지
+
+		*/
+	}
 }
 
 void collisionManager::enemyCollision()

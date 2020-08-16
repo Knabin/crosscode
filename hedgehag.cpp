@@ -201,18 +201,18 @@ void hedgehag::update()
 
 void hedgehag::render()
 {
-	D2DRENDERER->DrawRectangle(_attackRC, D2DRenderer::DefaultBrush::Black, 2.f);
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_attackRC), D2DRenderer::DefaultBrush::Black, 2.f);//에너미 공격렉트
 	_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
 	_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//에너미 애니메이션 재생
-	//_rc.render(getMemDC());//에너미 렉트
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//에너미 렉트
 	for (int i = 0; i < 3; i++)
 	{
-		//RectangleMake(getMemDC(), _t[i]->getRect().getCenter().x, _t[i]->getRect().getCenter().y, SIZE, SIZE);
+		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
 	}
 
 	for (int i = 0; i < _move.size(); ++i)
 	{
-		//_move[i]->getRect().render(getMemDC());
+		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
 	}
 	//RectangleMakeCenter(getMemDC(), _rc.getCenter().x, _rc.getCenter().y, 10, 10);
 	//RectangleMakeCenter(getMemDC(), _playerX, _playerY, 10, 10);
@@ -355,6 +355,8 @@ void hedgehag::move()
 		}
 		else
 		{
+			_position.x += cosf(_angleSave + PI) * _noHitSpeed;
+			_position.y += -sinf(_angleSave + PI) * _noHitSpeed;
 			_idleMove = false;
 		}
 	}
