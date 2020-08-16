@@ -34,6 +34,7 @@ player::player()
 
 	_combo = 0;
 	_iscombo = false;
+	_fullCount = 0;
 
 	_state = new playerStateController(idle);
 	_position.y = 700;
@@ -217,22 +218,34 @@ void player::update()
 	{
 		_state->setState(_vState[PLAYERSTATE::GUARD]);
 	}
-
-	if ((KEYMANAGER->isOnceKeyDown('V') || KEYMANAGER->isOnceKeyDown(VK_LBUTTON))&&getDistance(_position.x , _position.y, _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
-		_ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top)<100)		// 근접공격키
+	if (KEYMANAGER->isOnceKeyDown('V')) //근접공격키
 	{
 		playerMeleeattack();
 	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))	// 가까우면 근접 , 멀면 원거리 공격
 	{
-		_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
-		_state->getState()->setLongAttack();
-		playerFire();
+		_fullCount = 0;
+
+		if (getDistance(_position.x, _position.y, _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150)
+		{
+			playerMeleeattack();
+		}
+		else if (getDistance(_position.x, _position.y, _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top) >= 100 && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
+		{
+			_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
+			_state->getState()->setLongAttack();
+			playerFire();
+		}
 	}
 	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACK])
-
+	
 	{
-		_state->setState(_vState[PLAYERSTATE::LONGATTACKMOVE]);
+		_fullCount++;
+		if (_fullCount > 10)
+		{
+			_state->setState(_vState[PLAYERSTATE::LONGATTACKMOVE]);
+		}
 	}
 
 

@@ -1035,7 +1035,7 @@ void longAttackState::longAttack(animation* anim, int a, bool b)
 			_isLongAttack = false;
 		}
 	}
-	if (_count > 40 && _player->getAnimation()->isPlay() == false)
+	if (_count > 20 && _player->getAnimation()->isPlay() == false)			// 원거리공격 텀?
 	{
 		_isAttack = false;
 		_isLeft = false;

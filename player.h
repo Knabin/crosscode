@@ -55,6 +55,7 @@ private:
 	bool _iscombo;
 	int _combocount;
 	int _combo;
+	int _fullCount;	//원거리공격 충전시간
 
 	float _jumpPower;
 	float _gravity;
