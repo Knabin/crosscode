@@ -180,6 +180,7 @@
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="meerkat.h" />
+    <ClInclude Include="mine.h" />
     <ClInclude Include="mountainScene.h" />
     <ClInclude Include="nomalUI.h" />
     <ClInclude Include="objectManager.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="meerkat.cpp" />
+    <ClCompile Include="mine.cpp" />
     <ClCompile Include="mountainScene.cpp" />
     <ClCompile Include="nomalUI.cpp" />
     <ClCompile Include="objectManager.cpp" />
