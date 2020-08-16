@@ -172,6 +172,9 @@
     <ClCompile Include="icethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -352,6 +355,9 @@
       <Filter>playGround\object</Filter>
     </ClInclude>
     <ClInclude Include="icethrower.h">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h">
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>

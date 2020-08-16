@@ -43,7 +43,7 @@ public:
 	icethrower();
 	~icethrower();
 
-	HRESULT init();
+	HRESULT init(float centerX, float centerY);
 	void release();
 	void update();
 	void render();

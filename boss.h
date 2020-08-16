@@ -1,6 +1,7 @@
 #pragma once
 #include "gameObject.h"
 #include "icethrower.h"
+#include "mine.h"
 
 enum bossState //보스 상태패턴 enum문
 {
@@ -20,9 +21,10 @@ enum bossState //보스 상태패턴 enum문
 	ICETHROWER_READY2,
 	ICETHROWER,
 	ICETHROWER_END,
-	CENTER_ATTACK_READY,
-	CENTER_ATTACK,
-	CENTER_ATTACK_END,
+	MINE_READY,
+	MINE_READY2,
+	MINE,
+	MINE_END,
 };
 struct tagBossPart  //보스 파츠별 구조체
 {
@@ -57,6 +59,7 @@ class boss : public gameObject
 private:
 
 	icethrower* _icethrower;
+	mine* _mine;
 
 	image* image;
 	bossState _bossState;		//상태 패턴
@@ -77,9 +80,8 @@ private:
 	int _protectCurrentFrameX, _protectCurrentFrameY;
 	int _protectFrameCount;
 
-	int _motionDelay;
+	int _moveCount;
 
-	int _mineAttackCount;
 
 	//방어막 프레임
 	int _bossShieldOneFrameX, _bossShieldOneFrameY;
@@ -87,7 +89,16 @@ private:
 	//왼손공격1 프레임
 	int _bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY;
 
+	//몸통움직임 프레임
+	int _bossCenterMoveFrameX, _bossCenterMoveFrameY;
+
+	//움직임 딜레이
+	int _motionDelay;
+
+	//얼음방사 공격 딜레이
 	int _icethrowerDelay;
+
+	int _mineAttackCount;
 
 
 public:
@@ -104,6 +115,9 @@ public:
 	void bossState();		//보스 현재 상태패턴 
 	void bossMove();		//보스 실시간 움직임 
 	void bossDraw();		//보스 전신 렌더 이미지
+
+	void moveUp();
+	void moveDown();
 
 	void fireCollision();
 
