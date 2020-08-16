@@ -740,6 +740,7 @@ void mapToolScene::changeMapSize()
 				_vEnemies.erase(_vEnemies.begin() + i);
 			}
 		}
+		checkMapIndex();
 		redrawMap();
 		_controlMode = NOWMODE::NONE;
 	}
@@ -747,19 +748,20 @@ void mapToolScene::changeMapSize()
 
 void mapToolScene::moveMapView()
 {
-	if (KEYMANAGER->isOnceKeyDown('D') && _clippingPoint.x + 4 <= MAXTILEX * SIZE - _mapViewRc.GetWidth())
+	if (KEYMANAGER->isStayKeyDown('D') && _clippingPoint.x + 4 <= MAXTILEX * SIZE - _mapViewRc.GetWidth())
 	{
 		_clippingPoint.x += 48;
 	}
-	if (KEYMANAGER->isOnceKeyDown('A') && _clippingPoint.x - 4 >= 0)
+
+	if (KEYMANAGER->isStayKeyDown('A') && _clippingPoint.x - 4 >= 0)
 	{
 		_clippingPoint.x -= 48;
 	}
-	if (KEYMANAGER->isOnceKeyDown('W') && _clippingPoint.y - 4 >= 0)
+	if (KEYMANAGER->isStayKeyDown('W') && _clippingPoint.y - 4 >= 0)
 	{
 		_clippingPoint.y -= 48;
 	}
-	if (KEYMANAGER->isOnceKeyDown('S') && _clippingPoint.y + 4 <= MAXTILEY * SIZE - _mapViewRc.GetHeight())
+	if (KEYMANAGER->isStayKeyDown('S') && _clippingPoint.y + 4 <= MAXTILEY * SIZE - _mapViewRc.GetHeight())
 	{
 		_clippingPoint.y += 48;
 	}
@@ -1063,7 +1065,7 @@ void mapToolScene::renderPreviewTile()
 							{
 								_terrainImageBig[_page]->setAlpha(0.7f);
 								_terrainImageBig[_page]->frameRender(
-									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+									(Vector2(_vTiles[drawY + i][drawX + j]->getRect().getCenter())
 										+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 									_sampleStart.x, _sampleStart.y);
 							}
@@ -1071,7 +1073,7 @@ void mapToolScene::renderPreviewTile()
 							{
 								_objectImageBig[_page]->setAlpha(0.7f);
 								_objectImageBig[_page]->frameRender(
-									(Vector2(_vTiles[_drawStart.y + i][_drawStart.x + j]->getRect().getCenter())
+									(Vector2(_vTiles[drawY + i][drawX + j]->getRect().getCenter())
 									+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint),
 									_sampleStart.x, _sampleStart.y);
 							}
@@ -1413,9 +1415,11 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 
 void mapToolScene::redrawMap()
 {
-	for (int i = 0; i <= _nowIndex.y; ++i)
+	//for (int i = 0; i <= _nowIndex.y; ++i)
+	for(int i = 0; i <= _viewLastIndex.y; ++i)
 	{
-		for (int j = 0; j <= _nowIndex.x; ++j)
+		for (int j = 0; j <= _viewLastIndex.x; ++j)
+		//for (int j = 0; j <= _nowIndex.x; ++j)
 		{
 			if (_vTiles[i][j]->getRect().getCenter().x < _clippingPoint.x ||
 				_vTiles[i][j]->getRect().getCenter().x > _clippingPoint.x + _mapViewRc.getSize().x ||

@@ -2,8 +2,8 @@
 #include "gameObject.h"
 
 #define SIZE 48
-#define MAXTILEX 50
-#define MAXTILEY 50
+#define MAXTILEX 100
+#define MAXTILEY 100
 #define MAXMAPTOOLX 23
 #define MAXMAPTOOLY 19
 
