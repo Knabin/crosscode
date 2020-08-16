@@ -938,23 +938,23 @@ void longAttackState::update()
 	{
 	case PLAYERDIRECTION::TOP:
 		_player->setAnimation(_top);
-		longAttack(_top, 9, true);
+		longAttack(_top, 10, true);
 		break;
 	case PLAYERDIRECTION::RIGHT_TOP:
 		_player->setAnimation(_right_top);
-		longAttack(_right_top, 26, true);
+		longAttack(_right_top, 27, true);
 		break;
 	case PLAYERDIRECTION::RIGHT:
 		_player->setAnimation(_right);
-		longAttack(_right, 43, true);
+		longAttack(_right, 44, true);
 		break;
 	case PLAYERDIRECTION::RIGHT_BOTTOM:
 		_player->setAnimation(_right_bottom);
-		longAttack(_right_bottom, 60, true);
+		longAttack(_right_bottom, 61, true);
 		break;
 	case PLAYERDIRECTION::BOTTOM:
 		_player->setAnimation(_bottom);
-		longAttack(_bottom, 77, true);
+		longAttack(_bottom, 78, true);
 		break;
 	case PLAYERDIRECTION::LEFT_BOTTOM:
 		_player->setAnimation(_left_bottom);
@@ -969,7 +969,7 @@ void longAttackState::update()
 		longAttack(_left_top, 126, false);
 		break;
 	}
-	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 25);
+	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 15);
 }
 
 void longAttackState::exit()
