@@ -34,6 +34,11 @@ void scene::render()
 	int endX = CAMERA->getRect().right / SIZE;
 	int endY = CAMERA->getRect().bottom / SIZE;
 
+	if (startX <= 0) startX = 0;
+	if (startY <= 0) startY = 0;
+	if (endX >= _maxX) endX = _maxX;
+	if (endY >= _maxY) endY = _maxY;
+
 	for (int i = startY; i <= endY; ++i)
 	{
 		for (int j = startX; j <= endX; ++j)
