@@ -172,6 +172,12 @@
     <ClCompile Include="icethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
+    <ClCompile Include="puzzleScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bullets.cpp">
+      <Filter>enemyTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -351,8 +357,14 @@
     <ClInclude Include="mapObject.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
+    <ClInclude Include="puzzleScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
     <ClInclude Include="icethrower.h">
       <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="bullets.h">
+      <Filter>enemyTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

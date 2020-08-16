@@ -2,6 +2,8 @@
 #include "collisionManager.h"
 #include "player.h"
 #include "enemy.h"
+#include "meerkat.h"
+#include "bullets.h"
 
 HRESULT collisionManager::init()
 {
@@ -28,7 +30,7 @@ void collisionManager::render()
 
 void collisionManager::playerCollision()
 {
-	
+	/*
 	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 
 	for (int i = 0; i < temp.size(); i++)
@@ -97,7 +99,7 @@ void collisionManager::playerCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	//에너미 공격렉트랑 플레이어가 충돌시
+	//에너미 공격렉트랑 플레이어가 충돌시*/
 }
 
 void collisionManager::bulletCollision()
@@ -138,7 +140,7 @@ void collisionManager::bulletCollision()
 
 void collisionManager::enemyCollision()
 {
-	
+	/*
 	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 
 	for (int i = 0; i < temp.size(); i++)
@@ -243,5 +245,5 @@ void collisionManager::enemyCollision()
 		}
 		//에너미 렉트와 에너미 렉트가 충돌시 에너미 밀어내기
 
-	}
+	}*/
 }

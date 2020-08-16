@@ -1,11 +1,10 @@
 #pragma once
 #include "enemy.h"
-#include "bullets.h"
 
 class meerkat : public enemy
 {
 private:
-	bullets* _bullet;
+	class bullets* _bullet;
 
 	image* _meerkatMoveImage;//미어캣 무브 이미지
 

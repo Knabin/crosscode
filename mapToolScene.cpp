@@ -1247,9 +1247,9 @@ void mapToolScene::loadMap()
 
 	if (GetOpenFileName(&ofn) == FALSE) return;
 
-	for (int i = 0; i <= _nowIndex.y; ++i)
+	for (int i = 0; i < _vTiles.size(); ++i)
 	{
-		for (int j = 0; j <= _nowIndex.x; ++j)
+		for (int j = 0; j < _vTiles[i].size(); ++j)
 		{
 			_vTiles[i][j]->release();
 			SAFE_DELETE(_vTiles[i][j]);

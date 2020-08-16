@@ -28,14 +28,20 @@ void scene::update()
 void scene::render()
 {
 	if (_vTiles.size() <= 0) return;
-	for (int i = 0; i <= _maxY; ++i)
+	
+	int startX = CAMERA->getRect().left / SIZE;
+	int startY = CAMERA->getRect().top / SIZE;
+	int endX = CAMERA->getRect().right / SIZE;
+	int endY = CAMERA->getRect().bottom / SIZE;
+
+	for (int i = startY; i <= endY; ++i)
 	{
-		for (int j = 0; j <= _maxX; ++j)
+		for (int j = startX; j <= endX; ++j)
 		{
-			if (CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
+			/*if (CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
 				CAMERA->getRect().right <= _vTiles[i][j]->getRect().left ||
 				CAMERA->getRect().bottom <= _vTiles[i][j]->getRect().top ||
-				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;
+				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;*/
 
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->frameRender(
