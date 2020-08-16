@@ -20,6 +20,8 @@ protected:
 	bool _isLeft;
 	int _count;
 
+	float _aMovespeed = 2.0f;
+
 public:
 	virtual ~playerState() {};
 
@@ -105,6 +107,52 @@ class longAttackMoveState : public playerState
 public:
 	longAttackMoveState(class player* player);
 	~longAttackMoveState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+};
+
+class movestopState : public playerState
+{
+public:
+	movestopState(class player* player);
+	~movestopState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+};
+
+class rightattackState : public playerState
+{
+public:
+	rightattackState(class player* player);
+	~rightattackState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+
+};
+
+class leftattackState : public playerState
+{
+public:
+	leftattackState(class player* player);
+	~leftattackState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+
+};
+
+class rightfinalattackState : public playerState
+{
+public:
+	rightfinalattackState(class player* player);
+	~rightfinalattackState();
 
 	void enter() override;
 	void update() override;
