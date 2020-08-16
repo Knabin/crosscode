@@ -169,6 +169,9 @@
     <ClCompile Include="mapObject.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="puzzleScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -347,6 +350,9 @@
     </ClInclude>
     <ClInclude Include="mapObject.h">
       <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="puzzleScene.h">
+      <Filter>playGround\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
