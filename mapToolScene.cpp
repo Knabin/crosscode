@@ -1246,7 +1246,7 @@ void mapToolScene::loadMap()
 	{
 		for (int j = 0; j < _vTiles[i].size(); ++j)
 		{
-			_vTiles[i][j]->release();
+			if(_vTiles[i][j] != nullptr) _vTiles[i][j]->release();
 			SAFE_DELETE(_vTiles[i][j]);
 		}
 		_vTiles[i].clear();
