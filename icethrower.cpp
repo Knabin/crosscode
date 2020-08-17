@@ -11,7 +11,6 @@ icethrower::~icethrower()
 
 HRESULT icethrower::init(float centerX, float centerY)
 {
-
 	_angle = PI2;
 	_angle2 = PI2;
 	_center.x = centerX;
@@ -63,6 +62,7 @@ void icethrower::release()
 
 void icethrower::update()
 {
+
 	_centerEnd.x = cosf(_angle) * _centerMeter + _center.x;
 	_centerEnd.y = -sinf(_angle) * _centerMeter + _center.y;
 
@@ -191,14 +191,17 @@ void icethrower::move()
 			_viIcethrower->_rc.update(Vector2(_viIcethrower->_x, _viIcethrower->_y), Vector2(_viIcethrower->_size, _viIcethrower->_size), pivot::CENTER);
 		}
 
+		
 		if (_viIcethrower->_fireStart && _angle < PI - (PI / 4))
 		{
 			_viIcethrower->_fireStart = false;
 		}
+		
 	}
 }
 
 void icethrower::removeFire(int Num1)
 {
+	_vIcethrower[Num1]._image->ResetRenderOption();
 	_vIcethrower.erase(_vIcethrower.begin() + Num1);
 }

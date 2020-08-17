@@ -15,8 +15,10 @@ HRESULT boss::init()
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
 	_moveCount = 0;
+	_stopCount = 0;
 	_motionDelay = 0;
 	_icethrowerDelay = 0;
+	_randomAttackCount = 0;
 	_mineAttackCount = 0;
 
 	//================================================================================================================================================================//
@@ -40,15 +42,19 @@ HRESULT boss::init()
 	IMAGEMANAGER->addImage("오른팔", L"images/boss/right_arm.png");
 	IMAGEMANAGER->addImage("오른손", L"images/boss/right_hand.png");
 
+	IMAGEMANAGER->addFrameImage("오른손공격", L"images/boss/right_hand_attack2.png", 8, 1);
+
 	//================================================================================================================================================================//
+
+	// WINSIZEY / 2 - 175
 
 	//보스 몸통 선언
 	_Center._x = (WINSIZEX / 2 - 85);
-	_Center._y = (WINSIZEY / 2 - 175);
+	_Center._y = (WINSIZEY / 2 + 175);
 	_Center._angle = 0;
 
 	_Center._center.x = (WINSIZEX / 2 - 85);
-	_Center._center.y = (WINSIZEY / 2 - 175);
+	_Center._center.y = (WINSIZEY / 2 + 175);
 	_Center._centerMeter = 100;
 
 	_Center._speed = 2.0f;
@@ -57,8 +63,9 @@ HRESULT boss::init()
 
 	//_bossState = APPEARANCE;
 	//_bossState = STOP;
-	_bossState = ICETHROWER_READY1;
+	//_bossState = ICETHROWER_READY;
 	//_bossState = MINE_READY;
+	_bossState = STONESHOWER_READY;
 
 	//================================================================================================================================================================//
 
@@ -250,7 +257,67 @@ void boss::bossState()
 	case MOVEDOWN:
 	case STOP:
 	{
+		_stopCount++;
+		_randomAttackCount++;
 
+		if (_stopCount < 5)
+		{
+			bossInitialization();
+		}
+
+		if (_stopCount >= 5 && _stopCount < 22)
+		{
+			_LeftArm._angle += 0.01f / 60;
+			_RightArm._angle -= 0.01f / 60;
+			_LeftHand._angle += 0.01f / 60;
+			_RightHand._angle -= 0.01f / 60;
+			_Center._y += 0.5f / 6;
+			_Bottom._y += 0.25f / 6;
+		}
+
+		if (_stopCount >= 22 && _stopCount < 53)
+		{
+			_LeftArm._angle -= 0.01f / 60;
+			_RightArm._angle += 0.01f / 60;
+			_LeftHand._angle -= 0.01f / 60;
+			_RightHand._angle += 0.01f / 60;
+			_Center._y -= 0.5f / 6;
+			_Bottom._y -= 0.25f / 6;
+		}
+
+		if (_stopCount >= 53 && _stopCount < 69)
+		{
+			_LeftArm._angle += 0.01f / 60;
+			_RightArm._angle -= 0.01f / 60;
+			_LeftHand._angle += 0.01f / 60;
+			_RightHand._angle -= 0.01f / 60;
+			_Center._y += 0.5f / 6;
+			_Bottom._y += 0.25f / 6;
+		}
+
+		if (_stopCount >= 69)
+		{
+			_stopCount = 0;
+		}
+
+
+
+		if (_randomAttackCount >= 200)
+		{
+			_randomAttackCount = 0;
+			int _randomAttack;
+			_randomAttack = RND->getInt(3);
+
+			if (_randomAttack == 1)
+			{
+				_bossState = MINE_READY;
+			}
+			else
+			{
+				_bossState = ICETHROWER_READY;
+			}
+
+		}
 
 	}
 	break;
@@ -258,7 +325,7 @@ void boss::bossState()
 	//왼손 얼음포물선 발사 모션
 
 
-	case ICETHROWER_READY1:
+	case ICETHROWER_READY:
 	{
 
 		_RightArm._angle -= 0.012f;
@@ -369,10 +436,10 @@ void boss::bossState()
 		_LeftArm._center.y -= 2.0f;
 
 
-		_RightArm._angle -= 0.012f;
-		_RightHand._angle -= 0.012f;
-		_RightArm._realAngle += 0.6f;
-		_RightHand._realAngle += 1.2f;
+		_RightArm._angle -= 0.012f / 1.35f;
+		_RightHand._angle -= 0.012f / 1.35f;
+		_RightArm._realAngle += 0.6f / 1.35f;
+		_RightHand._realAngle += 1.2f / 1.35f;
 
 
 		_LeftArm._angle -= 0.016f;
@@ -382,10 +449,18 @@ void boss::bossState()
 
 		_Center._angle += 0.15f;
 
+		if (_LeftHand._rectBody.left <= WINSIZEX / 2 - 243)
+		{
+			_bossState = STOP;
+		}
+
+
+		/*
 		if (_RightHand._rectBody.top >= _LeftHand._rectBody.top - 22)
 		{
-			_bossState = MINE_READY;
+			_bossState = STOP;
 		}
+		*/
 		
 	}
 	break;
@@ -471,7 +546,7 @@ void boss::bossState()
 		_LeftHand._realAngle -= 1.5f;
 		_RightHand._realAngle += 1.5f;
 
-		if (_LeftHand._rectBody.left > WINSIZEX / 2 - 265)
+		if (_LeftHand._rectBody.left > WINSIZEX / 2 - 266)
 		{
 			_bossState = MINE_END2;
 		}
@@ -493,7 +568,102 @@ void boss::bossState()
 	}
 	break;
 
+	case STONESHOWER_READY:
+	{
+	
+		_LeftArm._angle += 0.005f * 3;
+		_LeftArm._realAngle -= 0.2f * 3;
+		_LeftHand._angle += 0.001f * 3;
+		_LeftArm._center.y += 0.2f * 3;
+
+
+		_RightArm._angle += 0.004f * 4;
+		_RightArm._realAngle -= 0.2f * 4;
+		//_RightArm._center.x -= 0.2f * 3;
+		//_RightArm._center.y -= 0.2f * 3;
+
+		_RightHand._angle += 0.01f * 2;
+		//_RightHand._realAngle += 0.1f * 2;
+
+
+
+		_bossRightHandAttackFrameY = 0;
+
+		if (_frameCount % 10 == 0)
+		{
+			if (_currentFrameX >= 5)
+			{
+				_bossState = STONESHOWER;
+			}
+			_bossRightHandAttackFrameX = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+		}
+
+		/*
+		if (_LeftHand._rectBody.right >= WINSIZEX / 2 - 100)
+		{
+
+			_bossState = STONESHOWER;
+		}
+		*/
+
+
 	}
+	break;
+	
+	case STONESHOWER:
+	{
+
+
+
+		/*
+		_Center._angle += 0.1f;
+		_LeftArm._angle -= 0.005f;
+		_LeftArm._realAngle += 0.2f;
+		_LeftHand._angle -= 0.001f;
+		_LeftArm._center.y -= 0.2f;
+
+		_RightArm._angle -= 0.004f;
+		_RightArm._realAngle += 0.2f;
+		_RightArm._center.x += 0.2f;
+		_RightArm._center.y += 0.2f;
+
+		_RightArm._center.y += 0.5f;
+
+
+		_bossRightHandAttackFrameY = 0;
+
+		if (_frameCount % 10 == 0)
+		{
+			if (_currentFrameX >= IMAGEMANAGER->findImage("오른손공격")->getMaxFrameX())
+			{
+				_currentFrameX = 0;
+			}
+			_bossRightHandAttackFrameX = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+		}
+
+		if (_LeftHand._rectBody.left <= WINSIZEX / 2 - 250)
+		{
+
+			_bossState = STONESHOWER_END;
+		}
+		*/
+	}
+	break;
+
+	case STONESHOWER_END:
+	{
+	
+
+	}
+	break;
+
+
+	}
+
 }
 
 void boss::bossMove()
@@ -597,11 +767,6 @@ void boss::bossDraw()
 	}
 	
 
-	//오른손
-	IMAGEMANAGER->findImage("오른손")->setAngle(_RightHand._realAngle);
-	IMAGEMANAGER->findImage("오른손")->render(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x - 200, _RightHand._centerEnd.y - 50)));
-
-
 	//왼손
 	if (_bossState == ICETHROWER)
 	{
@@ -614,7 +779,21 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("왼손")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 250, _LeftHand._centerEnd.y - 100)));
 	}
 
+	//오른손
+	if (_bossState == STONESHOWER_READY || _bossState == STONESHOWER)
+	{
+		IMAGEMANAGER->findImage("오른손공격")->setAngle(_RightHand._angle);
+		IMAGEMANAGER->findImage("오른손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x + 100 , _RightHand._centerEnd.y + 150)),
+			_bossRightHandAttackFrameX, _bossRightHandAttackFrameY);
+	}
+	else
+	{
+		IMAGEMANAGER->findImage("오른손")->setAngle(_RightHand._realAngle);
+		IMAGEMANAGER->findImage("오른손")->render(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x - 200, _RightHand._centerEnd.y - 50)));
+	}
+
 	//================================================================================================================================================================//
+
 
 	//위치 확인용 몸통, 바텀 렉트
 
@@ -785,5 +964,42 @@ void boss::fireCollision()
 
 }
 
+void boss::bossInitialization()
+{
+	_Center._x = (WINSIZEX / 2 - 85);
+	_Center._y = (WINSIZEY / 2 - 175);
 
+	_Center._center.x = (WINSIZEX / 2 - 85);
+	_Center._center.y = (WINSIZEY / 2 - 175);
+	
+	_LeftArm._x = (_Center._x - 125) + 100;
+	_LeftArm._y = (_Center._y + 25);
+	_LeftArm._angle = PI2 - (PI / 4);
+	_LeftArm._realAngle = PI2 - (PI / 4);
 
+	_LeftArm._center.x = (_Center._x - 125) + 100;
+	_LeftArm._center.y = (_Center._y + 25);
+
+	_RightArm._x = (_Center._x + 545) - 100;
+	_RightArm._y = (_Center._y + 25);
+	_RightArm._angle = PI2 - (PI / 4);
+	_RightArm._realAngle = PI2 - (PI / 4);
+
+	_RightArm._center.x = (_Center._x + 545) - 100;
+	_RightArm._center.y = (_Center._y + 25);
+
+	_LeftHand._x = _LeftArm._x - 100;
+	_LeftHand._y = _LeftArm._y + 100;
+	_LeftHand._angle = PI2 - (PI / 4);
+	_LeftHand._realAngle = PI2 - (PI / 4);
+
+	_RightHand._x = _RightArm._x + 100;
+	_RightHand._y = _RightArm._y + 100;
+	_RightHand._angle = PI2 - (PI / 4);
+	_RightHand._realAngle = PI2 - (PI / 4);
+
+	_Bottom._x = _Center._x + 160;
+	_Bottom._y = _Center._y + 450;
+	_Center._angle = 0;
+
+}
