@@ -378,6 +378,7 @@
     <ClInclude Include="mine.h">
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
+    <ClInclude Include="mine.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

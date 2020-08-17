@@ -30,7 +30,10 @@ HRESULT icethrower::init(float centerX, float centerY)
 	IMAGEMANAGER->addFrameImage("얼음이펙트2", L"images/boss/ice_move.png", 10, 1);
 	IMAGEMANAGER->addFrameImage("얼음이펙트3", L"images/boss/ice_move.png", 10, 1);
 
+	//IMAGEMANAGER->addFrameImage("얼음충돌", L"images/boss/ice_collision.png", 10, 1);
+
 	_currentFrameX, _currentFrameY, _frameCount = 0;
+	_collisionCurrentFrameX, _collisionCurrentFrameY, _collisionFrameCount = 0;
 
 	//================================================================================================================================================================//
 
@@ -67,6 +70,7 @@ void icethrower::update()
 	_centerEnd2.y = -sinf(_angle) + _center.y;
 
 	_frameCount++;
+	_collisionFrameCount++;
 
 	move();
 
@@ -85,6 +89,21 @@ void icethrower::update()
 		_frameCount = 0;
 	}
 
+	/*
+	_collisionFrameY = 0;
+
+	if (_collisionFrameCount % 5 == 0)
+	{
+		if (_collisionCurrentFrameX >= IMAGEMANAGER->findImage("얼음충돌")->getMaxFrameX())
+		{
+			_collisionCurrentFrameX = 0;
+		}
+		_collisionFrameX = _collisionCurrentFrameX;
+		_collisionCurrentFrameX++;
+		_collisionFrameCount = 0;
+	}
+	*/
+
 }
 
 void icethrower::render()
@@ -94,6 +113,9 @@ void icethrower::render()
 		(CAMERA->getRelativeVector2(Vector2(_centerEnd.x, _centerEnd.y))),
 		D2D1::ColorF::Black, 1, 2.0f);
 	*/
+
+	//IMAGEMANAGER->findImage("얼음충돌")->frameRender(CAMERA->getRelativeVector2(Vector2(_centerEnd.x + 150, _centerEnd.y + 550)), _collisionFrameX, _collisionFrameY);
+
 
 	for (_viIcethrower = _vIcethrower.begin(); _viIcethrower != _vIcethrower.end(); ++_viIcethrower)
 	{
@@ -119,6 +141,8 @@ void icethrower::render()
 			IMAGEMANAGER->findImage("얼음이펙트3")->setAngle(_angle2);
 			IMAGEMANAGER->findImage("얼음이펙트3")->frameRender(CAMERA->getRelativeVector2(Vector2(_centerEnd.x + 250, _centerEnd.y + 50)),
 				_iceEffectFrameX, _iceEffectFrameY);
+
+			//IMAGEMANAGER->findImage("얼음충돌")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIcethrower->_x, _viIcethrower->_y)), _collisionFrameX, _collisionFrameY);
 
 		}
 	}

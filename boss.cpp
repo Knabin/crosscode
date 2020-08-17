@@ -179,18 +179,10 @@ void boss::update()
 
 	_mine->update();
 
-
-	if (KEYMANAGER->isOnceKeyDown('Q'))
-	{
-		_bossState = MINE_READY;
-	}
-
-
 }
 
 void boss::render()
 {
-
 
 	_icethrower->render();
 
@@ -427,8 +419,6 @@ void boss::bossState()
 		_LeftHand._realAngle += 1.5f;
 		_RightHand._realAngle -= 1.5f;
 
-
-
 		if (_LeftHand._rectBody.left < WINSIZEX / 2 - 280)
 		{
 			_bossState = MINE;
@@ -441,7 +431,6 @@ void boss::bossState()
 	case MINE:
 	{
 		
-
 		_bossCenterMoveFrameY = 0;
 
 		
@@ -467,41 +456,40 @@ void boss::bossState()
 
 		}
 		
-		/*
-		_LeftHand._centerEnd.y -= 25;
-		_RightHand._centerEnd.y -= 25;
-		_Center._y += 0.5f;
-		_LeftArm._angle -= 0.005f * 12;
-		_RightArm._angle += 0.005f * 12;
-		_LeftHand._angle -= 0.015f * 12;
-		_RightHand._angle += 0.015f * 12;
-
-		if (_LeftHand._rectBody.right < WINSIZEX / 2 - 625)
-		{
-			_bossState = CENTER_ATTACK_END;
-
-		}
-		*/
 	}
 	break;
 
 	case MINE_END:
 	{
-		/*
-		_mineAttackCount++;
 
-		_LeftHand._centerEnd.x -= 15;
-		_RightHand._centerEnd.x += 15;
-		_LeftHand._centerEnd.y += 15;
-		_RightHand._centerEnd.y += 15;
+		_LeftArm._angle += 0.01f;
+		_RightArm._angle -= 0.01f;
+		_LeftHand._angle += 0.025f;
+		_RightHand._angle -= 0.025f;
+		_LeftArm._realAngle -= 0.6f;
+		_RightArm._realAngle += 0.6f;
+		_LeftHand._realAngle -= 1.5f;
+		_RightHand._realAngle += 1.5f;
 
-		if (_mineAttackCount % 30 == 0)
+		if (_LeftHand._rectBody.left > WINSIZEX / 2 - 265)
 		{
-			//_Mine->MineFire();
-
+			_bossState = MINE_END2;
 		}
 
-		*/
+	}
+	break;
+
+
+	case MINE_END2:
+	{
+		moveDown();
+
+		if (_moveCount >= 64 || _Center._y > WINSIZEY / 2 - 175)
+		{
+			_moveCount = 0;
+			_bossState = STOP;
+		}
+
 	}
 	break;
 
@@ -597,7 +585,7 @@ void boss::bossDraw()
 
 
 	//¸öÅë
-	if (_bossState == MINE_READY2 || _bossState == MINE || _bossState == MINE_END)
+	if (_bossState == MINE)
 	{
 		IMAGEMANAGER->findImage("º¸½º¸öÅë¿òÁ÷ÀÓ")->frameRender(CAMERA->getRelativeVector2(Vector2(_Center._rectBody.left + 296, _Center._rectBody.top + 144)),
 			_bossCenterMoveFrameX, _bossCenterMoveFrameY);
@@ -724,6 +712,61 @@ void boss::moveUp()
 
 void boss::moveDown()
 {
+	_moveCount++;
+
+	_Center._y += 2.0f;
+	_LeftArm._center.y += 2.0f;
+	_LeftHand._center.y += 2.0f;
+	_RightArm._center.y += 2.0f;
+	_RightHand._center.y += 2.0f;
+	_Bottom._y += 2.0f;
+
+	if (_moveCount < 17)
+	{
+		_LeftArm._angle -= 0.01f / 10;
+		_LeftHand._angle -= 0.001f / 10;
+		_RightArm._angle -= 0.01f / 10;
+		_RightHand._angle -= 0.001f / 10;
+		_LeftArm._center.x -= 0.5f;
+		_LeftArm._center.y -= 1.0f;
+		_RightArm._center.x += 0.5f;
+		_RightArm._center.y += 1.0f;
+		_Center._angle += 0.1f;
+	}
+
+
+	if (_moveCount >= 17 && _moveCount < 48)
+	{
+		_LeftArm._angle += 0.01f / 10;
+		_LeftHand._angle += 0.001f / 10;
+		_RightArm._angle += 0.01f / 10;
+		_RightHand._angle += 0.001f / 10;
+		_LeftArm._center.x += 0.5f;
+		_LeftArm._center.y += 1.0f;
+		_RightArm._center.x -= 0.5f;
+		_RightArm._center.y -= 1.0f;
+		_Center._angle -= 0.1f;
+
+	}
+
+	if (_moveCount >= 48 && _moveCount < 64)
+	{
+		_LeftArm._angle -= 0.01f / 10;
+		_LeftHand._angle -= 0.001f / 10;
+		_RightArm._angle -= 0.01f / 10;
+		_RightHand._angle -= 0.001f / 10;
+		_LeftArm._center.x -= 0.5f;
+		_LeftArm._center.y -= 1.0f;
+		_RightArm._center.x += 0.5f;
+		_RightArm._center.y += 1.0f;
+		_Center._angle += 0.1f;
+	}
+
+	if (_moveCount >= 64)
+	{
+		_moveCount = 0;
+
+	}
 }
 
 void boss::fireCollision()

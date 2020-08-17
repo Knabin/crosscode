@@ -39,6 +39,10 @@ private:
 	int _currentFrameX, _currentFrameY;
 	int _frameCount;
 
+	int _mineCurrentFrameX, _mineCurrentFrameY;
+	int _mineFrameCount;
+
+	int _mineFrameX, _mineFrameY;
 	int _explosionFrameX, _explosionFrameY;
 
 public:
