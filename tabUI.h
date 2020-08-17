@@ -17,8 +17,11 @@ private:
 	bool _iv;	//인벤
 	bool _sv;	//세이브
 	bool _st;	//스탯
-	bool _setButton;
+	bool _eqSelect;
+	int _invenIndex;
 	LPBYTE StateArray;
+	
+	floatRect _eqRect[5];
 public:
 	tabUI() {};
 	~tabUI() {};
@@ -34,5 +37,7 @@ public:
 	void inSave();
 	void inStat();
 	void outMenu();
+	void InventoryList();
+	void equipSelect();
 };
 

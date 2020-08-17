@@ -184,9 +184,7 @@
     <ClCompile Include="mine.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
-    <ClCompile Include="stoneshower.cpp">
-      <Filter>enemyTest\bossPattern</Filter>
-    </ClCompile>
+    <ClCompile Include="mine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -382,9 +380,6 @@
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
     <ClInclude Include="mine.h" />
-    <ClInclude Include="stoneshower.h">
-      <Filter>enemyTest\bossPattern</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
