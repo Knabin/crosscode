@@ -6,10 +6,11 @@ HRESULT nomalUI::init()
 {
 	IMAGEMANAGER->addImage("nomalUI", L"images/menu/nomalUI.png");
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
-	//_hp = _player.
 
-	_hp = 160;
-	_exp = 158;
+	_hpRC.update(Vector2(125, 44), Vector2(158, 10), pivot::LEFTTOP);
+	_expRC.update(Vector2(125, 60), Vector2(158, 5), pivot::LEFTTOP);
+	_hp = 158;
+	_exp = 157;
 	return S_OK;
 }
 
@@ -19,30 +20,19 @@ void nomalUI::release()
 
 void nomalUI::update()
 {
-
+	_hpRC.update(Vector2(125, 44), Vector2(_hp, 10), pivot::LEFTTOP);
+	_expRC.update(Vector2(135, 57), Vector2(_exp, 4), pivot::LEFTTOP);
 }
 
 void nomalUI::render()
 {
 	IMAGEMANAGER->findImage("nomalUI")->render(Vector2(15, 15));
 
-	int ltX = CAMERA->getRect().left + 117;
-	int tY = CAMERA->getRect().top + 43;
-	int rtX = ltX + _hp;
-	int rbX = rtX + 12 ;
-	int bY = CAMERA->getRect().top + 53;
-	int lbX = ltX+ 12;
+	if ( _hp > 50)
+		D2DRENDERER->SkewRectangle(_hpRC, D2D1::ColorF::LawnGreen, 0, 45);
+	else 
+		D2DRENDERER->SkewRectangle(_hpRC, D2D1::ColorF::Red, 0, 45);
 
-	/*HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
-	HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-	POINT polygon[5] = { ltX,tY,rtX ,tY,rbX,bY,lbX,bY,ltX,tY };
-	Polygon(getMemDC(), polygon, 5);
-	SelectObject(getMemDC(), oldBrush);
-	DeleteObject(brush);
+	D2DRENDERER->DrawRotationFillRectangle(_expRC, D2D1::ColorF::MediumPurple, 0);
 
-	HBRUSH brush1 = CreateSolidBrush(RGB(243, 0, 243));
-	HBRUSH oldBrush1 = (HBRUSH)SelectObject(getMemDC(), brush1);
-	RectangleMake(getMemDC(), ltX +17, bY +3, _exp, 5);
-	SelectObject(getMemDC(), oldBrush1);
-	DeleteObject(brush1);*/
 }

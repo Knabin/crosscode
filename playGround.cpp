@@ -32,8 +32,7 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-	_ui = new uiController();
-	_ui->init();
+	
 
 	SCENEMANAGER->addScene("title", new titleScene());			// Å¸ÀÌÆ² ¾À
 	SCENEMANAGER->addScene("maptool", new mapToolScene());		// ¸ÊÅø ¾À
@@ -47,6 +46,8 @@ HRESULT playGround::init()
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
+	_ui = new uiController();
+	_ui->init();
 	return S_OK;
 }
 

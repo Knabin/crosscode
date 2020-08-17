@@ -12,6 +12,7 @@ HRESULT uiController::init()
 
 	scene = SCENEMANAGER->getCurrentSceneName();
 
+	
 	return S_OK;
 }
 
@@ -38,16 +39,17 @@ void uiController::update()
 
 void uiController::render()
 {
-	for (int i = 0; i < _vUiObjects.size(); ++i)
-	{
-		if (!_vUiObjects[i]->getIsActive()) continue;
-		_vUiObjects[i]->render();
-	}
+
 
 	if (scene != "title" && scene != "maptool")
 	{
 		_nm->render();
 		_tu->render();
+	}
+	for (int i = 0; i < _vUiObjects.size(); ++i)
+	{
+		if (!_vUiObjects[i]->getIsActive()) continue;
+		_vUiObjects[i]->render();
 	}
 	
 }
