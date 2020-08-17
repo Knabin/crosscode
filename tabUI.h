@@ -23,6 +23,7 @@ public:
 	tabUI() {};
 	~tabUI() {};
 
+	bool getOn() { return _on; }
 
 	HRESULT init();
 	void release();

@@ -16,5 +16,7 @@ public:
 	void release();
 	void update();
 	void render();
+
+	bool isUIOn() { return _tu->getOn(); }
 };
 

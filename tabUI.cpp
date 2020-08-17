@@ -29,6 +29,36 @@ HRESULT tabUI::init()
 	_eq = _iv = _sv = _st = false;
 	_setButton = false;
 	
+	button* btnEquip = new button();
+	btnEquip->init("buttons", 600, 500, 0, 0, 0, 0, bind(&tabUI::inEquip, this));
+	btnEquip->setName("equip");
+	btnEquip->setIsActive(false);
+
+	button* btnInventory = new button();
+	btnInventory->init("buttons", 600, 600, 0, 1, 0, 1, bind(&tabUI::inInven, this));
+	btnInventory->setName("inventory");
+	btnInventory->setIsActive(false);
+
+	button* btnStat = new button();
+	btnStat->init("buttons", 600, 700, 0, 2, 0, 2, bind(&tabUI::inStat, this));
+	btnStat->setName("stat");
+	btnStat->setIsActive(false);
+
+	button* btnSave = new button();
+	btnSave->init("buttons", 600, 800, 0, 3, 0, 3, bind(&tabUI::inSave, this));
+	btnSave->setName("save");
+	btnSave->setIsActive(false);
+
+	button* btnMenuExit = new button();
+	btnMenuExit->init("buttons", 600, 900, 0, 4, 0, 4, bind(&tabUI::outMenu, this));
+	btnMenuExit->setName("menuexit");
+	btnMenuExit->setIsActive(false);
+
+	OBJECTMANAGER->addObject(objectType::UI, btnEquip);
+	OBJECTMANAGER->addObject(objectType::UI, btnInventory);
+	OBJECTMANAGER->addObject(objectType::UI, btnStat);
+	OBJECTMANAGER->addObject(objectType::UI, btnSave);
+	OBJECTMANAGER->addObject(objectType::UI, btnMenuExit);
 
 	return S_OK;
 }
@@ -48,32 +78,19 @@ void tabUI::update()
 		_hpRC.update(Vector2(298, 188), Vector2(_hp, 12), pivot::LEFTTOP);
 		_expRC.update(Vector2(309, 203), Vector2(_exp, 2), pivot::LEFTTOP);
 
-		if (!_setButton)
-		{
-			button* btnEquip = new button();
-			btnEquip->init("buttons", 600, 500, 0, 0, 0, 0, bind(&tabUI::inEquip, this));
-
-			button* btnInventory = new button();
-			btnInventory->init("buttons", 600, 600, 0, 1, 0, 1, bind(&tabUI::inInven, this));
-
-			button* btnStat = new button();
-			btnStat->init("buttons", 600, 700, 0, 2, 0, 2, bind(&tabUI::inStat, this));
-
-			button* btnSave = new button();
-			btnSave->init("buttons", 600, 800, 0, 3, 0, 3, bind(&tabUI::inSave, this));
-
-			button* btnMenuExit = new button();
-			btnMenuExit->init("buttons", 600, 900, 0, 4, 0, 4, bind(&tabUI::outMenu, this));
-
-			OBJECTMANAGER->addObject(objectType::UI, btnEquip);
-			OBJECTMANAGER->addObject(objectType::UI, btnInventory);
-			OBJECTMANAGER->addObject(objectType::UI, btnStat);
-			OBJECTMANAGER->addObject(objectType::UI, btnSave);
-			OBJECTMANAGER->addObject(objectType::UI, btnMenuExit);
-
-			_setButton = true;
-		}
-		
+		OBJECTMANAGER->findObject(objectType::UI, "equip")->setIsActive(true);
+		OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(true);
+		OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(true);
+		OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(true);
+		OBJECTMANAGER->findObject(objectType::UI, "menuexit")->setIsActive(true);
+	}
+	else
+	{
+		OBJECTMANAGER->findObject(objectType::UI, "equip")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "menuexit")->setIsActive(false);
 	}
 
 	if (_on == false)
@@ -110,7 +127,7 @@ void tabUI::render()
 	}
 	if (_iv)
 	{
-		IMAGEMANAGER->findImage("inven")->render(Vector2(0, 0));
+		IMAGEMANAGER->findImage("inven1")->render(Vector2(0, 0));
 	}
 	if (_sv)
 	{

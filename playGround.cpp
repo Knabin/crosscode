@@ -100,7 +100,7 @@ void playGround::update()
 
 	// 이벤트 재생 중에는 업데이트하지 않음
 	// TODO: UI 켜져 있을 때 화면 멈춰야 하므로 조건 추가
-	if (!EVENTMANAGER->isPlayingEvent())
+	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn())
 	{
 		SCENEMANAGER->update();
 		OBJECTMANAGER->update();
