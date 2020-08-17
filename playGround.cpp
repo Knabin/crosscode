@@ -32,8 +32,6 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-	
-
 	SCENEMANAGER->addScene("title", new titleScene());			// 타이틀 씬
 	SCENEMANAGER->addScene("maptool", new mapToolScene());		// 맵툴 씬
 	SCENEMANAGER->addScene("test", new testScene());			// 테스트용(새 게임 버튼)

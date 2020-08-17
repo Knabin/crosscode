@@ -22,6 +22,9 @@ HRESULT button::init(const char * imageName, float x, float y, int frameX, int f
 
 	_rc.update(Vector2(x, y), Vector2(_image->getFrameSize()), pivot::CENTER);
 
+	_width = _rc.GetWidth();
+	_height = _rc.GetHeight();
+
 	_frameUpPoint.x = frameX;
 	_frameUpPoint.y = frameY;
 
