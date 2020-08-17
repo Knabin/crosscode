@@ -43,11 +43,6 @@ void scene::render()
 	{
 		for (int j = startX; j <= endX; ++j)
 		{
-			/*if (CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
-				CAMERA->getRect().right <= _vTiles[i][j]->getRect().left ||
-				CAMERA->getRect().bottom <= _vTiles[i][j]->getRect().top ||
-				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;*/
-
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->frameRender(
 				CAMERA->getRelativeVector2(_vTiles[i][j]->getRect().getCenter()),
