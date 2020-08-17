@@ -2,6 +2,7 @@
 #include "gameObject.h"
 #include "icethrower.h"
 #include "mine.h"
+#include "stoneshower.h"
 
 enum bossState //보스 상태패턴 enum문
 {
@@ -27,6 +28,8 @@ enum bossState //보스 상태패턴 enum문
 	MINE_END,
 	MINE_END2,
 	STONESHOWER_READY,
+	STONESHOWER_READY2,
+	STONESHOWER_READY3,
 	STONESHOWER,
 	STONESHOWER_END
 };
@@ -64,6 +67,7 @@ private:
 
 	icethrower* _icethrower;
 	mine* _mine;
+	stoneshower* _stoneshower;
 
 	image* image;
 	bossState _bossState;		//상태 패턴
@@ -92,7 +96,7 @@ private:
 
 	int _moveCount;  //움직이고 있을때의 카운트
 
-	int _stopCount;  //멈춰있을 때의 카운트
+	int _breatheCount; // 숨을 쉴때의 카운트
 
 	int _randomAttackCount;  // 어떤 공격을 할까나~~??
 
@@ -105,6 +109,10 @@ private:
 
 	//지뢰 발사 딜레이
 	int _mineAttackCount;
+
+	int _dustCurrentFrameX, _dustCurrentFrameY;
+	int _dustFrameX, _dustFrameY;
+	int _dustFrameCount;
 
 public:
 
@@ -127,6 +135,7 @@ public:
 	void fireCollision();
 
 	void bossInitialization();	//보스 stop후 위치 확인용
+	void breathe();				//보스가 숨을 쉬어요(?)
 
 };
 
