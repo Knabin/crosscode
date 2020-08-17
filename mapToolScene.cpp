@@ -210,6 +210,10 @@ void mapToolScene::release()
 		_vTiles[i].clear();
 	}
 	_vTiles.clear();
+
+	OBJECTMANAGER->findObject(objectType::UI, "save button")->setIsAlive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "load button")->setIsAlive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "back title button")->setIsAlive(false);
 }
 
 void mapToolScene::update()
