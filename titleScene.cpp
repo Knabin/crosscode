@@ -7,6 +7,7 @@ titleScene::~titleScene()
 
 HRESULT titleScene::init()
 {
+	_loading = false;
 	CAMERA->setCameraMode(CAMERASTATE::NONE);
 	CAMERA->setMapSize(Vector2(WINSIZEX, WINSIZEY));
 

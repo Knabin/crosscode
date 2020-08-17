@@ -17,7 +17,7 @@ private:
 	bool _iv;	//인벤
 	bool _sv;	//세이브
 	bool _st;	//스탯
-	bool _setButton;
+	int _invenIndex;
 	LPBYTE StateArray;
 public:
 	tabUI() {};
@@ -34,5 +34,6 @@ public:
 	void inSave();
 	void inStat();
 	void outMenu();
+	void InventoryList();
 };
 
