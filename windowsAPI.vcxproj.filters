@@ -184,6 +184,7 @@
     <ClCompile Include="mine.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
