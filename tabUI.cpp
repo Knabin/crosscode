@@ -8,6 +8,13 @@ HRESULT tabUI::init()
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	IMAGEMANAGER->addImage("menu", L"images/menu/menu.png");
 	IMAGEMANAGER->addImage("equip", L"images/equip/eq.png");
+	IMAGEMANAGER->addImage("eq_armL", L"images/equip/eq_armL.png");
+	IMAGEMANAGER->addImage("eq_armR", L"images/equip/eq_armR.png");
+	IMAGEMANAGER->addImage("eq_belt", L"images/equip/eq_belt.png");
+	IMAGEMANAGER->addImage("eq_foot", L"images/equip/eq_foot.png");
+	IMAGEMANAGER->addImage("eq_head", L"images/equip/eq_head.png");
+	IMAGEMANAGER->addImage("eq_select", L"images/equip/eq_select.png");
+	IMAGEMANAGER->addImage("eq_ui", L"images/equip/eq_ui.png");
 
 	IMAGEMANAGER->addImage("inven1", L"images/menu/inven1.png");
 	IMAGEMANAGER->addImage("inven2", L"images/menu/inven2.png");
@@ -24,6 +31,9 @@ HRESULT tabUI::init()
 	IMAGEMANAGER->addImage("button_menu_back", L"images/menu/button_menu_back.png");
 
 	IMAGEMANAGER->addFrameImage("invenList", L"images/menu/invenList.png", 7, 1);
+
+
+
 
 	_on = false;
 
@@ -121,6 +131,11 @@ HRESULT tabUI::init()
 	OBJECTMANAGER->findObject(objectType::UI, "inven6")->setPosition(Vector2(1216 + 94 * 4, 130));
 	OBJECTMANAGER->findObject(objectType::UI, "inven7")->setPosition(Vector2(1216 + 94 * 5, 130));
 
+	for (int i = 0; i < 5; i++)
+	{
+		_eqRect[i].update(Vector2(1223,248+128*i), Vector2(IMAGEMANAGER->findImage("eq_ui")->getWidth() * 0.85f, IMAGEMANAGER->findImage("eq_ui")->getHeight() * 0.85f), pivot::LEFTTOP);
+	}
+
 	return S_OK;
 }
 
@@ -139,7 +154,7 @@ void tabUI::update()
 		_hpRC.update(Vector2(298, 188), Vector2(_hp, 12), pivot::LEFTTOP);
 		_expRC.update(Vector2(309, 203), Vector2(_exp, 2), pivot::LEFTTOP);
 
-		if (!_eq && !_iv && !_sv && !_st)
+		if (!_eq && !_iv && !_sv && !_st && !_eqSelect)
 		{
 			OBJECTMANAGER->findObject(objectType::UI, "equip")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(true);
@@ -170,6 +185,7 @@ void tabUI::update()
 		_iv = false;
 		_sv = false;
 		_st = false;
+		_eqSelect = false;
 		_invenIndex = 0;
 		OBJECTMANAGER->findObject(objectType::UI, "inven2")->setPosition(Vector2(1215, 130));
 		OBJECTMANAGER->findObject(objectType::UI, "inven3")->setPosition(Vector2(1215 + 94, 130));
@@ -249,10 +265,25 @@ void tabUI::update()
 		}
 	}
 
+	if (_eq)
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			if (PtInRect(&_eqRect[i].getRect(), _ptMouse))
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_eq = false;
+					_eqSelect = true;
+				}
+				break;
+			}
+		}
+	}
+
+
 	if (_hp < 0)
 		_hp = 0;
-
-	cout << _invenIndex << endl;
 }
 
 void tabUI::render()
@@ -272,7 +303,39 @@ void tabUI::render()
 	if (_eq)
 	{
 		IMAGEMANAGER->findImage("equip")->render(Vector2(0, 0));
+		for (int i = 0; i < 5; ++i)
+		{
+			if (PtInRect(&_eqRect[i].getRect(), _ptMouse))
+			{
+				switch (i)
+				{
+				case 0:
+					IMAGEMANAGER->findImage("eq_head")->render(Vector2(0, 0));
+					break;
+				case 1:
+					IMAGEMANAGER->findImage("eq_armR")->render(Vector2(0, 0));
+					break;
+				case 2:
+					IMAGEMANAGER->findImage("eq_armL")->render(Vector2(0, 0));
+					break;
+				case 3:
+					IMAGEMANAGER->findImage("eq_belt")->render(Vector2(0, 0));
+					break;
+				case 4:
+					IMAGEMANAGER->findImage("eq_foot")->render(Vector2(0, 0));
+					break;
+				}
+			}
+		}
 	}
+
+	if (_eqSelect)
+	{
+		IMAGEMANAGER->findImage("eq_select")->render(Vector2(0, 0));
+	}
+	
+		
+
 	if (_iv)
 	{
 		switch (_invenIndex)
@@ -309,6 +372,7 @@ void tabUI::render()
 	{
 		IMAGEMANAGER->findImage("stat")->render(Vector2(0, 0));
 	}
+	
 }
 
 void tabUI::inEquip()
@@ -361,11 +425,50 @@ void tabUI::inStat()
 }
 void tabUI::outMenu()
 {
-	_on = false;
-	_eq = false;
-	_iv = false;
-	_sv = false;
-	_st = false;
+	if (_on == true && !_eq && !_iv && !_sv && !_st && !_eqSelect)
+	{
+		_on = false;
+	}
+
+	if (_eq == true)
+	{
+		_eq = false;
+	}
+
+	if (_eqSelect == true)
+	{
+		_eqSelect = false;
+		_eq = true;
+	}
+	
+	if (_iv == true)
+	{
+		_iv = false;
+		OBJECTMANAGER->findObject(objectType::UI, "inven1")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inven2")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inven3")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inven4")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inven5")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inven6")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inven7")->setIsActive(false);
+		OBJECTMANAGER->findObject(objectType::UI, "inven2")->setPosition(Vector2(1215, 130));
+		OBJECTMANAGER->findObject(objectType::UI, "inven3")->setPosition(Vector2(1215 + 94, 130));
+		OBJECTMANAGER->findObject(objectType::UI, "inven4")->setPosition(Vector2(1215 + 94 * 2, 130));
+		OBJECTMANAGER->findObject(objectType::UI, "inven5")->setPosition(Vector2(1215 + 94 * 3, 130));
+		OBJECTMANAGER->findObject(objectType::UI, "inven6")->setPosition(Vector2(1216 + 94 * 4, 130));
+		OBJECTMANAGER->findObject(objectType::UI, "inven7")->setPosition(Vector2(1216 + 94 * 5, 130));
+		_invenIndex = 0;
+	}
+
+	if (_sv == true)
+	{
+		_sv = false;
+	}
+
+	if (_st == true)
+	{
+		_st = false;
+	}
 	
 }
 
@@ -443,4 +546,9 @@ void tabUI::InventoryList()
 		OBJECTMANAGER->findObject(objectType::UI, "inven6")->setPosition(Vector2(952 + 94 * 4, 130));
 		break;
 	}
+}
+
+void tabUI::equipSelect()
+{
+
 }
