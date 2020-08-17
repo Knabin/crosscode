@@ -467,3 +467,21 @@ void D2DRenderer::DrawRotationFillRectangle(const floatRect& rc, const D2D1::Col
 
 	NEW_SAFE_RELEASE(brush);
 }
+
+
+void D2DRenderer::SkewRectangle(const floatRect& rc, const D2D1::ColorF& color, const float angle, float angle2)
+{
+	floatRect rect = rc;
+
+	D2D1_POINT_2F offset;
+	offset.x = rect.left + rect.GetWidth() / 2;
+	offset.y = rect.top + rect.GetHeight() / 2;
+
+	ID2D1SolidColorBrush* brush;
+	mD2DRenderTarget->CreateSolidColorBrush(color, &brush);
+	mD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, offset));
+	mD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Skew(angle2, 0, offset));
+	mD2DRenderTarget->FillRectangle(D2D1::RectF((float)rect.left, (float)rect.top, (float)rect.right, (float)rect.bottom), brush);
+
+	NEW_SAFE_RELEASE(brush);
+}
