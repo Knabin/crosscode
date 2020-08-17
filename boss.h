@@ -25,6 +25,7 @@ enum bossState //보스 상태패턴 enum문
 	MINE_READY2,
 	MINE,
 	MINE_END,
+	MINE_END2
 };
 struct tagBossPart  //보스 파츠별 구조체
 {

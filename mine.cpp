@@ -38,10 +38,11 @@ HRESULT mine::init(float centerX, float centerY)
 	_randomDropX6 = RND->getFromIntTo(-450, 150);
 	_randomDropY6 = RND->getFromIntTo(150, 300);
 
-	IMAGEMANAGER->addImage("Áö·Ú", L"images/boss/mine.png");
 	IMAGEMANAGER->addFrameImage("Æø¹ß", L"images/boss/explosion.png", 18, 1);
+	IMAGEMANAGER->addFrameImage("Áö·Ú", L"images/boss/mine.png", 6, 1);
 
 	_currentFrameX, _currentFrameY, _frameCount = 0;
+	_mineCurrentFrameX, _mineCurrentFrameY, _mineFrameCount = 0;
 
 	//================================================================================================================================================================//
 
@@ -81,11 +82,7 @@ void mine::release()
 void mine::update()
 {
 	_frameCount++;
-
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-	{
-		fire();
-	}
+	_mineFrameCount++;
 
 	_explosionFrameY = 0;
 
@@ -100,6 +97,19 @@ void mine::update()
 		_frameCount = 0;
 	}
 
+	_mineFrameY = 0;
+
+	if (_mineFrameCount % 20 == 0)
+	{
+		if (_mineCurrentFrameX >= IMAGEMANAGER->findImage("Áö·Ú")->getMaxFrameX())
+		{
+			_mineCurrentFrameX = 0;
+		}
+		_mineFrameX = _mineCurrentFrameX;
+		_mineCurrentFrameX++;
+		_mineFrameCount = 0;
+	}
+
 	move();
 
 }
@@ -110,9 +120,10 @@ void mine::render(float centerX, float centerY)
 	{
 		if (!_viMine->_fireStart) continue;
 		{
-			//_viMine->_rc.render(getMemDC());
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine->_rc));
 
-			IMAGEMANAGER->findImage("Áö·Ú")->render(CAMERA->getRelativeVector2(Vector2(_viMine->_x , _viMine->_y)));
+			IMAGEMANAGER->findImage("Áö·Ú")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine->_x , _viMine->_y)),
+				_mineFrameX, _mineFrameY);
 		}
 
 		if (_vMine.begin()->_fireStart && !(_vMine.begin() + 1)->_fireStart)
@@ -143,9 +154,10 @@ void mine::render(float centerX, float centerY)
 
 		if (!_viMine2->_fireStart) continue;
 		{
-			//_viMine2->_rc.render(getMemDC());
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine2->_rc));
 
-			IMAGEMANAGER->findImage("Áö·Ú")->render(CAMERA->getRelativeVector2(Vector2(_viMine2->_x, _viMine2->_y)));
+			IMAGEMANAGER->findImage("Áö·Ú")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine2->_x, _viMine2->_y)),
+				_mineFrameX, _mineFrameY);
 		}
 
 		if (_vMine2.begin()->_fireStart && !(_vMine2.begin() + 1)->_fireStart)
@@ -181,7 +193,7 @@ void mine::fire()
 			_viMine->_y = -sinf(_angle) * _centerMeter + _viMine->_center.y;
 			_viMine->_angle = _angle;
 
-			_viMine->_rc.update(Vector2(_viMine->_x, _viMine->_y), Vector2(42, 42), pivot::CENTER);
+			_viMine->_rc.update(Vector2(_viMine->_x, _viMine->_y), Vector2(40, 40), pivot::CENTER);
 
 			break;
 		}
@@ -197,7 +209,7 @@ void mine::fire()
 			_viMine2->_y = -sinf(_angle) * _centerMeter + _viMine2->_center.y;
 			_viMine2->_angle = _angle;
 
-			_viMine2->_rc.update(Vector2(_viMine2->_x, _viMine2->_y), Vector2(42, 42), pivot::CENTER);
+			_viMine2->_rc.update(Vector2(_viMine2->_x, _viMine2->_y), Vector2(40, 40), pivot::CENTER);
 
 			break;
 		}
@@ -214,7 +226,7 @@ void mine::move()
 			_viMine->_x += cosf(_viMine->_angle) * _viMine->_speed;
 			_viMine->_y += -sinf(_viMine->_angle) * _viMine->_speed;
 
-			_viMine->_rc.update(Vector2(_viMine->_x, _viMine->_y), Vector2(42, 42), pivot::CENTER);
+			_viMine->_rc.update(Vector2(_viMine->_x, _viMine->_y), Vector2(40, 40), pivot::CENTER);
 		}
 	}
 
@@ -266,7 +278,7 @@ void mine::move()
 			_viMine2->_x += cosf(_viMine2->_angle) * _viMine2->_speed;
 			_viMine2->_y += -sinf(_viMine2->_angle) * _viMine2->_speed;
 
-			_viMine2->_rc.update(Vector2(_viMine2->_x, _viMine2->_y), Vector2(42, 42), pivot::CENTER);
+			_viMine2->_rc.update(Vector2(_viMine2->_x, _viMine2->_y), Vector2(40, 40), pivot::CENTER);
 		}
 	}
 	
