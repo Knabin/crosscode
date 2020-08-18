@@ -193,6 +193,10 @@
     <ClCompile Include="buffalo.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="bullet.cpp">
+      <Filter>playerTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -395,6 +399,10 @@
     <ClInclude Include="mine.h" />
     <ClInclude Include="buffalo.h">
       <Filter>enemyTest</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="bullet.h">
+      <Filter>playerTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
