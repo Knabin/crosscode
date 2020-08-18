@@ -1,7 +1,6 @@
 #pragma once
 #include "gameObject.h"
 
-
 struct tagMine
 {
 	image * _image;

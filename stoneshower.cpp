@@ -70,11 +70,6 @@ void stoneshower::update()
 
 	frameUpdate();
 	
-	if (KEYMANAGER->isOnceKeyDown('L'))
-	{
-		fire();
-	}
-
 	move();
 
 }
@@ -145,6 +140,7 @@ void stoneshower::frameUpdate()
 				if (_currentFrameX >= IMAGEMANAGER->findImage("¸ÕÁö")->getMaxFrameX())
 				{
 					_currentFrameX = 0;
+					_viDust->_fireStart = false;
 				}
 				_dustFrameX = _currentFrameX;
 				_currentFrameX++;
