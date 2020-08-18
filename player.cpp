@@ -36,6 +36,7 @@ player::player()
 
 	_combo = 0;
 	_iscombo = false;
+	_isEffect = false;
 	_fullCount = 0;
 
 	_dodgeCount = 4; //´åÁö ±âº» È½¼ö
@@ -59,7 +60,8 @@ HRESULT player::init()
 	IMAGEMANAGER->addFrameImage("p_meleeattack_left", L"images/player/meleeattack_left1.png", 8, 7);
 	IMAGEMANAGER->addFrameImage("p_meleeattack_right", L"images/player/meleeattack_right1.png", 8, 7);
 	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
-	IMAGEMANAGER->addImage("player dodgeDust", L"images/player/player_dodgedust.png");
+	IMAGEMANAGER->addFrameImage("player dodgeDust", L"images/player/player_dodgedust.png", 5,1);
+	EFFECTMANAGER->addEffect("player dodgeDust", "player dodgeDust", 1, 0.34f, 10, 1.0f);
 
 	_width = _height = 96;
 	_pivot = pivot::CENTER;
@@ -77,7 +79,7 @@ void player::release()
 
 void player::update()
 {
-
+	
 	if (KEYMANAGER->isStayKeyDown('W'))
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE])
@@ -162,6 +164,8 @@ void player::update()
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			EFFECTMANAGER->play("player dodgeDust", CAMERA->getRelativeVector2(_position).x +20, CAMERA->getRelativeVector2(_position).y + 50);
+		
 			_dodgeCount--;
 		}
 		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] &&
@@ -387,6 +391,7 @@ void player::update()
 
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	_state->updateState();
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 }
 
 void player::render()

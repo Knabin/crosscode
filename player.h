@@ -54,6 +54,7 @@ private:
 	int _count;
 
 	bool _iscombo;
+	bool _isEffect;
 	int _combocount;
 	int _combo;
 	int _fullCount;	//원거리공격 충전시간
