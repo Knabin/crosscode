@@ -44,7 +44,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 		attack1._image = _attackImage[2];
 		attack1._size = _attackSize[2];
 
-		attack1._speed = 20.5f;
+		attack1._speed = 15.5f;
 
 		attack1._fireStart = false;
 
