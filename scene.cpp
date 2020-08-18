@@ -3,6 +3,7 @@
 #include <commdlg.h>
 #include "hedgehag.h"
 #include "meerkat.h"
+#include "buffalo.h"
 #include "vendor.h"
 #include "door.h"
 #include "mapObject.h"
@@ -204,6 +205,14 @@ void scene::getEnemiesFromFile(string fileName)
 		case 1:
 		{
 			gameObject* hed = new meerkat();
+			hed->init();
+			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
+		}
+		break;
+		case 2:
+		{
+			gameObject* hed = new buffalo();
 			hed->init();
 			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
 			OBJECTMANAGER->addObject(objectType::ENEMY, hed);

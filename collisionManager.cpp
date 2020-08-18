@@ -30,7 +30,7 @@ void collisionManager::render()
 
 void collisionManager::playerCollision()
 {
-	/*
+	
 	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 
 	for (int i = 0; i < temp.size(); i++)
@@ -99,7 +99,7 @@ void collisionManager::playerCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	//에너미 공격렉트랑 플레이어가 충돌시*/
+	//에너미 공격렉트랑 플레이어가 충돌시
 }
 
 void collisionManager::bulletCollision()
@@ -140,7 +140,7 @@ void collisionManager::bulletCollision()
 
 void collisionManager::enemyCollision()
 {
-	/*
+	
 	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 
 	for (int i = 0; i < temp.size(); i++)
@@ -150,6 +150,7 @@ void collisionManager::enemyCollision()
 		//에너미 렉트랑 플레이어의 공격렉트랑 충돌시
 		if (isCollision(e->getRect(), _player->getPlayerAttackRect()))//에너미렉트랑 플레이어 공격렉트랑 충돌시
 		{
+			/*
 			if (e->getEnemyAngle() * (180 / PI) >= 135 && e->getEnemyAngle() * (180 / PI) <= 225 && !e->getEnemyIsAttack())//왼쪽
 			{
 				e->setEnemyDirection(ENEMY_LEFT_HIT);
@@ -180,7 +181,7 @@ void collisionManager::enemyCollision()
 			{
 				e->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 			}
-
+			*/
 			e->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
 			_player->setPlayerAttackRectRemove();//플레이어공격 렉트삭제
 		}
@@ -245,5 +246,5 @@ void collisionManager::enemyCollision()
 		}
 		//에너미 렉트와 에너미 렉트가 충돌시 에너미 밀어내기
 
-	}*/
+	}
 }
