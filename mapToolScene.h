@@ -184,8 +184,6 @@ public:
 	void saveMap();
 	void loadMap();
 	
-	bool isAutoTile(int frameX, int frameY, int page);
-	void autotile();
 	void checkAutoTile(int indexX, int indexY);
 	void redrawMap();
 

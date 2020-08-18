@@ -119,6 +119,10 @@ HRESULT mapToolScene::init()
 	IMAGEMANAGER->addFrameImage("button prev", L"images/tile/buttonpreview.png", 3, 1);
 	IMAGEMANAGER->addFrameImage("button2 prev", L"images/tile/button2preview.png", 1, 1);
 	IMAGEMANAGER->addFrameImage("destruct", L"images/object/destruct.png", 1, 1);
+	IMAGEMANAGER->addFrameImage("wall prev", L"images/tile/wallpreview.png", 1, 1);
+	IMAGEMANAGER->addFrameImage("wall2 prev", L"images/tile/wall2preview.png", 1, 1);
+	IMAGEMANAGER->addFrameImage("wall3 prev", L"images/tile/wall3preview.png", 1, 1);
+	IMAGEMANAGER->addFrameImage("wall4 prev", L"images/tile/wall4preview.png", 1, 1);
 	
 	// 빈 타일
 	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
@@ -968,11 +972,11 @@ void mapToolScene::renderPreviewTile()
 				if (_drawStart.x > _drawEnd.x) drawX = _drawEnd.x;
 				if (_drawStart.y > _drawEnd.y) drawY = _drawEnd.y;
 
-				image* img = img = IMAGEMANAGER->findImage("vendor");
+				image* img = IMAGEMANAGER->findImage("vendor");
 
 				int width = 0;
 				int height = 0;
-
+				int frameX = _sampleStart.x % 3;
 
 				switch (_sampleStart.y)
 				{
@@ -1008,10 +1012,30 @@ void mapToolScene::renderPreviewTile()
 					break;
 				case 4:
 					img = IMAGEMANAGER->findImage("destruct");
-					width = SIZE;
-					//height = SIZE * 0.5f;
+					width = SIZE * 0.5f;
+					break;
+				case 5:
+					if (_sampleStart.x == 0)
+					{
+						img = IMAGEMANAGER->findImage("wall prev");
+					}
+					else if (_sampleStart.x == 1)
+					{
+						img = IMAGEMANAGER->findImage("wall2 prev");
+					}
+					else if (_sampleStart.x == 2)
+					{
+						img = IMAGEMANAGER->findImage("wall3 prev");
+					}
+					else if (_sampleStart.x == 3)
+					{
+						img = IMAGEMANAGER->findImage("wall4 prev");
+						width = SIZE * 0.5f;
+					}
+					frameX = 0;
 					break;
 				}
+				
 				
 				for (int i = 0; i <= abs(_drawEnd.y - _drawStart.y); ++i)
 				{
@@ -1022,7 +1046,7 @@ void mapToolScene::renderPreviewTile()
 							img->setAlpha(0.7f);
 							img->frameRender(Vector2(_vTiles[drawY + i][drawX + j]->getRect().getCenter()) 
 								+ Vector2(_mapViewRc.left, _mapViewRc.top) - _clippingPoint - Vector2(width,height),
-								_sampleStart.x % 3, 0);
+								frameX, 0);
 						}
 						if (drawX + j + 1 > _viewLastIndex.x) break;
 					}
@@ -1213,32 +1237,6 @@ void mapToolScene::saveMap()
 	}
 
 	CloseHandle(file);
-
-	// 상호작용하는 object 저장
-	/*s = "../object/";
-	s += name;
-
-	file = CreateFile(TEXT(s.c_str()), GENERIC_WRITE, NULL, NULL,
-		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	ZeroMemory(str, sizeof(str));
-	sprintf_s(str, "object number: %d\n", _vObject.size());
-	WriteFile(file, str, strlen(str), &write, NULL);
-
-	for (int i = 0; i < _vObject.size(); ++i)
-	{
-		ZeroMemory(str, sizeof(str));
-		sprintf_s(str, "%d,%d,%d,%d,%d,%d\n",
-			_vObject[i].tileX,
-			_vObject[i].tileY,
-			_vObject[i].frameX,
-			_vObject[i].frameY,
-			_vObject[i].pageNum,
-			_vObject[i].objectType);
-		WriteFile(file, str, strlen(str), &write, NULL);
-	}
-
-	CloseHandle(file);*/
 }
 
 void mapToolScene::loadMap()
@@ -1369,27 +1367,6 @@ void mapToolScene::loadMap()
 	redrawMap();
 }
 
-bool mapToolScene::isAutoTile(int frameX, int frameY, int page)
-{
-	switch (page)
-	{
-	case 0:
-		// 초록초록
-		break;
-	case 1:
-		// 마을
-		break;
-	case 2:
-		// 보스
-		break;
-	}
-	return false;
-}
-
-void mapToolScene::autotile()
-{
-}
-
 void mapToolScene::checkAutoTile(int indexX, int indexY)
 {
 	int autoIndex = 0;
@@ -1431,6 +1408,7 @@ void mapToolScene::checkAutoTile(int indexX, int indexY)
 
 void mapToolScene::redrawMap()
 {
+	checkMapIndex();
 	//for (int i = 0; i <= _nowIndex.y; ++i)
 	for(int i = 0; i <= _viewLastIndex.y; ++i)
 	{
@@ -1497,45 +1475,66 @@ void mapToolScene::redrawMap()
 
 		image* img = IMAGEMANAGER->findImage("vendor");
 
-		switch (_miObject->second.objectType)
+		switch (_miObject->second.frameY)
 		{
 		case 0:
-			if (_miObject->second.frameY == 0)
+			if (_miObject->second.frameX <= 2)
 			{
 				img = IMAGEMANAGER->findImage("vendor");
 			}
-			else if (_miObject->second.frameY == 1)
+			else
 			{
-				img = IMAGEMANAGER->findImage("tree");
-				height = SIZE * 2.5f;
-			}
-			else if (_miObject->second.frameY == 2)
-			{
-				img = IMAGEMANAGER->findImage("button prev");
-				height = SIZE * 0.5f;
-			}
-			else if (_miObject->second.frameY == 3)
-			{
-				img = IMAGEMANAGER->findImage("button2 prev");
-				height = SIZE * 0.5f;
-			}
-			else if (_miObject->second.frameY == 4)
-			{
-				img = IMAGEMANAGER->findImage("destruct");
-				width = SIZE;
+				img = IMAGEMANAGER->findImage("door prev");
+				frameX -= 3;
 			}
 			break;
 		case 1:
-			if (_miObject->second.frameY == 0)
+			if (_miObject->second.frameX <= 2)
 			{
-				img = IMAGEMANAGER->findImage("door prev");
+				img = IMAGEMANAGER->findImage("tree");
+				height = SIZE * 2.5f;
 			}
 			else
 			{
 				img = IMAGEMANAGER->findImage("grass");
 				height = SIZE * 0.5f;
+				frameX -= 3;
 			}
-			frameX -= 3;
+			break;
+		case 2:
+			img = IMAGEMANAGER->findImage("button prev");
+			height = SIZE * 0.5f;
+			break;
+		case 3:
+			img = IMAGEMANAGER->findImage("button2 prev");
+			height = SIZE * 0.5f;
+			break;
+		case 4:
+			img = IMAGEMANAGER->findImage("destruct");
+			width = SIZE * 0.5f;
+			break;
+		case 5:
+			if (_miObject->second.frameX == 0)
+			{
+				img = IMAGEMANAGER->findImage("wall prev");
+				frameX = 0;
+			}
+			else if (_miObject->second.frameX == 1)
+			{
+				img = IMAGEMANAGER->findImage("wall2 prev");
+				frameX = 0;
+			}
+			else if (_miObject->second.frameX == 2)
+			{
+				img = IMAGEMANAGER->findImage("wall3 prev");
+				frameX = 0;
+			}
+			else if (_miObject->second.frameX == 3)
+			{
+				img = IMAGEMANAGER->findImage("wall4 prev");
+				frameX = 0;
+				width = SIZE * 0.5f;
+			}
 			break;
 		}
 		img->frameRender(

@@ -7,7 +7,7 @@ puzzleScene::~puzzleScene()
 
 HRESULT puzzleScene::init()
 {
-	CAMERA->setCameraMode(CAMERASTATE::TARGET);
+	CAMERA->setCameraMode(CAMERASTATE::NONE);
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
@@ -25,11 +25,12 @@ HRESULT puzzleScene::init()
 			{
 				// 해당 타일에 오브젝트가 존재하는 경우, object manager에 추가해서 위에 오브젝트만 렌더 한 번 더 하게끔!
 				// object manager에서 플레이어보다 뒤에 있어야 하는 경우에만 렌더 처리하면 될 것 같아요
-				if (_vTiles[i][j]->getObjectX() != -1 && _vTiles[i][j]->getObjectImageNum() < 3)
+				if (_vTiles[i][j]->getObjectX() != -1 && _vTiles[i][j]->getObjectImageNum() < 3 && _vTiles[i][j]->getOrderIndex() == 4)
 				{
-					_vTiles[i][j]->setIsActive(true);
 					OBJECTMANAGER->addObject(objectType::TILEOBJECT, _vTiles[i][j]);
-					SCENEMANAGER->getObjectImage(_vTiles[i][j]->getObjectImageNum())->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
+					if (i + 1 > _maxY) continue;
+					OBJECTMANAGER->addObject(objectType::MAPOBJECT, _vTiles[i + 1][j]);
+					//SCENEMANAGER->getObjectImage(_vTiles[i][j]->getObjectImageNum())->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
 				}
 			}
 		}
