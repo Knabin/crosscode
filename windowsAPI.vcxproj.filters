@@ -200,6 +200,10 @@
     <ClCompile Include="puzzleComboButton.cpp">
       <Filter>playGround\puzzle</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="bullet.cpp">
+      <Filter>playerTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -409,6 +413,10 @@
     </ClInclude>
     <ClInclude Include="puzzleComboButton.h">
       <Filter>playGround\puzzle</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="bullet.h">
+      <Filter>playerTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -152,6 +152,7 @@
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossTestScene.h" />
     <ClInclude Include="buffalo.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="bullets.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossTestScene.cpp" />
     <ClCompile Include="buffalo.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bullets.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />

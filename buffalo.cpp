@@ -6,7 +6,9 @@ HRESULT buffalo::init()
 {
 	_enemyImage = IMAGEMANAGER->addFrameImage("enemyIdleMoveAttackPrepare", L"images/enemy/buffalo_idle_move_attackPrepare.png", 6, 18);
 	_attackImage = IMAGEMANAGER->addFrameImage("enemyAttack", L"images/enemy/buffalo_attack.png", 6, 12);
-	_hitImage = IMAGEMANAGER->addFrameImage("enemyHit", L"images/enemy/buffalo_hit.png", 5, 6);
+	_hitImage = IMAGEMANAGER->addFrameImage("enemyHit", L"images/enemy/buffalo_hit.png", 4, 6);
+
+	_name = "buffalo";
 
 	_maxHP = 100;
 	_currentHP = _maxHP;
@@ -24,10 +26,11 @@ HRESULT buffalo::init()
 	_attackCount = 0;
 	_hitCount = 0;
 
-	_isAttack = false;
+	_isAttack = true;
 	_distanceChange = false;
 	_idleMove = false;
 	_oneAnimation = false;
+	_wallCollision = false;
 
 	//버팔로 위쪽 기본 애니메이션
 	_idleMotion_U_R = new animation;
@@ -61,7 +64,7 @@ HRESULT buffalo::init()
 
 	_idleMotion_D_L = new animation;
 	_idleMotion_D_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
-	_idleMotion_D_L->setPlayFrame(27, 24, false, true);
+	_idleMotion_D_L->setPlayFrame(33, 30, false, true);
 	_idleMotion_D_L->setFPS(1);
 	//버팔로 아래쪽 기본 애니메이션
 
@@ -109,7 +112,7 @@ HRESULT buffalo::init()
 
 	_attackPrepareMotion_U_L = new animation;
 	_attackPrepareMotion_U_L->init(_enemyImage->getWidth(), _enemyImage->getHeight(), _enemyImage->getFrameSize().x, _enemyImage->getFrameSize().y);
-	_attackPrepareMotion_U_L->setPlayFrame(90, 85, false, false);
+	_attackPrepareMotion_U_L->setPlayFrame(96, 91, false, false);
 	_attackPrepareMotion_U_L->setFPS(1);
 	//버팔로 위쪽 돌진공격준비 애니메이션
 
@@ -170,6 +173,7 @@ HRESULT buffalo::init()
 	_meleeAttackMotion_D_L = new animation;
 	_meleeAttackMotion_D_L->init(_attackImage->getWidth(), _attackImage->getHeight(), _attackImage->getFrameSize().x, _attackImage->getFrameSize().y);
 	_meleeAttackMotion_D_L->setPlayFrame(33, 30, false, false);
+	_meleeAttackMotion_D_L->setFPS(1);
 	//버팔로 아래쪽 근접공격 애니메이션
 
 	//버팔로 위쪽 돌진공격 애니메이션
@@ -265,14 +269,12 @@ void buffalo::update()
 	tileGet();//버팔로 타일 검출 업데이트
 	move();//버팔로 무브
 	animationControl();//변경된 디렉션 상태값에 따라 애니메이션 실행
-	//animationAngleControl();//버팔로의 각도값에 따라 애니메이션 변경
 	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);//버팔로 애니메이션 업데이트
 	angry();//버팔로의 체력이 절반이하가 되면 능력치 상승(스피드, 공격속도, 공격력)
 }
 
 void buffalo::render()
 {
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_attackRC));//버팔로 공격렉트
 	animationDraw();
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//버팔로 렉트
 	for (int i = 0; i < 3; i++)
@@ -283,6 +285,7 @@ void buffalo::render()
 	{
 		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
 	}
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_attackRC), D2D1::ColorF::Black, 0);//버팔로 공격렉트
 }
 
 void buffalo::move()
@@ -304,7 +307,19 @@ void buffalo::move()
 			_enemyDirection != ENEMY_DOWN_LEFT_HIT &&
 			_enemyDirection != ENEMY_DOWN_RIGHT_HIT)
 		{
-			if (!_distanceChange)
+			if (!_distanceChange && !_isAttack && !_wallCollision &&
+				_enemyDirection != ENEMY_UP_LEFT_ATTACK_PREPARE &&
+				_enemyDirection != ENEMY_UP_RIGHT_ATTACK_PREPARE &&
+				_enemyDirection != ENEMY_LEFT_ATTACK_PREPARE &&
+				_enemyDirection != ENEMY_RIGHT_ATTACK_PREPARE &&
+				_enemyDirection != ENEMY_DOWN_LEFT_ATTACK_PREPARE &&
+				_enemyDirection != ENEMY_DOWN_RIGHT_ATTACK_PREPARE &&
+				_enemyDirection != ENEMY_UP_LEFT_ATTACK &&
+				_enemyDirection != ENEMY_UP_RIGHT_ATTACK &&
+				_enemyDirection != ENEMY_LEFT_ATTACK &&
+				_enemyDirection != ENEMY_RIGHT_ATTACK &&
+				_enemyDirection != ENEMY_DOWN_LEFT_ATTACK &&
+				_enemyDirection != ENEMY_DOWN_RIGHT_ATTACK)
 			{
 				if (_move.size() != NULL)
 				{
@@ -352,44 +367,51 @@ void buffalo::move()
 					}
 				}
 			}
-			else if (_distanceChange && _distance > 100)//거리가 350보다 가깝고 100보다 멀면
+			else if (_distanceChange && _distance > 200 && !_isAttack && !_wallCollision)
 			{
 				_attackDelay++;
-				if (_attackDelay >= _maxAttackDelay && !_isAttack)
+			}
+
+			if (_attackDelay >= _maxAttackDelay && !_isAttack && !_wallCollision)
+			{
+				_angleSave = _angle;
+				_playerSaveX = _playerX;
+				_playerSaveY = _playerY;
+
+				if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
 				{
-					_angleSave = _angle;
-					_playerSaveX = _playerX;
-					_playerSaveY = _playerY;
+					_enemyDirection = ENEMY_LEFT_ATTACK_PREPARE;
+					_attackDelay = 0;
+				}
 
-					if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
-					{
-						_enemyDirection = ENEMY_LEFT_ATTACK_PREPARE;
-					}
+				if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
+				{
+					_enemyDirection = ENEMY_UP_LEFT_ATTACK_PREPARE;
+					_attackDelay = 0;
+				}
 
-					if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
-					{
-						_enemyDirection = ENEMY_UP_LEFT_ATTACK_PREPARE;
-					}
+				if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
+				{
+					_enemyDirection = ENEMY_UP_RIGHT_ATTACK_PREPARE;
+					_attackDelay = 0;
+				}
 
-					if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
-					{
-						_enemyDirection = ENEMY_UP_RIGHT_ATTACK_PREPARE;
-					}
+				if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
+				{
+					_enemyDirection = ENEMY_RIGHT_ATTACK_PREPARE;
+					_attackDelay = 0;
+				}
 
-					if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
-					{
-						_enemyDirection = ENEMY_RIGHT_ATTACK_PREPARE;
-					}
+				if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
+				{
+					_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK_PREPARE;
+					_attackDelay = 0;
+				}
 
-					if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
-					{
-						_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK_PREPARE;
-					}
-
-					if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
-					{
-						_enemyDirection = ENEMY_DOWN_LEFT_ATTACK_PREPARE;
-					}
+				if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
+				{
+					_enemyDirection = ENEMY_DOWN_LEFT_ATTACK_PREPARE;
+					_attackDelay = 0;
 				}
 			}
 
@@ -402,83 +424,101 @@ void buffalo::move()
 				}
 				else//장애물에 부딪혔으면
 				{
-					_position.x += cosf(_angleSave + PI) * _attackSpeed;
-					_position.y += -sinf(_angleSave + PI) * _attackSpeed;
-					//_count++;
-					//if (_count % 5 == 0)
-					//{
-						if (_enemyDirection == ENEMY_UP_LEFT_ATTACK)
-						{
-							_enemyDirection = ENEMY_UP_LEFT_HIT;
-						}
-						if (_enemyDirection == ENEMY_UP_RIGHT_ATTACK)
-						{
-							_enemyDirection = ENEMY_UP_RIGHT_HIT;
-						}
-						if (_enemyDirection == ENEMY_LEFT_ATTACK)
-						{
-							_enemyDirection = ENEMY_LEFT_HIT;
-						}
-						if (_enemyDirection == ENEMY_RIGHT_ATTACK)
-						{
-							_enemyDirection = ENEMY_RIGHT_HIT;
-						}
-						if (_enemyDirection == ENEMY_DOWN_LEFT_ATTACK)
-						{
-							_enemyDirection = ENEMY_DOWN_LEFT_HIT;
-						}
-						if (_enemyDirection == ENEMY_DOWN_RIGHT_ATTACK)
-						{
-							_enemyDirection = ENEMY_DOWN_RIGHT_HIT;
-						}
-
-						_isAttack = false;
-					//	_count = 0;
-					//}
+					_isAttack = false;
 				}
 				_attackRC.update(Vector2(0, 0), Vector2(100, 100), pivot::CENTER);
 			}
-
-			if (_distance <= 100)//거리가 100보다 가까우면
+			else if (!tileMove())
 			{
+				_wallCollision = true;
+			}
+
+			if (_wallCollision)
+			{
+				_position.x += cosf(_angleSave + PI) * _attackSpeed;
+				_position.y += -sinf(_angleSave + PI) * _attackSpeed;
 				_count++;
 				if (_count % 5 == 0)
+				{
+					if (_enemyDirection == ENEMY_UP_LEFT_ATTACK)
+					{
+						_count = 0;
+						_enemyDirection = ENEMY_UP_LEFT_HIT;
+					}
+					if (_enemyDirection == ENEMY_UP_RIGHT_ATTACK)
+					{
+						_count = 0;
+						_enemyDirection = ENEMY_UP_RIGHT_HIT;
+					}
+					if (_enemyDirection == ENEMY_LEFT_ATTACK)
+					{
+						_count = 0;
+						_enemyDirection = ENEMY_LEFT_HIT;
+					}
+					if (_enemyDirection == ENEMY_RIGHT_ATTACK)
+					{
+						_count = 0;
+						_enemyDirection = ENEMY_RIGHT_HIT;
+					}
+					if (_enemyDirection == ENEMY_DOWN_LEFT_ATTACK)
+					{
+						_count = 0;
+						_enemyDirection = ENEMY_DOWN_LEFT_HIT;
+					}
+					if (_enemyDirection == ENEMY_DOWN_RIGHT_ATTACK)
+					{
+						_count = 0;
+						_enemyDirection = ENEMY_DOWN_RIGHT_HIT;
+					}
+					_wallCollision = false;
+				}
+			}
+
+			if (_distance <= 200 && !_isAttack && tileMove() && !_wallCollision)
+			{
+				_count++;
+				if (_count % 55 == 0)
 				{
 					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
 					{
 						_enemyDirection = ENEMY_LEFT_MELEE_ATTACK;
+						_count = 0;
 					}
 
 					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
 					{
 						_enemyDirection = ENEMY_UP_LEFT_MELEE_ATTACK;
+						_count = 0;
 					}
 
 					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
 					{
 						_enemyDirection = ENEMY_UP_RIGHT_MELEE_ATTACK;
+						_count = 0;
 					}
 
 					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
 					{
 						_enemyDirection = ENEMY_RIGHT_MELEE_ATTACK;
+						_count = 0;
 					}
 
 					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
 					{
 						_enemyDirection = ENEMY_DOWN_RIGHT_MELEE_ATTACK;
+						_count = 0;
 					}
 
 					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
 					{
 						_enemyDirection = ENEMY_DOWN_LEFT_MELEE_ATTACK;
+						_count = 0;
 					}
-					_count = 0;
 				}
 			}
 		}
 
-		if (_distance > 350)//플레이어와 에너미의 거리가 350보다 크면
+		if (_distance > 450)
 		{
 			_distanceChange = false;
 		}
@@ -492,41 +532,6 @@ void buffalo::move()
 			_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);
 		}
 
-		if (!tileMove())
-		{
-			_position.x += cosf(_angle) * _speed;
-			_position.y += -sinf(_angle) * _speed;
-
-			if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
-			{
-				_enemyDirection = ENEMY_LEFT_MOVE;
-			}
-
-			if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
-			{
-				_enemyDirection = ENEMY_UP_LEFT_MOVE;
-			}
-
-			if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
-			{
-				_enemyDirection = ENEMY_UP_RIGHT_MOVE;
-			}
-
-			if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
-			{
-				_enemyDirection = ENEMY_RIGHT_MOVE;
-			}
-
-			if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
-			{
-				_enemyDirection = ENEMY_DOWN_RIGHT_MOVE;
-			}
-
-			if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
-			{
-				_enemyDirection = ENEMY_DOWN_LEFT_MOVE;
-			}
-		}
 	}
 	else//공격받지 않았으면
 	{
@@ -551,7 +556,7 @@ void buffalo::move()
 			_position.y += -sinf(_angleSave + PI) * _noHitSpeed;
 			_idleMove = false;
 		}
-
+		
 		if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
 		{
 			_enemyDirection = ENEMY_LEFT_MOVE;
@@ -585,196 +590,6 @@ void buffalo::move()
 
 	_rc.set(_position, pivot::CENTER);//버팔로 렉트 위치 업데이트
 	_attackRC.set(_position, pivot::CENTER);//버팔로 공격렉트 위치 업데이트
-}
-
-void buffalo::animationAngleControl()
-{
-	if (_maxHP > _currentHP)//공격받았으면
-	{
-		if (_enemyDirection != ENEMY_UP_LEFT_HIT &&
-			_enemyDirection != ENEMY_UP_RIGHT_HIT &&
-			_enemyDirection != ENEMY_LEFT_HIT &&
-			_enemyDirection != ENEMY_RIGHT_HIT &&
-			_enemyDirection != ENEMY_DOWN_LEFT_HIT &&
-			_enemyDirection != ENEMY_DOWN_RIGHT_HIT)
-		{
-			if (!_distanceChange)
-			{
-				if (_move.size() != NULL)
-				{
-					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
-					{
-						_enemyDirection = ENEMY_LEFT_MOVE;
-					}
-
-					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
-					{
-						_enemyDirection = ENEMY_UP_LEFT_MOVE;
-					}
-
-					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
-					{
-						_enemyDirection = ENEMY_UP_RIGHT_MOVE;
-					}
-
-					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
-					{
-						_enemyDirection = ENEMY_RIGHT_MOVE;
-					}
-
-					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
-					{
-						_enemyDirection = ENEMY_DOWN_RIGHT_MOVE;
-					}
-
-					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
-					{
-						_enemyDirection = ENEMY_DOWN_LEFT_MOVE;
-					}
-				}
-			}
-			else if (_distanceChange && _distance > 100)//거리가 350보다 가깝고 100보다 멀면
-			{
-				if (_attackDelay >= _maxAttackDelay && !_isAttack)
-				{
-					if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
-					{
-						_enemyDirection = ENEMY_LEFT_ATTACK_PREPARE;
-					}
-
-					if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
-					{
-						_enemyDirection = ENEMY_UP_LEFT_ATTACK_PREPARE;
-					}
-
-					if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
-					{
-						_enemyDirection = ENEMY_UP_RIGHT_ATTACK_PREPARE;
-					}
-
-					if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
-					{
-						_enemyDirection = ENEMY_RIGHT_ATTACK_PREPARE;
-					}
-
-					if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
-					{
-						_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK_PREPARE;
-					}
-
-					if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
-					{
-						_enemyDirection = ENEMY_DOWN_LEFT_ATTACK_PREPARE;
-					}
-				}
-			}
-
-			if (_isAttack)//에너미 공격시작
-			{
-				if (!tileMove())//장애물에 부딪혔으면
-				{
-					if (_count % 5 == 0)
-					{
-						if (_enemyDirection == ENEMY_UP_LEFT_ATTACK)
-						{
-							_enemyDirection = ENEMY_UP_LEFT_HIT;
-						}
-						if (_enemyDirection == ENEMY_UP_RIGHT_ATTACK)
-						{
-							_enemyDirection = ENEMY_UP_RIGHT_HIT;
-						}
-						if (_enemyDirection == ENEMY_LEFT_ATTACK)
-						{
-							_enemyDirection = ENEMY_LEFT_HIT;
-						}
-						if (_enemyDirection == ENEMY_RIGHT_ATTACK)
-						{
-							_enemyDirection = ENEMY_RIGHT_HIT;
-						}
-						if (_enemyDirection == ENEMY_DOWN_LEFT_ATTACK)
-						{
-							_enemyDirection = ENEMY_DOWN_LEFT_HIT;
-						}
-						if (_enemyDirection == ENEMY_DOWN_RIGHT_ATTACK)
-						{
-							_enemyDirection = ENEMY_DOWN_RIGHT_HIT;
-						}
-					}
-				}
-			}
-
-			if (_distance <= 100)//거리가 100보다 가까우면
-			{
-				if (_count % 5 == 0)
-				{
-					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
-					{
-						_enemyDirection = ENEMY_LEFT_MELEE_ATTACK;
-					}
-
-					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
-					{
-						_enemyDirection = ENEMY_UP_LEFT_MELEE_ATTACK;
-					}
-
-					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
-					{
-						_enemyDirection = ENEMY_UP_RIGHT_MELEE_ATTACK;
-					}
-
-					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
-					{
-						_enemyDirection = ENEMY_RIGHT_MELEE_ATTACK;
-					}
-
-					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
-					{
-						_enemyDirection = ENEMY_DOWN_RIGHT_MELEE_ATTACK;
-					}
-
-					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
-					{
-						_enemyDirection = ENEMY_DOWN_LEFT_MELEE_ATTACK;
-					}
-				}
-			}
-		}
-	}
-	else//공격받지 않았으면
-	{
-		if (_distanceSave > 10 && tileMove())
-		{
-			if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
-			{
-				_enemyDirection = ENEMY_LEFT_MOVE;
-			}
-
-			if (_angleSave * (180 / PI) >= 90 && _angleSave * (180 / PI) <= 135)//왼쪽위
-			{
-				_enemyDirection = ENEMY_UP_LEFT_MOVE;
-			}
-
-			if (_angleSave * (180 / PI) >= 45 && _angleSave * (180 / PI) <= 90)//오른쪽위
-			{
-				_enemyDirection = ENEMY_UP_RIGHT_MOVE;
-			}
-
-			if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
-			{
-				_enemyDirection = ENEMY_RIGHT_MOVE;
-			}
-
-			if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
-			{
-				_enemyDirection = ENEMY_DOWN_RIGHT_MOVE;
-			}
-
-			if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
-			{
-				_enemyDirection = ENEMY_DOWN_LEFT_MOVE;
-			}
-		}
-	}
 }
 
 void buffalo::animationDraw()
@@ -1401,9 +1216,9 @@ void buffalo::tileGet()
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 
 	int k = 1;
-	currentTileIndex = Vector2(_tile.left / SIZE, _tile.top / SIZE);//현재 버팔로 위치에 타일
+	currentTileIndex = Vector2(_tile.left / SIZE, _tile.top / SIZE);//현재에너미 위치에 타일
 
-	if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪾
+	if (_angleSave * (180 / PI) >= 135 && _angleSave * (180 / PI) <= 225)//왼쪽
 	{
 		nextTileIndex[0] = Vector2(currentTileIndex.x - k, currentTileIndex.y);
 		nextTileIndex[1] = Vector2(currentTileIndex.x - k, currentTileIndex.y + k);
@@ -1421,10 +1236,10 @@ void buffalo::tileGet()
 	{
 		nextTileIndex[0] = Vector2(currentTileIndex.x + k, currentTileIndex.y - k);
 		nextTileIndex[1] = Vector2(currentTileIndex.x, currentTileIndex.y - k);
-		nextTileIndex[2] = Vector2(currentTileIndex.x + k, currentTileIndex.y - k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x - k, currentTileIndex.y - k);
 	}
 
-	if (_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45 || _angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360)//오른쪽
+	if ((_angleSave * (180 / PI) >= 0 && _angleSave * (180 / PI) <= 45) || (_angleSave * (180 / PI) >= 315 && _angleSave * (180 / PI) <= 360))//오른쪽
 	{
 		nextTileIndex[0] = Vector2(currentTileIndex.x + k, currentTileIndex.y);
 		nextTileIndex[1] = Vector2(currentTileIndex.x + k, currentTileIndex.y - k);
@@ -1434,6 +1249,13 @@ void buffalo::tileGet()
 	if (_angleSave * (180 / PI) >= 270 && _angleSave * (180 / PI) <= 315)//아래오른쪽
 	{
 		nextTileIndex[0] = Vector2(currentTileIndex.x + k, currentTileIndex.y + k);
+		nextTileIndex[1] = Vector2(currentTileIndex.x, currentTileIndex.y + k);
+		nextTileIndex[2] = Vector2(currentTileIndex.x - k, currentTileIndex.y + k);
+	}
+
+	if (_angleSave * (180 / PI) >= 225 && _angleSave * (180 / PI) <= 270)//아래왼쪽
+	{
+		nextTileIndex[0] = Vector2(currentTileIndex.x - k, currentTileIndex.y + k);
 		nextTileIndex[1] = Vector2(currentTileIndex.x, currentTileIndex.y + k);
 		nextTileIndex[2] = Vector2(currentTileIndex.x + k, currentTileIndex.y + k);
 	}

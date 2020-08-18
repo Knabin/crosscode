@@ -35,7 +35,6 @@ public:
 
 	void move();
 	void animationControl();
-	void animationAngleControl();
 	void tileGet();//타일위치 가져오기
 	void ballTileGet();//미어캣의 볼타일위치 가져오기
 	bool ballTileMove();//볼타일 무브

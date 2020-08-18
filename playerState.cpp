@@ -993,6 +993,7 @@ void longAttackState::update()
 		longAttack(_left_top, 126, false);
 		break;
 	}
+	_player->playerLongAttackMove();
 	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 15);
 }
 

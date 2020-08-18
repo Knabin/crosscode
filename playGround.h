@@ -13,6 +13,8 @@ private:
 	uiController* _ui;
 	enemyManager* _enemyManager;
 
+	float _test;
+
 public:
 	playGround();
 	~playGround();

@@ -72,6 +72,19 @@ void effect::startEffect(int x, int y)
 	_effectAnimation->start();
 }
 
+void effect::startEffect(int x, int y, float angle)
+{
+	if (!_effectImage || !_effectAnimation) return;
+
+	_x = x - (_effectAnimation->getFrameWidth() / 2);
+	_y = y - (_effectAnimation->getFrameHeight() / 2);
+	_effectImage->setAngle(angle);
+
+	_isRunning = true;
+
+	_effectAnimation->start();
+}
+
 void effect::killEffect()
 {
 	_isRunning = false;

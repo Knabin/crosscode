@@ -26,6 +26,7 @@ private:
 	float an;
 
 	bool _oneAnimation;//애니메이션을 한번만 실행시키기 위한 변수
+	bool _wallCollision;//버팔로가 벽에 돌진공격으로 부딪혔는지 여부 확인용
 
 public:
 	buffalo() {};
@@ -39,7 +40,6 @@ public:
 	void move();
 	void animationDraw();
 	void animationControl();
-	void animationAngleControl();
 	void tileGet();
 	bool tileMove();
 };
