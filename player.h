@@ -53,6 +53,8 @@ private:
 	int _nowOrder;
 	int _count;
 
+	int _jumpCount;
+
 	bool _iscombo;		//근거리 콤보 상태인지 체크
 	int _combocount;	//근거리 콤보용
 	int _combo;			//근거리 콤보용
@@ -83,6 +85,7 @@ public:
 
 	void playerMove();
 	void playerDodge();
+	void playerJumpMove();
 	void playerLongAttackMove();
 	void playermeleeattackMove();
 	void playerfinalattackMove();
