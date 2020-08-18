@@ -55,9 +55,14 @@ public:
 	void update();
 	void render(float centerX, float centerY);
 
-	void fire();
-	void move();
+	void frameUpdate();   //지뢰, 폭발 프레임
+	void fire();			//지뢰, 발사
+	void move();			//지뢰 발사 후 움직임
 
+	vector<tagMine>& getMineVector() { return _vMine; }
+	vector<tagMine>::iterator& getMineIterVector() { return _viMine; }
 
+	vector<tagMine>& getMine2Vector() { return _vMine2; }
+	vector<tagMine>::iterator& getMine2IterVector() { return _viMine2; }
 };
 

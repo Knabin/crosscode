@@ -32,7 +32,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 	//IMAGEMANAGER->addFrameImage("얼음충돌", L"images/boss/ice_collision.png", 10, 1);
 
 	_currentFrameX, _currentFrameY, _frameCount = 0;
-	_collisionCurrentFrameX, _collisionCurrentFrameY, _collisionFrameCount = 0;
+	//_collisionCurrentFrameX, _collisionCurrentFrameY, _collisionFrameCount = 0;
 
 	//================================================================================================================================================================//
 
@@ -64,53 +64,16 @@ void icethrower::release()
 
 void icethrower::update()
 {
-
-	_centerEnd.x = cosf(_angle) * _centerMeter + _center.x;
-	_centerEnd.y = -sinf(_angle) * _centerMeter + _center.y;
-
-	_centerEnd2.x = cosf(_angle) + _center.x;
-	_centerEnd2.y = -sinf(_angle) + _center.y;
-
-	_frameCount++;
-	_collisionFrameCount++;
+	angleUpdate();
 
 	move();
 
-	_iceEffectFrameY = 0;
-
-	if (_frameCount % 5 == 0)
-	{
-		if (_currentFrameX >= IMAGEMANAGER->findImage("얼음이펙트")->getMaxFrameX() ||
-			_currentFrameX >= IMAGEMANAGER->findImage("얼음이펙트2")->getMaxFrameX() ||
-			_currentFrameX >= IMAGEMANAGER->findImage("얼음이펙트3")->getMaxFrameX())
-		{
-			_currentFrameX = 0;
-		}
-		_iceEffectFrameX = _currentFrameX;
-		_currentFrameX++;
-		_frameCount = 0;
-	}
-
-	/*
-	_collisionFrameY = 0;
-
-	if (_collisionFrameCount % 5 == 0)
-	{
-		if (_collisionCurrentFrameX >= IMAGEMANAGER->findImage("얼음충돌")->getMaxFrameX())
-		{
-			_collisionCurrentFrameX = 0;
-		}
-		_collisionFrameX = _collisionCurrentFrameX;
-		_collisionCurrentFrameX++;
-		_collisionFrameCount = 0;
-	}
-	*/
-
+	frameUpdate();
 }
 
 void icethrower::render()
 {
-	/*
+	/*  발사 선
 	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_center.x, _center.y))),
 		(CAMERA->getRelativeVector2(Vector2(_centerEnd.x, _centerEnd.y))),
 		D2D1::ColorF::Black, 1, 2.0f);
@@ -148,6 +111,51 @@ void icethrower::render()
 
 		}
 	}
+}
+
+void icethrower::angleUpdate()
+{
+	_centerEnd.x = cosf(_angle) * _centerMeter + _center.x;
+	_centerEnd.y = -sinf(_angle) * _centerMeter + _center.y;
+
+	_centerEnd2.x = cosf(_angle) + _center.x;
+	_centerEnd2.y = -sinf(_angle) + _center.y;
+}
+
+void icethrower::frameUpdate()
+{
+	_frameCount++;
+	//_collisionFrameCount++;
+
+	_iceEffectFrameY = 0;
+
+	if (_frameCount % 5 == 0)
+	{
+		if (_currentFrameX >= IMAGEMANAGER->findImage("얼음이펙트")->getMaxFrameX() ||
+			_currentFrameX >= IMAGEMANAGER->findImage("얼음이펙트2")->getMaxFrameX() ||
+			_currentFrameX >= IMAGEMANAGER->findImage("얼음이펙트3")->getMaxFrameX())
+		{
+			_currentFrameX = 0;
+		}
+		_iceEffectFrameX = _currentFrameX;
+		_currentFrameX++;
+		_frameCount = 0;
+	}
+
+	/*
+	_collisionFrameY = 0;
+
+	if (_collisionFrameCount % 5 == 0)
+	{
+		if (_collisionCurrentFrameX >= IMAGEMANAGER->findImage("얼음충돌")->getMaxFrameX())
+		{
+			_collisionCurrentFrameX = 0;
+		}
+		_collisionFrameX = _collisionCurrentFrameX;
+		_collisionCurrentFrameX++;
+		_collisionFrameCount = 0;
+	}
+	*/
 }
 
 void icethrower::fire()
@@ -203,6 +211,5 @@ void icethrower::move()
 
 void icethrower::removeFire(int Num1)
 {
-	_vIcethrower[Num1]._image->ResetRenderOption();
 	_vIcethrower.erase(_vIcethrower.begin() + Num1);
 }

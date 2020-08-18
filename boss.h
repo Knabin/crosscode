@@ -96,8 +96,6 @@ private:
 
 	int _moveCount;  //움직이고 있을때의 카운트
 
-	int _breatheCount; // 숨을 쉴때의 카운트
-
 	int _randomAttackCount;  // 어떤 공격을 할까나~~??
 
 
@@ -109,6 +107,9 @@ private:
 
 	//지뢰 발사 딜레이
 	int _mineAttackDelay;
+
+	//바위 발사 딜레이
+	int _stoneAttackDelay;
 
 	int _dustCurrentFrameX, _dustCurrentFrameY;
 	int _dustFrameX, _dustFrameY;
@@ -135,7 +136,6 @@ public:
 	void fireCollision();
 
 	void bossInitialization();	//보스 stop후 위치 확인용
-	void breathe();				//보스가 숨을 쉬어요(?)
 
 };
 

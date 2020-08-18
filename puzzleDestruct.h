@@ -1,12 +1,13 @@
 #pragma once
 #include "gameObject.h"
-class puzzleComboButton : public gameObject
+
+class puzzleDestruct : public gameObject
 {
 private:
 	image* _image;
 
 public:
-	~puzzleComboButton();
+	~puzzleDestruct();
 
 	virtual HRESULT init();
 	virtual void release();

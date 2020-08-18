@@ -15,7 +15,7 @@ public:
 	collisionManager() {};
 	~collisionManager() {};
 
-	HRESULT init();
+	/*HRESULT init();
 	void release();
 	void update();
 	void render();
@@ -26,6 +26,6 @@ public:
 
 	void enemyCollision();
 	void playerCollision();
-	void bulletCollision();
+	void bulletCollision();*/
 };
 

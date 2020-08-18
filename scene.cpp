@@ -7,6 +7,9 @@
 #include "vendor.h"
 #include "door.h"
 #include "mapObject.h"
+#include "puzzleTabButton.h"
+#include "puzzleComboButton.h"
+#include "puzzleDestruct.h"
 //#include "tile.h"
 
 scene::~scene()
@@ -131,7 +134,7 @@ void scene::getTilesFromFile(string fileName)
 						break;
 						}
 					}
-					else
+					else if (oy == 1)
 					{
 						switch (type)
 						{
@@ -151,6 +154,34 @@ void scene::getTilesFromFile(string fileName)
 							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(grass));
 						}
 						break;
+						}
+					}
+					else if (oy == 2)
+					{
+						{
+							puzzleTabButton* puzzle = new puzzleTabButton();
+							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
+							puzzle->init();
+							puzzle->setFrameY(ox);
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
+						}
+					}
+					else if (oy == 3)
+					{
+						{
+							puzzleComboButton* puzzle = new puzzleComboButton();
+							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
+							puzzle->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
+						}
+					}
+					else if (oy == 4)
+					{
+						{
+							puzzleDestruct* puzzle = new puzzleDestruct();
+							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x - SIZE, v[j]->getRect().getCenter().y });
+							puzzle->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
 						}
 					}
 				}
@@ -278,7 +309,7 @@ void scene::getObjectsFromFile(string fileName)
 			break;
 			}
 		}
-		else
+		else if(fy == 1)
 		{
 			switch (ot)
 			{
@@ -298,6 +329,15 @@ void scene::getObjectsFromFile(string fileName)
 				OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(grass));
 			}
 			break;
+			}
+		}
+		else if (fy == 2)
+		{
+			{
+				puzzleTabButton* puzzle = new puzzleTabButton();
+				puzzle->setPosition(Vector2{ _vTiles[ty][tx]->getRect().getCenter().x, _vTiles[ty][tx]->getRect().top });
+				puzzle->init();
+				OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
 			}
 		}
 		tok = strtok_s(NULL, "\n", &context);

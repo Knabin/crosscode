@@ -152,6 +152,7 @@
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossTestScene.h" />
     <ClInclude Include="buffalo.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="bullets.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="playGround.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="puzzleComboButton.h" />
+    <ClInclude Include="puzzleDestruct.h" />
     <ClInclude Include="puzzleScene.h" />
     <ClInclude Include="puzzleTabButton.h" />
     <ClInclude Include="randomFunction.h" />
@@ -223,6 +225,7 @@
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossTestScene.cpp" />
     <ClCompile Include="buffalo.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bullets.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -263,6 +266,7 @@
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="puzzleComboButton.cpp" />
+    <ClCompile Include="puzzleDestruct.cpp" />
     <ClCompile Include="puzzleScene.cpp" />
     <ClCompile Include="puzzleTabButton.cpp" />
     <ClCompile Include="scene.cpp" />

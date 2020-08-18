@@ -35,12 +35,12 @@ public:
 	void render();
 
 	void addEffect(string effectName, const char* imageName,
-		int fps, float elapsedTime, int buffer, float scale);
+		int fps, float elapsedTime, int buffer, float scale = 1.0f);
 	void addEffect(string effectName, const char* imageName,
 		int imageWidth, int imageHeight, int effectWidth, int effectHeight,
-		int fps, float elapsedTime, int buffer, float scale);
+		int fps, float elapsedTime, int buffer, float scale = 1.0f);
 
-	void play(string effectName, int x, int y);
-	void play(string effectName, int x, int y, float angle);
+	void play(string effectName, int x, int y, float angle = 0.0f, float alpha = 1.0f);
+	void play(string effectName, Vector2 pos, float angle = 0.0f, float alpha = 1.0f);
 };
 
