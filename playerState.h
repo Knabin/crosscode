@@ -102,6 +102,17 @@ public:
 	void longAttack(animation* anim, int a, bool b);
 };
 
+class longAttackIdleState : public playerState
+{
+public:
+	longAttackIdleState(class player* player);
+	~longAttackIdleState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+};
+
 class longAttackMoveState : public playerState
 {
 public:

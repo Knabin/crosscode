@@ -7,7 +7,8 @@ mountainScene::~mountainScene()
 
 HRESULT mountainScene::init()
 {
-	CAMERA->setCameraMode(CAMERASTATE::TARGET);
+	CAMERA->setCameraMode(CAMERASTATE::NONE);
+	//CAMERA->setCameraMode(CAMERASTATE::TARGET);
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
@@ -15,7 +16,7 @@ HRESULT mountainScene::init()
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
-	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 9 * SIZE));
+	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((_maxX - 1) * SIZE, 29 * SIZE));
 
 	if (_vTiles.size() != 0)
 	{

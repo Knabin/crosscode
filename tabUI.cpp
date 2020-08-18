@@ -281,6 +281,13 @@ void tabUI::update()
 		}
 	}
 
+	if (_on)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		{
+			outMenu();
+		}
+	}
 
 	if (_hp < 0)
 		_hp = 0;

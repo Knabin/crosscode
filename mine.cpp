@@ -49,7 +49,7 @@ HRESULT mine::init(float centerX, float centerY)
 	for (int i = 0; i < 3; i++)
 	{
 		tagMine _Mine;
-
+		ZeroMemory(&_Mine, sizeof(_Mine));
 		_Mine._center.x = centerX - 268 + (57 * i);
 		_Mine._center.y = centerY  - (44 * i);
 		_Mine._speed = 20.0f;
@@ -62,7 +62,7 @@ HRESULT mine::init(float centerX, float centerY)
 	for (int i = 0; i < 3; i++)
 	{
 		tagMine _Mine2;
-
+		ZeroMemory(&_Mine2, sizeof(_Mine2));
 		_Mine2._center.x = centerX + 403 - (57 * i);
 		_Mine2._center.y = centerY - (44 * i);
 		_Mine2._speed = 20.0f;
