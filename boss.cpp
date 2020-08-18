@@ -587,28 +587,28 @@ void boss::bossState()
 	{
 		_motionDelay++;
 
-		if (_motionDelay >= 100)
+		if (_motionDelay >= 75)
 		{
-			_LeftArm._angle -= 0.024f;
-			_LeftHand._angle -= 0.016f;
-			_LeftArm._realAngle += 1.2f;
-			_LeftHand._realAngle += 0.8f;
-			_LeftArm._center.y -= 1.0f;
-			_LeftArm._center.x -= 1.0f;
+			_LeftArm._angle -= 0.024f * 6.0f;
+			_LeftHand._angle -= 0.016f * 6.0f;
+			_LeftArm._realAngle += 1.2f * 6.0f;
+			_LeftHand._realAngle += 0.8f * 6.0f;
+			_LeftArm._center.y -= 1.0f * 6.0f;
+			_LeftArm._center.x -= 1.0f * 6.0f;
 
-			_RightArm._angle -= 0.024f * 2.2f;
-			_RightHand._angle -= 0.016f * 2.2f;
-			_RightArm._realAngle += 1.2f * 2.2f;
-			_RightHand._realAngle += 0.8f * 0.8f;
+			_RightArm._angle -= 0.024f * 19.2f;
+			_RightHand._angle -= 0.016f * 19.2f;
+			_RightArm._realAngle += 1.2f * 19.2f;
+			_RightHand._realAngle += 0.8f * 8.8f;
 
 			_LeftArm._center.x += 1.0f;
 
 			_RightArm._center.x -= 2.5f;
-			_RightArm._center.y += 3.5f;
+			_RightArm._center.y += 3.5f * 6;
 
 			_Center._angle += 0.6f;
 
-			if (_frameCount % 14 == 0)
+			if (_frameCount % 3 == 0)
 			{
 
 				if (_currentFrameX >= 7)
@@ -643,13 +643,8 @@ void boss::bossState()
 			{
 				_stoneshower->dustFalse(i);
 				break;
-
-
 			}
-
 		}
-
-
 
 	}
 	break;
@@ -660,6 +655,9 @@ void boss::bossState()
 
 	}
 	break;
+
+
+
 	}
 
 }
