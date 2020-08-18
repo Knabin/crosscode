@@ -6,7 +6,7 @@
 #include "buffalo.h"
 #include "hedgehag.h"
 #include "bullets.h"
-//
+
 //HRESULT collisionManager::init()
 //{
 //	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));

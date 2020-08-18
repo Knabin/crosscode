@@ -308,41 +308,50 @@ jumpState::jumpState(player * player)
 	_top = new animation;
 	_top->init(192, 768, 96, 96);
 	_top->setPlayFrame(top, 2, 0);
+	_top->setFPS(1);
+
 
 	int ltop[] = { 10, 11 };
 	_left_top = new animation;
 	_left_top->init(192, 768, 96, 96);
 	_left_top->setPlayFrame(ltop, 2, 0);
+	_left_top->setFPS(1);
 
 	int left[] = { 12, 13 };
 	_left = new animation;
 	_left->init(192, 768, 96, 96);
 	_left->setPlayFrame(left, 2, 0);
+	_left->setFPS(1);
 
 	int lbottom[] = { 14, 15 };
 	_left_bottom = new animation;
 	_left_bottom->init(192, 768, 96, 96);
 	_left_bottom->setPlayFrame(lbottom, 1, 0);
+	_left_bottom->setFPS(1);
 
 	int bottom[] = { 8, 9 };
 	_bottom = new animation;
 	_bottom->init(192, 768, 96, 96);
 	_bottom->setPlayFrame(bottom, 2, 0);
+	_bottom->setFPS(1);
 
 	int rbottom[] = { 6, 7 };
 	_right_bottom = new animation;
 	_right_bottom->init(192, 768, 96, 96);
 	_right_bottom->setPlayFrame(rbottom, 2, 0);
+	_right_bottom->setFPS(1);
 
 	int right[] = { 4, 5 };
 	_right = new animation;
 	_right->init(192, 768, 96, 96);
 	_right->setPlayFrame(right, 2, 0);
+	_right->setFPS(1);
 
 	int rtop[] = { 2, 3 };
 	_right_top = new animation;
 	_right_top->init(192, 768, 96, 96);
 	_right_top->setPlayFrame(rtop, 2, 0);
+	_right_top->setFPS(1);
 }
 
 jumpState::~jumpState()
@@ -401,6 +410,7 @@ void jumpState::enter()
 
 void jumpState::update()
 {
+	_player->playerJumpMove();
 	//cout << "jumpState update()" << endl;
 	switch (_player->getDirection())
 	{
@@ -437,6 +447,7 @@ void jumpState::update()
 
 		break;
 	}
+	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 5);
 }
 
 void jumpState::exit()
