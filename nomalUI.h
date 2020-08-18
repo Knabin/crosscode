@@ -8,6 +8,9 @@ private:
 	int _hp;
 	int _exp;
 
+	floatRect _hpRC;
+	floatRect _expRC;
+
 public:
 	nomalUI() {};
 	~nomalUI() {};

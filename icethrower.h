@@ -35,15 +35,19 @@ private:
 
 	int _currentFrameX, _currentFrameY;
 	int _frameCount;
+	int _collisionCurrentFrameX, _collisionCurrentFrameY;
+	int _collisionFrameCount;
 
 	int _iceEffectFrameX, _iceEffectFrameY;		
+	int _collisionFrameX, _collisionFrameY;
+
 
 public:
 
 	icethrower();
 	~icethrower();
 
-	HRESULT init();
+	HRESULT init(float centerX, float centerY);
 	void release();
 	void update();
 	void render();
@@ -54,7 +58,6 @@ public:
 
 	vector<tagIcethrower>& getIcethrowerVector() { return _vIcethrower; }
 	vector<tagIcethrower>::iterator& getIcethrowerIterVector() { return _viIcethrower; }
-
 
 };
 

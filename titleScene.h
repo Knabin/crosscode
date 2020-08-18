@@ -8,6 +8,8 @@ private:
 	int _index;
 	int _time;
 	
+	bool _loading;
+
 	POINT _c1, _c2, _gr, _mn, _rl, _pl;	
 public:
 	virtual ~titleScene() override;

@@ -35,15 +35,15 @@ void scene::render()
 	int endX = CAMERA->getRect().right / SIZE;
 	int endY = CAMERA->getRect().bottom / SIZE;
 
+	if (startX <= 0) startX = 0;
+	if (startY <= 0) startY = 0;
+	if (endX >= _maxX) endX = _maxX;
+	if (endY >= _maxY) endY = _maxY;
+
 	for (int i = startY; i <= endY; ++i)
 	{
 		for (int j = startX; j <= endX; ++j)
 		{
-			/*if (CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
-				CAMERA->getRect().right <= _vTiles[i][j]->getRect().left ||
-				CAMERA->getRect().bottom <= _vTiles[i][j]->getRect().top ||
-				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;*/
-
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->frameRender(
 				CAMERA->getRelativeVector2(_vTiles[i][j]->getRect().getCenter()),

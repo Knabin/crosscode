@@ -181,6 +181,14 @@
     <ClCompile Include="mountainScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="stoneshower.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -371,6 +379,14 @@
     </ClInclude>
     <ClInclude Include="mountainScene.h">
       <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="stoneshower.h">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
