@@ -76,7 +76,7 @@ void player::release()
 
 void player::update()
 {
-	cout << _state->getState() << endl;
+	
 	if (KEYMANAGER->isStayKeyDown('A') && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE])
 	{
 		if (KEYMANAGER->isStayKeyDown('W'))
@@ -362,7 +362,7 @@ void player::update()
 		_dodgeCharge = 0;
 	}
 
-
+	cout << _nowOrder << endl;
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	_state->updateState();
 }
@@ -377,7 +377,6 @@ void player::render()
 	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
 
-	
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[0].y][next[0].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[1].y][next[1].x]->getRect()),
@@ -418,6 +417,7 @@ void player::playerMove()
 	//POINT next[3];
 	float moveSpeed = 4.5f;
 
+
 	switch (_direction)
 	{
 	case PLAYERDIRECTION::TOP:
@@ -436,19 +436,19 @@ void player::playerMove()
 		next[2] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
 		break;
 	case PLAYERDIRECTION::LEFT_BOTTOM:
-		next[0] = { currentTileIndex.x - 1, currentTileIndex.y };
-		next[1] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
-		next[2] = { currentTileIndex.x, currentTileIndex.y };
+		next[0] = { currentTileIndex.x - 1, currentTileIndex.y +1};
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y  };
+		next[2] = { currentTileIndex.x, currentTileIndex.y +1};
 		break;
 	case PLAYERDIRECTION::BOTTOM:
-		next[0] = { currentTileIndex.x, currentTileIndex.y };
-		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
-		next[2] = { currentTileIndex.x + 1, currentTileIndex.y };
+		next[0] = { currentTileIndex.x, currentTileIndex.y +1};
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y +1};
+		next[2] = { currentTileIndex.x + 1, currentTileIndex.y +1};
 		break;
 	case PLAYERDIRECTION::RIGHT_BOTTOM:
-		next[0] = { currentTileIndex.x + 1, currentTileIndex.y };
-		next[1] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
-		next[2] = { currentTileIndex.x, currentTileIndex.y };
+		next[0] = { currentTileIndex.x + 1, currentTileIndex.y +1};
+		next[1] = { currentTileIndex.x + 1, currentTileIndex.y  };
+		next[2] = { currentTileIndex.x, currentTileIndex.y +1};
 		break;
 	case PLAYERDIRECTION::RIGHT:
 		next[0] = { currentTileIndex.x + 1, currentTileIndex.y };
@@ -465,6 +465,8 @@ void player::playerMove()
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
 
+
+
 	// 다음 타일
 	for (int i = 0; i < 3; ++i)
 	{
@@ -475,9 +477,17 @@ void player::playerMove()
 	}
 
 	RECT temp;
-
+	
+	int _backOrder = _nowOrder;
+	_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
+	if (_nowOrder == 4)
+	{
+		_nowOrder = _backOrder;
+	}
+	
+	
 	// 층이 같다면
-	//if (t->getOrderIndex() == _nowOrder)
+	//if (ti->getOrderIndex() == _nowOrder)
 	{
 		switch (_direction)
 		{
@@ -486,7 +496,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 4)
 				{
 					move(0, 4.5f);
 					break;
@@ -498,7 +508,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 1.75f, moveSpeed);
 					break;
@@ -511,7 +521,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					move(4.5f, 0);
 					break;
@@ -523,7 +533,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 0.25f, moveSpeed);
 					break;
@@ -535,7 +545,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					move(0, -4.5f);
 					break;
@@ -547,7 +557,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 0.75f, moveSpeed);
 					break;
@@ -559,7 +569,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					move(-4.5f, 0);
 					break;
@@ -571,7 +581,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 1.25f, moveSpeed);
 					break;
@@ -955,11 +965,10 @@ void player::playerfinalattackMove() // 근접공격 마지막타 움직이는거 타일체크
 
 void player::move(const float & x, const float & y)
 {
-
 	_position.x += x;
 	_position.y += y;
 	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
-	_tileRect.set(_position - Vector2(0, 5), pivot::CENTER);
+	_tileRect.set(_position + Vector2(0, 30), pivot::CENTER);
 }
 
 void player::moveAngle(const float & cangle, const float & speed)
@@ -967,7 +976,7 @@ void player::moveAngle(const float & cangle, const float & speed)
 	_position.x += cosf(cangle) * speed;
 	_position.y -= sinf(cangle) * speed;
 	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
-	_tileRect.set(_position - Vector2(0, 5), pivot::CENTER);
+	_tileRect.set(_position + Vector2(0, 30), pivot::CENTER);
 }
 
 void player::playerFire()

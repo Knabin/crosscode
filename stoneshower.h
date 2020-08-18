@@ -33,9 +33,7 @@ private:
 	int _dustFrameX, _dustFrameY;
 
 
-
 public:
-
 
 	stoneshower();
 	~stoneshower();
@@ -48,8 +46,8 @@ public:
 
 	void dustDraw(float centerX, float centerY);
 
-	void dustTrue(int Num2);
-	void dustFalse(int Num3);
+	void dustTrue(int Num2);		//먼지 이미지 On
+	void dustFalse(int Num3);		//먼지 이미지 Off
 
 
 	vector<tagStoneshower>& getDustVector() { return _vDust; }
