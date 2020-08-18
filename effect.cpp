@@ -56,29 +56,33 @@ void effect::render()
 {
 	if (!_isRunning) return;
 
+	_effectImage->setAngle(_angle);
+	_effectImage->setAlpha(_alpha);
 	_effectImage->aniRender(Vector2(_x, _y), _effectAnimation, _scale);
 }
 
-void effect::startEffect(int x, int y)
+void effect::startEffect(int x, int y, float angle, float alpha)
 {
-	//이펙트 이미지 또는 이펙트 애니메이션이 없으면 실행하지마라
 	if (!_effectImage || !_effectAnimation) return;
 
 	_x = x - (_effectAnimation->getFrameWidth() / 2);
 	_y = y - (_effectAnimation->getFrameHeight() / 2);
+	_angle = angle;
+	_alpha = alpha;
 
 	_isRunning = true;
 
 	_effectAnimation->start();
 }
 
-void effect::startEffect(int x, int y, float angle)
+void effect::startEffect(Vector2 pos, float angle, float alpha)
 {
 	if (!_effectImage || !_effectAnimation) return;
 
-	_x = x - (_effectAnimation->getFrameWidth() / 2);
-	_y = y - (_effectAnimation->getFrameHeight() / 2);
-	_effectImage->setAngle(angle);
+	_x = pos.x - (_effectAnimation->getFrameWidth() / 2);
+	_y = pos.y - (_effectAnimation->getFrameHeight() / 2);
+	_angle = angle;
+	_alpha = alpha;
 
 	_isRunning = true;
 
