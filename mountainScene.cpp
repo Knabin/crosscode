@@ -15,7 +15,7 @@ HRESULT mountainScene::init()
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
-	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 9 * SIZE));
+	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((_maxX - 1) * SIZE, 28 * SIZE));
 
 	if (_vTiles.size() != 0)
 	{
