@@ -128,7 +128,7 @@ private:
 	floatRect _plusRc;
 	floatRect _minusRc;
 
-	floatRect _typeRcs[6];
+	floatRect _typeRcs[7];
 	int _selectType;
 
 	NOWMODE _controlMode;

@@ -64,6 +64,7 @@ public:
 
 	void setCameraMode(CAMERASTATE state) { _state = state; }
 
+	void changePosition(Vector2 vector) { _position = vector; }
 	// 타겟팅될 게임 오브젝트 변경
 	void changeTarget(class gameObject* gameObject);
 
