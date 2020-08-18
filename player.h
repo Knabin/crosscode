@@ -59,10 +59,8 @@ private:
 	int _combocount;	//근거리 콤보용
 	int _combo;			//근거리 콤보용
 
-	bool _iscombo;
+	
 	bool _isEffect;
-	int _combocount;
-	int _combo;
 	int _fullCount;	//원거리공격 충전시간
 
 	int _dodgeCount;	//닷지횟수
