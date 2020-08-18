@@ -179,12 +179,12 @@ HRESULT buffalo::init()
 	//버팔로 위쪽 돌진공격 애니메이션
 	_attackMotion_U_R = new animation;
 	_attackMotion_U_R->init(_attackImage->getWidth(), _attackImage->getHeight(), _attackImage->getFrameSize().x, _attackImage->getFrameSize().y);
-	_attackMotion_U_R->setPlayFrame(36, 41, false, true);
+	_attackMotion_U_R->setPlayFrame(37, 40, false, true);
 	_attackMotion_U_R->setFPS(1);
 
 	_attackMotion_U_L = new animation;
 	_attackMotion_U_L->init(_attackImage->getWidth(), _attackImage->getHeight(), _attackImage->getFrameSize().x, _attackImage->getFrameSize().y);
-	_attackMotion_U_L->setPlayFrame(54, 59, false, true);
+	_attackMotion_U_L->setPlayFrame(58, 55, false, true);
 	_attackMotion_U_L->setFPS(1);
 	//버팔로 위쪽 돌진공격 애니메이션
 
@@ -285,7 +285,7 @@ void buffalo::render()
 	{
 		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
 	}
-	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_attackRC), D2D1::ColorF::Black, 0);//버팔로 공격렉트
+	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_attackRC), D2D1::ColorF::Black, 0);//버팔로 공격렉트
 }
 
 void buffalo::move()
@@ -419,8 +419,16 @@ void buffalo::move()
 			{
 				if (tileMove())//장애물에 부딪힌게 아니라면
 				{
-					_position.x += cosf(_angleSave) * _attackSpeed;
-					_position.y += -sinf(_angleSave) * _attackSpeed;
+					if (_enemyDirection != ENEMY_UP_LEFT_MELEE_ATTACK &&
+						_enemyDirection != ENEMY_UP_RIGHT_MELEE_ATTACK &&
+						_enemyDirection != ENEMY_LEFT_MELEE_ATTACK &&
+						_enemyDirection != ENEMY_RIGHT_MELEE_ATTACK &&
+						_enemyDirection != ENEMY_DOWN_LEFT_MELEE_ATTACK &&
+						_enemyDirection != ENEMY_DOWN_RIGHT_MELEE_ATTACK)
+					{
+						_position.x += cosf(_angleSave) * _attackSpeed;
+						_position.y += -sinf(_angleSave) * _attackSpeed;
+					}
 				}
 				else//장애물에 부딪혔으면
 				{
@@ -479,42 +487,110 @@ void buffalo::move()
 				_count++;
 				if (_count % 55 == 0)
 				{
-					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
+					if (_enemyDirection != ENEMY_UP_LEFT_ATTACK_PREPARE &&
+						_enemyDirection != ENEMY_UP_RIGHT_ATTACK_PREPARE &&
+						_enemyDirection != ENEMY_LEFT_ATTACK_PREPARE &&
+						_enemyDirection != ENEMY_RIGHT_ATTACK_PREPARE &&
+						_enemyDirection != ENEMY_DOWN_LEFT_ATTACK_PREPARE &&
+						_enemyDirection != ENEMY_DOWN_RIGHT_ATTACK_PREPARE)
 					{
-						_enemyDirection = ENEMY_LEFT_MELEE_ATTACK;
-						_count = 0;
-					}
+						if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
+						{
+							_enemyDirection = ENEMY_LEFT_MELEE_ATTACK;
+							_count = 0;
+						}
 
-					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
-					{
-						_enemyDirection = ENEMY_UP_LEFT_MELEE_ATTACK;
-						_count = 0;
-					}
+						if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
+						{
+							_enemyDirection = ENEMY_UP_LEFT_MELEE_ATTACK;
+							_count = 0;
+						}
 
-					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
-					{
-						_enemyDirection = ENEMY_UP_RIGHT_MELEE_ATTACK;
-						_count = 0;
-					}
+						if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
+						{
+							_enemyDirection = ENEMY_UP_RIGHT_MELEE_ATTACK;
+							_count = 0;
+						}
 
-					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
-					{
-						_enemyDirection = ENEMY_RIGHT_MELEE_ATTACK;
-						_count = 0;
-					}
+						if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
+						{
+							_enemyDirection = ENEMY_RIGHT_MELEE_ATTACK;
+							_count = 0;
+						}
 
-					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
-					{
-						_enemyDirection = ENEMY_DOWN_RIGHT_MELEE_ATTACK;
-						_count = 0;
-					}
+						if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
+						{
+							_enemyDirection = ENEMY_DOWN_RIGHT_MELEE_ATTACK;
+							_count = 0;
+						}
 
-					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
-					{
-						_enemyDirection = ENEMY_DOWN_LEFT_MELEE_ATTACK;
-						_count = 0;
+						if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
+						{
+							_enemyDirection = ENEMY_DOWN_LEFT_MELEE_ATTACK;
+							_count = 0;
+						}
 					}
 				}
+			}
+		}
+
+		if (_enemyDirection == ENEMY_UP_LEFT_ATTACK_PREPARE)
+		{
+			if (_attackCount >= 3 && !_enemyMotion->isPlay())
+			{
+				_enemyDirection = ENEMY_UP_LEFT_ATTACK;
+				_isAttack = true;
+				_attackCount = 0;
+			}
+		}
+
+		if (_enemyDirection == ENEMY_UP_RIGHT_ATTACK_PREPARE)
+		{
+			if (_attackCount >= 3 && !_enemyMotion->isPlay())
+			{
+				_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
+				_isAttack = true;
+				_attackCount = 0;
+			}
+		}
+
+		if (_enemyDirection == ENEMY_LEFT_ATTACK_PREPARE)
+		{
+			if (_attackCount >= 3 && !_enemyMotion->isPlay())
+			{
+				_enemyDirection = ENEMY_LEFT_ATTACK;
+				_isAttack = true;
+				_attackCount = 0;
+			}
+		}
+
+		if (_enemyDirection == ENEMY_RIGHT_ATTACK_PREPARE)
+		{
+			if (_attackCount >= 3 && !_enemyMotion->isPlay())
+			{
+				_enemyDirection = ENEMY_RIGHT_ATTACK;
+				_isAttack = true;
+				_attackCount = 0;
+			}
+		}
+
+		if (_enemyDirection == ENEMY_DOWN_LEFT_ATTACK_PREPARE)
+		{
+			if (_attackCount >= 3 && !_enemyMotion->isPlay())
+			{
+				_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
+				_isAttack = true;
+				_attackCount = 0;
+			}
+		}
+
+		if (_enemyDirection == ENEMY_DOWN_RIGHT_ATTACK_PREPARE)
+		{
+			if (_attackCount >= 3 && !_enemyMotion->isPlay())
+			{
+				_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK;
+				_isAttack = true;
+				_attackCount = 0;
 			}
 		}
 
@@ -597,150 +673,116 @@ void buffalo::animationDraw()
 	switch (_enemyDirection)
 	{
 	case ENEMY_LEFT_IDLE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_RIGHT_IDLE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_UP_LEFT_IDLE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_UP_RIGHT_IDLE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_DOWN_LEFT_IDLE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_DOWN_RIGHT_IDLE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_LEFT_MOVE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_RIGHT_MOVE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_UP_LEFT_MOVE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_UP_RIGHT_MOVE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_DOWN_LEFT_MOVE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_DOWN_RIGHT_MOVE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_LEFT_HIT:
-		_hitImage->setSize(Vector2(_hitImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_hitImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _hitImage;
 		break;
 	case ENEMY_RIGHT_HIT:
-		_hitImage->setSize(Vector2(_hitImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_hitImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _hitImage;
 		break;
 	case ENEMY_UP_LEFT_HIT:
-		_hitImage->setSize(Vector2(_hitImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_hitImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _hitImage;
 		break;
 	case ENEMY_UP_RIGHT_HIT:
-		_hitImage->setSize(Vector2(_hitImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_hitImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _hitImage;
 		break;
 	case ENEMY_DOWN_LEFT_HIT:
-		_hitImage->setSize(Vector2(_hitImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_hitImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _hitImage;
 		break;
 	case ENEMY_DOWN_RIGHT_HIT:
-		_hitImage->setSize(Vector2(_hitImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_hitImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _hitImage;
 		break;
 	case ENEMY_LEFT_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_RIGHT_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_UP_LEFT_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_UP_RIGHT_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_UP_LEFT_ATTACK_PREPARE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_UP_RIGHT_ATTACK_PREPARE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_LEFT_ATTACK_PREPARE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_RIGHT_ATTACK_PREPARE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK_PREPARE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK_PREPARE:
-		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _enemyImage;
 		break;
 	case ENEMY_UP_LEFT_MELEE_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_UP_RIGHT_MELEE_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_LEFT_MELEE_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_RIGHT_MELEE_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_DOWN_LEFT_MELEE_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	case ENEMY_DOWN_RIGHT_MELEE_ATTACK:
-		_attackImage->setSize(Vector2(_attackImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_attackImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
+		_enemyAnimationImage = _attackImage;
 		break;
 	}
+	_enemyAnimationImage->setSize(Vector2(_enemyAnimationImage->getFrameSize()) * CAMERA->getZoomAmount());
+	_enemyAnimationImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//버팔로 애니메이션 재생
 }
 
 void buffalo::animationControl()
@@ -828,6 +870,7 @@ void buffalo::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_LEFT_MOVE:
+
 		_enemyMotion = _moveMotion_D_L;
 
 		if (!_enemyMotion->isPlay())
@@ -1019,13 +1062,6 @@ void buffalo::animationControl()
 			_attackCount++;
 			_enemyMotion->start();
 		}
-
-		if (_attackCount >= 3)
-		{
-			_isAttack = true;
-			_enemyDirection = ENEMY_UP_LEFT_ATTACK;
-			_attackCount = 0;
-		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK_PREPARE:
 		_enemyMotion = _attackPrepareMotion_U_R;
@@ -1035,13 +1071,6 @@ void buffalo::animationControl()
 			_attackCount++;
 			_enemyMotion->start();
 		}
-
-		if (_attackCount >= 3)
-		{
-			_isAttack = true;
-			_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
-			_attackCount = 0;
-		}
 		break;
 	case ENEMY_LEFT_ATTACK_PREPARE:
 		_enemyMotion = _attackPrepareMotion_L;
@@ -1050,13 +1079,6 @@ void buffalo::animationControl()
 		{
 			_attackCount++;
 			_enemyMotion->start();
-		}
-
-		if (_attackCount >= 3)
-		{
-			_isAttack = true;
-			_enemyDirection = ENEMY_LEFT_ATTACK;
-			_attackCount = 0;
 		}
 		break;
 	case ENEMY_RIGHT_ATTACK_PREPARE:
@@ -1068,12 +1090,6 @@ void buffalo::animationControl()
 			_enemyMotion->start();
 		}
 
-		if (_attackCount >= 3)
-		{
-			_isAttack = true;
-			_enemyDirection = ENEMY_RIGHT_ATTACK;
-			_attackCount = 0;
-		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK_PREPARE:
 		_enemyMotion = _attackPrepareMotion_D_L;
@@ -1084,12 +1100,6 @@ void buffalo::animationControl()
 			_enemyMotion->start();
 		}
 
-		if (_attackCount >= 3)
-		{
-			_isAttack = true;
-			_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
-			_attackCount = 0;
-		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK_PREPARE:
 		_enemyMotion = _attackPrepareMotion_D_R;
@@ -1098,12 +1108,6 @@ void buffalo::animationControl()
 		{
 			_attackCount++;
 			_enemyMotion->start();
-		}
-
-		if (_attackCount >= 3)
-		{
-			_isAttack = true;
-			_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK;
 		}
 		break;
 	case ENEMY_UP_LEFT_MELEE_ATTACK:

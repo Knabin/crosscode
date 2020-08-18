@@ -197,8 +197,6 @@ void hedgehag::update()
 	{
 		EFFECTMANAGER->play("enemyHedgehogMoveDust", _rc.getCenter().x, _rc.getCenter().y);
 	}
-
-
 }
 
 void hedgehag::render()
