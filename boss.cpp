@@ -11,6 +11,14 @@ boss::~boss()
 
 HRESULT boss::init()
 {
+	// 기본 y축WINSIZEY / 2 - 175
+	bossInitialization();
+
+	//_bossState = APPEARANCE;
+	//_bossState = STOP;
+	//_bossState = ICETHROWER_READY;
+	//_bossState = MINE_READY;
+	_bossState = STONESHOWER_READY;
 
 	_dustCurrentFrameX, _dustCurrentFrameY, _dustFrameCount = 0;
 
@@ -20,12 +28,12 @@ HRESULT boss::init()
 	_motionDelay = 0;
 	_icethrowerDelay = 0;
 	_randomAttackCount = 0;
-	_mineAttackCount = 0;
+	_mineAttackDelay = 0;
 	_breatheCount = 0;
 
 	//================================================================================================================================================================//
 
-	IMAGEMANAGER->addFrameImage("보스바텀방어막4", L"images/boss/dust.png", 9, 1);
+	//IMAGEMANAGER->addFrameImage("보스바텀방어막4", L"images/boss/dust.png", 9, 1);
 
 	//보스 png이미지 선언
 
@@ -53,107 +61,46 @@ HRESULT boss::init()
 
 	//================================================================================================================================================================//
 
-	// WINSIZEY / 2 - 175
+	//몸통
 
-	//보스 몸통 선언
-	_Center._x = (WINSIZEX / 2 - 85);
-	_Center._y = (WINSIZEY / 2 + 25);
-	_Center._angle = 0;
-
-	_Center._center.x = (WINSIZEX / 2 - 85);
-	_Center._center.y = (WINSIZEY / 2 + 25);
 	_Center._centerMeter = 100;
 
 	_Center._speed = 2.0f;
 
 	_Center._rectBody.update(Vector2(_Center._x + 210, _Center._y + 200), Vector2(600, 400), pivot::CENTER);
 
-	//_bossState = APPEARANCE;
-	//_bossState = STOP;
-	//_bossState = ICETHROWER_READY;
-	//_bossState = MINE_READY;
-	_bossState = STONESHOWER_READY;
+	//왼팔
 
-	//================================================================================================================================================================//
-
-	//왼팔 선언
-
-	_LeftArm._x = (_Center._x - 125) + 100;
-	_LeftArm._y = (_Center._y + 25);
-	_LeftArm._angle = PI2 - (PI / 4);
-	_LeftArm._realAngle = PI2 - (PI / 4);
-
-	_LeftArm._center.x = (_Center._x - 125) + 100;
-	_LeftArm._center.y = (_Center._y + 25);
 	_LeftArm._centerMeter = 170;
-
-
-	//왼팔 관절 렉트 선언
 
 	_LeftArm._rectBody.update(Vector2(_LeftArm._center.x, _LeftArm._center.y), Vector2(50, 50), pivot::CENTER);
 
-	//================================================================================================================================================================//
-
-	//왼손 선언
-
-	_LeftHand._x = _LeftArm._x - 100;
-	_LeftHand._y = _LeftArm._y + 100;
-	_LeftHand._angle = PI2 - (PI / 4);
-	_LeftHand._realAngle = PI2 - (PI / 4);
+	//왼팔
 
 	_LeftHand._center.x = sinf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.x;
 	_LeftHand._center.y = cosf(_LeftArm._angle) * _LeftArm._centerMeter + _LeftArm._center.y;
 	_LeftHand._centerMeter = 170;
 
-
-	//왼손 관절 렉트 선언
-
 	_LeftHand._rectBody.update(Vector2(_LeftHand._center.x, _LeftHand._center.y), Vector2(50, 50), pivot::CENTER);
 
-	//================================================================================================================================================================//
+	//오른팔
 
-	//오른팔 선언
-
-	_RightArm._x = (_Center._x + 545) - 100;
-	_RightArm._y = (_Center._y + 25);
-	_RightArm._angle = PI2 - (PI / 4);
-	_RightArm._realAngle = PI2 - (PI / 4);
-
-	_RightArm._center.x = (_Center._x + 545) - 100;
-	_RightArm._center.y = (_Center._y + 25);
 	_RightArm._centerMeter = 170;
-
-
-	//오른팔 관절 렉트 선언
 
 	_RightArm._rectBody.update(Vector2(_RightArm._center.x, _RightArm._center.y), Vector2(50, 50), pivot::CENTER);
 
-	//================================================================================================================================================================//
-
-	//오른손 선언
-
-	_RightHand._x = _RightArm._x + 100;
-	_RightHand._y = _RightArm._y + 100;
-	_RightHand._angle = PI2 - (PI / 4);
-	_RightHand._realAngle = PI2 - (PI / 4);
-
+	//오른손
+	
 	_RightHand._center.x = cosf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.x;
 	_RightHand._center.y = -sinf(_RightArm._angle) * _RightArm._centerMeter + _RightArm._center.y;
 	_RightHand._centerMeter = 170;
 
-
-	//오른손 관절 렉트 선언
 	_RightHand._rectBody.update(Vector2(_RightHand._center.x, _RightHand._center.y), Vector2(50, 50), pivot::CENTER);
 
-	//================================================================================================================================================================//
-
-	//바텀 선언
-
-	_Bottom._x = _Center._x + 160;
-	_Bottom._y = _Center._y + 450;
+	//바텀
 
 	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y), Vector2(150, 70), pivot::CENTER);
-
+	
 	//================================================================================================================================================================//
 
 	_icethrower = new icethrower;
@@ -188,7 +135,7 @@ void boss::update()
 
 	fireCollision();
 
-	breathe();
+	//breathe();
 
 	//================================================================================================================================================================//
 
@@ -204,6 +151,7 @@ void boss::update()
 	}
 
 	
+	/*
 	_dustFrameCount++;
 
 	_dustFrameY = 0;
@@ -218,6 +166,7 @@ void boss::update()
 		_dustCurrentFrameX++;
 		_dustFrameCount = 0;
 	}
+	*/
 	
 
 
@@ -234,7 +183,7 @@ void boss::render()
 
 	_mine->render(_Center._x + 115, _Center._y + 50);
 
-	_stoneshower->render();
+	_stoneshower->render(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200);
 }
 
 void boss::bossState()
@@ -293,7 +242,7 @@ void boss::bossState()
 	case MOVEDOWN:
 	case STOP:
 	{
-		/*
+		
 
 		_randomAttackCount++;
 		bossInitialization();
@@ -309,17 +258,19 @@ void boss::bossState()
 			{
 				_bossState = MINE_READY;
 			}
+			/*
 			if (_randomAttack == 2)
 			{
 				_bossState = STONESHOWER_READY;
 			}
+			*/
 			else
 			{
 				_bossState = ICETHROWER_READY;
 			}
 
 		}
-		*/
+		
 	}
 	break;
 
@@ -520,8 +471,8 @@ void boss::bossState()
 
 			if (_currentFrameX >= 7)
 			{
-				_mineAttackCount++;
-				if (_mineAttackCount % 2 == 0)
+				_mineAttackDelay++;
+				if (_mineAttackDelay % 2 == 0)
 				{
 					_mine->fire();
 				}
@@ -585,7 +536,7 @@ void boss::bossState()
 
 		_Center._angle -= 0.6f;
 
-		if (_RightHand._rectBody.top < WINSIZEY / 2 + 125)
+		if (_RightHand._rectBody.top < WINSIZEY / 2 - 75)
 		{
 			_bossRightHandAttackFrameY = 0;
 
@@ -603,7 +554,7 @@ void boss::bossState()
 		}
 
 
-		if (_RightHand._rectBody.top < WINSIZEY / 2)
+		if (_RightHand._rectBody.top < WINSIZEY / 2 - 200)
 		{
 			_bossState = STONESHOWER_READY2;
 		}
@@ -634,46 +585,69 @@ void boss::bossState()
 
 	case STONESHOWER_READY3:
 	{
+		_motionDelay++;
 
-		_LeftArm._angle -= 0.024f;
-		_LeftHand._angle -= 0.016f;
-		_LeftArm._realAngle += 1.2f;
-		_LeftHand._realAngle += 0.8f;
-		_LeftArm._center.y -= 1.0f;
-		_LeftArm._center.x -= 1.0f;
-
-		_RightArm._angle -= 0.024f * 2.2f;
-		_RightHand._angle -= 0.016f * 2.2f;
-		_RightArm._realAngle += 1.2f * 2.2f;
-		_RightHand._realAngle += 0.8f * 0.8f;
-
-		_LeftArm._center.x += 1.0f;
-
-		_RightArm._center.x -= 2.5f;
-		_RightArm._center.y += 3.5f;
-
-		_Center._angle += 0.6f;
-
-		if (_frameCount % 14 == 0)
+		if (_motionDelay >= 100)
 		{
+			_LeftArm._angle -= 0.024f;
+			_LeftHand._angle -= 0.016f;
+			_LeftArm._realAngle += 1.2f;
+			_LeftHand._realAngle += 0.8f;
+			_LeftArm._center.y -= 1.0f;
+			_LeftArm._center.x -= 1.0f;
 
-			if (_currentFrameX >= 7)
+			_RightArm._angle -= 0.024f * 2.2f;
+			_RightHand._angle -= 0.016f * 2.2f;
+			_RightArm._realAngle += 1.2f * 2.2f;
+			_RightHand._realAngle += 0.8f * 0.8f;
+
+			_LeftArm._center.x += 1.0f;
+
+			_RightArm._center.x -= 2.5f;
+			_RightArm._center.y += 3.5f;
+
+			_Center._angle += 0.6f;
+
+			if (_frameCount % 14 == 0)
 			{
-				_bossState = STONESHOWER;
+
+				if (_currentFrameX >= 7)
+				{
+					_motionDelay = 0;
+					CAMERA->shakeStart(3.f, 5.5f);
+					_bossState = STONESHOWER;
+
+					for (int i = 0; i < _stoneshower->getDustVector().size(); i++)
+					{
+						_stoneshower->dustTrue(i);
+						break;
+					}
+				}
+				_bossRightHandAttackFrameX = _currentFrameX;
+				_currentFrameX++;
+				_frameCount = 0;
+				
 			}
-			_bossRightHandAttackFrameX = _currentFrameX;
-			_currentFrameX++;
-			_frameCount = 0;
 		}
-
-
-
 	}
 	break;
 
 	case STONESHOWER:
 	{
+		_motionDelay++;
+		
 
+		if (_motionDelay >= 58)
+		{
+			for (int i = 0; i < _stoneshower->getDustVector().size(); i++)
+			{
+				_stoneshower->dustFalse(i);
+				break;
+
+
+			}
+
+		}
 
 
 
@@ -763,8 +737,8 @@ void boss::bossDraw()
 	//자주 움직이는 양팔과 양손은 중점 x,y 를 기준으로 렌더
 	//그 외는 rect left,top에 렌더를 했습니다.
 
-	IMAGEMANAGER->findImage("보스바텀방어막4")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 475, _Bottom._rectBody.top + 460)),
-		_dustFrameX, _dustFrameY);
+	//IMAGEMANAGER->findImage("보스바텀방어막4")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 475, _Bottom._rectBody.top + 460)),
+		//_dustFrameX, _dustFrameY);
 
 
 	//바텀
@@ -841,6 +815,13 @@ void boss::bossDraw()
 	{
 		IMAGEMANAGER->findImage("오른손")->setAngle(_RightHand._realAngle);
 		IMAGEMANAGER->findImage("오른손")->render(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x - 200, _RightHand._centerEnd.y - 50)));
+	}
+
+
+	if (_bossState == STONESHOWER)
+	{
+		_stoneshower->dustDraw(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200);
+
 	}
 
 

@@ -36,6 +36,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 
 	//================================================================================================================================================================//
 
+	
 	for (int i = 0; i < 18; i++)
 	{
 		tagIcethrower attack1;
@@ -49,6 +50,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 
 		_vIcethrower.push_back(attack1);
 	}
+	
 
 	//================================================================================================================================================================//
 
@@ -154,7 +156,6 @@ void icethrower::fire()
 	{
 		if (_viIcethrower->_fireStart) continue;
 		{
-
 			int _randomNumber;
 			_randomNumber = RND->getInt(3);
 
