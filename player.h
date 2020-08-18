@@ -57,6 +57,9 @@ private:
 	int _combo;
 	int _fullCount;	//원거리공격 충전시간
 
+	int _dodgeCount;	//닷지횟수
+	int _dodgeCharge;	//닷지횟수 충전용
+
 	float _jumpPower;
 	float _gravity;
 

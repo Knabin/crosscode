@@ -36,6 +36,8 @@ player::player()
 	_iscombo = false;
 	_fullCount = 0;
 
+	_dodgeCount = 4; //닷지 기본 횟수
+
 	_state = new playerStateController(idle);
 	_position.y = 700;
 }
@@ -90,10 +92,11 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
 		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&_state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
@@ -121,10 +124,11 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
 		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
@@ -152,10 +156,11 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
 		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
@@ -183,10 +188,11 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
 		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
@@ -336,6 +342,18 @@ void player::update()
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 	}
 
+	if (_dodgeCount < 4)
+	{
+		_dodgeCharge++;
+	}
+
+	if (_dodgeCharge > 20)
+	{
+		_dodgeCount++;
+		_dodgeCharge = 0;
+	}
+
+
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	_state->updateState();
 }
@@ -471,6 +489,13 @@ void player::playerDodge()		//회피시 움직임
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
 	float moveSpeed = 8.3f;
+
+	
+	if (_dodgeCount < 1)
+	{
+		moveSpeed = 2.0f;
+	}
+	
 
 	switch (_direction)
 	{
