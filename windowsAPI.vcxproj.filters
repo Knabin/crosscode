@@ -204,6 +204,10 @@
     <ClCompile Include="bullet.cpp">
       <Filter>playerTest</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="puzzleDestruct.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -417,6 +421,10 @@
     <ClInclude Include="mine.h" />
     <ClInclude Include="bullet.h">
       <Filter>playerTest</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="puzzleDestruct.h">
+      <Filter>playGround\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
