@@ -24,6 +24,7 @@ public:
 	virtual void render();
 
 	void startEffect(int x, int y);
+	void startEffect(int x, int y, float angle);
 
 	virtual void killEffect();
 

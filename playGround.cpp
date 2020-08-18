@@ -41,11 +41,20 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("mountain", new mountainScene());
 	SCENEMANAGER->loadScene("title");
 
+
+	// ============== 이펙트 넣는 법! =================
+	// 이펙트 사용: VK_F8 쪽 확인
+	IMAGEMANAGER->addFrameImage("test", L"images/test.png", 4, 2);
+	// addEffect(이펙트 이름, 이미지 이름, fps, elapsedTime, 버퍼(여러 개 동시에 쓸 거면 적당히 잡기), 크기(scale))
+	EFFECTMANAGER->addEffect("test", "test", 1, 1.0f, 5, 5.0f);
+
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
 	_ui = new uiController();
 	_ui->init();
+
+	_test = 0.f;
 	return S_OK;
 }
 
@@ -87,6 +96,14 @@ void playGround::update()
 		SCENEMANAGER->loadScene("mountain");
 	}
 
+	if (KEYMANAGER->isOnceKeyDown(VK_F8))
+	{
+		_test += 30.f;
+		// ============== 이펙트 회전해서 사용하는 법! =================
+		// play(이펙트 이름, 위치, 위치, 앵글값)
+		EFFECTMANAGER->play("test", 200, 200, _test);
+	}
+
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
 		CAMERA->shakeStart(3.f, 0.5f);
@@ -106,6 +123,7 @@ void playGround::update()
 		_enemyManager->update();
 	}
 
+	EFFECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();
 }
@@ -122,6 +140,7 @@ void playGround::render()
 		OBJECTMANAGER->render();
 		TIMEMANAGER->render();
 		_ui->render();
+		EFFECTMANAGER->render();
 		//_enemyManager->render();
 
 		//=============================================
