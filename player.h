@@ -22,6 +22,7 @@ enum PLAYERSTATE : int
 	GUARD,
 	DODGE,
 	LONGATTACK,
+	LONGATTACKIDLE,
 	LONGATTACKMOVE,
 	MOVESTOP,
 	LEFT_ATTACK,
@@ -82,6 +83,7 @@ public:
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }
+	void setDirection(PLAYERDIRECTION direction) { _direction = direction; }
 
 	animation* getAnimation() { return _ani; }
 
