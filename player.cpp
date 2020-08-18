@@ -311,13 +311,13 @@ void player::update()
 		float d1 = angle + de;
 		float d2 = angle - de;
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 12; i++)
 		{
-			rc1[i].update(Vector2(_position.x + cosf(d1) * 20 * i, _position.y + -sinf(d1) * 20 * i), Vector2(10, 10), pivot::CENTER);
+			rc1[i].update(Vector2(_position.x + cosf(d1) * 60 * i, _position.y + -sinf(d1) * 60 * i), Vector2(10, 10), pivot::CENTER);
 		}
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 12; i++)
 		{
-			rc2[i].update(Vector2(_position.x + cosf(d2) * 20 * i, _position.y + -sinf(d2) * 20 * i), Vector2(10, 10), pivot::CENTER);
+			rc2[i].update(Vector2(_position.x + cosf(d2) * 60 * i, _position.y + -sinf(d2) * 60 * i), Vector2(10, 10), pivot::CENTER);
 		}
 	}
 
