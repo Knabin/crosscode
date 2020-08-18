@@ -166,6 +166,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyManager.h" />
     <ClInclude Include="eventManager.h" />
+    <ClInclude Include="flamethrower.h" />
     <ClInclude Include="floatCircle.h" />
     <ClInclude Include="floatPoint.h" />
     <ClInclude Include="floatRect.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyManager.cpp" />
     <ClCompile Include="eventManager.cpp" />
+    <ClCompile Include="flamethrower.cpp" />
     <ClCompile Include="floatCircle.cpp" />
     <ClCompile Include="floatPoint.cpp" />
     <ClCompile Include="floatRect.cpp" />

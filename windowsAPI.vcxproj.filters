@@ -433,13 +433,6 @@
     <ClInclude Include="puzzleDestruct.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
-    <ClInclude Include="puzzleBlueWall.h">
-      <Filter>playGround\puzzle</Filter>
-    </ClInclude>
-    <ClInclude Include="puzzleOrangeWall.h">
-      <Filter>playGround\puzzle</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

@@ -153,7 +153,8 @@ void collisionManager::buffaloCollision()
 			}
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-	}*/
+	}
+	*/
 }
 
 void collisionManager::hedgehagCollision()
@@ -268,7 +269,8 @@ void collisionManager::hedgehagCollision()
 			}
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-	}*/
+	}
+	*/
 }
 
 void collisionManager::meerkatCollision()
@@ -385,7 +387,8 @@ void collisionManager::meerkatCollision()
 			}
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-	}*/
+	}
+	*/
 }
 
 void collisionManager::playerCollision()

@@ -94,7 +94,18 @@ void player::update()
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
-			_direction = PLAYERDIRECTION::TOP;
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				_direction = PLAYERDIRECTION::RIGHT_TOP;
+			}
+			else if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				_direction = PLAYERDIRECTION::LEFT_TOP;
+			}
+			else
+			{
+				_direction = PLAYERDIRECTION::TOP;
+			}
 		}
 		// ================== 傍拜 贸府==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
@@ -125,7 +136,18 @@ void player::update()
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
-			_direction = PLAYERDIRECTION::BOTTOM;
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				_direction = PLAYERDIRECTION::RIGHT_BOTTOM;
+			}
+			else if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				_direction = PLAYERDIRECTION::LEFT_BOTTOM;
+			}
+			else
+			{
+				_direction = PLAYERDIRECTION::BOTTOM;
+			}
 		}
 		// ================== 傍拜 贸府==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
