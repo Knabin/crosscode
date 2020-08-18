@@ -84,6 +84,8 @@ private:
 	int _bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY;
 	int _bossCenterMoveFrameX, _bossCenterMoveFrameY;
 	int _bossRightHandAttackFrameX, _bossRightHandAttackFrameY;
+	int _bossRightHandAttackFrameX2, _bossRightHandAttackFrameY2;
+	int _bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY;
 
 	//보스 방어막 프레임
 	int _protectCurrentFrameX, _protectCurrentFrameY;
@@ -106,10 +108,6 @@ private:
 
 	//바위 발사 딜레이
 	int _stoneAttackDelay;
-
-	int _dustCurrentFrameX, _dustCurrentFrameY;
-	int _dustFrameX, _dustFrameY;
-	int _dustFrameCount;
 
 public:
 

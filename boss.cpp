@@ -15,13 +15,11 @@ HRESULT boss::init()
 	bossInitialization();
 
 	//_bossState = APPEARANCE;
-	//_bossState = STOP;
+	_bossState = STOP;
 	//_bossState = ICETHROWER_READY;
 	//_bossState = MINE_READY;
 	//_bossState = STONESHOWER_READY;
-	_bossState = FLAMETHROWER_READY;
-
-	_dustCurrentFrameX, _dustCurrentFrameY, _dustFrameCount = 0;
+	//_bossState = FLAMETHROWER_READY;
 
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
@@ -50,13 +48,17 @@ HRESULT boss::init()
 
 	IMAGEMANAGER->addImage("왼팔", L"images/boss/left_arm.png");
 	IMAGEMANAGER->addImage("왼손", L"images/boss/left_hand.png");
+	IMAGEMANAGER->addImage("왼손움직임3", L"images/boss/left_hand_move3.png");
 
 	IMAGEMANAGER->addFrameImage("왼손공격", L"images/boss/left_hand_attack.png", 20, 2);
+	IMAGEMANAGER->addFrameImage("왼손움직임1", L"images/boss/left_hand_move.png", 4, 1);
+	IMAGEMANAGER->addFrameImage("왼손움직임2", L"images/boss/left_hand_move2.png", 4, 1);
 
 	IMAGEMANAGER->addImage("오른팔", L"images/boss/right_arm.png");
 	IMAGEMANAGER->addImage("오른손", L"images/boss/right_hand.png");
 
 	IMAGEMANAGER->addFrameImage("오른손공격", L"images/boss/right_hand_attack2.png", 8, 1);
+	IMAGEMANAGER->addFrameImage("오른손공격2", L"images/boss/right_hand_attack.png", 4, 1);
 
 	//================================================================================================================================================================//
 
@@ -147,6 +149,10 @@ void boss::update()
 
 	_flamethrower->update();
 
+	if (KEYMANAGER->isOnceKeyDown('Q'))
+	{
+		_bossState = FLAMETHROWER_READY;
+	}
 
 }
 
@@ -223,6 +229,7 @@ void boss::bossState()
 		_randomAttackCount++;
 		bossInitialization();
 		
+		/*
 		if (_randomAttackCount >= 200)
 		{
 			_randomAttackCount = 0;
@@ -245,7 +252,7 @@ void boss::bossState()
 			}
 
 		}
-		
+		*/
 	}
 	break;
 
@@ -661,12 +668,59 @@ void boss::bossState()
 
 	case FLAMETHROWER_READY:
 	{
+		
+		_LeftArm._center.x -= 0.2f;
+		_LeftArm._center.y += 0.5f;
+
+		_LeftArm._angle += 0.024f;
+		_LeftHand._angle += 0.016f;
+		_LeftArm._realAngle -= 1.2f;
+		_LeftHand._realAngle -= 5.4f;
+
+
+		_RightArm._center.y += 1.8f / 1.5f;
+
+		_RightArm._angle -= 0.036f / 1.5f;
+		_RightHand._angle -= 0.032f / 1.5f;
+		_RightArm._realAngle += 1.6f / 1.5f;
+		_RightHand._realAngle += 0.44f / 1.5f;
+
+		_bossRightHandAttackFrameY2 = 0;
+		_bossLeftHandMoveFrameY = 0;
+
+		if (_frameCount % 12 == 0)
+		{
+			if (_currentFrameX >= IMAGEMANAGER->findImage("오른손공격2")->getMaxFrameX() &&
+				_currentFrameX >= IMAGEMANAGER->findImage("왼손움직임1")->getMaxFrameX())
+			{
+				_currentFrameX = 0;
+			}
+			_bossLeftHandMoveFrameX = _currentFrameX;
+			_bossRightHandAttackFrameX2 = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+		}
+
+
+		if (_RightHand._rectBody.bottom > WINSIZEY / 2 + 90)
+		{
+			_bossState = FLAMETHROWER_READY2;
+		}
+
 
 	}
 	break;
 
 	case FLAMETHROWER_READY2:
 	{
+		moveUp();
+		
+
+		if (_Center._y < WINSIZEY / 2 - 300)
+		{
+			_bossState = FLAMETHROWER;
+		}
+
 
 	}
 	break;
@@ -796,6 +850,17 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("왼손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 50, _LeftHand._centerEnd.y + 225)),
 		_bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY);
 	}
+	else if (_bossState == FLAMETHROWER_READY)
+	{
+		IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
+		IMAGEMANAGER->findImage("왼손움직임1")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 50, _LeftHand._centerEnd.y + 225)),
+			_bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY);
+	}
+	else if (_bossState == FLAMETHROWER_READY2 || _bossState == FLAMETHROWER)
+	{
+		IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
+		IMAGEMANAGER->findImage("왼손움직임3")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 135, _LeftHand._centerEnd.y - 100)));
+	}
 	else
 	{
 		IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
@@ -820,7 +885,12 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("오른손공격")->setAngle(_RightHand._realAngle);
 		IMAGEMANAGER->findImage("오른손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200)),
 			_bossRightHandAttackFrameX, _bossRightHandAttackFrameY);
-
+	}
+	else if (_bossState == FLAMETHROWER_READY || _bossState == FLAMETHROWER_READY2 || _bossState == FLAMETHROWER)
+	{
+		IMAGEMANAGER->findImage("오른손공격2")->setAngle(_RightHand._realAngle);
+		IMAGEMANAGER->findImage("오른손공격2")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200)),
+			_bossRightHandAttackFrameX2, _bossRightHandAttackFrameY2);
 	}
 	else
 	{
