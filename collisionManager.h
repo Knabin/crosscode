@@ -18,6 +18,10 @@ public:
 	void update();
 	void render();
 
+	void buffaloCollision();
+	void hedgehagCollision();
+	void meerkatCollision();
+
 	void enemyCollision();
 	void playerCollision();
 	void bulletCollision();

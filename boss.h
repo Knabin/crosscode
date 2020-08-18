@@ -108,7 +108,7 @@ private:
 	int _icethrowerDelay;
 
 	//Áö·Ú ¹ß»ç µô·¹ÀÌ
-	int _mineAttackCount;
+	int _mineAttackDelay;
 
 	int _dustCurrentFrameX, _dustCurrentFrameY;
 	int _dustFrameX, _dustFrameY;

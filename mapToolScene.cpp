@@ -55,9 +55,9 @@ HRESULT mapToolScene::init()
 
 	_sampleRc.update(Vector2(_editUiRc.getCenter().x, _editUiRc.getCenter().y + 20), Vector2(512, 576), pivot::CENTER);
 
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 7; ++i)
 	{
-		_typeRcs[i].update(Vector2(_sampleRc.left, i == 0 ? _sampleRc.top : _typeRcs[i - 1].bottom), Vector2(512, 96), pivot::LEFTTOP);
+		_typeRcs[i].update(Vector2(_sampleRc.left, i == 0 ? _sampleRc.top : _typeRcs[i - 1].bottom), Vector2(512, 83), pivot::LEFTTOP);
 	}
 	// ===============================
 
@@ -116,14 +116,15 @@ HRESULT mapToolScene::init()
 	IMAGEMANAGER->addFrameImage("door prev", L"images/tile/doorpreview.png", 3, 1);
 	IMAGEMANAGER->addFrameImage("tree", L"images/object/tree.png", 3, 1);
 	IMAGEMANAGER->addFrameImage("grass", L"images/object/grass.png", 3, 1);
+	IMAGEMANAGER->addFrameImage("button prev", L"images/tile/buttonpreview.png", 3, 1);
+	IMAGEMANAGER->addFrameImage("button2 prev", L"images/tile/button2preview.png", 1, 1);
 	
 	// 빈 타일
 	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
-	IMAGEMANAGER->addImage("tile change", L"images/tile/tilechange.png");
 
 	// 오더 버튼 이미지
-	IMAGEMANAGER->addFrameImage("type", L"images/maptool/button_type.png", 2, 6);
-	_typeImage = IMAGEMANAGER->addFrameImage("tile type", L"images/tile/typetile.png", 1, 6);
+	IMAGEMANAGER->addFrameImage("type", L"images/maptool/button_type.png", 2, 7);
+	_typeImage = IMAGEMANAGER->addFrameImage("tile type", L"images/tile/typetile.png", 1, 7);
 
 	// 버튼 추가
 	button* save = new button();
@@ -283,7 +284,7 @@ void mapToolScene::render()
 		renderSelectTile();
 		break;
 	case EDITMODE::TYPE:
-		for (int i = 0; i < 6; ++i)
+		for (int i = 0; i < 7; ++i)
 		{
 			if (_selectType == i)
 				IMAGEMANAGER->findImage("type")->frameRender(Vector2(_typeRcs[i].getCenter()), 1, i);
@@ -854,7 +855,7 @@ void mapToolScene::selectUiButton()
 
 	if (_editMode == EDITMODE::TYPE)
 	{
-		for (int i = 0; i < 6; ++i)
+		for (int i = 0; i < 7; ++i)
 		{
 			if (PtInRect(&_typeRcs[i].getRect(), _ptMouse))
 			{
@@ -971,8 +972,10 @@ void mapToolScene::renderPreviewTile()
 				int width = 0;
 				int height = 0;
 
-				if (_sampleStart.y == 0)
+
+				switch (_sampleStart.y)
 				{
+				case 0:
 					if (_sampleStart.x <= 2)
 					{
 						img = IMAGEMANAGER->findImage("vendor");
@@ -981,9 +984,8 @@ void mapToolScene::renderPreviewTile()
 					{
 						img = IMAGEMANAGER->findImage("door prev");
 					}
-				}
-				else
-				{
+					break;
+				case 1:
 					if (_sampleStart.x <= 2)
 					{
 						img = IMAGEMANAGER->findImage("tree");
@@ -994,8 +996,17 @@ void mapToolScene::renderPreviewTile()
 						img = IMAGEMANAGER->findImage("grass");
 						height = SIZE * 0.5f;
 					}
+					break;
+				case 2:
+					img = IMAGEMANAGER->findImage("button prev");
+					height = SIZE * 0.5f;
+					break;
+				case 3:
+					img = IMAGEMANAGER->findImage("button2 prev");
+					height = SIZE * 0.5f;
+					break;
 				}
-
+				
 				for (int i = 0; i <= abs(_drawEnd.y - _drawStart.y); ++i)
 				{
 					for (int j = 0; j <= abs(_drawEnd.x - _drawStart.x); ++j)
@@ -1487,22 +1498,29 @@ void mapToolScene::redrawMap()
 			{
 				img = IMAGEMANAGER->findImage("vendor");
 			}
-			else
+			else if (_miObject->second.frameY == 1)
 			{
-				// 나무
 				img = IMAGEMANAGER->findImage("tree");
 				height = SIZE * 2.5f;
+			}
+			else if (_miObject->second.frameY == 2)
+			{
+				img = IMAGEMANAGER->findImage("button prev");
+				height = SIZE * 0.5f;
+			}
+			else if (_miObject->second.frameY == 3)
+			{
+				img = IMAGEMANAGER->findImage("button2 prev");
+				height = SIZE * 0.5f;
 			}
 			break;
 		case 1:
 			if (_miObject->second.frameY == 0)
 			{
-				// 문
 				img = IMAGEMANAGER->findImage("door prev");
 			}
 			else
 			{
-				// 풀
 				img = IMAGEMANAGER->findImage("grass");
 				height = SIZE * 0.5f;
 			}

@@ -8,6 +8,8 @@ HRESULT meerkat::init()
 	_enemyImage = IMAGEMANAGER->addFrameImage("enemyMeerkat", L"images/enemy/meerkat.png", 10, 12);//기본, 히트, 공격모션 이미지
 	_meerkatMoveImage = IMAGEMANAGER->addFrameImage("enemyMeerkatMove", L"images/enemy/meerkatMove.png", 9, 1);//무브 이미지
 
+	_name = "meerkat";
+
 	_maxHP = 100;
 	_currentHP = _maxHP;
 
@@ -193,7 +195,6 @@ void meerkat::update()
 	tileGet();//에너미의 타울검출 위치 업데이트
 	move();//에너미 무브
 	animationControl();//에너미 애니메이션 컨트롤
-	//animationAngleControl();//에너미와 플레이어간의 앵글값에 따른 애니메이션 컨트롤
 	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
 	angry();//에너미의 체력이 절반 이하가 되면 능력치 상승(스피드, 공격력, 공격딜레이)
 
@@ -768,97 +769,6 @@ void meerkat::animationControl()
 			_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 		}
 		break;
-	}
-}
-
-void meerkat::animationAngleControl()
-{
-	if (_maxHP > _currentHP)//에너미의 현재 체력이 멕스HP보다 작아지면
-	{
-		if (_enemyDirection != ENEMY_LEFT_HIT &&
-			_enemyDirection != ENEMY_RIGHT_HIT &&
-			_enemyDirection != ENEMY_UP_LEFT_HIT &&
-			_enemyDirection != ENEMY_UP_RIGHT_HIT &&
-			_enemyDirection != ENEMY_DOWN_LEFT_HIT &&
-			_enemyDirection != ENEMY_DOWN_RIGHT_HIT)//에너미가 히트 애니메이션이 아닐경우
-		{
-			if (!_isAttack)//에너미가 공격중이 아니면
-			{
-				if (_distance <= _smallDistance)//플레이어랑 에너미의 거리가 가까우면
-				{
-					_enemyDirection = ENEMY_TUNNEL_MOVE;
-
-				}
-				else if (_distance > _smallDistance && _distance < _bigDistance)//플레이어랑 에너미의 거리가 일정거리이상 멀고 너무멀지 않으면
-				{
-					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
-					{
-						_enemyDirection = ENEMY_LEFT_IDLE;
-					}
-
-					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
-					{
-						_enemyDirection = ENEMY_UP_LEFT_IDLE;
-					}
-
-					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
-					{
-						_enemyDirection = ENEMY_UP_RIGHT_IDLE;
-					}
-
-					if (_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45 || _angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360)//오른쪽
-					{
-						_enemyDirection = ENEMY_RIGHT_IDLE;
-					}
-
-					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
-					{
-						_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
-					}
-
-					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
-					{
-						_enemyDirection = ENEMY_DOWN_LEFT_IDLE;
-					}
-				}
-				else//플레이어와 에너미의 거리가 너무 멀면
-				{
-					_enemyDirection = ENEMY_TUNNEL_MOVE;
-				}
-			}
-			else//공격상태값이 트루면
-			{
-				if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
-				{
-					_enemyDirection = ENEMY_LEFT_ATTACK;
-				}
-
-				if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
-				{
-					_enemyDirection = ENEMY_UP_LEFT_ATTACK;
-				}
-
-				if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
-				{
-					_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
-				}
-
-				if (_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45 || _angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360)//오른쪽
-				{
-					_enemyDirection = ENEMY_RIGHT_ATTACK;
-				}
-
-				if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
-				{
-					_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK;
-				}
-
-				if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
-				{
-					_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
-				}
-			}
-		}
 	}
 }
 

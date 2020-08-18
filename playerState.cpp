@@ -63,7 +63,7 @@ idleState::~idleState()
 
 void idleState::enter()
 {
-	cout << "idleState enter()" << endl;
+	//cout << "idleState enter()" << endl;
 
 	_player->setImage("p");
 
@@ -130,7 +130,7 @@ void idleState::update()
 
 void idleState::exit()
 {
-	cout << "idleState exit()" << endl;
+	//cout << "idleState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -209,7 +209,7 @@ moveState::~moveState()
 
 void moveState::enter()
 {
-	cout << "moveState enter()" << endl;
+//	cout << "moveState enter()" << endl;
 
 	_player->setImage("p");
 
@@ -251,7 +251,7 @@ void moveState::enter()
 
 void moveState::update()
 {
-	cout << "moveState update()" << endl;
+	//cout << "moveState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -288,7 +288,7 @@ void moveState::update()
 
 void moveState::exit()
 {
-	cout << "moveState exit()" << endl;
+	//cout << "moveState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -359,7 +359,7 @@ jumpState::~jumpState()
 
 void jumpState::enter()
 {
-	cout << "jumpState enter()" << endl;
+	//cout << "jumpState enter()" << endl;
 	_player->setImage("player jump");
 
 	switch (_player->getDirection())
@@ -401,7 +401,7 @@ void jumpState::enter()
 
 void jumpState::update()
 {
-	cout << "jumpState update()" << endl;
+	//cout << "jumpState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -441,7 +441,7 @@ void jumpState::update()
 
 void jumpState::exit()
 {
-	cout << "jumpState exit()" << endl;
+	//cout << "jumpState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -520,7 +520,7 @@ guardState::~guardState()
 
 void guardState::enter()
 {
-	cout << "guardState enter()" << endl;
+//	cout << "guardState enter()" << endl;
 	_player->setImage("player guard");
 
 	switch (_player->getDirection())
@@ -562,7 +562,7 @@ void guardState::enter()
 
 void guardState::update()
 {
-	cout << "guardState update()" << endl;
+	//cout << "guardState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -599,7 +599,7 @@ void guardState::update()
 
 void guardState::exit()
 {
-	cout << "guardState exit()" << endl;
+	//cout << "guardState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -678,7 +678,7 @@ dodgeState::~dodgeState()
 
 void dodgeState::enter()
 {
-	cout << "dodgeState enter()" << endl;
+//	cout << "dodgeState enter()" << endl;
 	_player->setImage("player dodge");
 	switch (_player->getDirection())
 	{
@@ -713,7 +713,7 @@ void dodgeState::enter()
 
 void dodgeState::update()
 {
-	cout << "dodgeState update()" << endl;
+	//cout << "dodgeState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -750,7 +750,7 @@ void dodgeState::update()
 
 void dodgeState::exit()
 {
-	cout << "dodgeState exit()" << endl;
+	//cout << "dodgeState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -858,7 +858,7 @@ void longAttackState::enter()
 	}
 
 
-	cout << "longAttackState enter()" << endl;
+	//cout << "longAttackState enter()" << endl;
 	_player->setImage("player longAttack");
 	_count = 0;
 	_isLongAttack = true;
@@ -957,7 +957,7 @@ void longAttackState::enter()
 
 void longAttackState::update()
 {
-	cout << "longAttackState update()" << endl;
+	//cout << "longAttackState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -999,7 +999,7 @@ void longAttackState::update()
 
 void longAttackState::exit()
 {
-	cout << "longAttackState exit()" << endl;
+	//cout << "longAttackState exit()" << endl;
 	_top->stop();
 	_left->stop();
 	_right->stop();
@@ -1135,7 +1135,7 @@ longAttackMoveState::~longAttackMoveState()
 
 void longAttackMoveState::enter()
 {
-	cout << "longAttackMoveState enter()" << endl;
+//	cout << "longAttackMoveState enter()" << endl;
 	_player->setImage("player longAttackMove");
 	switch (_player->getDirection())
 	{
@@ -1168,7 +1168,7 @@ void longAttackMoveState::enter()
 
 void longAttackMoveState::update()
 {
-	cout << "longAttackMoveState update()" << endl;
+	//cout << "longAttackMoveState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -1205,7 +1205,7 @@ void longAttackMoveState::update()
 
 void longAttackMoveState::exit()
 {
-	cout << "longAttackMoveState exit()" << endl;
+	//cout << "longAttackMoveState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -1284,7 +1284,7 @@ movestopState::~movestopState()
 
 void movestopState::enter()
 {
-	cout << "movestopState enter()" << endl;
+	//cout << "movestopState enter()" << endl;
 	_player->setImage("p");
 	switch (_player->getDirection())
 	{
@@ -1362,7 +1362,7 @@ void movestopState::update()
 
 void movestopState::exit()
 {
-	cout << "movestopState exit()" << endl;
+	//cout << "movestopState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -1441,7 +1441,7 @@ rightattackState::~rightattackState()
 
 void rightattackState::enter()
 {
-	cout << "rightattackState enter()" << endl;
+	//cout << "rightattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 
 	switch (_player->getDirection())
@@ -1521,7 +1521,7 @@ void rightattackState::update()
 
 void rightattackState::exit()
 {
-	cout << "rightattackState exit()" << endl;
+	//cout << "rightattackState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -1599,7 +1599,7 @@ leftattackState::~leftattackState()
 
 void leftattackState::enter()
 {
-	cout << "leftattackState enter()" << endl;
+	//cout << "leftattackState enter()" << endl;
 	_player->setImage("p_meleeattack_left");
 
 	switch (_player->getDirection())
@@ -1679,7 +1679,7 @@ void leftattackState::update()
 
 void leftattackState::exit()
 {
-	cout << "leftattackState exit()" << endl;
+//	cout << "leftattackState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -1759,7 +1759,7 @@ rightfinalattackState::~rightfinalattackState()
 
 void rightfinalattackState::enter()
 {
-	cout << "rightfinalattackState enter()" << endl;
+	//cout << "rightfinalattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 
 	switch (_player->getDirection())
@@ -1839,7 +1839,7 @@ void rightfinalattackState::update()
 
 void rightfinalattackState::exit()
 {
-	cout << "rightfinalattackState exit()" << endl;
+	//cout << "rightfinalattackState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -1917,7 +1917,7 @@ longAttackIdleState::~longAttackIdleState()
 
 void longAttackIdleState::enter()
 {
-	cout << "longAttackIdleState enter()" << endl;
+	//cout << "longAttackIdleState enter()" << endl;
 
 	_player->setImage("player longAttackMove");
 
@@ -1959,7 +1959,7 @@ void longAttackIdleState::enter()
 
 void longAttackIdleState::update()
 {
-	cout << "longAttackIdleState update()" << endl;
+	//cout << "longAttackIdleState update()" << endl;
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -1996,7 +1996,7 @@ void longAttackIdleState::update()
 
 void longAttackIdleState::exit()
 {
-	cout << "longAttackIdleState exit()" << endl;
+	//cout << "longAttackIdleState exit()" << endl;
 	_top->stop();
 	_right->stop();
 	_bottom->stop();

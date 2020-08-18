@@ -8,6 +8,8 @@ HRESULT hedgehag::init()
 	EFFECTMANAGER->addEffect("enemyHedgehogDust", "images/enemy/hedgehogDust.png", 240, 102, 48, 102, 1.0f, 0.5f, 200, 1.0f);//공격상태에서 제자리에 나오는 먼지 이펙트
 	EFFECTMANAGER->addEffect("enemyHedgehogMoveDust", "images/enemy/hedgehogMoveDust.png", 240, 51, 48, 51, 1.0f, 0.5f, 200, 1.0f);//공격상태에서 움직이는중에 나오는 먼지 이펙트
 
+	_name = "hedgehag";
+
 	_maxHP = 100;
 	_currentHP = _maxHP;
 

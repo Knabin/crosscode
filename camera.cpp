@@ -23,7 +23,8 @@ void camera::update()
 	switch (_state)
 	{
 	case CAMERASTATE::NONE:
-		_rc = RectMake(0, 0, WINSIZEX / _nowZoomAmount, WINSIZEY / _nowZoomAmount);
+		//_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX / _nowZoomAmount, WINSIZEY / _nowZoomAmount);
+		moveToTarget();
 		break;
 	case CAMERASTATE::TARGET:
 		if (_isShake) 
@@ -158,7 +159,7 @@ void camera::updateRect()
 void camera::changeTarget(gameObject* gameObject)
 {
 	_target = gameObject;
-	_state = CAMERASTATE::TARGET;
+	//_state = CAMERASTATE::TARGET;
 }
 
 void camera::shakeStart(float amount, float time)

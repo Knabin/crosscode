@@ -35,10 +35,12 @@ public:
 	void render();
 
 	void addEffect(string effectName, const char* imageName,
+		int fps, float elapsedTime, int buffer, float scale);
+	void addEffect(string effectName, const char* imageName,
 		int imageWidth, int imageHeight, int effectWidth, int effectHeight,
 		int fps, float elapsedTime, int buffer, float scale);
 
 	void play(string effectName, int x, int y);
-
+	void play(string effectName, int x, int y, float angle);
 };
 
