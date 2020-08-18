@@ -11,6 +11,7 @@ player::player()
 	playerState* guard = new guardState(this);
 	playerState* dodge = new dodgeState(this);
 	playerState* longAttack = new longAttackState(this);
+	playerState* longAttackIdle = new longAttackIdleState(this);
 	playerState* longAttackMove = new longAttackMoveState(this);
 	playerState* movestop = new movestopState(this);
 	playerState* leftattackstate = new leftattackState(this);
@@ -23,6 +24,7 @@ player::player()
 	_vState.push_back(guard);
 	_vState.push_back(dodge);
 	_vState.push_back(longAttack);
+	_vState.push_back(longAttackIdle);
 	_vState.push_back(longAttackMove);
 	_vState.push_back(movestop);
 	_vState.push_back(leftattackstate);
@@ -35,6 +37,8 @@ player::player()
 	_combo = 0;
 	_iscombo = false;
 	_fullCount = 0;
+
+	_dodgeCount = 4; //닷지 기본 횟수
 
 	_state = new playerStateController(idle);
 	_position.y = 700;
@@ -54,7 +58,7 @@ HRESULT player::init()
 	IMAGEMANAGER->addFrameImage("player longAttackMove", L"images/player/player_longAttackMove.png", 7, 8);
 	IMAGEMANAGER->addFrameImage("p_meleeattack_left", L"images/player/meleeattack_left1.png", 8, 7);
 	IMAGEMANAGER->addFrameImage("p_meleeattack_right", L"images/player/meleeattack_right1.png", 8, 7);
-
+	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
 
 	_width = _height = 96;
 	_pivot = pivot::CENTER;
@@ -72,7 +76,8 @@ void player::release()
 
 void player::update()
 {
-	if (KEYMANAGER->isStayKeyDown('A'))
+	
+	if (KEYMANAGER->isStayKeyDown('A') && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE])
 	{
 		if (KEYMANAGER->isStayKeyDown('W'))
 		{
@@ -91,19 +96,22 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&_state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && 
+			_state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] &&
+			_state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&
+			_state->getState() != _vState[PLAYERSTATE::DODGE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
-
 	}
 
-	if (KEYMANAGER->isStayKeyDown('D'))
+	if (KEYMANAGER->isStayKeyDown('D') && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE])
 	{
 		if (KEYMANAGER->isStayKeyDown('W'))
 		{
@@ -122,19 +130,20 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE]
+			&& _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
-
 	}
 
-	if (KEYMANAGER->isStayKeyDown('W'))
+	if (KEYMANAGER->isStayKeyDown('W') && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE])
 	{
 		if (KEYMANAGER->isStayKeyDown('D'))
 		{
@@ -153,19 +162,20 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE]
+			&& _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
-
 	}
 
-	if (KEYMANAGER->isStayKeyDown('S'))
+	if (KEYMANAGER->isStayKeyDown('S') && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE])
 	{
 		if (KEYMANAGER->isStayKeyDown('D'))
 		{
@@ -184,12 +194,14 @@ void player::update()
 		{
 			playerMeleeattack();
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
 			_ani->start();
+			_dodgeCount--;
 		}
-		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE])
+		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_ATTACK] && _state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] && _state->getState() != _vState[PLAYERSTATE::DODGE]
+			&& _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
@@ -198,7 +210,7 @@ void player::update()
 
 	_combocount++;   // 근접공격 콤보 카운트용
 
-			// ==================근접 공격 초기화용==================
+	// ==================근접 공격 초기화용==================
 	if (_state->getState() != _vState[LEFT_ATTACK] && _state->getState() != _vState[RIGHT_ATTACK])
 	{
 		_iscombo = false;
@@ -227,43 +239,70 @@ void player::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))	// 가까우면 근접 , 멀면 원거리 공격
 	{
 		_fullCount = 0;
-
-		if (getDistance(_position.x, _position.y, _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150)
+		if (getDistance(_position.x, _position.y, _ptMouse.x / 
+			CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / 
+			CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150)
 		{
 			playerMeleeattack();
 		}
-		else if (getDistance(_position.x, _position.y, _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top) >= 100 && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
+		else if (getDistance(_position.x, _position.y, _ptMouse.x / 
+			CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / 
+			CAMERA->getZoomAmount() + CAMERA->getRect().top) >= 100)
 		{
 			_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
 			_state->getState()->setLongAttack();
 			playerFire();
 		}
 	}
-	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACK])
-	
+
+	if (_state->getState() == _vState[LONGATTACK])
 	{
-		_fullCount++;
-		if (_fullCount > 10)
+		float angle = getAngle(_position.x, _position.y,
+			_ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
+			_ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
+
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))	de -= PI / 50;
+		if (de < 0)	de = 0;
+		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))	de = PI / 4;
+
+		float d1 = angle - de;
+		float d2 = angle + de;
+
+		for (int i = 0; i < 10; i++)
 		{
-			_state->setState(_vState[PLAYERSTATE::LONGATTACKMOVE]);
+			rc1[i].update(Vector2(_position.x + cosf(d1) * 20 * i, _position.y + -sinf(d1) * 20 * i), Vector2(10, 10), pivot::CENTER);
+		}
+		for (int i = 0; i < 10; i++)
+		{
+			rc2[i].update(Vector2(_position.x + cosf(d2) * 20 * i, _position.y + -sinf(d2) * 20 * i), Vector2(10, 10), pivot::CENTER);
 		}
 	}
 
+
+	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && _state->getState() != _vState[PLAYERSTATE::LONGATTACK] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
+	{
+		_fullCount++;
+		if (_fullCount > 15)
+		{
+			_state->setState(_vState[PLAYERSTATE::LONGATTACKIDLE]);
+		}
+	}
+
+	//롱 어택 무브일 때 마우스 왼쪽 버튼 뗄 시 롱 어택 모션
+	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON) && _state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE])
+	{
+		_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
+		_state->getState()->setLongAttack();
+		playerFire();
+	}
 
 	if (_state->getState() == _vState[PLAYERSTATE::DODGE] && _ani->isPlay() == false)
 	{
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 	}
 
-	/* 원거리 공격 버튼 누를 시 점선이 중앙으로 모임
-			float angle = getAngle(_x, _y, _ptMouseAbs.x, _ptMouseAbs.y);
-		de -= PI / 15;
-		float d1 = angle + de;
-		_rc.setCenter(_x + cosf(d1), _y + -sinf(d1));
-	*/
-
 	// ==================== 가드상태 또는 원거리 공격시 마우스 방향으로 플레이어의 방향 바뀜 ==================== //
-	if (_state->getState() == _vState[PLAYERSTATE::GUARD] || _state->getState() == _vState[PLAYERSTATE::LONGATTACK])
+	if (_state->getState() == _vState[PLAYERSTATE::GUARD] || _state->getState() == _vState[PLAYERSTATE::LONGATTACK] || _state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE])
 	{
 		float angle = getAngle(_position.x, _position.y,
 			_ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
@@ -294,49 +333,36 @@ void player::update()
 		}
 	}
 
-	if (_state->getState() == _vState[LONGATTACK])
-	{
-		float angle = getAngle(_position.x, _position.y, _ptMouse.x, _ptMouse.y);
-
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))	de -= PI / 50;
-		if (de < 0)	de = 0;
-		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))	de = PI / 4;
-
-		float d1 = angle + de;
-		float d2 = angle - de;
-
-		for (int i = 0; i < 10; i++)
-		{
-			rc1[i].update(Vector2(_position.x + cosf(d1) * 20 * i, _position.y + -sinf(d1) * 20 * i), Vector2(10, 10), pivot::CENTER);
-		}
-		for (int i = 0; i < 10; i++)
-		{
-			rc2[i].update(Vector2(_position.x + cosf(d2) * 20 * i, _position.y + -sinf(d2) * 20 * i), Vector2(10, 10), pivot::CENTER);
-		}
-	}
-
-
 	//========================================움직이고 나서 정지하는 모션 ====================================================
 	if (KEYMANAGER->isOnceKeyUp('A') || KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('D') || KEYMANAGER->isOnceKeyUp('S') ||
 		KEYMANAGER->isOnceKeyUp('A') && KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('D') && KEYMANAGER->isOnceKeyUp('W') ||
 		KEYMANAGER->isOnceKeyUp('A') && KEYMANAGER->isOnceKeyUp('S') || KEYMANAGER->isOnceKeyUp('D') && KEYMANAGER->isOnceKeyUp('S'))
 		_state->setState(_vState[PLAYERSTATE::MOVESTOP]);
 
-
 	if (KEYMANAGER->isOnceKeyUp('C')
 		|| (KEYMANAGER->isOnceKeyUp(VK_RBUTTON) && _state->getState() == _vState[PLAYERSTATE::GUARD])
 		|| _state->getState() == _vState[MOVESTOP] && !_ani->isPlay()
 		|| _state->getState() == _vState[RIGHT_FINALATTACK] && !_ani->isPlay()
-		//|| KEYMANAGER->isOnceKeyUp(VK_LBUTTON)
 		)
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
-
 
 	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] && _state->getState()->isAttack() == false && _state->getState()->isLongAttack() == false)
 	{
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 	}
 
+	if (_dodgeCount < 4)
+	{
+		_dodgeCharge++;
+	}
+
+	if (_dodgeCharge > 20)
+	{
+		_dodgeCount++;
+		_dodgeCharge = 0;
+	}
+
+	cout << _nowOrder << endl;
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	_state->updateState();
 }
@@ -351,17 +377,23 @@ void player::render()
 	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
 
-	for (int i = 0; i < 10; ++i)
-	{
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc1[i]));
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc2[i]));
-	}
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[0].y][next[0].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[1].y][next[1].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[2].y][next[2].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
+
+	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] ||
+		_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
+		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
+	{
+		for (int i = 0; i < 10; ++i)
+		{
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc1[i]));
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc2[i]));
+		}
+	}
 }
 
 void player::playerMove()
@@ -385,6 +417,7 @@ void player::playerMove()
 	//POINT next[3];
 	float moveSpeed = 4.5f;
 
+
 	switch (_direction)
 	{
 	case PLAYERDIRECTION::TOP:
@@ -403,19 +436,19 @@ void player::playerMove()
 		next[2] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
 		break;
 	case PLAYERDIRECTION::LEFT_BOTTOM:
-		next[0] = { currentTileIndex.x - 1, currentTileIndex.y };
-		next[1] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
-		next[2] = { currentTileIndex.x, currentTileIndex.y };
+		next[0] = { currentTileIndex.x - 1, currentTileIndex.y +1};
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y  };
+		next[2] = { currentTileIndex.x, currentTileIndex.y +1};
 		break;
 	case PLAYERDIRECTION::BOTTOM:
-		next[0] = { currentTileIndex.x, currentTileIndex.y };
-		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
-		next[2] = { currentTileIndex.x + 1, currentTileIndex.y };
+		next[0] = { currentTileIndex.x, currentTileIndex.y +1};
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y +1};
+		next[2] = { currentTileIndex.x + 1, currentTileIndex.y +1};
 		break;
 	case PLAYERDIRECTION::RIGHT_BOTTOM:
-		next[0] = { currentTileIndex.x + 1, currentTileIndex.y };
-		next[1] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
-		next[2] = { currentTileIndex.x, currentTileIndex.y };
+		next[0] = { currentTileIndex.x + 1, currentTileIndex.y +1};
+		next[1] = { currentTileIndex.x + 1, currentTileIndex.y  };
+		next[2] = { currentTileIndex.x, currentTileIndex.y +1};
 		break;
 	case PLAYERDIRECTION::RIGHT:
 		next[0] = { currentTileIndex.x + 1, currentTileIndex.y };
@@ -432,6 +465,8 @@ void player::playerMove()
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
 
+
+
 	// 다음 타일
 	for (int i = 0; i < 3; ++i)
 	{
@@ -442,9 +477,17 @@ void player::playerMove()
 	}
 
 	RECT temp;
-
+	
+	int _backOrder = _nowOrder;
+	_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
+	if (_nowOrder == 4)
+	{
+		_nowOrder = _backOrder;
+	}
+	
+	
 	// 층이 같다면
-	//if (t->getOrderIndex() == _nowOrder)
+	//if (ti->getOrderIndex() == _nowOrder)
 	{
 		switch (_direction)
 		{
@@ -453,7 +496,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 4)
 				{
 					move(0, 4.5f);
 					break;
@@ -465,7 +508,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 1.75f, moveSpeed);
 					break;
@@ -478,7 +521,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					move(4.5f, 0);
 					break;
@@ -490,7 +533,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 0.25f, moveSpeed);
 					break;
@@ -502,7 +545,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					move(0, -4.5f);
 					break;
@@ -514,7 +557,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 0.75f, moveSpeed);
 					break;
@@ -526,7 +569,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					move(-4.5f, 0);
 					break;
@@ -538,7 +581,7 @@ void player::playerMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
-				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() != _nowOrder && ti->getOrderIndex() != 4)
+				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()) && ti->getOrderIndex() > _nowOrder +1 && ti->getOrderIndex() != 4)
 				{
 					moveAngle(PI * 1.25f, moveSpeed);
 					break;
@@ -572,6 +615,13 @@ void player::playerDodge()		//회피시 움직임
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
 	float moveSpeed = 8.3f;
+
+	
+	if (_dodgeCount < 1)
+	{
+		moveSpeed = 2.0f;
+	}
+	
 
 	switch (_direction)
 	{
@@ -644,11 +694,11 @@ void player::playerDodge()		//회피시 움직임
 	}
 }
 
-void player::playerLongAttackMove()		//원거리 공격시 움직임
+void player::playerLongAttackMove()
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
-	float moveSpeed = 1.0f;
+	float moveSpeed = 1.5f;
 
 	switch (_direction)
 	{
@@ -681,14 +731,12 @@ void player::playerLongAttackMove()		//원거리 공격시 움직임
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
 
-	// 다음 타일
 	if (nextTileIndex.x > maxTileX) nextTileIndex.x = maxTileX;
 	else if (nextTileIndex.x < 0) nextTileIndex.x = 0;
 	if (nextTileIndex.y > maxTileY) nextTileIndex.y = maxTileY;
 	else if (nextTileIndex.y < 0) nextTileIndex.y = 0;
 	tile* t = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex.y][nextTileIndex.x];
 
-	// 층이 같다면
 	if (t->getOrderIndex() == _nowOrder)
 	{
 		switch (_direction)
@@ -917,11 +965,10 @@ void player::playerfinalattackMove() // 근접공격 마지막타 움직이는거 타일체크
 
 void player::move(const float & x, const float & y)
 {
-
 	_position.x += x;
 	_position.y += y;
 	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
-	_tileRect.set(_position - Vector2(0, 5), pivot::CENTER);
+	_tileRect.set(_position + Vector2(0, 30), pivot::CENTER);
 }
 
 void player::moveAngle(const float & cangle, const float & speed)
@@ -929,12 +976,11 @@ void player::moveAngle(const float & cangle, const float & speed)
 	_position.x += cosf(cangle) * speed;
 	_position.y -= sinf(cangle) * speed;
 	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
-	_tileRect.set(_position - Vector2(0, 5), pivot::CENTER);
+	_tileRect.set(_position + Vector2(0, 30), pivot::CENTER);
 }
 
 void player::playerFire()
 {
-
 }
 
 void player::playerMeleeattack()   //근접 기본공격

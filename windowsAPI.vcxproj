@@ -191,7 +191,9 @@
     <ClInclude Include="playerStateController.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="progressBar.h" />
+    <ClInclude Include="puzzleComboButton.h" />
     <ClInclude Include="puzzleScene.h" />
+    <ClInclude Include="puzzleTabButton.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="scene.h" />
@@ -260,7 +262,9 @@
     <ClCompile Include="playerStateController.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="progressBar.cpp" />
+    <ClCompile Include="puzzleComboButton.cpp" />
     <ClCompile Include="puzzleScene.cpp" />
+    <ClCompile Include="puzzleTabButton.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />

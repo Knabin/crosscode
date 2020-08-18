@@ -193,6 +193,13 @@
     <ClCompile Include="buffalo.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="puzzleTabButton.cpp">
+      <Filter>playGround\puzzle</Filter>
+    </ClCompile>
+    <ClCompile Include="puzzleComboButton.cpp">
+      <Filter>playGround\puzzle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -396,6 +403,13 @@
     <ClInclude Include="buffalo.h">
       <Filter>enemyTest</Filter>
     </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="puzzleTabButton.h">
+      <Filter>playGround\puzzle</Filter>
+    </ClInclude>
+    <ClInclude Include="puzzleComboButton.h">
+      <Filter>playGround\puzzle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -492,6 +506,9 @@
     </Filter>
     <Filter Include="enemyTest\bossPattern">
       <UniqueIdentifier>{5be1332e-68f7-4292-bd6b-b0f375f1c9ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\puzzle">
+      <UniqueIdentifier>{9f4dbf8f-c00e-48f9-a70a-470f8cc1f10e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

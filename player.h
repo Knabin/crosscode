@@ -22,6 +22,7 @@ enum PLAYERSTATE : int
 	GUARD,
 	DODGE,
 	LONGATTACK,
+	LONGATTACKIDLE,
 	LONGATTACKMOVE,
 	MOVESTOP,
 	LEFT_ATTACK,
@@ -57,6 +58,9 @@ private:
 	int _combo;
 	int _fullCount;	//¿ø°Å¸®°ø°Ý ÃæÀü½Ã°£
 
+	int _dodgeCount;	//´åÁöÈ½¼ö
+	int _dodgeCharge;	//´åÁöÈ½¼ö ÃæÀü¿ë
+
 	float _jumpPower;
 	float _gravity;
 
@@ -85,6 +89,7 @@ public:
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }
+	void setDirection(PLAYERDIRECTION direction) { _direction = direction; }
 
 	animation* getAnimation() { return _ani; }
 
