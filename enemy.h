@@ -160,6 +160,8 @@ public:
 	void angry();//에너미의 체력이 절반 이하로 떨어지면 능력치 향상(공격력, 스피드, 공격딜레이)
 
 	//접근자
+	ENEMYDIRECTION getEnemyDirection() { return _enemyDirection; }
+
 	floatRect getEnemyAttackRect() { return _attackRC; }//에너미 공격렉트
 
 	float getEnemyAngle() { return _angle; }//에너미와 플레이어간의 각도
@@ -177,6 +179,7 @@ public:
 	void setEnemyY(float y) { _position.y = y; }//에너미의 y좌표 변경
 	void setEnemyAttackRect() { _attackRC.update(Vector2(0,0), Vector2(0,0), pivot::CENTER); }//에너미의 공격렉트 지우기
 	void setEnemyIsActive(bool isActive) { _isActive = isActive; }//에너미 사망
+	void setIsAttack(bool isAttack) { _isAttack = isAttack; }
 	//설정자
 
 	vector<tile*>& getMove() { return _move; }
