@@ -637,7 +637,7 @@ void boss::bossState()
 		_motionDelay++;
 		
 
-		if (_motionDelay >= 58)
+		if (_motionDelay >= 48)
 		{
 			for (int i = 0; i < _stoneshower->getDustVector().size(); i++)
 			{

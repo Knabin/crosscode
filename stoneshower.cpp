@@ -13,7 +13,7 @@ HRESULT stoneshower::init()
 {
 	
 	IMAGEMANAGER->addImage("바위", L"images/boss/stone.png");
-	//IMAGEMANAGER->addFrameImage("먼지", L"images/boss/dust.png", 9, 1);
+	IMAGEMANAGER->addFrameImage("먼지", L"images/boss/dust.png", 9, 1);
 
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 
@@ -69,7 +69,7 @@ void stoneshower::update()
 		{
 			_dustFrameY = 0;
 
-			if (_frameCount % 7 == 0)
+			if (_frameCount % 5 == 0)
 			{
 				if (_currentFrameX >= IMAGEMANAGER->findImage("먼지")->getMaxFrameX())
 				{
@@ -132,7 +132,6 @@ void stoneshower::dustDraw(float centerX, float centerY)
 void stoneshower::dustTrue(int Num2)
 {
 	_vDust[Num2]._fireStart = true;
-
 }
 
 void stoneshower::dustFalse(int Num3)
