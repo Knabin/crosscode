@@ -3,6 +3,7 @@
 #include <commdlg.h>
 #include "hedgehag.h"
 #include "meerkat.h"
+#include "buffalo.h"
 #include "vendor.h"
 #include "door.h"
 #include "mapObject.h"
@@ -43,11 +44,6 @@ void scene::render()
 	{
 		for (int j = startX; j <= endX; ++j)
 		{
-			/*if (CAMERA->getRect().left >= _vTiles[i][j]->getRect().right ||
-				CAMERA->getRect().right <= _vTiles[i][j]->getRect().left ||
-				CAMERA->getRect().bottom <= _vTiles[i][j]->getRect().top ||
-				CAMERA->getRect().top >= _vTiles[i][j]->getRect().bottom) continue;*/
-
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
 			SCENEMANAGER->getTileImage(_vTiles[i][j]->getTerrainImageNum())->frameRender(
 				CAMERA->getRelativeVector2(_vTiles[i][j]->getRect().getCenter()),
@@ -209,6 +205,14 @@ void scene::getEnemiesFromFile(string fileName)
 		case 1:
 		{
 			gameObject* hed = new meerkat();
+			hed->init();
+			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
+		}
+		break;
+		case 2:
+		{
+			gameObject* hed = new buffalo();
 			hed->init();
 			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
 			OBJECTMANAGER->addObject(objectType::ENEMY, hed);

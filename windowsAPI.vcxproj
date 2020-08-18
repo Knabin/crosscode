@@ -151,6 +151,7 @@
     <ClInclude Include="aStar.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossTestScene.h" />
+    <ClInclude Include="buffalo.h" />
     <ClInclude Include="bullets.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stoneshower.h" />
     <ClInclude Include="tabUI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testScene.h" />
@@ -218,6 +220,7 @@
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossTestScene.cpp" />
+    <ClCompile Include="buffalo.cpp" />
     <ClCompile Include="bullets.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -267,6 +270,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="stoneshower.cpp" />
     <ClCompile Include="tabUI.cpp" />
     <ClCompile Include="testScene.cpp" />
     <ClCompile Include="testScene2.cpp" />

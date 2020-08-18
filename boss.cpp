@@ -12,18 +12,27 @@ boss::~boss()
 HRESULT boss::init()
 {
 
+	_dustCurrentFrameX, _dustCurrentFrameY, _dustFrameCount = 0;
+
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
 	_moveCount = 0;
 	_motionDelay = 0;
 	_icethrowerDelay = 0;
+	_randomAttackCount = 0;
 	_mineAttackCount = 0;
+	_breatheCount = 0;
 
 	//================================================================================================================================================================//
+
+	IMAGEMANAGER->addFrameImage("보스바텀방어막4", L"images/boss/dust.png", 9, 1);
 
 	//보스 png이미지 선언
 
 	IMAGEMANAGER->addImage("보스몸통", L"images/boss/center_body.png");
+	IMAGEMANAGER->addImage("보스몸통우", L"images/boss/center_right.png");
+	IMAGEMANAGER->addImage("보스몸통좌", L"images/boss/center_left.png");
+	IMAGEMANAGER->addImage("보스몸통하", L"images/boss/center_down.png");
 
 	IMAGEMANAGER->addFrameImage("보스몸통움직임", L"images/boss/center_move.png", 15, 1);
 
@@ -40,15 +49,19 @@ HRESULT boss::init()
 	IMAGEMANAGER->addImage("오른팔", L"images/boss/right_arm.png");
 	IMAGEMANAGER->addImage("오른손", L"images/boss/right_hand.png");
 
+	IMAGEMANAGER->addFrameImage("오른손공격", L"images/boss/right_hand_attack2.png", 8, 1);
+
 	//================================================================================================================================================================//
+
+	// WINSIZEY / 2 - 175
 
 	//보스 몸통 선언
 	_Center._x = (WINSIZEX / 2 - 85);
-	_Center._y = (WINSIZEY / 2 - 175);
+	_Center._y = (WINSIZEY / 2 + 25);
 	_Center._angle = 0;
 
 	_Center._center.x = (WINSIZEX / 2 - 85);
-	_Center._center.y = (WINSIZEY / 2 - 175);
+	_Center._center.y = (WINSIZEY / 2 + 25);
 	_Center._centerMeter = 100;
 
 	_Center._speed = 2.0f;
@@ -57,8 +70,9 @@ HRESULT boss::init()
 
 	//_bossState = APPEARANCE;
 	//_bossState = STOP;
-	_bossState = ICETHROWER_READY1;
+	//_bossState = ICETHROWER_READY;
 	//_bossState = MINE_READY;
+	_bossState = STONESHOWER_READY;
 
 	//================================================================================================================================================================//
 
@@ -148,7 +162,8 @@ HRESULT boss::init()
 	_mine = new mine;
 	_mine->init(_Center._x + 115 , _Center._y + 50);
 
-
+	_stoneshower = new stoneshower;
+	_stoneshower->init();
 
 	return S_OK;
 }
@@ -173,24 +188,43 @@ void boss::update()
 
 	fireCollision();
 
+	breathe();
+
 	//================================================================================================================================================================//
 
 	_icethrower->update();
 
 	_mine->update();
 
+	_stoneshower->update();
 
 	if (KEYMANAGER->isOnceKeyDown('Q'))
 	{
-		_bossState = MINE_READY;
+		_bossState = STONESHOWER_READY;
 	}
+
+	
+	_dustFrameCount++;
+
+	_dustFrameY = 0;
+
+	if (_dustFrameCount % 5 == 0)
+	{
+		if (_dustCurrentFrameX >= IMAGEMANAGER->findImage("보스바텀방어막4")->getMaxFrameX())
+		{
+			_dustCurrentFrameX = 0;
+		}
+		_dustFrameX = _dustCurrentFrameX;
+		_dustCurrentFrameX++;
+		_dustFrameCount = 0;
+	}
+	
 
 
 }
 
 void boss::render()
 {
-
 
 	_icethrower->render();
 
@@ -200,6 +234,7 @@ void boss::render()
 
 	_mine->render(_Center._x + 115, _Center._y + 50);
 
+	_stoneshower->render();
 }
 
 void boss::bossState()
@@ -258,15 +293,40 @@ void boss::bossState()
 	case MOVEDOWN:
 	case STOP:
 	{
+		/*
 
+		_randomAttackCount++;
+		bossInitialization();
+		
 
+		if (_randomAttackCount >= 200)
+		{
+			_randomAttackCount = 0;
+			int _randomAttack;
+			_randomAttack = RND->getInt(3);
+
+			if (_randomAttack == 1)
+			{
+				_bossState = MINE_READY;
+			}
+			if (_randomAttack == 2)
+			{
+				_bossState = STONESHOWER_READY;
+			}
+			else
+			{
+				_bossState = ICETHROWER_READY;
+			}
+
+		}
+		*/
 	}
 	break;
 
 	//왼손 얼음포물선 발사 모션
 
 
-	case ICETHROWER_READY1:
+	case ICETHROWER_READY:
 	{
 
 		_RightArm._angle -= 0.012f;
@@ -377,10 +437,10 @@ void boss::bossState()
 		_LeftArm._center.y -= 2.0f;
 
 
-		_RightArm._angle -= 0.012f;
-		_RightHand._angle -= 0.012f;
-		_RightArm._realAngle += 0.6f;
-		_RightHand._realAngle += 1.2f;
+		_RightArm._angle -= 0.012f / 1.35f;
+		_RightHand._angle -= 0.012f / 1.35f;
+		_RightArm._realAngle += 0.6f / 1.35f;
+		_RightHand._realAngle += 1.2f / 1.35f;
 
 
 		_LeftArm._angle -= 0.016f;
@@ -390,10 +450,18 @@ void boss::bossState()
 
 		_Center._angle += 0.15f;
 
+		if (_LeftHand._rectBody.left <= WINSIZEX / 2 - 243)
+		{
+			_bossState = STOP;
+		}
+
+
+		/*
 		if (_RightHand._rectBody.top >= _LeftHand._rectBody.top - 22)
 		{
-			_bossState = MINE_READY;
+			_bossState = STOP;
 		}
+		*/
 		
 	}
 	break;
@@ -427,8 +495,6 @@ void boss::bossState()
 		_LeftHand._realAngle += 1.5f;
 		_RightHand._realAngle -= 1.5f;
 
-
-
 		if (_LeftHand._rectBody.left < WINSIZEX / 2 - 280)
 		{
 			_bossState = MINE;
@@ -441,7 +507,6 @@ void boss::bossState()
 	case MINE:
 	{
 		
-
 		_bossCenterMoveFrameY = 0;
 
 		
@@ -467,45 +532,162 @@ void boss::bossState()
 
 		}
 		
-		/*
-		_LeftHand._centerEnd.y -= 25;
-		_RightHand._centerEnd.y -= 25;
-		_Center._y += 0.5f;
-		_LeftArm._angle -= 0.005f * 12;
-		_RightArm._angle += 0.005f * 12;
-		_LeftHand._angle -= 0.015f * 12;
-		_RightHand._angle += 0.015f * 12;
-
-		if (_LeftHand._rectBody.right < WINSIZEX / 2 - 625)
-		{
-			_bossState = CENTER_ATTACK_END;
-
-		}
-		*/
 	}
 	break;
 
 	case MINE_END:
 	{
-		/*
-		_mineAttackCount++;
 
-		_LeftHand._centerEnd.x -= 15;
-		_RightHand._centerEnd.x += 15;
-		_LeftHand._centerEnd.y += 15;
-		_RightHand._centerEnd.y += 15;
+		_LeftArm._angle += 0.01f;
+		_RightArm._angle -= 0.01f;
+		_LeftHand._angle += 0.025f;
+		_RightHand._angle -= 0.025f;
+		_LeftArm._realAngle -= 0.6f;
+		_RightArm._realAngle += 0.6f;
+		_LeftHand._realAngle -= 1.5f;
+		_RightHand._realAngle += 1.5f;
 
-		if (_mineAttackCount % 30 == 0)
+		if (_LeftHand._rectBody.left > WINSIZEX / 2 - 266)
 		{
-			//_Mine->MineFire();
-
+			_bossState = MINE_END2;
 		}
 
-		*/
 	}
 	break;
 
+
+	case MINE_END2:
+	{
+		moveDown();
+
+		if (_moveCount >= 64 || _Center._y > WINSIZEY / 2 - 175)
+		{
+			_moveCount = 0;
+			_bossState = STOP;
+		}
+
 	}
+	break;
+
+	case STONESHOWER_READY:
+	{
+		_LeftArm._angle += 0.024f;
+		_LeftHand._angle += 0.016f;
+		_LeftArm._realAngle -= 1.2f;
+		_LeftHand._realAngle -= 0.8f;
+		_LeftArm._center.y += 1.0f;
+		_LeftArm._center.x += 1.0f;
+
+		_RightArm._angle += 0.024f * 2.0f;
+		_RightHand._angle += 0.016f * 2.0f;
+		_RightArm._realAngle -= 1.2f * 2.0f;
+		_RightHand._realAngle -= 0.8f * 2.0f;
+
+		_Center._angle -= 0.6f;
+
+		if (_RightHand._rectBody.top < WINSIZEY / 2 + 125)
+		{
+			_bossRightHandAttackFrameY = 0;
+
+			if (_frameCount % 4 == 0)
+			{
+
+				if (_currentFrameX >= IMAGEMANAGER->findImage("오른손공격")->getMaxFrameX())
+				{
+					_currentFrameX++;
+				}
+				_bossRightHandAttackFrameX = _currentFrameX;
+				_currentFrameX++;
+				_frameCount = 0;
+			}
+		}
+
+
+		if (_RightHand._rectBody.top < WINSIZEY / 2)
+		{
+			_bossState = STONESHOWER_READY2;
+		}
+
+		
+	}
+	break;
+	
+	case STONESHOWER_READY2:
+	{
+
+		_RightHand._realAngle += 2.0f;
+		
+		if (_frameCount % 4 == 0)
+		{
+
+			if (_currentFrameX >= 5)
+			{
+				_bossState = STONESHOWER_READY3;
+			}
+			_bossRightHandAttackFrameX = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+		}
+		
+	}
+	break;
+
+	case STONESHOWER_READY3:
+	{
+
+		_LeftArm._angle -= 0.024f;
+		_LeftHand._angle -= 0.016f;
+		_LeftArm._realAngle += 1.2f;
+		_LeftHand._realAngle += 0.8f;
+		_LeftArm._center.y -= 1.0f;
+		_LeftArm._center.x -= 1.0f;
+
+		_RightArm._angle -= 0.024f * 2.2f;
+		_RightHand._angle -= 0.016f * 2.2f;
+		_RightArm._realAngle += 1.2f * 2.2f;
+		_RightHand._realAngle += 0.8f * 0.8f;
+
+		_LeftArm._center.x += 1.0f;
+
+		_RightArm._center.x -= 2.5f;
+		_RightArm._center.y += 3.5f;
+
+		_Center._angle += 0.6f;
+
+		if (_frameCount % 14 == 0)
+		{
+
+			if (_currentFrameX >= 7)
+			{
+				_bossState = STONESHOWER;
+			}
+			_bossRightHandAttackFrameX = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+		}
+
+
+
+	}
+	break;
+
+	case STONESHOWER:
+	{
+
+
+
+
+	}
+	break;
+
+
+	case STONESHOWER_END:
+	{
+
+	}
+	break;
+	}
+
 }
 
 void boss::bossMove()
@@ -581,6 +763,9 @@ void boss::bossDraw()
 	//자주 움직이는 양팔과 양손은 중점 x,y 를 기준으로 렌더
 	//그 외는 rect left,top에 렌더를 했습니다.
 
+	IMAGEMANAGER->findImage("보스바텀방어막4")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 475, _Bottom._rectBody.top + 460)),
+		_dustFrameX, _dustFrameY);
+
 
 	//바텀
 	IMAGEMANAGER->findImage("보스바텀")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left - 175, _Bottom._rectBody.top - 60)));
@@ -597,10 +782,21 @@ void boss::bossDraw()
 
 
 	//몸통
-	if (_bossState == MINE_READY2 || _bossState == MINE || _bossState == MINE_END)
+	if (_bossState == MINE)
 	{
 		IMAGEMANAGER->findImage("보스몸통움직임")->frameRender(CAMERA->getRelativeVector2(Vector2(_Center._rectBody.left + 296, _Center._rectBody.top + 144)),
 			_bossCenterMoveFrameX, _bossCenterMoveFrameY);
+	}
+
+	else if (_bossState == STONESHOWER_READY2 || _bossState == STONESHOWER_READY3)
+	{
+		IMAGEMANAGER->findImage("보스몸통우")->setAngle(_Center._angle);
+		IMAGEMANAGER->findImage("보스몸통우")->render(CAMERA->getRelativeVector2(Vector2((_Center._rectBody.left - 191) - 20, _Center._rectBody.top - 193)));
+	}
+
+	else if (_bossState == STONESHOWER)
+	{
+		IMAGEMANAGER->findImage("보스몸통하")->render(CAMERA->getRelativeVector2(Vector2((_Center._rectBody.left - 191), (_Center._rectBody.top - 193) + 25)));
 	}
 	else
 	{
@@ -608,11 +804,6 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("보스몸통")->render(CAMERA->getRelativeVector2(Vector2(_Center._rectBody.left - 191, _Center._rectBody.top - 193)));
 	}
 	
-
-	//오른손
-	IMAGEMANAGER->findImage("오른손")->setAngle(_RightHand._realAngle);
-	IMAGEMANAGER->findImage("오른손")->render(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x - 200, _RightHand._centerEnd.y - 50)));
-
 
 	//왼손
 	if (_bossState == ICETHROWER)
@@ -626,7 +817,36 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("왼손")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 250, _LeftHand._centerEnd.y - 100)));
 	}
 
+	//오른손
+	if (_bossState == STONESHOWER_READY)
+	{
+		IMAGEMANAGER->findImage("오른손공격")->setAngle(_RightHand._realAngle);
+		IMAGEMANAGER->findImage("오른손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200)),
+			_bossRightHandAttackFrameX, _bossRightHandAttackFrameY);
+	}
+	else if (_bossState == STONESHOWER_READY2 || _bossState == STONESHOWER_READY3)
+	{
+		IMAGEMANAGER->findImage("오른손공격")->setAngle(_RightHand._realAngle);
+		IMAGEMANAGER->findImage("오른손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y - 80)),
+			_bossRightHandAttackFrameX, _bossRightHandAttackFrameY);
+	}
+	else if (_bossState == STONESHOWER)
+	{
+		IMAGEMANAGER->findImage("오른손공격")->setAngle(_RightHand._realAngle);
+		IMAGEMANAGER->findImage("오른손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200)),
+			_bossRightHandAttackFrameX, _bossRightHandAttackFrameY);
+
+	}
+	else
+	{
+		IMAGEMANAGER->findImage("오른손")->setAngle(_RightHand._realAngle);
+		IMAGEMANAGER->findImage("오른손")->render(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x - 200, _RightHand._centerEnd.y - 50)));
+	}
+
+
+
 	//================================================================================================================================================================//
+
 
 	//위치 확인용 몸통, 바텀 렉트
 
@@ -724,6 +944,61 @@ void boss::moveUp()
 
 void boss::moveDown()
 {
+	_moveCount++;
+
+	_Center._y += 2.0f;
+	_LeftArm._center.y += 2.0f;
+	_LeftHand._center.y += 2.0f;
+	_RightArm._center.y += 2.0f;
+	_RightHand._center.y += 2.0f;
+	_Bottom._y += 2.0f;
+
+	if (_moveCount < 17)
+	{
+		_LeftArm._angle -= 0.01f / 10;
+		_LeftHand._angle -= 0.001f / 10;
+		_RightArm._angle -= 0.01f / 10;
+		_RightHand._angle -= 0.001f / 10;
+		_LeftArm._center.x -= 0.5f;
+		_LeftArm._center.y -= 1.0f;
+		_RightArm._center.x += 0.5f;
+		_RightArm._center.y += 1.0f;
+		_Center._angle += 0.1f;
+	}
+
+
+	if (_moveCount >= 17 && _moveCount < 48)
+	{
+		_LeftArm._angle += 0.01f / 10;
+		_LeftHand._angle += 0.001f / 10;
+		_RightArm._angle += 0.01f / 10;
+		_RightHand._angle += 0.001f / 10;
+		_LeftArm._center.x += 0.5f;
+		_LeftArm._center.y += 1.0f;
+		_RightArm._center.x -= 0.5f;
+		_RightArm._center.y -= 1.0f;
+		_Center._angle -= 0.1f;
+
+	}
+
+	if (_moveCount >= 48 && _moveCount < 64)
+	{
+		_LeftArm._angle -= 0.01f / 10;
+		_LeftHand._angle -= 0.001f / 10;
+		_RightArm._angle -= 0.01f / 10;
+		_RightHand._angle -= 0.001f / 10;
+		_LeftArm._center.x -= 0.5f;
+		_LeftArm._center.y -= 1.0f;
+		_RightArm._center.x += 0.5f;
+		_RightArm._center.y += 1.0f;
+		_Center._angle += 0.1f;
+	}
+
+	if (_moveCount >= 64)
+	{
+		_moveCount = 0;
+
+	}
 }
 
 void boss::fireCollision()
@@ -742,5 +1017,82 @@ void boss::fireCollision()
 
 }
 
+void boss::bossInitialization()
+{
+	_Center._x = (WINSIZEX / 2 - 85);
+	_Center._y = (WINSIZEY / 2 - 175);
 
+	_Center._center.x = (WINSIZEX / 2 - 85);
+	_Center._center.y = (WINSIZEY / 2 - 175);
+	
+	_LeftArm._x = (_Center._x - 125) + 100;
+	_LeftArm._y = (_Center._y + 25);
+	_LeftArm._angle = PI2 - (PI / 4);
+	_LeftArm._realAngle = PI2 - (PI / 4);
 
+	_LeftArm._center.x = (_Center._x - 125) + 100;
+	_LeftArm._center.y = (_Center._y + 25);
+
+	_RightArm._x = (_Center._x + 545) - 100;
+	_RightArm._y = (_Center._y + 25);
+	_RightArm._angle = PI2 - (PI / 4);
+	_RightArm._realAngle = PI2 - (PI / 4);
+
+	_RightArm._center.x = (_Center._x + 545) - 100;
+	_RightArm._center.y = (_Center._y + 25);
+
+	_LeftHand._x = _LeftArm._x - 100;
+	_LeftHand._y = _LeftArm._y + 100;
+	_LeftHand._angle = PI2 - (PI / 4);
+	_LeftHand._realAngle = PI2 - (PI / 4);
+
+	_RightHand._x = _RightArm._x + 100;
+	_RightHand._y = _RightArm._y + 100;
+	_RightHand._angle = PI2 - (PI / 4);
+	_RightHand._realAngle = PI2 - (PI / 4);
+
+	_Bottom._x = _Center._x + 160;
+	_Bottom._y = _Center._y + 450;
+	_Center._angle = 0;
+
+}
+
+void boss::breathe()
+{
+	_breatheCount++;
+
+	if (_breatheCount >= 5 && _breatheCount < 22)
+	{
+		_LeftArm._angle += 0.01f / 60;
+		_RightArm._angle -= 0.01f / 60;
+		_LeftHand._angle += 0.01f / 60;
+		_RightHand._angle -= 0.01f / 60;
+		_Center._y += 0.5f / 6;
+		_Bottom._y += 0.25f / 6;
+	}
+
+	if (_breatheCount >= 22 && _breatheCount < 53)
+	{
+		_LeftArm._angle -= 0.01f / 60;
+		_RightArm._angle += 0.01f / 60;
+		_LeftHand._angle -= 0.01f / 60;
+		_RightHand._angle += 0.01f / 60;
+		_Center._y -= 0.5f / 6;
+		_Bottom._y -= 0.25f / 6;
+	}
+
+	if (_breatheCount >= 53 && _breatheCount < 69)
+	{
+		_LeftArm._angle += 0.01f / 60;
+		_RightArm._angle -= 0.01f / 60;
+		_LeftHand._angle += 0.01f / 60;
+		_RightHand._angle -= 0.01f / 60;
+		_Center._y += 0.5f / 6;
+		_Bottom._y += 0.25f / 6;
+	}
+
+	if (_breatheCount >= 69)
+	{
+		_breatheCount = 0;
+	}
+}
