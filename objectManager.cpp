@@ -42,8 +42,9 @@ void objectManager::update()
 			// 해당 오브젝트만 보여지고 있는 경우에만 update 진행합니다.
 			if (objectList[i]->getIsActive())
 			{
-				objectList[i]->update();
-				if (iter->first != objectType::UI && iter->first != objectType::TILEOBJECT)
+				if (iter->first != objectType::UI)
+					objectList[i]->update();
+				if (iter->first != objectType::TILEOBJECT)
 				{
 					if (!objectList[i]->getIsAlive())
 					{
@@ -52,12 +53,13 @@ void objectManager::update()
 						objectList.erase(objectList.begin() + i);
 						i--;
 					}
-					else
+					else if(iter->first != objectType::UI)
 					{
 						_vZOrderRender.push_back(objectList[i]);
 					}
 				}
 			}
+			
 		}
 	}
 
@@ -145,6 +147,7 @@ void objectManager::removeObjectsWithoutPlayer()
 	{
 		//vector<gameObject*>& objectList = iter->second;
 		vector<gameObject*>::iterator viter = iter->second.begin();
+		if (iter->first == objectType::UI) continue;
 		for (; viter != iter->second.end(); )
 		{
 			if ((*viter)->getName() != "player")

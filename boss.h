@@ -2,6 +2,7 @@
 #include "gameObject.h"
 #include "icethrower.h"
 #include "mine.h"
+#include "stoneshower.h"
 
 enum bossState //보스 상태패턴 enum문
 {
@@ -17,7 +18,7 @@ enum bossState //보스 상태패턴 enum문
 
 	//======================================공격할 것이오======================================//
 
-	ICETHROWER_READY1,
+	ICETHROWER_READY,
 	ICETHROWER_READY2,
 	ICETHROWER,
 	ICETHROWER_END,
@@ -25,6 +26,12 @@ enum bossState //보스 상태패턴 enum문
 	MINE_READY2,
 	MINE,
 	MINE_END,
+	MINE_END2,
+	STONESHOWER_READY,
+	STONESHOWER_READY2,
+	STONESHOWER_READY3,
+	STONESHOWER,
+	STONESHOWER_END
 };
 struct tagBossPart  //보스 파츠별 구조체
 {
@@ -60,6 +67,7 @@ private:
 
 	icethrower* _icethrower;
 	mine* _mine;
+	stoneshower* _stoneshower;
 
 	image* image;
 	bossState _bossState;		//상태 패턴
@@ -74,23 +82,24 @@ private:
 
 	tagBossPart _Bottom;		//바텀
 
+	//보스 전신 프레임
 	int _currentFrameX, _currentFrameY;
 	int _frameCount;
+	int _bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY;
+	int _bossCenterMoveFrameX, _bossCenterMoveFrameY;
+	int _bossRightHandAttackFrameX, _bossRightHandAttackFrameY;
 
+	//보스 방어막 프레임
 	int _protectCurrentFrameX, _protectCurrentFrameY;
 	int _protectFrameCount;
-
-	int _moveCount;
-
-
-	//방어막 프레임
 	int _bossShieldOneFrameX, _bossShieldOneFrameY;
 
-	//왼손공격1 프레임
-	int _bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY;
+	int _moveCount;  //움직이고 있을때의 카운트
 
-	//몸통움직임 프레임
-	int _bossCenterMoveFrameX, _bossCenterMoveFrameY;
+	int _breatheCount; // 숨을 쉴때의 카운트
+
+	int _randomAttackCount;  // 어떤 공격을 할까나~~??
+
 
 	//움직임 딜레이
 	int _motionDelay;
@@ -98,8 +107,12 @@ private:
 	//얼음방사 공격 딜레이
 	int _icethrowerDelay;
 
+	//지뢰 발사 딜레이
 	int _mineAttackCount;
 
+	int _dustCurrentFrameX, _dustCurrentFrameY;
+	int _dustFrameX, _dustFrameY;
+	int _dustFrameCount;
 
 public:
 
@@ -120,6 +133,9 @@ public:
 	void moveDown();
 
 	void fireCollision();
+
+	void bossInitialization();	//보스 stop후 위치 확인용
+	void breathe();				//보스가 숨을 쉬어요(?)
 
 };
 

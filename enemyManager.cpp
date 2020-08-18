@@ -19,13 +19,14 @@ HRESULT enemyManager::init()
 void enemyManager::update()
 {
 	_time++;
-	if (_sc != SCENEMANAGER->getCurrentScene())
+	_vEnemy = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+
+	if (_sc != SCENEMANAGER->getCurrentScene() && _vEnemy.size() > 0)
 	{
 		_sc = SCENEMANAGER->getCurrentScene();
 		_as->init();
 		_as->setTiles();
 	}
-	_vEnemy = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 
 	if (_time % 10 == 0 && _vEnemy.size() != NULL)
 	{

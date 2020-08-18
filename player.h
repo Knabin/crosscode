@@ -63,6 +63,9 @@ private:
 	float _jumpPower;
 	float _gravity;
 
+	floatRect _tileRect;
+	POINT next[3];
+
 public:
 	player();
 	virtual ~player();

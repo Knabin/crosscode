@@ -84,6 +84,7 @@ public:
 
 	void DrawRotationNullRectangle(const floatRect& rc, const D2D1::ColorF::Enum& color, const float alpha, const float angle, const float strokeWidth = 1.f);
 	void DrawRotationFillRectangle(const floatRect& rc, const D2D1::ColorF& color, const float angle);
+	void SkewRectangle(const floatRect & rc, const D2D1::ColorF & color, const float angle, float angle2);
 };
 
 #define _D2DRenderer D2DRenderer::GetInstance()

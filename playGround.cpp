@@ -32,9 +32,6 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-	_ui = new uiController();
-	_ui->init();
-
 	SCENEMANAGER->addScene("title", new titleScene());			// 타이틀 씬
 	SCENEMANAGER->addScene("maptool", new mapToolScene());		// 맵툴 씬
 	SCENEMANAGER->addScene("test", new testScene());			// 테스트용(새 게임 버튼)
@@ -47,6 +44,8 @@ HRESULT playGround::init()
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
+	_ui = new uiController();
+	_ui->init();
 	return S_OK;
 }
 
@@ -99,7 +98,7 @@ void playGround::update()
 
 	// 이벤트 재생 중에는 업데이트하지 않음
 	// TODO: UI 켜져 있을 때 화면 멈춰야 하므로 조건 추가
-	if (!EVENTMANAGER->isPlayingEvent())
+	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn())
 	{
 		SCENEMANAGER->update();
 		OBJECTMANAGER->update();
