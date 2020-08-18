@@ -377,18 +377,14 @@ void player::render()
 	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
 
-	for (int i = 0; i < 10; ++i)
-	{
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc1[i]));
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc2[i]));
-	}
+	
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[0].y][next[0].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[1].y][next[1].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[2].y][next[2].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
-}
+
 	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] ||
 		_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
 		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
