@@ -7,7 +7,7 @@ puzzleComboButton::~puzzleComboButton()
 
 HRESULT puzzleComboButton::init()
 {
-	_image = IMAGEMANAGER->addFrameImage("puzzle", L"images/object/button2.png", 14, 1);
+	_image = IMAGEMANAGER->addFrameImage("puzzle2", L"images/object/button2.png", 14, 1);
 	_rc.update(_position, Vector2(_image->getFrameSize().x, _image->getFrameSize().y), pivot::CENTER);
 	
 	return S_OK;

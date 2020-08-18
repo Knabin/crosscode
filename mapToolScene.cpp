@@ -118,6 +118,7 @@ HRESULT mapToolScene::init()
 	IMAGEMANAGER->addFrameImage("grass", L"images/object/grass.png", 3, 1);
 	IMAGEMANAGER->addFrameImage("button prev", L"images/tile/buttonpreview.png", 3, 1);
 	IMAGEMANAGER->addFrameImage("button2 prev", L"images/tile/button2preview.png", 1, 1);
+	IMAGEMANAGER->addFrameImage("destruct", L"images/object/destruct.png", 1, 1);
 	
 	// ºó Å¸ÀÏ
 	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
@@ -1005,6 +1006,11 @@ void mapToolScene::renderPreviewTile()
 					img = IMAGEMANAGER->findImage("button2 prev");
 					height = SIZE * 0.5f;
 					break;
+				case 4:
+					img = IMAGEMANAGER->findImage("destruct");
+					width = SIZE;
+					//height = SIZE * 0.5f;
+					break;
 				}
 				
 				for (int i = 0; i <= abs(_drawEnd.y - _drawStart.y); ++i)
@@ -1512,6 +1518,11 @@ void mapToolScene::redrawMap()
 			{
 				img = IMAGEMANAGER->findImage("button2 prev");
 				height = SIZE * 0.5f;
+			}
+			else if (_miObject->second.frameY == 4)
+			{
+				img = IMAGEMANAGER->findImage("destruct");
+				width = SIZE;
 			}
 			break;
 		case 1:

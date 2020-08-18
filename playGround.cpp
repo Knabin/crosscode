@@ -101,7 +101,8 @@ void playGround::update()
 		_test += 30.f;
 		// ============== 이펙트 회전해서 사용하는 법! =================
 		// play(이펙트 이름, 위치, 위치, 앵글값)
-		EFFECTMANAGER->play("test", 200, 200, _test);
+		//EFFECTMANAGER->play("test", 200, 200, _test);
+		EFFECTMANAGER->play("test", Vector2(200, 200), 180, 0.3f);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('1'))

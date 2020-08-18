@@ -9,22 +9,28 @@ stoneshower::~stoneshower()
 {
 }
 
-HRESULT stoneshower::init()
+HRESULT stoneshower::init(float centerX, float centerY)
 {
 	
+	_angle = PI / 2 + (PI);
+	_centerMeter = 50;
+
+
 	IMAGEMANAGER->addImage("바위", L"images/boss/stone.png");
-	IMAGEMANAGER->addFrameImage("먼지", L"images/boss/dust.png", 9, 1);
 
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 19; i++)
 	{
 		tagStoneshower attack2;
 		ZeroMemory(&attack2, sizeof(attack2));
 
-		attack2._x = WINSIZEX / 2 + (i * 56);
-		attack2._y = WINSIZEY / 2 + 1000;
+		attack2._size = 72.0f;
+
+		attack2._center.x = centerX;
+		attack2._center.y = centerY;
+
 
 		attack2._speed = 15.5f;
 
@@ -61,34 +67,29 @@ void stoneshower::release()
 
 void stoneshower::update()
 {
-	_frameCount++;
 
-	for (_viDust = _vDust.begin(); _viDust != _vDust.end(); ++_viDust)
+	frameUpdate();
+	
+	if (KEYMANAGER->isOnceKeyDown('L'))
 	{
-		if (_viDust->_fireStart == true)
-		{
-			_dustFrameY = 0;
-
-			if (_frameCount % 5 == 0)
-			{
-				if (_currentFrameX >= IMAGEMANAGER->findImage("먼지")->getMaxFrameX())
-				{
-					_currentFrameX = 0;
-				}
-				_dustFrameX = _currentFrameX;
-				_currentFrameX++;
-				_frameCount = 0;
-			}
-
-		}
+		fire();
 	}
+
+	move();
+
 }
 
-void stoneshower::render(float centerX, float centerY)
+void stoneshower::render()
 {
+
 	for (_viStoneshower = _vStoneshower.begin(); _viStoneshower != _vStoneshower.end(); ++_viStoneshower)
 	{
-		IMAGEMANAGER->findImage("바위")->render(CAMERA->getRelativeVector2(Vector2(_viStoneshower->_x, _viStoneshower->_y)));
+		if (!_viStoneshower->_fireStart) continue;
+		{
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viStoneshower->_rc));
+
+			IMAGEMANAGER->findImage("바위")->render(CAMERA->getRelativeVector2(Vector2(_viStoneshower->_x - _viStoneshower->_size / 2, _viStoneshower->_y - _viStoneshower->_size / 2)));
+		}
 
 	}
 
@@ -129,6 +130,77 @@ void stoneshower::dustDraw(float centerX, float centerY)
 
 }
 
+void stoneshower::frameUpdate()
+{
+	_frameCount++;
+
+	for (_viDust = _vDust.begin(); _viDust != _vDust.end(); ++_viDust)
+	{
+		if (_viDust->_fireStart == true)
+		{
+			_dustFrameY = 0;
+
+			if (_frameCount % 5 == 0)
+			{
+				if (_currentFrameX >= IMAGEMANAGER->findImage("먼지")->getMaxFrameX())
+				{
+					_currentFrameX = 0;
+				}
+				_dustFrameX = _currentFrameX;
+				_currentFrameX++;
+				_frameCount = 0;
+			}
+		}
+	}
+}
+
+void stoneshower::fire()
+{
+	for (_viStoneshower = _vStoneshower.begin(); _viStoneshower != _vStoneshower.end(); ++_viStoneshower)
+	{
+		if (_viStoneshower->_fireStart) continue;
+		{
+
+			_viStoneshower->_fireStart = true;
+
+			int _randomFire;
+			_randomFire = RND->getFromIntTo(-500, 500);
+
+
+
+			_viStoneshower->_x = cosf(_angle) * _centerMeter + _viStoneshower->_center.x + _randomFire;
+			_viStoneshower->_y = -sinf(_angle) * _centerMeter + _viStoneshower->_center.y;
+
+			_viStoneshower->_angle = _angle;
+
+			_viStoneshower->_rc.update(Vector2(_viStoneshower->_x, _viStoneshower->_y), Vector2(_viStoneshower->_size, _viStoneshower->_size), pivot::CENTER);
+
+			break;
+
+		}
+
+	}
+
+}
+
+void stoneshower::move()
+{
+	for (_viStoneshower = _vStoneshower.begin(); _viStoneshower != _vStoneshower.end(); ++_viStoneshower)
+	{
+		if (!_viStoneshower->_fireStart) continue;
+		{
+			
+			_viStoneshower->_x += cosf(_viStoneshower->_angle) * _viStoneshower->_speed;
+			_viStoneshower->_y += -sinf(_viStoneshower->_angle) * _viStoneshower->_speed;
+
+			_viStoneshower->_y += _viStoneshower->_speed;
+
+			_viStoneshower->_rc.update(Vector2(_viStoneshower->_x, _viStoneshower->_y), Vector2(_viStoneshower->_size, _viStoneshower->_size), pivot::CENTER);
+
+		}
+	}
+}
+
 void stoneshower::dustTrue(int Num2)
 {
 	_vDust[Num2]._fireStart = true;
@@ -137,4 +209,9 @@ void stoneshower::dustTrue(int Num2)
 void stoneshower::dustFalse(int Num3)
 {
 	_vDust[Num3]._fireStart = false;
+}
+
+void stoneshower::removeFire(int Num4)
+{
+	_vStoneshower.erase(_vStoneshower.begin() + Num4);
 }

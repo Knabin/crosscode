@@ -14,6 +14,8 @@ protected:
 	BOOL		_isRunning;
 	float		_elapsedTime;
 	float		_scale;
+	float		_angle;
+	float		_alpha;
 public:
 	effect();
 	~effect();
@@ -23,8 +25,8 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void startEffect(int x, int y);
-	void startEffect(int x, int y, float angle);
+	void startEffect(int x, int y, float angle, float alpha);
+	void startEffect(Vector2 pos, float angle, float alpha);
 
 	virtual void killEffect();
 
