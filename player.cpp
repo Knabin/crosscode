@@ -1394,28 +1394,28 @@ void player::playerMeleeattack()   //근접 기본공격
 		switch (_direction)
 		{
 		case PLAYERDIRECTION::TOP:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50));
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,3.15f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), 315);
 			break;
 		case PLAYERDIRECTION::LEFT:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,2.7f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 60), 270);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,2.25f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), 225);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,1.8f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), 180);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.35f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), 135);
 			break;
 		case PLAYERDIRECTION::RIGHT:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,0.9f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 70), 90);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,0.45f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), 45);
 			break;
 		}
 	}
@@ -1426,28 +1426,28 @@ void player::playerMeleeattack()   //근접 기본공격
 		switch (_direction)
 		{
 		case PLAYERDIRECTION::TOP:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50));
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 3.15f);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), 315);
 			break;
 		case PLAYERDIRECTION::LEFT:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.7f);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 60), 270);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.25f);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), 225);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.8f);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), 180);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.35f);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), 135);
 			break;
 		case PLAYERDIRECTION::RIGHT:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.9f);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 70), 90);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
-			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.45f);
+			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), 45);
 			break;
 		}
 	}
@@ -1455,31 +1455,32 @@ void player::playerMeleeattack()   //근접 기본공격
 	{
 		_state->setState(_vState[PLAYERSTATE::LEFT_ATTACK]);
 		_combo++;
+
 		switch (_direction)
 		{
 		case PLAYERDIRECTION::TOP:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50));
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 3.15f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), 315);
 			break;
 		case PLAYERDIRECTION::LEFT:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.7f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 60), 270);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.25f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), 225);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.8f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), 180);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.35f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), 135);
 			break;
 		case PLAYERDIRECTION::RIGHT:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.9f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 70), 90);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
-			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.45f);
+			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), 45);
 			break;
 		}
 	}
