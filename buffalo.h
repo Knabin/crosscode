@@ -4,6 +4,7 @@
 class buffalo : public enemy
 {
 private:
+	image* _enemyAnimationImage;
 	image* _attackImage;
 	image* _hitImage;
 

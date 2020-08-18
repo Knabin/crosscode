@@ -81,34 +81,7 @@ void mine::release()
 
 void mine::update()
 {
-	_frameCount++;
-	_mineFrameCount++;
-
-	_explosionFrameY = 0;
-
-	if (_frameCount % 4 == 0)
-	{
-		if (_currentFrameX >= IMAGEMANAGER->findImage("Æø¹ß")->getMaxFrameX())
-		{
-			_currentFrameX = 0;
-		}
-		_explosionFrameX = _currentFrameX;
-		_currentFrameX++;
-		_frameCount = 0;
-	}
-
-	_mineFrameY = 0;
-
-	if (_mineFrameCount % 20 == 0)
-	{
-		if (_mineCurrentFrameX >= IMAGEMANAGER->findImage("Áö·Ú")->getMaxFrameX())
-		{
-			_mineCurrentFrameX = 0;
-		}
-		_mineFrameX = _mineCurrentFrameX;
-		_mineCurrentFrameX++;
-		_mineFrameCount = 0;
-	}
+	frameUpdate();
 
 	move();
 
@@ -179,6 +152,38 @@ void mine::render(float centerX, float centerY)
 		}
 	}
 
+}
+
+void mine::frameUpdate()
+{
+	_frameCount++;
+	_mineFrameCount++;
+
+	_explosionFrameY = 0;
+
+	if (_frameCount % 4 == 0)
+	{
+		if (_currentFrameX >= IMAGEMANAGER->findImage("Æø¹ß")->getMaxFrameX())
+		{
+			_currentFrameX = 0;
+		}
+		_explosionFrameX = _currentFrameX;
+		_currentFrameX++;
+		_frameCount = 0;
+	}
+
+	_mineFrameY = 0;
+
+	if (_mineFrameCount % 20 == 0)
+	{
+		if (_mineCurrentFrameX >= IMAGEMANAGER->findImage("Áö·Ú")->getMaxFrameX())
+		{
+			_mineCurrentFrameX = 0;
+		}
+		_mineFrameX = _mineCurrentFrameX;
+		_mineCurrentFrameX++;
+		_mineFrameCount = 0;
+	}
 }
 
 void mine::fire()
@@ -319,3 +324,4 @@ void mine::move()
 	}
 	
 }
+

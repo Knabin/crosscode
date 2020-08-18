@@ -133,7 +133,7 @@ void effectManager::addEffect(string effectName, const char * imageName, int ima
 	_vTotalEffect.push_back(mArrEffect);
 }
 
-void effectManager::play(string effectName, int x, int y)
+void effectManager::play(string effectName, int x, int y, float angle, float alpha)
 {
 	iterTotalEffect vIter;
 	iterEffect mIter;
@@ -148,14 +148,14 @@ void effectManager::play(string effectName, int x, int y)
 			for (vArrIter = mIter->second.begin(); vArrIter != mIter->second.end(); ++vArrIter)
 			{
 				if ((*vArrIter)->getIsRunning()) continue;
-				(*vArrIter)->startEffect(x, y);
+				(*vArrIter)->startEffect(x, y, angle, alpha);
 				return;
 			}
 		}
 	}
 }
 
-void effectManager::play(string effectName, int x, int y, float angle)
+void effectManager::play(string effectName, Vector2 pos, float angle, float alpha)
 {
 	iterTotalEffect vIter;
 	iterEffect mIter;
@@ -170,7 +170,7 @@ void effectManager::play(string effectName, int x, int y, float angle)
 			for (vArrIter = mIter->second.begin(); vArrIter != mIter->second.end(); ++vArrIter)
 			{
 				if ((*vArrIter)->getIsRunning()) continue;
-				(*vArrIter)->startEffect(x, y, angle);
+				(*vArrIter)->startEffect(pos, angle, alpha);
 				return;
 			}
 		}

@@ -35,8 +35,8 @@ private:
 
 	int _currentFrameX, _currentFrameY;
 	int _frameCount;
-	int _collisionCurrentFrameX, _collisionCurrentFrameY;
-	int _collisionFrameCount;
+	//int _collisionCurrentFrameX, _collisionCurrentFrameY;
+	//int _collisionFrameCount;
 
 	int _iceEffectFrameX, _iceEffectFrameY;		
 	int _collisionFrameX, _collisionFrameY;
@@ -52,9 +52,11 @@ public:
 	void update();
 	void render();
 
-	void fire();
-	void move();
-	void removeFire(int Num1);
+	void angleUpdate();		//엥글 값 업데이트
+	void frameUpdate();		//얼음 프레임 업데이트
+	void fire();			//얼음 발사
+	void move();			//얼음 발사 후 움직임
+	void removeFire(int Num1); //얼음 발사 후 삭제
 
 	vector<tagIcethrower>& getIcethrowerVector() { return _vIcethrower; }
 	vector<tagIcethrower>::iterator& getIcethrowerIterVector() { return _viIcethrower; }

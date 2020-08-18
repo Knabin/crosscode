@@ -2,6 +2,7 @@
 #include "gameObject.h"
 class puzzleComboButton : public gameObject
 {
+private:
 	image* _image;
 
 public:
