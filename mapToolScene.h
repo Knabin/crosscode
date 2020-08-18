@@ -16,6 +16,7 @@ enum class EDITMODE : int
 	OBJECT,
 	ENEMY,
 	TYPE,
+
 	END
 };
 
