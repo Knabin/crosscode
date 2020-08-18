@@ -70,9 +70,10 @@ private:
 
 	float _jumpPower;
 	float _gravity;
+	bool _jumping;
 
 	floatRect _tileRect;
-	POINT next[3];
+	POINT next[6];
 
 public:
 	player();
