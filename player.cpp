@@ -61,6 +61,13 @@ HRESULT player::init()
 	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
 	IMAGEMANAGER->addImage("player dodgeDust", L"images/player/player_dodgedust.png");
 
+	IMAGEMANAGER->addFrameImage("leftattackeffect", L"images/player/leftattackeffect.png", 7, 1);
+	IMAGEMANAGER->addFrameImage("rightattackeffect", L"images/player/rightattackeffect.png", 7, 1);
+
+	EFFECTMANAGER->addEffect("leftattackeffect", "leftattackeffect",1,1.0f,5,1.0f);
+	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 1.0f, 5, 1.0f);
+
+
 	_width = _height = 96;
 	_pivot = pivot::CENTER;
 	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
@@ -1041,16 +1048,97 @@ void player::playerMeleeattack()   //근접 기본공격
 		_state->setState(_vState[PLAYERSTATE::LEFT_ATTACK]);
 		_iscombo = true;
 		_combo++;
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50);
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,3.15f);
+			break;
+		case PLAYERDIRECTION::LEFT:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,2.7f);
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,2.25f);
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,1.8f);
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.35f);
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,0.9f);
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50,0.45f);
+			break;
+		}
 	}
 	if (!_ani->isPlay() && _iscombo &&  _combo == 1)
 	{
 		_state->setState(_vState[PLAYERSTATE::RIGHT_ATTACK]);
 		_combo++;
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50);
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 3.15f);
+			break;
+		case PLAYERDIRECTION::LEFT:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.7f);
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.25f);
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.8f);
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.35f);
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.9f);
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			EFFECTMANAGER->play("rightattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.45f);
+			break;
+		}
 	}
 	if (!_ani->isPlay() && _iscombo && _combo == 2)
 	{
 		_state->setState(_vState[PLAYERSTATE::LEFT_ATTACK]);
 		_combo++;
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50);
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 3.15f);
+			break;
+		case PLAYERDIRECTION::LEFT:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.7f);
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 2.25f);
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.8f);
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 1.35f);
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.9f);
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			EFFECTMANAGER->play("leftattackeffect", CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50, 0.45f);
+			break;
+		}
 	}
 	if (!_ani->isPlay() && _iscombo && _combo == 3)
 	{
