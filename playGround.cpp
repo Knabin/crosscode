@@ -55,6 +55,7 @@ HRESULT playGround::init()
 	_ui->init();
 
 	_test = 0.f;
+
 	return S_OK;
 }
 
