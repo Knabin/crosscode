@@ -123,6 +123,7 @@ HRESULT mapToolScene::init()
 	IMAGEMANAGER->addFrameImage("wall2 prev", L"images/tile/wall2preview.png", 1, 1);
 	IMAGEMANAGER->addFrameImage("wall3 prev", L"images/tile/wall3preview.png", 1, 1);
 	IMAGEMANAGER->addFrameImage("wall4 prev", L"images/tile/wall4preview.png", 1, 1);
+	IMAGEMANAGER->addFrameImage("roof", L"images/object/test.png", 1, 1);
 	
 	// ºó Å¸ÀÏ
 	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
@@ -988,6 +989,7 @@ void mapToolScene::renderPreviewTile()
 					else
 					{
 						img = IMAGEMANAGER->findImage("door prev");
+						width = SIZE * 0.5f;
 					}
 					break;
 				case 1:
@@ -1033,6 +1035,9 @@ void mapToolScene::renderPreviewTile()
 						width = SIZE * 0.5f;
 					}
 					frameX = 0;
+					break;
+				case 6:
+					img = IMAGEMANAGER->findImage("roof");
 					break;
 				}
 				
@@ -1485,6 +1490,7 @@ void mapToolScene::redrawMap()
 			else
 			{
 				img = IMAGEMANAGER->findImage("door prev");
+				width = SIZE * 0.5f;
 				frameX -= 3;
 			}
 			break;
@@ -1535,6 +1541,9 @@ void mapToolScene::redrawMap()
 				frameX = 0;
 				width = SIZE * 0.5f;
 			}
+			break;
+		case 6:
+			img = IMAGEMANAGER->findImage("roof");
 			break;
 		}
 		img->frameRender(

@@ -25,7 +25,6 @@ public:
 	void meerkatCollision();
 
 	void enemyCollision();
-	void playerCollision();
 	void bulletCollision();
 };
 

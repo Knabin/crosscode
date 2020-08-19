@@ -26,7 +26,7 @@ HRESULT buffalo::init()
 	_attackCount = 0;
 	_hitCount = 0;
 
-	_isAttack = true;
+	_isAttack = false;
 	_distanceChange = false;
 	_idleMove = false;
 	_oneAnimation = false;
@@ -269,8 +269,57 @@ void buffalo::update()
 	tileGet();//버팔로 타일 검출 업데이트
 	move();//버팔로 무브
 	animationControl();//변경된 디렉션 상태값에 따라 애니메이션 실행
-	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);//버팔로 애니메이션 업데이트
+	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 5);//버팔로 애니메이션 업데이트
 	angry();//버팔로의 체력이 절반이하가 되면 능력치 상승(스피드, 공격속도, 공격력)
+
+	if (_enemyDirection == ENEMY_UP_LEFT_ATTACK || _enemyDirection == ENEMY_UP_RIGHT_ATTACK || _enemyDirection == ENEMY_LEFT_ATTACK || _enemyDirection == ENEMY_RIGHT_ATTACK ||
+		_enemyDirection == ENEMY_DOWN_LEFT_ATTACK || _enemyDirection == ENEMY_DOWN_RIGHT_ATTACK)
+	{
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x, CAMERA->getRelativeVector2(_position).y + 40);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 40, CAMERA->getRelativeVector2(_position).y + 40);
+	}
+
+	if (_enemyDirection == ENEMY_UP_LEFT_MELEE_ATTACK)
+	{
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y - 30);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 25, CAMERA->getRelativeVector2(_position).y - 30);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y - 5);
+	}
+
+	if (_enemyDirection == ENEMY_UP_RIGHT_MELEE_ATTACK)
+	{
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y - 30);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 45, CAMERA->getRelativeVector2(_position).y - 30);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y - 5);
+	}
+
+	if (_enemyDirection == ENEMY_LEFT_MELEE_ATTACK)
+	{
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y + 40);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y + 80);
+	}
+
+	if (_enemyDirection == ENEMY_RIGHT_MELEE_ATTACK)
+	{
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 40);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80);
+	}
+
+	if (_enemyDirection == ENEMY_DOWN_LEFT_MELEE_ATTACK)
+	{
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 40, CAMERA->getRelativeVector2(_position).y + 100);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 15, CAMERA->getRelativeVector2(_position).y + 100);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 40, CAMERA->getRelativeVector2(_position).y + 75);
+	}
+
+	if (_enemyDirection == ENEMY_DOWN_RIGHT_MELEE_ATTACK)
+	{
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 100);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75);
+	}
 }
 
 void buffalo::render()
@@ -665,7 +714,7 @@ void buffalo::move()
 	}
 
 	_rc.set(_position, pivot::CENTER);//버팔로 렉트 위치 업데이트
-	_attackRC.set(_position, pivot::CENTER);//버팔로 공격렉트 위치 업데이트
+	//_attackRC.set(_position, pivot::CENTER);//버팔로 공격렉트 위치 업데이트
 }
 
 void buffalo::animationDraw()
@@ -870,7 +919,6 @@ void buffalo::animationControl()
 		}
 		break;
 	case ENEMY_DOWN_LEFT_MOVE:
-
 		_enemyMotion = _moveMotion_D_L;
 
 		if (!_enemyMotion->isPlay())
@@ -1013,6 +1061,11 @@ void buffalo::animationControl()
 		{
 			_enemyMotion->start();
 		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(_position, pivot::CENTER);
+		}
 		break;
 	case ENEMY_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_R;
@@ -1020,6 +1073,11 @@ void buffalo::animationControl()
 		if (!_enemyMotion->isPlay())
 		{
 			_enemyMotion->start();
+		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(_position, pivot::CENTER);
 		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK:
@@ -1029,6 +1087,11 @@ void buffalo::animationControl()
 		{
 			_enemyMotion->start();
 		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(_position, pivot::CENTER);
+		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_U_R;
@@ -1036,6 +1099,11 @@ void buffalo::animationControl()
 		if (!_enemyMotion->isPlay())
 		{
 			_enemyMotion->start();
+		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(_position, pivot::CENTER);
 		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK:
@@ -1045,6 +1113,11 @@ void buffalo::animationControl()
 		{
 			_enemyMotion->start();
 		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(_position, pivot::CENTER);
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK:
 		_enemyMotion = _attackMotion_D_R;
@@ -1052,6 +1125,11 @@ void buffalo::animationControl()
 		if (!_enemyMotion->isPlay())
 		{
 			_enemyMotion->start();
+		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(_position, pivot::CENTER);
 		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK_PREPARE:
@@ -1126,6 +1204,11 @@ void buffalo::animationControl()
 			_oneAnimation = false;
 			_isAttack = false;
 		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(Vector2(_position.x - 50, _position.y - 50), pivot::CENTER);
+		}
 		break;
 	case ENEMY_UP_RIGHT_MELEE_ATTACK:
 		_enemyMotion = _meleeAttackMotion_U_R;
@@ -1142,6 +1225,11 @@ void buffalo::animationControl()
 			_enemyDirection = ENEMY_UP_RIGHT_IDLE;
 			_oneAnimation = false;
 			_isAttack = false;
+		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(Vector2(_position.x + 50, _position.y - 50), pivot::CENTER);
 		}
 		break;
 	case ENEMY_LEFT_MELEE_ATTACK:
@@ -1160,6 +1248,11 @@ void buffalo::animationControl()
 			_oneAnimation = false;
 			_isAttack = false;
 		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(Vector2(_position.x - 50, _position.y), pivot::CENTER);
+		}
 		break;
 	case ENEMY_RIGHT_MELEE_ATTACK:
 		_enemyMotion = _meleeAttackMotion_R;
@@ -1176,6 +1269,11 @@ void buffalo::animationControl()
 			_enemyDirection = ENEMY_RIGHT_IDLE;
 			_oneAnimation = false;
 			_isAttack = false;
+		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(Vector2(_position.x + 50, _position.y), pivot::CENTER);
 		}
 		break;
 	case ENEMY_DOWN_LEFT_MELEE_ATTACK:
@@ -1194,6 +1292,11 @@ void buffalo::animationControl()
 			_oneAnimation = false;
 			_isAttack = false;
 		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(Vector2(_position.x - 50, _position.y + 50), pivot::CENTER);
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_MELEE_ATTACK:
 		_enemyMotion = _meleeAttackMotion_D_R;
@@ -1210,6 +1313,11 @@ void buffalo::animationControl()
 			_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 			_oneAnimation = false;
 			_isAttack = false;
+		}
+
+		if (_isAttack)
+		{
+			_attackRC.set(Vector2(_position.x + 50, _position.y + 50), pivot::CENTER);
 		}
 		break;
 	}

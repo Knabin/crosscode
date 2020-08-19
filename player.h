@@ -53,6 +53,8 @@ private:
 	POINT tileIndex;
 	RECT rcCollision;
 	int _nowOrder;
+	int _backOrder;
+	int _beginOrder;
 	int _count;
 
 	int _jumpCount;
