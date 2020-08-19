@@ -109,6 +109,7 @@ void objectManager::render()
 	}*/
 	for (int i = 0; i < _vZOrderRender.size(); ++i)
 	{
+		if (!_vZOrderRender[i]->getIsAlive()) continue;
 		_vZOrderRender[i]->render();
 	}
 
@@ -159,6 +160,24 @@ void objectManager::removeObjectsWithoutPlayer()
 			else viter++;
 		}
 	}
+
+	_vZOrderRender.clear();
+
+	//objectContainerIter iter = _mObjectContainer.begin();
+	//for (; iter != _mObjectContainer.end(); ++iter)
+	//{
+	//	vector<gameObject*>::iterator viter = iter->second.begin();
+	//	if (iter->first == objectType::UI) continue;
+	//	for (; viter != iter->second.end(); )
+	//	{
+	//		if ((*viter)->getName() != "player")
+	//		{
+	//			(*viter)->setIsActive(false);
+	//		}
+	//		else viter++;
+	//	}
+	//}
+
 }
 
 gameObject * objectManager::findObject(objectType type, string objectName)

@@ -60,7 +60,7 @@ HRESULT playGround::init()
 
 	_test = 0.f;
 
-	ShowCursor(false);
+	//ShowCursor(false);
 
 	return S_OK;
 }
