@@ -167,7 +167,10 @@ HRESULT hedgehag::init()
 	_attackMotion_U_R->setFPS(1);
 	//고슴도치 위아래 공격 애니메이션
 
-	_rc.update(_position, Vector2(70, 70), pivot::CENTER);
+	_width = 70;
+	_height = 70;
+
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 
 	_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 	_enemyMotion = _idleMotion_D_R;
@@ -187,6 +190,7 @@ void hedgehag::release()
 void hedgehag::update()
 {
 	tileGet();//에너미의 타일검출 위치 가져오기
+	currentTileGet();//현재 에너미의 타일번호를 _nowOrder에 대입
 	move();//에너미 무브
 	animationControl();//에너미 애니메이션 컨트롤
 	animationAngleControl();//에너미와 플레이어간의 앵글값에 따른 애니메이션 컨트롤
@@ -252,14 +256,18 @@ void hedgehag::move()
 					_position.x += cosf(an) * _speed;
 					_position.y += -sinf(an) * _speed;
 
-
 					if (d < 5)
 					{
 						deleteMove();
 					}
 
 				}
-
+				else if (tileMove())
+				{
+					_position.x += cosf(_angle) * _speed;
+					_position.y += -sinf(_angle) * _speed;
+				}
+				
 			}
 			else if (_distanceChange)
 			{
@@ -336,6 +344,7 @@ void hedgehag::move()
 
 		if (!tileMove())
 		{
+			_isAttack = false;
 			_position.x += cosf(_angle) * _speed;
 			_position.y += -sinf(_angle) * _speed;
 		}
@@ -443,36 +452,165 @@ void hedgehag::tileGet()
 	_t[2] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[2].y][nextTileIndex[2].x];
 }
 
+void hedgehag::currentTileGet()
+{
+	_currentTileSave = Vector2(currentTileIndex.x, currentTileIndex.y);
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
+	//다음 타일
+	if (_currentTileSave.x > maxTileX) _currentTileSave.x = maxTileX;
+	else if (_currentTileSave.x < 0) _currentTileSave.x = 0;
+	if (_currentTileSave.y > maxTileY) _currentTileSave.y = maxTileY;
+	else if (_currentTileSave.y < 0) _currentTileSave.y = 0;
+	_currentTile = SCENEMANAGER->getCurrentScene()->getTiles()[_currentTileSave.y][_currentTileSave.x];
+	_nowOrder = _currentTile->getOrderIndex();
+}
+
 bool hedgehag::tileMove()
 {
-	//층이 같다면
-	if (_t[0]->getOrderIndex() == _nowOrder && _t[1]->getOrderIndex() == _nowOrder && _t[2]->getOrderIndex() == _nowOrder)
+	/*for (int i = 0; i < 3; i++)
+	{
+		if (_t[i]->getOrderIndex() > _nowOrder &&
+			_t[i]->getOrderIndex() != 4 &&
+			_t[i]->getOrderIndex() != 5)
+		{
+			return true;
+		}
+		else if ((_t[i]->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || _t[i]->getOrderIndex() < _nowOrder)
+		{
+			return true;
+		}
+		else if (_t[i]->getOrderIndex() == 5)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}*/
+		/*
+		else if (ti->getOrderIndex() == 5)
+		{
+			for (int j = 3; j < 6; j++)
+			{
+				ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
+
+				if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+				{
+					_state->setState(_vState[PLAYERSTATE::JUMP]);
+					break;
+				}
+
+			}
+		}
+		*/
+
+	for (int i = 0; i < 3; i++)
+	{
+		//물
+		if (_t[i]->getOrderIndex() == 0)
+		{
+			return true;
+		}
+
+		//1층
+		if (_t[i]->getOrderIndex() == 1)
+		{
+			return true;
+		}
+
+		//2층
+		if (_t[i]->getOrderIndex() == 2 && _t[0]->getOrderIndex() - _nowOrder == 1)
+		{
+			return true;
+		}
+
+		//3층
+		if (_t[i]->getOrderIndex() == 3 && _t[0]->getOrderIndex() - _nowOrder == 1)
+		{
+			return true;
+		}
+
+		//2층 모서리(Z-ORDER용)
+		if (_t[i]->getOrderIndex() == 4 || _nowOrder == 4)
+		{
+			return false;
+		}
+
+		//갈 수 있는 모서리
+		if (_t[i]->getOrderIndex() == 5 || _nowOrder == 5)
+		{
+			return false;
+		}
+
+		//현재 내 타일과 다음검사 타일이 같으면
+		if (_t[i]->getOrderIndex() == _nowOrder)
+		{
+			return true;
+		}
+
+		//이동불가능
+		if (_t[i]->getOrderIndex() == 6 || _nowOrder == 6)
+		{
+			return false;
+		}
+	}
+
+	/*
+	//물
+	if (_t[0]->getOrderIndex() == 0 || _t[1]->getOrderIndex() == 0 || _t[2]->getOrderIndex() == 0)
 	{
 		return true;
 	}
-	else
+
+	//1층
+	if (_t[0]->getOrderIndex() == 1 || _t[1]->getOrderIndex() == 1 || _t[2]->getOrderIndex() == 1)
 	{
-		//_x = currentTileIndex.x * SIZE;
-		//_y = currentTileIndex.y * SIZE;
+		return true;
+	}
+
+	//2층
+	if (_t[0]->getOrderIndex() == 2 && _t[0]->getOrderIndex() - _nowOrder == 1 ||
+		_t[1]->getOrderIndex() == 2 && _t[1]->getOrderIndex() - _nowOrder == 1 ||
+		_t[2]->getOrderIndex() == 2 && _t[2]->getOrderIndex() - _nowOrder == 1)
+	{
+		return true;
+	}
+
+	//3층
+	if (_t[0]->getOrderIndex() == 3 && _t[0]->getOrderIndex() - _nowOrder == 1 ||
+		_t[1]->getOrderIndex() == 3 && _t[1]->getOrderIndex() - _nowOrder == 1 ||
+		_t[2]->getOrderIndex() == 3 && _t[2]->getOrderIndex() - _nowOrder == 1)
+	{
+		return true;
+	}
+
+	//2층 모서리(Z-ORDER용)
+	if (_t[0]->getOrderIndex() == 4 || _t[1]->getOrderIndex() == 4 || _t[2]->getOrderIndex() == 4 || _nowOrder == 4)
+	{
 		return false;
 	}
 
-	////층이 플레이어보다 높다면
-	//else if (_t[0]->getOrderIndex() > _nowOrder)
-	//{
-	//	//한 층 차이라면
-	//	if (_t[0]->getOrderIndex() - _nowOrder == 1)
-	//	{
-	//		return false;
-	//	}
-	//	return false;
-	//}
-	////층이 플레이어보다 낮다면
-	//else
-	//{
-	//	if (_nowOrder == 0) return false;
-	//}
+	//갈 수 있는 모서리
+	if (_t[0]->getOrderIndex() == 5 || _t[1]->getOrderIndex() == 5 || _t[2]->getOrderIndex() == 5 || _nowOrder == 5)
+	{
+		return false;
+	}
 
+	//현재 내 타일과 다음검사 타일이 같으면
+	if (_t[0]->getOrderIndex() == _nowOrder || _t[1]->getOrderIndex() == _nowOrder || _t[2]->getOrderIndex() == _nowOrder)
+	{
+		return true;
+	}
+
+	//이동불가능
+	if (_t[0]->getOrderIndex() == 6 || _t[1]->getOrderIndex() == 6 || _t[2]->getOrderIndex() == 6 ||
+		_nowOrder == 6)
+	{
+		return false;
+	}
+	*/
 }
 
 void hedgehag::animationControl()

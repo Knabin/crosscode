@@ -174,7 +174,10 @@ HRESULT meerkat::init()
 	_meerkatMoveMotion->setFPS(1);
 	//미어캣 무브 애니메이션
 
-	_rc.update(_position, Vector2(70, 70), pivot::CENTER);
+	_width = 70;
+	_height = 70;
+
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 
 	_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 	_enemyMotion = _idleMotion_D_R;
@@ -227,7 +230,7 @@ void meerkat::render()
 	if (_enemyDirection != ENEMY_TUNNEL_MOVE)
 	{
 		_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
-		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter()), _enemyMotion, 1.0f);
+		_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y - 10), _enemyMotion, 1.0f);
 	}
 	else
 	{

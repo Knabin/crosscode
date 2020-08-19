@@ -44,7 +44,7 @@ void aStar::setTiles()
 		_startTile = NULL;
 		_endTile = NULL;
 		_currentTile = NULL;
-		if (_vTotalList[i]->getOrderIndex() == 5 || _vTotalList[i]->getOrderIndex() == 0)
+		if (_vTotalList[i]->getOrderIndex() == 6 || _vTotalList[i]->getOrderIndex() == 0 || _vTotalList[i]->getOrderIndex() == 7 || _vTotalList[i]->getOrderIndex() == 1)
 		{
 			_vTotalList[i]->setIsOpen(false);
 		}
@@ -78,7 +78,8 @@ void aStar::pathFinder(tile* currentTile)
 
 		if (!node->getIsOpen()) continue;
 		if (node->getStart()) continue;
-		if (node->getOrderIndex() == 5) continue;
+		if (node->getOrderIndex() == 6) continue;
+		if (node->getOrderIndex() == 7) continue;
 		if (node->getOrderIndex() == 0) continue;
 		if (node->getEnemy()) continue;
 		if (node->getPlayer() && _currentTile->getStart())
@@ -89,6 +90,7 @@ void aStar::pathFinder(tile* currentTile)
 			break;
 		}
 
+		if (node->getOrderIndex() == 4 && _currentTile->getOrderIndex() == 1) continue;
 		if (node->getOrderIndex() == 3 && _currentTile->getOrderIndex() == 1) continue;
 
 
@@ -190,8 +192,6 @@ vector<tile*> aStar::pathChecking(floatRect enemyRC)
 
 	for (int i = 0; i < _totalSize; ++i)
 	{
-		if (_vTotalList[i]->getOrderIndex() == 5)	continue;
-		if (_vTotalList[i]->getOrderIndex() == 0)	continue;
 
 		_vTotalList[i]->setIsOpen(true);
 		_vTotalList[i]->setParentTile(NULL);
