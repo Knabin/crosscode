@@ -440,6 +440,7 @@ void meerkat::move()
 
 					if (_enemyDirection == ENEMY_TUNNEL_MOVE)
 					{
+						//if문 조건문으로 플레이어가 1층에 있을경우에만 되게 해주기
 						_position.x += cosf(an) * _meerkatSpeed;
 						_position.y += -sinf(an) * _meerkatSpeed;
 					}
@@ -801,8 +802,8 @@ void meerkat::ballTileGet()
 		ballNextTileIndex[6] = Vector2(ballCurrentTileIndex.x, ballCurrentTileIndex.y - k);//위
 		ballNextTileIndex[7] = Vector2(ballCurrentTileIndex.x - k, ballCurrentTileIndex.y - k);//왼쪽위
 
-		int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
-		int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
+		int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+		int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
 
 		//다음 타일
 		if (ballNextTileIndex[0].x > maxTileX) ballNextTileIndex[0].x = maxTileX;
@@ -893,8 +894,8 @@ void meerkat::tileGet()
 	nextTileIndex[6] = Vector2(currentTileIndex.x, currentTileIndex.y - k);//위
 	nextTileIndex[7] = Vector2(currentTileIndex.x - k, currentTileIndex.y - k);//왼쪽위
 
-	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
-	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
 
 	//다음 타일
 	if (nextTileIndex[0].x > maxTileX) nextTileIndex[0].x = maxTileX;

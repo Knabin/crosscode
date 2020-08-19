@@ -207,16 +207,6 @@ void collisionManager::hedgehagCollision()
 			}
 		}
 
-		//if (h->getEnemyAttackRect().getSize().x != 0 && h->getEnemyAttackRect().getSize().y != 0)
-		//{
-		//	if (isCollision(_player->getRect(), h->getEnemyAttackRect()))//플레이어렉트에 고슴도치 공격렉트가 충돌했으면
-		//	{
-		//		_player->setPlayerPlusX(cosf(h->getEnemyAngle()) * 10.0f);
-		//		_player->setPlayerPlusY(-sinf(h->getEnemyAngle()) * 10.0f);
-		//		h->setIsAttack(false);
-		//	}
-		//}
-
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
 
