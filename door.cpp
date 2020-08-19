@@ -29,7 +29,7 @@ void door::update()
 
 	if (isCollision(_moveRect, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getRect()))
 	{
-		SCENEMANAGER->loadScene("town");
+		// 여기서 갈 수 있다면 프레임 렌더! 문 열리게끔
 	}
 }
 

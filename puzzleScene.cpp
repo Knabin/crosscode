@@ -15,7 +15,6 @@ HRESULT puzzleScene::init()
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
-	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 33 * SIZE));
 
 	if (_vTiles.size() != 0)
 	{

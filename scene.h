@@ -24,6 +24,13 @@ protected:
 	floatPoint _previous;
 	floatPoint _next;
 
+	// 씬 이동 관련 변수
+	Vector2 _nextPoint;
+	string _nextScene;
+	Vector2 _prevPoint;
+	string _prevScene;
+	bool _canMoveNextScene;
+
 public:
 	virtual ~scene();
 	virtual HRESULT init();
