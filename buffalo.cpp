@@ -323,8 +323,6 @@ void buffalo::update()
 		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100);
 		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75);
 	}
-
-	cout << _rc.GetWidth() << ", " << _rc.GetHeight() << endl;
 }
 
 void buffalo::render()
@@ -1330,6 +1328,8 @@ void buffalo::animationControl()
 
 void buffalo::tileGet()
 {
+	vector<vector<tile*>> _vTilesSave = SCENEMANAGER->getCurrentScene()->getTiles();
+
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 
 	int k = 1;
@@ -1377,29 +1377,29 @@ void buffalo::tileGet()
 		nextTileIndex[2] = Vector2(currentTileIndex.x + k, currentTileIndex.y + k);
 	}
 
-	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
-	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
 
 	//다음 타일
 	if (nextTileIndex[0].x > maxTileX) nextTileIndex[0].x = maxTileX;
 	else if (nextTileIndex[0].x < 0) nextTileIndex[0].x = 0;
 	if (nextTileIndex[0].y > maxTileY) nextTileIndex[0].y = maxTileY;
 	else if (nextTileIndex[0].y < 0) nextTileIndex[0].y = 0;
-	_t[0] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[0].y][nextTileIndex[0].x];
+	_t[0] = _vTilesSave[nextTileIndex[0].y][nextTileIndex[0].x];
 
 	//다음 타일
 	if (nextTileIndex[1].x > maxTileX) nextTileIndex[1].x = maxTileX;
 	else if (nextTileIndex[1].x < 0) nextTileIndex[1].x = 0;
 	if (nextTileIndex[1].y > maxTileY) nextTileIndex[1].y = maxTileY;
 	else if (nextTileIndex[1].y < 0) nextTileIndex[1].y = 0;
-	_t[1] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[1].y][nextTileIndex[1].x];
+	_t[1] = _vTilesSave[nextTileIndex[1].y][nextTileIndex[1].x];
 
 	//다음 타일
 	if (nextTileIndex[2].x > maxTileX) nextTileIndex[2].x = maxTileX;
 	else if (nextTileIndex[2].x < 0) nextTileIndex[2].x = 0;
 	if (nextTileIndex[2].y > maxTileY) nextTileIndex[2].y = maxTileY;
 	else if (nextTileIndex[2].y < 0) nextTileIndex[2].y = 0;
-	_t[2] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[2].y][nextTileIndex[2].x];
+	_t[2] = _vTilesSave[nextTileIndex[2].y][nextTileIndex[2].x];
 }
 
 bool buffalo::tileMove()
