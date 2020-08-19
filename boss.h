@@ -25,6 +25,8 @@ enum bossState //보스 상태패턴 enum문
 	STONESHOWER_END,
 	FLAMETHROWER_READY,
 	FLAMETHROWER_READY2,
+	FLAMETHROWER_READY3,
+	FLAMETHROWER_READY4,
 	FLAMETHROWER,
 	FLAMETHROWER_END
 };
@@ -93,6 +95,8 @@ private:
 	int _bossShieldOneFrameX, _bossShieldOneFrameY;
 
 	int _moveCount;  //움직이고 있을때의 카운트
+
+	int _chargeCount; //충전할때의 카운트
 
 	int _randomAttackCount;  // 어떤 공격을 할까나~~??
 

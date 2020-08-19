@@ -7,6 +7,7 @@ enum
 {
 	TREE,
 	GRASS,
+	ROOF,
 	END
 };
 

@@ -2,6 +2,8 @@
 #include "gameObject.h"
 #include "playerStateController.h"
 
+class bullet;
+
 enum class PLAYERDIRECTION : int
 {
 	TOP,
@@ -44,7 +46,11 @@ private:
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
-
+	
+	image* _attackImg;				//근거리 이펙트용
+	animation* _attackAni[40];		//근거리 이펙트용
+	float _attackAngle;			//근거리 이펙트용
+	bullet* _bullet;
 
 	vector<playerState*>	_vState;
 
@@ -61,12 +67,16 @@ private:
 	int _combocount;	//근거리 콤보용
 	int _combo;			//근거리 콤보용
 
+	int _attackEffectCount;	//근거리 이펙트용
+	int _attackCount;		//근거리 이펙트용
 	
 	bool _isEffect;
 	int _fullCount;	//원거리공격 충전시간
 
 	int _dodgeCount;	//닷지횟수
 	int _dodgeCharge;	//닷지횟수 충전용
+	
+	int _lineCount;		//한번 클릭시 좁혀지는 양쪽 선
 
 	int _pHp;		//플레이어 HP 
 	int _pXp;		//플레이어 경험치 적을 죽였을때
@@ -75,6 +85,8 @@ private:
 	float _jumpPower;
 	float _gravity;
 	bool _jumping;
+
+	float _angle;
 
 	floatRect _tileRect;
 	POINT next[6];
@@ -96,8 +108,8 @@ public:
 	void playerfinalattackMove();
 	void move(const float& x, const float& y);
 	void moveAngle(const float& cangle, const float& speed);
-	void playerFire();
 	void playerMeleeattack();
+	void playerDodgeEffect();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
@@ -109,4 +121,6 @@ public:
 	animation* getAnimation() { return _ani; }
 
 	PLAYERDIRECTION getDirection() { return _direction; }
+
+	bullet* getBullet() { return _bullet; }
 };

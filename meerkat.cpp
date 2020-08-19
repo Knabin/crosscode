@@ -7,6 +7,8 @@ HRESULT meerkat::init()
 {
 	_enemyImage = IMAGEMANAGER->addFrameImage("enemyMeerkat", L"images/enemy/meerkat.png", 10, 12);//기본, 히트, 공격모션 이미지
 	_meerkatMoveImage = IMAGEMANAGER->addFrameImage("enemyMeerkatMove", L"images/enemy/meerkatMove.png", 9, 1);//무브 이미지
+	IMAGEMANAGER->addFrameImage("enemyMeerkatBallEffect", L"images/enemy/meerkatBallEffect.png", 8, 1);//미어캣 총알 폭발 이펙트
+	EFFECTMANAGER->addEffect("enemyMeerkatBallEffect", "enemyMeerkatBallEffect", 1.0f, 0.5f, 5, 1.0f);//미어캣 총알 폭발 이펙트
 
 	_name = "meerkat";
 
@@ -207,9 +209,15 @@ void meerkat::update()
 	_bullet->update();//미어캣 총알 업데이트
 	for (int i = 0; i < _bullet->getvEnemyBullet().size(); i++)
 	{
-		if (!ballTileMove())//미어캣의 볼이 장애물에 충돌시
+		if (!_isAttack)
 		{
-			_bullet->remove(i);//미어캣 볼 벡터 제거
+			_count++;
+			if (!ballTileMove() && _count >= 25)//미어캣의 볼이 장애물에 충돌시
+			{
+				EFFECTMANAGER->play("enemyMeerkatBallEffect", CAMERA->getRelativeVector2(_bullet->getvEnemyBullet()[i].position).x + 25, CAMERA->getRelativeVector2(_bullet->getvEnemyBullet()[i].position).y + 25);
+				_bullet->remove(i);//미어캣 볼 벡터 제거
+				_count = 0;
+			}
 		}
 	}
 }

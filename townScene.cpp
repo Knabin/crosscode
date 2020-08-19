@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "puzzleScene.h"
+#include "townScene.h"
 
-puzzleScene::~puzzleScene()
+townScene::~townScene()
 {
 }
 
-HRESULT puzzleScene::init()
+HRESULT townScene::init()
 {
 	CAMERA->setCameraMode(CAMERASTATE::NONE);
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
-	this->getDataFromFile("puzzlemap.map");
+	this->getDataFromFile("townmap.map");
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
-	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 33 * SIZE));
+	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(35 * SIZE, (_maxY - 1) * SIZE));
 
 	if (_vTiles.size() != 0)
 	{
@@ -39,15 +39,15 @@ HRESULT puzzleScene::init()
 	return S_OK;
 }
 
-void puzzleScene::release()
+void townScene::release()
 {
 }
 
-void puzzleScene::update()
+void townScene::update()
 {
 }
 
-void puzzleScene::render()
+void townScene::render()
 {
 	scene::render();
 }
