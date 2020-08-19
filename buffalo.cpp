@@ -248,7 +248,10 @@ HRESULT buffalo::init()
 	_hitMotion_D_L->setFPS(1);
 	//버팔로 아래쪽 히트 애니메이션
 
-	_rc.update(_position, Vector2(70, 70), pivot::CENTER);
+	_width = 100;
+	_height = 100;
+
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 
 	_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
 	_enemyMotion = _idleMotion_D_R;
@@ -320,6 +323,8 @@ void buffalo::update()
 		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100);
 		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75);
 	}
+
+	cout << _rc.GetWidth() << ", " << _rc.GetHeight() << endl;
 }
 
 void buffalo::render()

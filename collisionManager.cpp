@@ -35,7 +35,7 @@ void collisionManager::render()
 
 void collisionManager::buffaloCollision()
 {
-	/*
+	
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::ENEMY, "buffalo");
 
 	for (int i = 0; i < temp.size(); i++)
@@ -153,12 +153,12 @@ void collisionManager::buffaloCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	*/
+	
 }
 
 void collisionManager::hedgehagCollision()
 {
-	/*
+	
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::ENEMY, "hedgehag");
 
 	for (int i = 0; i < temp.size(); i++)
@@ -207,35 +207,35 @@ void collisionManager::hedgehagCollision()
 			}
 		}
 
-		if (h->getEnemyAttackRect().getSize().x != 0 && h->getEnemyAttackRect().getSize().y != 0)
-		{
-			if (isCollision(_player->getRect(), h->getEnemyAttackRect()))//플레이어렉트에 고슴도치 공격렉트가 충돌했으면
-			{
-				_player->setPlayerPlusX(cosf(h->getEnemyAngle()) * 10.0f);
-				_player->setPlayerPlusY(-sinf(h->getEnemyAngle()) * 10.0f);
-				h->setIsAttack(false);
-			}
-		}
+		//if (h->getEnemyAttackRect().getSize().x != 0 && h->getEnemyAttackRect().getSize().y != 0)
+		//{
+		//	if (isCollision(_player->getRect(), h->getEnemyAttackRect()))//플레이어렉트에 고슴도치 공격렉트가 충돌했으면
+		//	{
+		//		_player->setPlayerPlusX(cosf(h->getEnemyAngle()) * 10.0f);
+		//		_player->setPlayerPlusY(-sinf(h->getEnemyAngle()) * 10.0f);
+		//		h->setIsAttack(false);
+		//	}
+		//}
 
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
 
 		RECT rcHold;
-		rcHold.left = FLOAT_TO_INT(h->getRect().left);
-		rcHold.right = FLOAT_TO_INT(h->getRect().right);
-		rcHold.top = FLOAT_TO_INT(h->getRect().top);
-		rcHold.bottom = FLOAT_TO_INT(h->getRect().bottom);
+		rcHold.left = FLOAT_TO_INT(_player->getRect().left);
+		rcHold.right = FLOAT_TO_INT(_player->getRect().right);
+		rcHold.top = FLOAT_TO_INT(_player->getRect().top);
+		rcHold.bottom = FLOAT_TO_INT(_player->getRect().bottom);
 
 		RECT rcMove;
-		rcMove.left = FLOAT_TO_INT(_player->getRect().left);
-		rcMove.right = FLOAT_TO_INT(_player->getRect().right);
-		rcMove.top = FLOAT_TO_INT(_player->getRect().top);
-		rcMove.bottom = FLOAT_TO_INT(_player->getRect().bottom);
+		rcMove.left = FLOAT_TO_INT(h->getRect().left);
+		rcMove.right = FLOAT_TO_INT(h->getRect().right);
+		rcMove.top = FLOAT_TO_INT(h->getRect().top);
+		rcMove.bottom = FLOAT_TO_INT(h->getRect().bottom);
 
 		if (IntersectRect(&rcInter, &rcHold, &rcMove))
 		{
-			int interW = rcInter.right - rcInter.left;
-			int interH = rcInter.bottom - rcInter.top;
+			interW = rcInter.right - rcInter.left;
+			interH = rcInter.bottom - rcInter.top;
 
 			if (!h->getEnemyIsAttack())//에너미가 공격상태가 아닐경우에만 충돌처리
 			{
@@ -244,12 +244,14 @@ void collisionManager::hedgehagCollision()
 					//위에서 부딪혔을때
 					if (rcInter.top == rcHold.top)
 					{
-						_player->setPlayerY(_player->getRect().getCenter().y - interH);
+						//_player->setPlayerY(_player->getRect().getCenter().y - interH);
+						h->setEnemyY(h->getRect().getCenter().y - interH);
 					}
 					//아래에서 부딪혔을때
 					else if (rcInter.bottom == rcHold.bottom)
 					{
-						_player->setPlayerY(_player->getRect().getCenter().y + interH);
+						//_player->setPlayerY(_player->getRect().getCenter().y + interH);
+						h->setEnemyY(h->getRect().getCenter().y + interH);
 					}
 				}
 				else//양옆에서 충돌했을때
@@ -257,24 +259,62 @@ void collisionManager::hedgehagCollision()
 					//왼족에서 충돌했을때
 					if (rcInter.left == rcHold.left)
 					{
-						_player->setPlayerX(_player->getRect().getCenter().x - interW);
+						//_player->setPlayerX(_player->getRect().getCenter().x - interW);
+						h->setEnemyX(h->getRect().getCenter().x - interW);
 					}
 					//오른쪽에서 충돌했을때
 					else if (rcInter.right == rcHold.right)
 					{
-						_player->setPlayerX(_player->getRect().getCenter().x + interW);
+						//_player->setPlayerX(_player->getRect().getCenter().x + interW);
+						h->setEnemyX(h->getRect().getCenter().x + interW);
 					}
+				}
+
+				if (h->getPosition().x > _player->getRect().left &&
+					h->getPosition().x < _player->getRect().right &&
+					h->getPosition().y > _player->getRect().top &&
+					h->getPosition().y < _player->getRect().bottom)
+				{
+					if (h->getPosition().x <= _player->getPosition().x)
+					{
+						h->setEnemyX(h->getPosition().x - interW);
+					}
+					else if (h->getPosition().x >= _player->getPosition().x)
+					{
+						h->setEnemyX(h->getPosition().x + interW);
+					}
+					if (h->getPosition().y <= _player->getPosition().y)
+					{
+						h->setEnemyY(h->getPosition().y - interH);
+					}
+					else if (h->getPosition().y >= _player->getPosition().y)
+					{
+						h->setEnemyY(h->getPosition().y + interH);
+					}
+				}
+			}
+			else
+			{
+				_count++;
+				if (_count <= 3)
+				{
+					_player->setPlayerPlusX(cosf(h->getEnemyAngle()) * 10.0f);
+					_player->setPlayerPlusY(-sinf(h->getEnemyAngle()) * 10.0f);
+				}
+				else
+				{
+					_count = 0;
 				}
 			}
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	*/
+	
 }
 
 void collisionManager::meerkatCollision()
 {
-	/*
+	
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::ENEMY, "meerkat");
 
 	for (int i = 0; i < temp.size(); i++)
@@ -387,7 +427,7 @@ void collisionManager::meerkatCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	*/
+	
 }
 
 void collisionManager::bulletCollision()

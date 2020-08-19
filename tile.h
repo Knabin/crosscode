@@ -18,7 +18,7 @@ enum class ORDER : int
 	TWO,			// 2층
 	THREE,			// 3층
 	BORDER,			// 2층 모서리(Z-ORDER용)
-	BORDER2,		// 3층 모서리(Z-ORDER용)
+	BORDER2,		// 갈 수 있는 모서리
 	NONE,			// 이동 불가능
 	END
 };
