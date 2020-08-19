@@ -41,6 +41,7 @@ private:
 
 	int _currentFrameX, _currentFrameY;
 	int _frameCount;
+	int _flameFrameX, _flameFrameY;
 
 	//화염총구이펙트 카운트
 	int _firePointCurrentFrameX, _firePointCurrentFrameY;
@@ -53,6 +54,9 @@ private:
 	int _chargeFrameCount, _chargeFrameCount2;
 	int _chargeFrameX, _chargeFrameY;
 	int _chargeFrameX2, _chargeFrameY2;
+
+	//각도값을 바꿔주는 카운트?
+	int _angleCount;
 
 
 public:
@@ -75,6 +79,12 @@ public:
 	void chargeDraw2(float centerX, float centerY);
 	void fireEffectDraw();
 
+
+	vector<tagFlamethrower>& getFlameVector() { return _vFlamethrower; }
+	vector<tagFlamethrower>::iterator& getFlameIterVector() { return _viFlamethrower; }
+
+	vector<tagFlamethrower>& getFlameEffectVector() { return _vFlameEffect; }
+	vector<tagFlamethrower>::iterator& getFlameEffectIterVector() { return _viFlameEffect; }
 
 
 };

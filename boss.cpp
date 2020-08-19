@@ -755,13 +755,6 @@ void boss::bossState()
 			_bossState = FLAMETHROWER_READY4;
 		}
 
-		/*
-		if (_RightHand._rectBody.bottom > WINSIZEY / 2 + 90)
-		{
-			_bossState = FLAMETHROWER;
-		}
-
-		*/
 	}
 	break;
 
@@ -774,8 +767,6 @@ void boss::bossState()
 			_chargeCount = 0;
 			_bossState = FLAMETHROWER;
 		}
-
-
 	}
 	break;
 
@@ -783,20 +774,104 @@ void boss::bossState()
 	{
 		_flamethrowerDelay++;
 
-		if (_flamethrowerDelay % 10 == 0)
+		if (_flamethrowerDelay % 3 == 0)
 		{
 			_flamethrower->fire();
 		}
 
+		if (_flamethrowerDelay >= 300)
+		{
+			for (_flamethrower->getFlameEffectIterVector() = _flamethrower->getFlameEffectVector().begin();
+				_flamethrower->getFlameEffectIterVector() != _flamethrower->getFlameEffectVector().end();
+				++_flamethrower->getFlameEffectIterVector())
+			{
+				_flamethrower->getFlameEffectIterVector()->_fireStart = false;
+			}
+		}
+
+		if (_flamethrowerDelay >= 400)
+		{
+			for (_flamethrower->getFlameIterVector() = _flamethrower->getFlameVector().begin();
+				_flamethrower->getFlameIterVector() != _flamethrower->getFlameVector().end();
+				++_flamethrower->getFlameIterVector())
+			{
+				
+				_flamethrower->getFlameIterVector()->_fireStart = false;	
+				_bossState = FLAMETHROWER_END;
+				
+			}
+		}	
 	}
 	break;
 
 	case FLAMETHROWER_END:
 	{
+		
+		_LeftArm._center.x -= 0.2f * 1.2f;
+		_LeftArm._center.y += 0.5f * 1.2f;
+
+		_LeftArm._angle += 0.024f * 1.2f;
+		_LeftHand._angle += 0.016f * 1.2f;
+		_LeftArm._realAngle -= 1.2f * 1.2f;
+		_LeftHand._realAngle -= 0.04f;
+
+		_RightArm._center.y -= 1.8f / 1.5f;
+
+		_RightArm._angle += 0.036f / 1.5f;
+		_RightHand._angle += 0.032f / 1.5f;
+		_RightArm._realAngle -= 1.6f / 1.5f;
+		_RightHand._realAngle += 0.004f;
+
+		_RightArm._center.y -= 3.8f / 1.5f;
+		_RightArm._center.x += 0.9f / 1.5f;
+
+		_RightArm._angle += 0.031f / 1.5f;
+		_RightHand._angle += 0.032f / 1.5f;
+		_RightArm._realAngle -= 1.6f / 1.5f;
+		_RightHand._realAngle -= 0.44f / 1.5f;
+
+
+		if (_RightHand._rectBody.right > WINSIZEX / 2 + 490)
+		{
+			_bossState = FLAMETHROWER_END2;
+		}
+
 
 	}
 	break;
 
+	case FLAMETHROWER_END2:
+	{	
+		moveDown();
+
+		if (_Center._y >= WINSIZEY / 2 - 175)
+		{
+			_bossState = FLAMETHROWER_END3;
+		}
+
+	}
+	break;
+
+	case FLAMETHROWER_END3:
+	{
+
+		_bossLeftHandMoveFrameY2 = 0;
+
+		if (_frameCount % 8 == 0)
+		{
+			if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ1")->getMaxFrameX())
+			{
+				_currentFrameX = 0;
+			}
+			_bossLeftHandMoveFrameX2 = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+
+		}
+
+
+	}
+	break;
 
 	}
 
@@ -916,10 +991,16 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ2")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 45, _LeftHand._centerEnd.y + 220)),
 			_bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY);
 	}
-	else if (_bossState == FLAMETHROWER_READY2 || _bossState == FLAMETHROWER_READY3 || _bossState == FLAMETHROWER_READY4 || _bossState == FLAMETHROWER)
+	else if (_bossState == FLAMETHROWER_READY2 || _bossState == FLAMETHROWER_READY3 || _bossState == FLAMETHROWER_READY4 || _bossState == FLAMETHROWER || _bossState == FLAMETHROWER_END || _bossState == FLAMETHROWER_END2)
 	{
 		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ3")->setAngle(_LeftHand._realAngle);
 		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ3")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 135, _LeftHand._centerEnd.y - 100)));
+	}
+	else if (_bossState == FLAMETHROWER_END3)
+	{
+		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ1")->setAngle(_LeftHand._realAngle);
+		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ1")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 45, _LeftHand._centerEnd.y + 220)),
+			_bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY);
 	}
 	else
 	{

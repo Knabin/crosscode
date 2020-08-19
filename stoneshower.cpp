@@ -192,7 +192,7 @@ void stoneshower::move()
 			_viStoneshower->_y += _viStoneshower->_speed;
 
 			_viStoneshower->_rc.update(Vector2(_viStoneshower->_x, _viStoneshower->_y), Vector2(_viStoneshower->_size, _viStoneshower->_size), pivot::CENTER);
-
+			
 		}
 	}
 }
