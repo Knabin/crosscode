@@ -104,6 +104,8 @@ public:
 	void setAnimation(animation* ani) { _ani = ani; }
 	void setDirection(PLAYERDIRECTION direction) { _direction = direction; }
 
+	inline int getNowOrder() { return _nowOrder; }
+
 	animation* getAnimation() { return _ani; }
 
 	PLAYERDIRECTION getDirection() { return _direction; }
