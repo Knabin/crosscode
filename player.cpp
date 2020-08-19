@@ -38,11 +38,12 @@ player::player()
 	_iscombo = false;
 	_isEffect = false;
 	_fullCount = 0;
-
+	_attackEffectCount = 0;
 	_dodgeCount = 4; //닷지 기본 횟수
-
+	_attackCount = 0;
 	_state = new playerStateController(idle);
 	_position.y = 700;
+	_attackAngle = 0;
 }
 
 player::~player()
@@ -65,10 +66,24 @@ HRESULT player::init()
 
 	IMAGEMANAGER->addFrameImage("leftattackeffect", L"images/player/leftattackeffect.png", 7, 1);
 	IMAGEMANAGER->addFrameImage("rightattackeffect", L"images/player/rightattackeffect.png", 7, 1);
+	_attackImg = IMAGEMANAGER->addFrameImage("finalattackeffect", L"images/player/finalattackeffect.png", 4, 1);
 
-	EFFECTMANAGER->addEffect("leftattackeffect", "leftattackeffect",1,1.0f,5,1.0f);
-	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 1.0f, 5, 1.0f);
+	EFFECTMANAGER->addEffect("leftattackeffect", "leftattackeffect",1,0.5f,5,1.0f);
+	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 0.5f, 5, 1.0f);
+	EFFECTMANAGER->addEffect("finalattackeffect", "finalattackeffect", 1, 0.3f, 5, 1.0f);
 
+
+	//=================================== 근거리 이펙트 용=================================
+
+	for (int i = 0; i < 40; i++)
+	{
+		_attackAni[i] = new animation;
+		_attackAni[i]->init(_attackImg->getWidth(), _attackImg->getHeight(), _attackImg->getFrameSize().x, _attackImg->getFrameSize().y);
+		_attackAni[i]->setPlayFrame(0, 3, false, false);
+		_attackAni[i]->setFPS(3);
+	
+	}
+	//===================================================================================
 
 	_width = _height = 96;
 	_pivot = pivot::CENTER;
@@ -407,10 +422,21 @@ void player::update()
 	
 	if (KEYMANAGER->isOnceKeyUp('C')
 		|| (KEYMANAGER->isOnceKeyUp(VK_RBUTTON) && _state->getState() == _vState[PLAYERSTATE::GUARD])
-		|| _state->getState() == _vState[MOVESTOP] && !_ani->isPlay()
-		|| _state->getState() == _vState[RIGHT_FINALATTACK] && !_ani->isPlay()
+		|| (_state->getState() == _vState[MOVESTOP] && !_ani->isPlay())
+		|| (_state->getState() == _vState[RIGHT_FINALATTACK] && !_ani->isPlay())
 		)
+	{
+		if (_state->getState() == _vState[RIGHT_FINALATTACK])
+		{
+			for (int i = 0; i < 40; i++)
+			{
+				_attackAni[i]->stop();
+			}
+			
+		}
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
+	}
+		
 
 	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] && _state->getState()->isAttack() == false && _state->getState()->isLongAttack() == false)
 	{
@@ -475,7 +501,45 @@ void player::update()
 			_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 		}
 	}
+	if (_state->getState() == _vState[PLAYERSTATE::RIGHT_FINALATTACK])
+	{
+		_attackEffectCount++;
+		
+
+		if (_attackEffectCount > 1)
+		{
+			if (!_attackAni[_attackCount]->isPlay())
+			{
+				_attackAni[_attackCount]->start();
+			}
+		}
+
+		if (_attackEffectCount > 1)
+		{
+			if (_attackCount + 10 < 39)
+				_attackCount++;
+
+			_attackEffectCount = 0;
+		}
 	
+		//=================================== 근거리 이펙트 용=================================
+		for (int i = _attackCount; i < _attackCount+10; i++)
+		{
+			_attackAni[i]->frameUpdate(TIMEMANAGER->getElapsedTime() * 30);
+		}
+
+		for (int i = _attackCount; i < _attackCount + 10; i++)
+		{
+			if (!_attackAni[i]->isPlay())
+			{
+				_attackAni[i]->start();
+			}
+		}
+		//===================================================================================
+		
+
+	}
+
 }
 
 void player::render()
@@ -505,6 +569,52 @@ void player::render()
 			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(rc2[i]));
 		}
 	}
+	//=================================== 근거리 이펙트 용=================================
+	if (_state->getState() == _vState[PLAYERSTATE::RIGHT_FINALATTACK])
+	for (int i = _attackCount; i < _attackCount+10; i++)
+	{
+		_attackImg->setAngle(_attackAngle);
+		_attackImg->aniRender(Vector2(CAMERA->getRelativeVector2(_position).x - 8+ cosf(PI/9 * i) * 70, CAMERA->getRelativeVector2(_position).y -sinf(PI / 9 * i) * 70), _attackAni[i], 1.f);
+
+		_attackAngle -= 10;
+		
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			if (_attackAngle < 315)
+				_attackAngle = 0;
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			if (_attackAngle < 245)
+				_attackAngle = 290;
+			break;
+		case PLAYERDIRECTION::LEFT:
+			if (_attackAngle < 200)
+				_attackAngle = 245;
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			if (_attackAngle < 175)
+				_attackAngle = 220;
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			if (_attackAngle < 135)
+				_attackAngle = 180;
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			if (_attackAngle < 45)
+				_attackAngle = 130;
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			if (_attackAngle < 45)
+				_attackAngle = 90;
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			if (_attackAngle < 0)
+				_attackAngle = 40;
+			break;
+		}
+	}
+	//=======================================================================================
 }
 
 void player::playerMove()
@@ -1717,10 +1827,48 @@ void player::playerMeleeattack()   //근접 기본공격
 	}
 	if (!_ani->isPlay() && _iscombo && _combo == 3)
 	{
+		cout << _state->getState() << endl;
+		_attackCount = 0;
 		_state->setState(_vState[PLAYERSTATE::RIGHT_FINALATTACK]);
 		_iscombo = false;
 		_combo++;
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			_attackAngle = 0;
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			_attackAngle = 290;
+			break;
+		case PLAYERDIRECTION::LEFT:
+			_attackAngle = 245;
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			_attackAngle = 220;
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			_attackAngle = 180;
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			_attackAngle = 130;
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			_attackAngle = 90;
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			_attackAngle = 40;
+			break;
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			_attackAni[i]->start();
+		}
 	}
 	if (_combo >= 4 && _combocount > 10)
 		_combo = 0;
+
+	
 }
+
+
+

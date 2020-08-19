@@ -44,8 +44,10 @@ private:
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
-
-
+	
+	image* _attackImg;				//근거리 이펙트용
+	animation* _attackAni[40];		//근거리 이펙트용
+	float _attackAngle;			//근거리 이펙트용
 	vector<playerState*>	_vState;
 
 	POINT tileIndex;
@@ -59,6 +61,8 @@ private:
 	int _combocount;	//근거리 콤보용
 	int _combo;			//근거리 콤보용
 
+	int _attackEffectCount;	//근거리 이펙트용
+	int _attackCount;		//근거리 이펙트용
 	
 	bool _isEffect;
 	int _fullCount;	//원거리공격 충전시간
