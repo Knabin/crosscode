@@ -29,6 +29,7 @@ HRESULT boss::init()
 	_randomAttackCount = 0;
 	_mineAttackDelay = 0;
 	_stoneAttackDelay = 0;
+	_flamethrowerDelay = 0;
 	_chargeCount = 0;
 
 	//================================================================================================================================================================//
@@ -115,7 +116,7 @@ HRESULT boss::init()
 	_stoneshower->init(_Center._x + 215, _Center._y - 999);
 
 	_flamethrower = new flamethrower;
-	_flamethrower->init(_Center._x, _Center._y + 450);
+	_flamethrower->init(_Center._x + 385, _Center._y + 525);
 
 	return S_OK;
 }
@@ -780,8 +781,12 @@ void boss::bossState()
 
 	case FLAMETHROWER:
 	{
+		_flamethrowerDelay++;
 
-
+		if (_flamethrowerDelay % 10 == 0)
+		{
+			_flamethrower->fire();
+		}
 
 	}
 	break;

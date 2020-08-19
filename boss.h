@@ -113,6 +113,9 @@ private:
 	//바위 발사 딜레이
 	int _stoneAttackDelay;
 
+	//화염방사 공격 딜레이
+	int _flamethrowerDelay;
+
 public:
 
 	boss();

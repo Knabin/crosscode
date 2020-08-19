@@ -35,7 +35,7 @@ void collisionManager::render()
 
 void collisionManager::buffaloCollision()
 {
-	
+	/*
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::ENEMY, "buffalo");
 
 	for (int i = 0; i < temp.size(); i++)
@@ -153,12 +153,12 @@ void collisionManager::buffaloCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	
+	*/
 }
 
 void collisionManager::hedgehagCollision()
 {
-	
+	/*
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::ENEMY, "hedgehag");
 
 	for (int i = 0; i < temp.size(); i++)
@@ -309,12 +309,12 @@ void collisionManager::hedgehagCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	
+	*/
 }
 
 void collisionManager::meerkatCollision()
 {
-	
+	/*
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::ENEMY, "meerkat");
 
 	for (int i = 0; i < temp.size(); i++)
@@ -427,7 +427,7 @@ void collisionManager::meerkatCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-	
+	*/
 }
 
 void collisionManager::bulletCollision()
