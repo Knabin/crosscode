@@ -319,9 +319,6 @@ void player::update()
 	{
 		playerMeleeattack();
 	}
-	
-	// 방향 ENUM
-	// 그 방향대로 angle
 
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))	// 가까우면 근접 , 멀면 원거리 공격
 	{
@@ -474,7 +471,6 @@ void player::update()
 		_dodgeCharge = 0;
 	}
 
-
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	_state->updateState();
 
@@ -580,16 +576,9 @@ void player::render()
 		D2D1::ColorF::Aqua, 0);
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[2].y][next[2].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);
+	*/
 
-	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[3].y][next[3].x]->getRect()),
-		D2D1::ColorF::Aqua, 0);
-	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[4].y][next[4].x]->getRect()),
-		D2D1::ColorF::Aqua, 0);
-	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[5].y][next[5].x]->getRect()),
-		D2D1::ColorF::Aqua, 0);*/
-
-	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] ||
-		_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
+	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
 		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
 	{
 		float angle = getAngle(_position.x, _position.y,
@@ -678,6 +667,7 @@ void player::render()
 		}
 	}
 	//=======================================================================================
+	_bullet->render();
 }
 
 void player::playerMove()

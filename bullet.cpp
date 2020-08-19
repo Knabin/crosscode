@@ -41,7 +41,6 @@ void bullet::render()
 {
 	for (int i = 0; i < _vPlayerBullet.size(); i++)
 	{
-		//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_vPlayerBullet[i].rc));
 		_vPlayerBullet[i].image->frameRender(CAMERA->getRelativeVector2(_vPlayerBullet[i].rc.getCenter()), _vPlayerBullet[i].currentFrameX, _vPlayerBullet[i].currentFrameY);
 		IMAGEMANAGER->findImage("player_bulletEffect")->setAlpha(_alpha);
 		IMAGEMANAGER->findImage("player_bulletEffect")->render(CAMERA->getRelativeVector2(_vPlayerBullet[i].rc.getCenter().x - 24, _vPlayerBullet[i].rc.getCenter().y - 23));

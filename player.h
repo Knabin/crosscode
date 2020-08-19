@@ -46,11 +46,11 @@ private:
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
+	bullet* _bullet;
 	
 	image* _attackImg;				//근거리 이펙트용
 	animation* _attackAni[40];		//근거리 이펙트용
 	float _attackAngle;			//근거리 이펙트용
-	bullet* _bullet;
 
 	vector<playerState*>	_vState;
 
