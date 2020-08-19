@@ -1308,7 +1308,7 @@ void player::playerJumpMove()
 		_nowOrder = _backOrder;
 	}*/
 
-	cout << _beginOrder << endl;
+	//cout << _beginOrder << endl;
 	// ÃþÀÌ °°´Ù¸é
 	//if (ti->getOrderIndex() == _nowOrder)
 	{
