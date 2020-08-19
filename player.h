@@ -51,6 +51,8 @@ private:
 	POINT tileIndex;
 	RECT rcCollision;
 	int _nowOrder;
+	int _backOrder;
+	int _beginOrder;
 	int _count;
 
 	int _jumpCount;
@@ -72,9 +74,10 @@ private:
 
 	float _jumpPower;
 	float _gravity;
+	bool _jumping;
 
 	floatRect _tileRect;
-	POINT next[3];
+	POINT next[6];
 
 public:
 	player();

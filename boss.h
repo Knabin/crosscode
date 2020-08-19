@@ -3,21 +3,12 @@
 #include "icethrower.h"
 #include "mine.h"
 #include "stoneshower.h"
+#include "flamethrower.h"
 
 enum bossState //보스 상태패턴 enum문
 {
-	//======================================등장할 것이오======================================//
-
 	APPEARANCE = 0,
-
-	//======================================이동할 것이오======================================//
-
 	STOP,
-	MOVEUP,
-	MOVEDOWN,
-
-	//======================================공격할 것이오======================================//
-
 	ICETHROWER_READY,
 	ICETHROWER_READY2,
 	ICETHROWER,
@@ -31,7 +22,11 @@ enum bossState //보스 상태패턴 enum문
 	STONESHOWER_READY2,
 	STONESHOWER_READY3,
 	STONESHOWER,
-	STONESHOWER_END
+	STONESHOWER_END,
+	FLAMETHROWER_READY,
+	FLAMETHROWER_READY2,
+	FLAMETHROWER,
+	FLAMETHROWER_END
 };
 struct tagBossPart  //보스 파츠별 구조체
 {
@@ -68,6 +63,7 @@ private:
 	icethrower* _icethrower;
 	mine* _mine;
 	stoneshower* _stoneshower;
+	flamethrower* _flamethrower;
 
 	image* image;
 	bossState _bossState;		//상태 패턴
@@ -88,6 +84,8 @@ private:
 	int _bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY;
 	int _bossCenterMoveFrameX, _bossCenterMoveFrameY;
 	int _bossRightHandAttackFrameX, _bossRightHandAttackFrameY;
+	int _bossRightHandAttackFrameX2, _bossRightHandAttackFrameY2;
+	int _bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY;
 
 	//보스 방어막 프레임
 	int _protectCurrentFrameX, _protectCurrentFrameY;
@@ -110,10 +108,6 @@ private:
 
 	//바위 발사 딜레이
 	int _stoneAttackDelay;
-
-	int _dustCurrentFrameX, _dustCurrentFrameY;
-	int _dustFrameX, _dustFrameY;
-	int _dustFrameCount;
 
 public:
 

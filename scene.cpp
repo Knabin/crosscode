@@ -10,6 +10,8 @@
 #include "puzzleTabButton.h"
 #include "puzzleComboButton.h"
 #include "puzzleDestruct.h"
+#include "puzzleBlueWall.h"
+#include "puzzleOrangeWall.h"
 //#include "tile.h"
 
 scene::~scene()
@@ -179,9 +181,40 @@ void scene::getTilesFromFile(string fileName)
 					{
 						{
 							puzzleDestruct* puzzle = new puzzleDestruct();
-							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x - SIZE, v[j]->getRect().getCenter().y });
+							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x - SIZE * 0.5f, v[j]->getRect().getCenter().y });
 							puzzle->init();
 							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
+						}
+					}
+					else if (oy == 5)
+					{
+						switch (ox)
+						{
+						case 0:	// ²ªÀÎ ³×¸ð
+						{
+							puzzleBlueWall* wall = new puzzleBlueWall(ox);
+							wall->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().getCenter().y });
+							wall->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
+						}
+						break;
+						case 1:	// ±ä ³×¸ð
+						{
+							puzzleBlueWall* wall = new puzzleBlueWall(ox);
+							wall->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().getCenter().y});
+							wall->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
+						}
+						break;
+						case 2: // ÂªÀ½
+						case 3: // ±ç
+						{
+							puzzleOrangeWall* wall = new puzzleOrangeWall(ox % 2);
+							wall->setPosition(Vector2{ v[j]->getRect().getCenter() });
+							wall->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
+						}
+						break;
 						}
 					}
 				}

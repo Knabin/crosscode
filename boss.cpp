@@ -15,12 +15,11 @@ HRESULT boss::init()
 	bossInitialization();
 
 	//_bossState = APPEARANCE;
-	//_bossState = STOP;
+	_bossState = STOP;
 	//_bossState = ICETHROWER_READY;
 	//_bossState = MINE_READY;
-	_bossState = STONESHOWER_READY;
-
-	_dustCurrentFrameX, _dustCurrentFrameY, _dustFrameCount = 0;
+	//_bossState = STONESHOWER_READY;
+	//_bossState = FLAMETHROWER_READY;
 
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
@@ -49,13 +48,17 @@ HRESULT boss::init()
 
 	IMAGEMANAGER->addImage("왼팔", L"images/boss/left_arm.png");
 	IMAGEMANAGER->addImage("왼손", L"images/boss/left_hand.png");
+	IMAGEMANAGER->addImage("왼손움직임3", L"images/boss/left_hand_move3.png");
 
 	IMAGEMANAGER->addFrameImage("왼손공격", L"images/boss/left_hand_attack.png", 20, 2);
+	IMAGEMANAGER->addFrameImage("왼손움직임1", L"images/boss/left_hand_move.png", 4, 1);
+	IMAGEMANAGER->addFrameImage("왼손움직임2", L"images/boss/left_hand_move2.png", 4, 1);
 
 	IMAGEMANAGER->addImage("오른팔", L"images/boss/right_arm.png");
 	IMAGEMANAGER->addImage("오른손", L"images/boss/right_hand.png");
 
 	IMAGEMANAGER->addFrameImage("오른손공격", L"images/boss/right_hand_attack2.png", 8, 1);
+	IMAGEMANAGER->addFrameImage("오른손공격2", L"images/boss/right_hand_attack.png", 4, 1);
 
 	//================================================================================================================================================================//
 
@@ -110,6 +113,9 @@ HRESULT boss::init()
 	_stoneshower = new stoneshower;
 	_stoneshower->init(_Center._x + 215, _Center._y - 999);
 
+	_flamethrower = new flamethrower;
+	_flamethrower->init();
+
 	return S_OK;
 }
 
@@ -141,6 +147,12 @@ void boss::update()
 
 	_stoneshower->update();
 
+	_flamethrower->update();
+
+	if (KEYMANAGER->isOnceKeyDown('Q'))
+	{
+		_bossState = FLAMETHROWER_READY;
+	}
 
 }
 
@@ -156,6 +168,8 @@ void boss::render()
 	_mine->render(_Center._x + 115, _Center._y + 50);
 
 	_stoneshower->render();
+
+	_flamethrower->render();
 }
 
 void boss::bossState()
@@ -209,15 +223,13 @@ void boss::bossState()
 	}
 	break;
 	*/
-
-	case MOVEUP:
-	case MOVEDOWN:
 	case STOP:
 	{
-		
+		_currentFrameX = 0;
 		_randomAttackCount++;
 		bossInitialization();
 		
+		/*
 		if (_randomAttackCount >= 200)
 		{
 			_randomAttackCount = 0;
@@ -226,7 +238,7 @@ void boss::bossState()
 
 			if (_randomAttack == 1)
 			{
-				_bossState = MINE_READY;
+				_bossState = STONESHOWER_READY;
 			}
 			
 			else if (_randomAttack == 2)
@@ -236,11 +248,11 @@ void boss::bossState()
 			
 			else
 			{
-				_bossState = ICETHROWER_READY;
+				_bossState = STONESHOWER_READY;
 			}
 
 		}
-		
+		*/
 	}
 	break;
 
@@ -267,7 +279,7 @@ void boss::bossState()
 		{
 			_motionDelay++;
 
-			if (_motionDelay < 20)
+			if (_motionDelay < 15)
 			{
 				_RightArm._angle += 0.012f;
 				_RightHand._angle += 0.012f;
@@ -282,7 +294,7 @@ void boss::bossState()
 				_Center._angle -= 0.2f;
 			}
 
-			if (_motionDelay >= 20)
+			if (_motionDelay >= 15)
 			{
 				_motionDelay = 0;
 				_bossState = ICETHROWER_READY2;
@@ -309,7 +321,7 @@ void boss::bossState()
 		_LeftHand._realAngle -= 0.8f;
 
 
-		_Center._angle -= 0.2f;
+		_Center._angle -= 0.3f;
 
 		if (_RightHand._rectBody.top < _Center._y + 50)
 		{
@@ -322,6 +334,7 @@ void boss::bossState()
 	case ICETHROWER:
 	{
 		_icethrowerDelay++;
+		_Center._angle += 0.042f;
 
 		if (_icethrowerDelay % 5 == 0)
 		{
@@ -497,7 +510,7 @@ void boss::bossState()
 		_RightArm._realAngle -= 1.2f * 2.0f;
 		_RightHand._realAngle -= 0.8f * 2.0f;
 
-		_Center._angle -= 0.6f;
+		_Center._angle -= 0.65f;
 
 		if (_RightHand._rectBody.top < WINSIZEY / 2 - 75)
 		{
@@ -569,7 +582,7 @@ void boss::bossState()
 			_RightArm._center.x -= 2.5f;
 			_RightArm._center.y += 3.5f * 6;
 
-			_Center._angle += 0.6f;
+			_Center._angle += 0.65f;
 
 			if (_frameCount % 3 == 0)
 			{
@@ -599,6 +612,7 @@ void boss::bossState()
 	{
 		_motionDelay++;
 		_stoneAttackDelay++;
+		_Center._angle += 0.047f;
 
 		if (_stoneAttackDelay % 8 == 0)
 		{
@@ -625,11 +639,9 @@ void boss::bossState()
 	}
 	break;
 
-
 	case STONESHOWER_END:
 	{		
-		_bossRightHandAttackFrameX = 0;
-
+		
 		_LeftArm._angle += 0.003f / 9;
 		_LeftHand._angle += 0.006f / 12;
 		_LeftArm._realAngle -= 0.12f / 3;
@@ -646,8 +658,6 @@ void boss::bossState()
 		_LeftArm._center.x += 0.02f;
 		_LeftArm._center.y += 0.09f;
 
-		_Center._angle = 0;
-
 		if (_RightHand._rectBody.top < WINSIZEY / 2 - 50)
 		{
 			_bossState = STOP;
@@ -656,6 +666,76 @@ void boss::bossState()
 	}
 	break;
 
+	case FLAMETHROWER_READY:
+	{
+		
+		_LeftArm._center.x -= 0.2f;
+		_LeftArm._center.y += 0.5f;
+
+		_LeftArm._angle += 0.024f;
+		_LeftHand._angle += 0.016f;
+		_LeftArm._realAngle -= 1.2f;
+		_LeftHand._realAngle -= 5.4f;
+
+
+		_RightArm._center.y += 1.8f / 1.5f;
+
+		_RightArm._angle -= 0.036f / 1.5f;
+		_RightHand._angle -= 0.032f / 1.5f;
+		_RightArm._realAngle += 1.6f / 1.5f;
+		_RightHand._realAngle += 0.44f / 1.5f;
+
+		_bossRightHandAttackFrameY2 = 0;
+		_bossLeftHandMoveFrameY = 0;
+
+		if (_frameCount % 12 == 0)
+		{
+			if (_currentFrameX >= IMAGEMANAGER->findImage("오른손공격2")->getMaxFrameX() &&
+				_currentFrameX >= IMAGEMANAGER->findImage("왼손움직임1")->getMaxFrameX())
+			{
+				_currentFrameX = 0;
+			}
+			_bossLeftHandMoveFrameX = _currentFrameX;
+			_bossRightHandAttackFrameX2 = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+		}
+
+
+		if (_RightHand._rectBody.bottom > WINSIZEY / 2 + 90)
+		{
+			_bossState = FLAMETHROWER_READY2;
+		}
+
+
+	}
+	break;
+
+	case FLAMETHROWER_READY2:
+	{
+		moveUp();
+		
+
+		if (_Center._y < WINSIZEY / 2 - 300)
+		{
+			_bossState = FLAMETHROWER;
+		}
+
+
+	}
+	break;
+
+	case FLAMETHROWER:
+	{
+
+	}
+	break;
+
+	case FLAMETHROWER_END:
+	{
+
+	}
+	break;
 
 
 	}
@@ -727,14 +807,6 @@ void boss::bossMove()
 
 void boss::bossDraw()
 {
-	// ~~~~나빈 주석~~~~ 읽고 나서 필요 없으면 지우세용
-	// 혜성 오빠!!! left에서 마이너스하는 기준이 어떤 건지 모르겠어서 센터로 수정 안 해 놨어용
-	// 중점에 렌더하는 거라면 floatRect의 getCenter()에 렌더하길 바람!
-	// ex) 이미지->render(CAMERA->getRelativeVector2(_Bottom._rectBody.getCenter()));
-
-	//자주 움직이는 양팔과 양손은 중점 x,y 를 기준으로 렌더
-	//그 외는 rect left,top에 렌더를 했습니다.
-
 	//바텀
 	IMAGEMANAGER->findImage("보스바텀")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left - 175, _Bottom._rectBody.top - 60)));
 
@@ -756,13 +828,12 @@ void boss::bossDraw()
 			_bossCenterMoveFrameX, _bossCenterMoveFrameY);
 	}
 
-	else if (_bossState == STONESHOWER_READY2 || _bossState == STONESHOWER_READY3)
+	else if (_bossState == ICETHROWER || _bossState == STONESHOWER_READY2 || _bossState == STONESHOWER_READY3)
 	{
-		IMAGEMANAGER->findImage("보스몸통우")->setAngle(_Center._angle);
 		IMAGEMANAGER->findImage("보스몸통우")->render(CAMERA->getRelativeVector2(Vector2((_Center._rectBody.left - 191) - 20, _Center._rectBody.top - 193)));
 	}
 
-	else if (_bossState == STONESHOWER)
+	else if (_bossState == STONESHOWER || _bossState == STONESHOWER_END)
 	{
 		IMAGEMANAGER->findImage("보스몸통하")->render(CAMERA->getRelativeVector2(Vector2((_Center._rectBody.left - 191), (_Center._rectBody.top - 193) + 25)));
 	}
@@ -778,6 +849,17 @@ void boss::bossDraw()
 	{
 		IMAGEMANAGER->findImage("왼손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 50, _LeftHand._centerEnd.y + 225)),
 		_bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY);
+	}
+	else if (_bossState == FLAMETHROWER_READY)
+	{
+		IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
+		IMAGEMANAGER->findImage("왼손움직임1")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 50, _LeftHand._centerEnd.y + 225)),
+			_bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY);
+	}
+	else if (_bossState == FLAMETHROWER_READY2 || _bossState == FLAMETHROWER)
+	{
+		IMAGEMANAGER->findImage("왼손")->setAngle(_LeftHand._realAngle);
+		IMAGEMANAGER->findImage("왼손움직임3")->render(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 135, _LeftHand._centerEnd.y - 100)));
 	}
 	else
 	{
@@ -803,7 +885,12 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("오른손공격")->setAngle(_RightHand._realAngle);
 		IMAGEMANAGER->findImage("오른손공격")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200)),
 			_bossRightHandAttackFrameX, _bossRightHandAttackFrameY);
-
+	}
+	else if (_bossState == FLAMETHROWER_READY || _bossState == FLAMETHROWER_READY2 || _bossState == FLAMETHROWER)
+	{
+		IMAGEMANAGER->findImage("오른손공격2")->setAngle(_RightHand._realAngle);
+		IMAGEMANAGER->findImage("오른손공격2")->frameRender(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y + 200)),
+			_bossRightHandAttackFrameX2, _bossRightHandAttackFrameY2);
 	}
 	else
 	{
@@ -982,7 +1069,7 @@ void boss::fireCollision()
 	for (int i = 0; i < _icethrower->getIcethrowerVector().size(); i++)
 	{
 
-		if (WINSIZEY + 1600 < _icethrower->getIcethrowerVector()[i]._rc.bottom)
+		if (WINSIZEY + 800 < _icethrower->getIcethrowerVector()[i]._rc.bottom)
 		{
 			_icethrower->removeFire(i);
 			break;
