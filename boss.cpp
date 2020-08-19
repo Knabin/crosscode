@@ -115,7 +115,7 @@ HRESULT boss::init()
 	_stoneshower->init(_Center._x + 215, _Center._y - 999);
 
 	_flamethrower = new flamethrower;
-	_flamethrower->init();
+	_flamethrower->init(_Center._x, _Center._y + 450);
 
 	return S_OK;
 }
@@ -149,11 +149,6 @@ void boss::update()
 	_stoneshower->update();
 
 	_flamethrower->update();
-
-	if (KEYMANAGER->isOnceKeyDown('Q'))
-	{
-		_bossState = FLAMETHROWER_READY;
-	}
 
 }
 
@@ -773,7 +768,7 @@ void boss::bossState()
 	{
 		_chargeCount++;
 
-		if (_chargeCount >= 350)
+		if (_chargeCount >= 250)
 		{
 			_chargeCount = 0;
 			_bossState = FLAMETHROWER;
@@ -966,15 +961,16 @@ void boss::bossDraw()
 	}
 
 	//기모으기
-	if (_bossState == FLAMETHROWER_READY4 && _chargeCount < 300)
+	if (_bossState == FLAMETHROWER_READY4 && _chargeCount < 200)
 	{
 		_flamethrower->chargeDraw(_RightHand._centerEnd.x - 30, _RightHand._centerEnd.y + 255);
 	}
-	if (_bossState == FLAMETHROWER_READY4 && _chargeCount >= 300)
+	if (_bossState == FLAMETHROWER_READY4 && _chargeCount >= 200)
 	{
 		_flamethrower->chargeDraw2(_RightHand._centerEnd.x - 30, _RightHand._centerEnd.y + 255);
 	}
 
+	//_flamethrower->fireEffectDraw();
 
 	//================================================================================================================================================================//
 
@@ -1026,43 +1022,43 @@ void boss::moveUp()
 
 	if (_moveCount < 17)
 	{	
-		_LeftArm._angle += 0.01f / 10;
-		_LeftHand._angle += 0.001f / 10;
-		_RightArm._angle += 0.01f / 10;
-		_RightHand._angle += 0.001f / 10;
-		_LeftArm._center.x += 0.5f;
-		_LeftArm._center.y += 1.0f;
-		_RightArm._center.x -= 0.5f;
-		_RightArm._center.y -= 1.0f;
-		_Center._angle -= 0.1f;
+		_LeftArm._angle += 0.01f / 40;
+		_LeftHand._angle += 0.001f / 40;
+		_RightArm._angle += 0.01f / 40;
+		_RightHand._angle += 0.001f / 40;
+		_LeftArm._center.x += 0.5f / 4;
+		_LeftArm._center.y += 1.0f / 4;
+		_RightArm._center.x -= 0.5f / 4;
+		_RightArm._center.y -= 1.0f / 4;
+		_Center._angle -= 0.01f;
 	}
 
 	
 	if (_moveCount >= 17 && _moveCount < 48)
 	{
-		_LeftArm._angle -= 0.01f / 10;
-		_LeftHand._angle -= 0.001f / 10;
-		_RightArm._angle -= 0.01f / 10;
-		_RightHand._angle -= 0.001f / 10;
-		_LeftArm._center.x -= 0.5f;
-		_LeftArm._center.y -= 1.0f;
-		_RightArm._center.x += 0.5f;
-		_RightArm._center.y += 1.0f;
-		_Center._angle += 0.1f;
+		_LeftArm._angle -= 0.01f / 40;
+		_LeftHand._angle -= 0.001f / 40;
+		_RightArm._angle -= 0.01f / 40;
+		_RightHand._angle -= 0.001f / 40;
+		_LeftArm._center.x -= 0.5f / 4;
+		_LeftArm._center.y -= 1.0f / 4;
+		_RightArm._center.x += 0.5f / 4;
+		_RightArm._center.y += 1.0f / 4;
+		_Center._angle += 0.01f;
 
 	}
 	
 	if (_moveCount >= 48 && _moveCount < 64)
 	{
-		_LeftArm._angle += 0.01f / 10;
-		_LeftHand._angle += 0.001f / 10;
-		_RightArm._angle += 0.01f / 10;
-		_RightHand._angle += 0.001f / 10;
-		_LeftArm._center.x += 0.5f;
-		_LeftArm._center.y += 1.0f;
-		_RightArm._center.x -= 0.5f;
-		_RightArm._center.y -= 1.0f;
-		_Center._angle -= 0.1f;
+		_LeftArm._angle += 0.01f / 40;
+		_LeftHand._angle += 0.001f / 40;
+		_RightArm._angle += 0.01f / 40;
+		_RightHand._angle += 0.001f / 40;
+		_LeftArm._center.x += 0.5f / 4;
+		_LeftArm._center.y += 1.0f / 4;
+		_RightArm._center.x -= 0.5f / 4;
+		_RightArm._center.y -= 1.0f / 4;
+		_Center._angle -= 0.01f;
 	}
 	
 	if (_moveCount >= 64)
@@ -1086,43 +1082,43 @@ void boss::moveDown()
 
 	if (_moveCount < 17)
 	{
-		_LeftArm._angle -= 0.01f / 10;
-		_LeftHand._angle -= 0.001f / 10;
-		_RightArm._angle -= 0.01f / 10;
-		_RightHand._angle -= 0.001f / 10;
-		_LeftArm._center.x -= 0.5f;
-		_LeftArm._center.y -= 1.0f;
-		_RightArm._center.x += 0.5f;
-		_RightArm._center.y += 1.0f;
-		_Center._angle += 0.1f;
+		_LeftArm._angle -= 0.01f / 40;
+		_LeftHand._angle -= 0.001f / 40;
+		_RightArm._angle -= 0.01f / 40;
+		_RightHand._angle -= 0.001f / 40;
+		_LeftArm._center.x -= 0.5f / 4;
+		_LeftArm._center.y -= 1.0f / 4;
+		_RightArm._center.x += 0.5f / 4;
+		_RightArm._center.y += 1.0f / 4;
+		_Center._angle += 0.01f;
 	}
 
 
 	if (_moveCount >= 17 && _moveCount < 48)
 	{
-		_LeftArm._angle += 0.01f / 10;
-		_LeftHand._angle += 0.001f / 10;
-		_RightArm._angle += 0.01f / 10;
-		_RightHand._angle += 0.001f / 10;
-		_LeftArm._center.x += 0.5f;
-		_LeftArm._center.y += 1.0f;
-		_RightArm._center.x -= 0.5f;
-		_RightArm._center.y -= 1.0f;
-		_Center._angle -= 0.1f;
+		_LeftArm._angle += 0.01f / 40;
+		_LeftHand._angle += 0.001f / 40;
+		_RightArm._angle += 0.01f / 40;
+		_RightHand._angle += 0.001f / 40;
+		_LeftArm._center.x += 0.5f / 4;
+		_LeftArm._center.y += 1.0f / 4;
+		_RightArm._center.x -= 0.5f / 4;
+		_RightArm._center.y -= 1.0f / 4;
+		_Center._angle -= 0.01f;
 
 	}
 
 	if (_moveCount >= 48 && _moveCount < 64)
 	{
-		_LeftArm._angle -= 0.01f / 10;
-		_LeftHand._angle -= 0.001f / 10;
-		_RightArm._angle -= 0.01f / 10;
-		_RightHand._angle -= 0.001f / 10;
-		_LeftArm._center.x -= 0.5f;
-		_LeftArm._center.y -= 1.0f;
-		_RightArm._center.x += 0.5f;
-		_RightArm._center.y += 1.0f;
-		_Center._angle += 0.1f;
+		_LeftArm._angle -= 0.01f / 40;
+		_LeftHand._angle -= 0.001f / 40;
+		_RightArm._angle -= 0.01f / 40;
+		_RightHand._angle -= 0.001f / 40;
+		_LeftArm._center.x -= 0.5f / 4;
+		_LeftArm._center.y -= 1.0f / 4;
+		_RightArm._center.x += 0.5f / 4;
+		_RightArm._center.y += 1.0f / 4;
+		_Center._angle += 0.01f;
 	}
 
 	if (_moveCount >= 64)

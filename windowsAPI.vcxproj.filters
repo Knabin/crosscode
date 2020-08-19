@@ -215,12 +215,14 @@
     <ClCompile Include="puzzleOrangeWall.cpp">
       <Filter>playGround\puzzle</Filter>
     </ClCompile>
-    <ClCompile Include="flamethrower.cpp" />
     <ClCompile Include="mine.cpp" />
     <ClCompile Include="townScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
     <ClCompile Include="mine.cpp" />
+    <ClCompile Include="flamethrower.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
@@ -442,7 +444,6 @@
     <ClInclude Include="puzzleDestruct.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
-    <ClInclude Include="flamethrower.h" />
     <ClInclude Include="puzzleBlueWall.h">
       <Filter>playGround\puzzle</Filter>
     </ClInclude>
@@ -454,6 +455,10 @@
     </ClInclude>
     <ClInclude Include="puzzleBlueWall.h" />
     <ClInclude Include="puzzleOrangeWall.h" />
+    <ClInclude Include="flamethrower.h">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
     <ClInclude Include="flamethrower.h">
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
