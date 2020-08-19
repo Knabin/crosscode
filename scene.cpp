@@ -129,7 +129,7 @@ void scene::getTilesFromFile(string fileName)
 						{
 							door* doo = new door();
 							doo->setType(ox % 3);
-							doo->setPosition(Vector2(v[j]->getRect().left, v[j]->getRect().top));
+							doo->setPosition(Vector2(v[j]->getRect().left, v[j]->getRect().top + SIZE * 0.5f));
 							doo->init();
 							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(doo));
 						}
@@ -215,6 +215,15 @@ void scene::getTilesFromFile(string fileName)
 							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
 						}
 						break;
+						}
+					}
+					else if (oy == 6)
+					{
+						{
+							mapObject* roof = new mapObject(2, 0);
+							roof->setPosition(Vector2{ v[j]->getRect().getCenter() });
+							roof->init();
+							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(roof));
 						}
 					}
 				}

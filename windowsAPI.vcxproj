@@ -177,9 +177,11 @@
     <ClInclude Include="iEvent.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
+    <ClInclude Include="initLoadingScene.h" />
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="meerkat.h" />
@@ -215,6 +217,7 @@
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="titleScene.h" />
+    <ClInclude Include="townScene.h" />
     <ClInclude Include="uiController.h" />
     <ClInclude Include="uiObject.h" />
     <ClInclude Include="utils.h" />
@@ -253,9 +256,11 @@
     <ClCompile Include="iEvent.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="initLoadingScene.cpp" />
     <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="meerkat.cpp" />
@@ -293,6 +298,7 @@
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="titleScene.cpp" />
+    <ClCompile Include="townScene.cpp" />
     <ClCompile Include="uiController.cpp" />
     <ClCompile Include="uiObject.cpp" />
     <ClCompile Include="utils.cpp" />
