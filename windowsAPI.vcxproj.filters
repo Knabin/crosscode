@@ -223,6 +223,12 @@
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
+    <ClCompile Include="initLoadingScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
@@ -451,6 +457,12 @@
       <Filter>playGround\puzzle</Filter>
     </ClInclude>
     <ClInclude Include="townScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="initLoadingScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="loadingScene.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
     <ClInclude Include="puzzleBlueWall.h" />

@@ -177,9 +177,11 @@
     <ClInclude Include="iEvent.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
+    <ClInclude Include="initLoadingScene.h" />
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="meerkat.h" />
@@ -254,9 +256,11 @@
     <ClCompile Include="iEvent.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="initLoadingScene.cpp" />
     <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="meerkat.cpp" />
