@@ -7,6 +7,7 @@
 #include "bossTestScene.h"
 #include "puzzleScene.h"
 #include "mountainScene.h"
+#include "townScene.h"
 
 
 playGround::playGround()
@@ -39,6 +40,7 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
 	SCENEMANAGER->addScene("puzzle", new puzzleScene());
 	SCENEMANAGER->addScene("mountain", new mountainScene());
+	SCENEMANAGER->addScene("town", new townScene());
 	SCENEMANAGER->loadScene("title");
 
 
@@ -48,6 +50,8 @@ HRESULT playGround::init()
 	// addEffect(이펙트 이름, 이미지 이름, fps, elapsedTime, 버퍼(여러 개 동시에 쓸 거면 적당히 잡기), 크기(scale))
 	EFFECTMANAGER->addEffect("test", "test", 1, 1.0f, 5, 5.0f);
 
+	//IMAGEMANAGER->addImage(cursor)
+
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
@@ -55,6 +59,9 @@ HRESULT playGround::init()
 	_ui->init();
 
 	_test = 0.f;
+
+	ShowCursor(false);
+
 	return S_OK;
 }
 
@@ -98,11 +105,14 @@ void playGround::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F8))
 	{
+		SCENEMANAGER->loadScene("town");
+		/*
 		_test += 30.f;
 		// ============== 이펙트 회전해서 사용하는 법! =================
 		// play(이펙트 이름, 위치, 위치, 앵글값)
 		//EFFECTMANAGER->play("test", 200, 200, _test);
 		EFFECTMANAGER->play("test", Vector2(200, 200), 180, 0.3f);
+		*/
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('1'))
@@ -138,11 +148,16 @@ void playGround::render()
 		//=================================================
 
 		SCENEMANAGER->render();
+		EFFECTMANAGER->render();
 		OBJECTMANAGER->render();
 		TIMEMANAGER->render();
 		_ui->render();
-		EFFECTMANAGER->render();
 		//_enemyManager->render();
+
+		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn())
+		{
+		//	render
+		}
 
 		//=============================================
 	}

@@ -9,8 +9,8 @@ HRESULT hedgehag::init()
 	IMAGEMANAGER->addFrameImage("enemyHedgehogDust", L"images/enemy/hedgehogDust.png", 5, 2);
 	IMAGEMANAGER->addFrameImage("enemyHedgehogMoveDust", L"images/enemy/hedgehogMoveDust.png", 5, 1);
 
-	EFFECTMANAGER->addEffect("enemyHedgehogDust", "enemyHedgehogDust", 1.0f, 0.5f, 200, 1.0f);//공격상태에서 제자리에 나오는 먼지 이펙트
-	EFFECTMANAGER->addEffect("enemyHedgehogMoveDust", "enemyHedgehogMoveDust", 1.0f, 0.5f, 200, 1.0f);//공격상태에서 움직이는중에 나오는 먼지 이펙트
+	EFFECTMANAGER->addEffect("enemyHedgehogDust", "enemyHedgehogDust", 1.0f, 0.5f, 5, 1.0f);//공격상태에서 제자리에 나오는 먼지 이펙트
+	EFFECTMANAGER->addEffect("enemyHedgehogMoveDust", "enemyHedgehogMoveDust", 1.0f, 0.5f, 5, 1.0f);//공격상태에서 움직이는중에 나오는 먼지 이펙트
 
 	_name = "hedgehag";
 
@@ -194,12 +194,12 @@ void hedgehag::update()
 	angry();//에너미의 체력이 절반 이하가 되면 능력치 상승(공격력, 스피드, 공격딜레이)
 	if (_effect)//에너미가 공격상태에서 움직이지 않은경우
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 25, CAMERA->getRelativeVector2(_position).y);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 25, CAMERA->getRelativeVector2(_position).y);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x, CAMERA->getRelativeVector2(_position).y + 40);
+		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 40, CAMERA->getRelativeVector2(_position).y + 40);
 	}
 	if (!_effect && _isAttack)//에너미가 공격상태이고 움직였을경우
 	{
-		EFFECTMANAGER->play("enemyHedgehogMoveDust", CAMERA->getRelativeVector2(_position).x, CAMERA->getRelativeVector2(_position).y);
+		EFFECTMANAGER->play("enemyHedgehogMoveDust", CAMERA->getRelativeVector2(_position).x + 20, CAMERA->getRelativeVector2(_position).y + 40);
 	}
 }
 

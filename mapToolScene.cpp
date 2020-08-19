@@ -988,6 +988,7 @@ void mapToolScene::renderPreviewTile()
 					else
 					{
 						img = IMAGEMANAGER->findImage("door prev");
+						width = SIZE * 0.5f;
 					}
 					break;
 				case 1:
@@ -1485,6 +1486,7 @@ void mapToolScene::redrawMap()
 			else
 			{
 				img = IMAGEMANAGER->findImage("door prev");
+				width = SIZE * 0.5f;
 				frameX -= 3;
 			}
 			break;
