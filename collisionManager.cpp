@@ -22,7 +22,6 @@ void collisionManager::release()
 
 void collisionManager::update()
 {
-	//playerCollision();//플레이어렉트에 에너미 렉트가 충돌시
 	enemyCollision();//에너미끼리 충돌
 	buffaloCollision();//버팔로랑 플레이어 충돌처리
 	hedgehagCollision();//고슴도치랑 플레이어 충돌처리
@@ -385,144 +384,6 @@ void collisionManager::meerkatCollision()
 	}
 }
 
-void collisionManager::playerCollision()
-{
-	/*
-	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
-
-	for (int i = 0; i < temp.size(); i++)
-	{
-		enemy* e = dynamic_cast<enemy*>(temp[i]);
-		if (isCollision(_player->getRect(), e->getEnemyAttackRect()))//에너미 공격렉트와 플레이어 렉트가 충돌했으면
-		{
-			_count++;
-			if (_count % 10 == 0)//충돌한 이후 에너미의 공격 상태값을 변경하기까지의 딜레이
-			{
-				_count = 0;//딜레이 초기화
-				//_player->setPlayerHP(e->getEnemyAttackPower());//에너미의 공격력 만큼 플레이어에게 데미지주기
-			}
-			e->setEnemyAttackRect();//에너미의 공격렉트 제거
-		}
-
-		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-		RECT rcInter;
-
-		RECT rcHold;
-		rcHold.left = FLOAT_TO_INT(e->getRect().left);
-		rcHold.right = FLOAT_TO_INT(e->getRect().right);
-		rcHold.top = FLOAT_TO_INT(e->getRect().top);
-		rcHold.bottom = FLOAT_TO_INT(e->getRect().bottom);
-
-		RECT rcMove;
-		rcMove.left = FLOAT_TO_INT(_player->getRect().left);
-		rcMove.right = FLOAT_TO_INT(_player->getRect().right);
-		rcMove.top = FLOAT_TO_INT(_player->getRect().top);
-		rcMove.bottom = FLOAT_TO_INT(_player->getRect().bottom);
-
-		if (IntersectRect(&rcInter, &rcHold, &rcMove))
-		{
-			int interW = rcInter.right - rcInter.left;
-			int interH = rcInter.bottom - rcInter.top;
-
-			if (!e->getEnemyIsAttack())//에너미가 공격상태가 아닐경우에만 충돌처리
-			{
-				if (interW > interH)//수직충돌(위아래)
-				{
-					//위에서 부딪혔을때
-					if (rcInter.top == rcHold.top)
-					{
-						_player->setPlayerY(_player->getRect().getCenter().y - interH);
-					}
-					//아래에서 부딪혔을때
-					else if (rcInter.bottom == rcHold.bottom)
-					{
-						_player->setPlayerY(_player->getRect().getCenter().y + interH);
-					}
-				}
-				else//양옆에서 충돌했을때
-				{
-					//왼족에서 충돌했을때
-					if (rcInter.left == rcHold.left)
-					{
-						_player->setPlayerX(_player->getRect().getCenter().x - interW);
-					}
-					//오른쪽에서 충돌했을때
-					else if (rcInter.right == rcHold.right)
-					{
-						_player->setPlayerX(_player->getRect().getCenter().x + interW);
-					}
-				}
-			}
-		}
-		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-	}
-	//에너미 공격렉트랑 플레이어가 충돌시
-
-	for (int i = 0; i < temp.size(); i++)
-	{
-		buffalo* b = dynamic_cast<buffalo*>(temp[i]);
-		if (b == NULL) continue;
-		
-		if (isCollision(_player->getRect(), b->getEnemyAttackRect()))
-		{
-			_player->setPlayerPlusX(cosf(b->getEnemyAngle()) * 10.0f);
-			_player->setPlayerPlusY(-sinf(b->getEnemyAngle()) * 10.0f);
-			//b->setBuffaloIsAttack(false);
-		}
-
-		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-		RECT rcInter;
-
-		RECT rcHold;
-		rcHold.left = FLOAT_TO_INT(b->getRect().left);
-		rcHold.right = FLOAT_TO_INT(b->getRect().right);
-		rcHold.top = FLOAT_TO_INT(b->getRect().top);
-		rcHold.bottom = FLOAT_TO_INT(b->getRect().bottom);
-
-		RECT rcMove;
-		rcMove.left = FLOAT_TO_INT(_player->getRect().left);
-		rcMove.right = FLOAT_TO_INT(_player->getRect().right);
-		rcMove.top = FLOAT_TO_INT(_player->getRect().top);
-		rcMove.bottom = FLOAT_TO_INT(_player->getRect().bottom);
-
-		if (IntersectRect(&rcInter, &rcHold, &rcMove) && !b->getBuffaloAttack())
-		{
-			int interW = rcInter.right - rcInter.left;
-			int interH = rcInter.bottom - rcInter.top;
-
-			if (interW > interH)//수직충돌(위아래)
-			{
-				//위에서 부딪혔을때
-				if (rcInter.top == rcHold.top)
-				{
-					_player->setPlayerY(_player->getRect().getCenter().y - interH);
-				}
-				//아래에서 부딪혔을때
-				else if (rcInter.bottom == rcHold.bottom)
-				{
-					_player->setPlayerY(_player->getRect().getCenter().y + interH);
-				}
-			}
-			else//양옆에서 충돌했을때
-			{
-				//왼족에서 충돌했을때
-				if (rcInter.left == rcHold.left)
-				{
-					_player->setPlayerX(_player->getRect().getCenter().x - interW);
-				}
-				//오른쪽에서 충돌했을때
-				else if (rcInter.right == rcHold.right)
-				{
-					_player->setPlayerX(_player->getRect().getCenter().x + interW);
-				}
-			}
-		}
-		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
-	}
-	//에너미 공격렉트랑 플레이어가 충돌시
-	*/
-}
-
 void collisionManager::bulletCollision()
 {
 	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
@@ -538,6 +399,7 @@ void collisionManager::bulletCollision()
 		{
 			if (isCollision(_player->getRect(), m->getBullets()->getvEnemyBullet()[j].rc))//미어캣의 총알이 플레이어 렉트에 충돌했으면
 			{
+				EFFECTMANAGER->play("enemyMeerkatBallEffect", CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).x + 25, CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).y + 25);
 				m->getBullets()->remove(j);//해당 총알의 벡터를 삭제
 				break;
 			}

@@ -138,10 +138,10 @@ void playGround::render()
 		//=================================================
 
 		SCENEMANAGER->render();
+		EFFECTMANAGER->render();
 		OBJECTMANAGER->render();
 		TIMEMANAGER->render();
 		_ui->render();
-		EFFECTMANAGER->render();
 		//_enemyManager->render();
 
 		//=============================================
