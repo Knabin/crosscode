@@ -38,12 +38,14 @@ player::player()
 	_combo = 0;
 	_iscombo = false;
 	_fullCount = 0;
-
+	_attackEffectCount = 0;
 	_dodgeCount = 4; //닷지 기본 횟수
 	_lineCount = 3;
 
+	_attackCount = 0;
 	_state = new playerStateController(idle);
 	_position.y = 700;
+	_attackAngle = 0;
 }
 
 player::~player()
@@ -72,16 +74,32 @@ HRESULT player::init()
 
 	IMAGEMANAGER->addFrameImage("leftattackeffect", L"images/player/leftattackeffect.png", 7, 1);
 	IMAGEMANAGER->addFrameImage("rightattackeffect", L"images/player/rightattackeffect.png", 7, 1);
+	_attackImg = IMAGEMANAGER->addFrameImage("finalattackeffect", L"images/player/finalattackeffect.png", 4, 1);
 
-	EFFECTMANAGER->addEffect("leftattackeffect", "leftattackeffect",1,1.0f,5,1.0f);
-	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 1.0f, 5, 1.0f);
+	EFFECTMANAGER->addEffect("leftattackeffect", "leftattackeffect",1,0.5f,5,1.0f);
+	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 0.5f, 5, 1.0f);
+	EFFECTMANAGER->addEffect("finalattackeffect", "finalattackeffect", 1, 0.3f, 5, 1.0f);
 
+
+	//=================================== 근거리 이펙트 용=================================
+
+	for (int i = 0; i < 40; i++)
+	{
+		_attackAni[i] = new animation;
+		_attackAni[i]->init(_attackImg->getWidth(), _attackImg->getHeight(), _attackImg->getFrameSize().x, _attackImg->getFrameSize().y);
+		_attackAni[i]->setPlayFrame(0, 3, false, false);
+		_attackAni[i]->setFPS(3);
+	
+	}
+	//===================================================================================
 
 	_width = _height = 96;
 	_pivot = pivot::CENTER;
 	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 	_tile.update(Vector2(0, 0), Vector2(48, 48), pivot::LEFTTOP);
 	_nowOrder = 1;
+	_beginOrder = 1;
+	_backOrder = 1;
 	_tileRect.update(Vector2(0, 0), Vector2(40, 40), pivot::CENTER);
 	_jumpCount = 0;
 	_jumpPower = 0;
@@ -424,10 +442,21 @@ void player::update()
 	
 	if (KEYMANAGER->isOnceKeyUp('C')
 		|| (KEYMANAGER->isOnceKeyUp(VK_RBUTTON) && _state->getState() == _vState[PLAYERSTATE::GUARD])
-		|| _state->getState() == _vState[MOVESTOP] && !_ani->isPlay()
-		|| _state->getState() == _vState[RIGHT_FINALATTACK] && !_ani->isPlay()
+		|| (_state->getState() == _vState[MOVESTOP] && !_ani->isPlay())
+		|| (_state->getState() == _vState[RIGHT_FINALATTACK] && !_ani->isPlay())
 		)
+	{
+		if (_state->getState() == _vState[RIGHT_FINALATTACK])
+		{
+			for (int i = 0; i < 40; i++)
+			{
+				_attackAni[i]->stop();
+			}
+			
+		}
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
+	}
+		
 
 	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] && _state->getState()->isAttack() == false && _state->getState()->isLongAttack() == false)
 	{
@@ -452,12 +481,12 @@ void player::update()
 	if (_state->getState() != _vState[PLAYERSTATE::JUMP])
 	{
 		POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
-		_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
+		int _nowOrder2 = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
 
-		if (_nowOrder == 5)
+		if (_nowOrder2 == 5 || _nowOrder2 == 0 || _nowOrder2 == 6 || _nowOrder2 == 7)
 		{
-			float an = getAngle(_tile.left, _tile.top, _position.x, _position.y);
-			float speed = 10;
+			float an = getAngle(_position.x, _position.y,_tile.left + 24, _tile.top +24);
+			float speed = 40;
 			switch (_direction)
 			{
 			case PLAYERDIRECTION::TOP:
@@ -469,6 +498,7 @@ void player::update()
 				break;
 			case PLAYERDIRECTION::LEFT:
 				_position.x += cosf(an) * speed;
+				_position.y -= sinf(an) * speed;
 				break;
 			case PLAYERDIRECTION::LEFT_BOTTOM:
 				_position.x += cosf(an) * speed;
@@ -483,6 +513,7 @@ void player::update()
 				break;
 			case PLAYERDIRECTION::RIGHT:
 				_position.x -= cosf(an) * speed;
+				_position.y -= sinf(an) * speed;
 				break;
 			case PLAYERDIRECTION::RIGHT_TOP:
 				_position.x -= cosf(an) * speed;
@@ -492,6 +523,45 @@ void player::update()
 			_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 		}
 	}
+	if (_state->getState() == _vState[PLAYERSTATE::RIGHT_FINALATTACK])
+	{
+		_attackEffectCount++;
+		
+
+		if (_attackEffectCount > 1)
+		{
+			if (!_attackAni[_attackCount]->isPlay())
+			{
+				_attackAni[_attackCount]->start();
+			}
+		}
+
+		if (_attackEffectCount > 1)
+		{
+			if (_attackCount + 10 < 39)
+				_attackCount++;
+
+			_attackEffectCount = 0;
+		}
+	
+		//=================================== 근거리 이펙트 용=================================
+		for (int i = _attackCount; i < _attackCount+10; i++)
+		{
+			_attackAni[i]->frameUpdate(TIMEMANAGER->getElapsedTime() * 30);
+		}
+
+		for (int i = _attackCount; i < _attackCount + 10; i++)
+		{
+			if (!_attackAni[i]->isPlay())
+			{
+				_attackAni[i]->start();
+			}
+		}
+		//===================================================================================
+		
+
+	}
+
 }
 
 void player::render()
@@ -503,14 +573,23 @@ void player::render()
 	_image->aniRender(CAMERA->getRelativeVector2(_position.x, _position.y - _jumpPower), _ani, 1.0f);
 	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
-	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[0].y][next[0].x]->getRect()),
-	//	D2D1::ColorF::Aqua, 0);
-	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[1].y][next[1].x]->getRect()),
-	//	D2D1::ColorF::Aqua, 0);
-	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[2].y][next[2].x]->getRect()),
-	//	D2D1::ColorF::Aqua, 0);
 
-	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
+	/*D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[0].y][next[0].x]->getRect()),
+		D2D1::ColorF::Aqua, 0);
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[1].y][next[1].x]->getRect()),
+		D2D1::ColorF::Aqua, 0);
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[2].y][next[2].x]->getRect()),
+		D2D1::ColorF::Aqua, 0);
+
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[3].y][next[3].x]->getRect()),
+		D2D1::ColorF::Aqua, 0);
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[4].y][next[4].x]->getRect()),
+		D2D1::ColorF::Aqua, 0);
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[5].y][next[5].x]->getRect()),
+		D2D1::ColorF::Aqua, 0);*/
+
+	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] ||
+		_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
 		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
 	{
 		float angle = getAngle(_position.x, _position.y,
@@ -553,125 +632,171 @@ void player::render()
 			(CAMERA->getRelativeVector2(_position.x + cosf(d2) * 50 * i, _position.y + -sinf(d2) * 50 * i), 1.f);
 		}
 	}
-	_bullet->render();
+	//=================================== 근거리 이펙트 용=================================
+	if (_state->getState() == _vState[PLAYERSTATE::RIGHT_FINALATTACK])
+	for (int i = _attackCount; i < _attackCount+10; i++)
+	{
+		_attackImg->setAngle(_attackAngle);
+		_attackImg->aniRender(Vector2(CAMERA->getRelativeVector2(_position).x - 8+ cosf(PI/9 * i) * 70, CAMERA->getRelativeVector2(_position).y -sinf(PI / 9 * i) * 70), _attackAni[i], 1.f);
+
+		_attackAngle -= 10;
+		
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			if (_attackAngle < 315)
+				_attackAngle = 0;
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			if (_attackAngle < 245)
+				_attackAngle = 290;
+			break;
+		case PLAYERDIRECTION::LEFT:
+			if (_attackAngle < 200)
+				_attackAngle = 245;
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			if (_attackAngle < 175)
+				_attackAngle = 220;
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			if (_attackAngle < 135)
+				_attackAngle = 180;
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			if (_attackAngle < 45)
+				_attackAngle = 130;
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			if (_attackAngle < 45)
+				_attackAngle = 90;
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			if (_attackAngle < 0)
+				_attackAngle = 40;
+			break;
+		}
+	}
+	//=======================================================================================
 }
 
 void player::playerMove()
 {
 	// 보고 있는 방향으로 앞에 체크
-// 체크한 타일과 층이 같다면
-//		그냥 이동
-// 체크한 타일과 층이 다르다면
-//		높다면
-//			1차이라면 점프함
-//			아니라면 이동하지 않음
-//		낮다면
+	// 체크한 타일과 층이 같다면
+	//		그냥 이동
+	// 체크한 타일과 층이 다르다면
+	//		높다면
+	//			1차이라면 점프함
+	//			아니라면 이동하지 않음
+	//		낮다면
+	
+	//			현재 층이 0이라면 빠져나감
+	//			(만약 앞앞타일과 층이 같다면 거기까지 점프함)
+	//			아니라면 (누른 시간만큼) 점프함
+	// **점프 함수에서 착지했을 때 층 체크해서 player 갱신해 주고 idle로 이동
 
-//			현재 층이 0이라면 빠져나감
-//			(만약 앞앞타일과 층이 같다면 거기까지 점프함)
-//			아니라면 (누른 시간만큼) 점프함
-// **점프 함수에서 착지했을 때 층 체크해서 player 갱신해 주고 idle로 이동
+	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
+	//POINT nextTileIndex;
+	//POINT next[3];
+	float moveSpeed = 4.5f;
+	
+	switch (_direction)
+	{
+	case PLAYERDIRECTION::TOP:
+		next[0] = { currentTileIndex.x, currentTileIndex.y - 1 };
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
+		next[2] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x, currentTileIndex.y - 2 };
+		next[4] = { currentTileIndex.x - 1, currentTileIndex.y - 2 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y - 2 };
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		next[0] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
+		next[2] = { currentTileIndex.x, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x -2 , currentTileIndex.y - 2 };
+		next[4] = { currentTileIndex.x -2, currentTileIndex.y - 1 };
+		next[5] = { currentTileIndex.x - 1, currentTileIndex.y - 2 };
+		break;
+	case PLAYERDIRECTION::LEFT:
+		next[0] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
+		next[2] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x - 2, currentTileIndex.y + 1 };
+		next[4] = { currentTileIndex.x - 2, currentTileIndex.y };
+		next[5] = { currentTileIndex.x - 2, currentTileIndex.y - 1 };
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		next[0] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
+		next[2] = { currentTileIndex.x, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x - 2, currentTileIndex.y + 2 };
+		next[4] = { currentTileIndex.x - 2, currentTileIndex.y + 1 };
+		next[5] = { currentTileIndex.x - 1, currentTileIndex.y + 2 };
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		next[0] = { currentTileIndex.x, currentTileIndex.y + 1 };
+		next[1] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
+		next[2] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x, currentTileIndex.y + 3 };
+		next[4] = { currentTileIndex.x - 1, currentTileIndex.y + 3 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y + 3 };
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		next[0] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+		next[1] = { currentTileIndex.x + 1, currentTileIndex.y };
+		next[2] = { currentTileIndex.x, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x + 2, currentTileIndex.y + 2 };
+		next[4] = { currentTileIndex.x + 2, currentTileIndex.y + 1 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y + 2 };
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		next[0] = { currentTileIndex.x + 1, currentTileIndex.y };
+		next[1] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
+		next[2] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x + 2, currentTileIndex.y };
+		next[4] = { currentTileIndex.x + 2, currentTileIndex.y - 1 };
+		next[5] = { currentTileIndex.x + 2, currentTileIndex.y + 1 };
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		next[0] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
+		next[1] = { currentTileIndex.x + 1, currentTileIndex.y };
+		next[2] = { currentTileIndex.x, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x + 2, currentTileIndex.y - 2 };
+		next[4] = { currentTileIndex.x + 2, currentTileIndex.y - 1 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y - 2 };
+		break;
+	}
+	
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
+	
+	
+	
+	// 다음 타일
+	for (int i = 0; i < 6; ++i)
+	{
+		if (next[i].x > maxTileX) next[i].x = maxTileX;
+		else if (next[i].x < 0) next[i].x = 0;
+		if (next[i].y > maxTileY) next[i].y = maxTileY;
+		else if (next[i].y < 0) next[i].y = 0;
+	}
+	
+	RECT temp;
+	
+	_backOrder = _nowOrder;
+	_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
+	if (_nowOrder == 4 || _nowOrder == 5)
+	{
+		_nowOrder = _backOrder;
+	}
 
-POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
-//POINT nextTileIndex;
-//POINT next[3];
-float moveSpeed = 4.5f;
+	_beginOrder = _nowOrder;
 
-switch (_direction)
-{
-case PLAYERDIRECTION::TOP:
-	next[0] = { currentTileIndex.x, currentTileIndex.y - 1 };
-	next[1] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
-	next[2] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
-	next[3] = { currentTileIndex.x, currentTileIndex.y - 2 };
-	next[4] = { currentTileIndex.x - 1, currentTileIndex.y - 2 };
-	next[5] = { currentTileIndex.x + 1, currentTileIndex.y - 2 };
-	break;
-case PLAYERDIRECTION::LEFT_TOP:
-	next[0] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
-	next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
-	next[2] = { currentTileIndex.x, currentTileIndex.y - 1 };
-	next[3] = { currentTileIndex.x, currentTileIndex.y - 2 };
-	next[4] = { currentTileIndex.x - 2, currentTileIndex.y - 1 };
-	next[5] = { currentTileIndex.x + 1, currentTileIndex.y - 2 };
-	break;
-case PLAYERDIRECTION::LEFT:
-	next[0] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
-	next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
-	next[2] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
-	next[3] = { currentTileIndex.x - 2, currentTileIndex.y + 1 };
-	next[4] = { currentTileIndex.x - 2, currentTileIndex.y };
-	next[5] = { currentTileIndex.x - 2, currentTileIndex.y - 1 };
-	break;
-case PLAYERDIRECTION::LEFT_BOTTOM:
-	next[0] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
-	next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
-	next[2] = { currentTileIndex.x, currentTileIndex.y + 1 };
-	next[3] = { currentTileIndex.x - 2, currentTileIndex.y + 2 };
-	next[4] = { currentTileIndex.x - 2, currentTileIndex.y + 1 };
-	next[5] = { currentTileIndex.x - 1, currentTileIndex.y + 2 };
-	break;
-case PLAYERDIRECTION::BOTTOM:
-	next[0] = { currentTileIndex.x, currentTileIndex.y + 1 };
-	next[1] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
-	next[2] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
-	next[3] = { currentTileIndex.x, currentTileIndex.y + 2 };
-	next[4] = { currentTileIndex.x - 1, currentTileIndex.y + 2 };
-	next[5] = { currentTileIndex.x + 1, currentTileIndex.y + 2 };
-	break;
-case PLAYERDIRECTION::RIGHT_BOTTOM:
-	next[0] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
-	next[1] = { currentTileIndex.x + 1, currentTileIndex.y };
-	next[2] = { currentTileIndex.x, currentTileIndex.y + 1 };
-	next[3] = { currentTileIndex.x + 2, currentTileIndex.y + 2 };
-	next[4] = { currentTileIndex.x + 2, currentTileIndex.y + 1 };
-	next[5] = { currentTileIndex.x + 1, currentTileIndex.y + 2 };
-	break;
-case PLAYERDIRECTION::RIGHT:
-	next[0] = { currentTileIndex.x + 1, currentTileIndex.y };
-	next[1] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
-	next[2] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
-	next[3] = { currentTileIndex.x + 2, currentTileIndex.y };
-	next[4] = { currentTileIndex.x + 2, currentTileIndex.y - 1 };
-	next[5] = { currentTileIndex.x + 2, currentTileIndex.y + 1 };
-	break;
-case PLAYERDIRECTION::RIGHT_TOP:
-	next[0] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
-	next[1] = { currentTileIndex.x + 1, currentTileIndex.y };
-	next[2] = { currentTileIndex.x, currentTileIndex.y - 1 };
-	next[3] = { currentTileIndex.x + 2, currentTileIndex.y - 2 };
-	next[4] = { currentTileIndex.x + 2, currentTileIndex.y - 1 };
-	next[5] = { currentTileIndex.x + 1, currentTileIndex.y - 2 };
-	break;
-}
+	// 층이 같다면
+	//if (ti->getOrderIndex() == _nowOrder)
 
-int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
-int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
-
-
-
-// 다음 타일
-for (int i = 0; i < 6; ++i)
-{
-	if (next[i].x > maxTileX) next[i].x = maxTileX;
-	else if (next[i].x < 0) next[i].x = 0;
-	if (next[i].y > maxTileY) next[i].y = maxTileY;
-	else if (next[i].y < 0) next[i].y = 0;
-}
-
-RECT temp;
-
-int _backOrder = _nowOrder;
-_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
-if (_nowOrder == 4 || _nowOrder == 5)
-{
-	_nowOrder = _backOrder;
-}
-
-
-// 층이 같다면
-//if (ti->getOrderIndex() == _nowOrder)
-{
 	switch (_direction)
 	{
 		case PLAYERDIRECTION::TOP:
@@ -686,7 +811,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						move(0, 4.5f);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+					/*else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 						
@@ -698,7 +827,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 							
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5 )
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5 )
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -721,7 +850,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						moveAngle(PI * 1.75f, moveSpeed);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+					/*else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 
@@ -733,7 +866,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -746,7 +879,6 @@ if (_nowOrder == 4 || _nowOrder == 5)
 			break;
 		case PLAYERDIRECTION::LEFT:
 			move(-moveSpeed, 0);
-
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
@@ -757,7 +889,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						move(4.5f, 0);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+					/*else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 
@@ -769,7 +905,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -792,7 +928,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						moveAngle(PI * 0.25f, moveSpeed);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+					/*else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 
@@ -804,7 +944,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -827,7 +967,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						move(0, -4.5f);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+				/*	else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 
@@ -839,7 +983,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -862,7 +1006,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						moveAngle(PI * 0.75f, moveSpeed);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+					/*else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 
@@ -874,7 +1022,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -897,7 +1045,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						move(-4.5f, 0);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+					/*else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 
@@ -909,7 +1061,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -932,7 +1084,11 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						moveAngle(PI * 1.25f, moveSpeed);
 						break;
 					}
-					else if (ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder)
+					/*else if (SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex() == 5)
+					{
+						break;
+					}*/
+					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
 
@@ -944,7 +1100,7 @@ if (_nowOrder == 4 || _nowOrder == 5)
 						{
 							ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
 
-							if ((ti->getOrderIndex() == _nowOrder + 1 || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
+							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
 								break;
@@ -955,10 +1111,10 @@ if (_nowOrder == 4 || _nowOrder == 5)
 				}
 			}
 			break;
-		}
-		_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
-		//_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 	}
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
+	//_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
+	
 	// 층이 플레이어보다 높다면
 	/*if (t->getOrderIndex() > _nowOrder)
 	{
@@ -1076,69 +1232,93 @@ void player::playerJumpMove()
 		next[0] = { currentTileIndex.x, currentTileIndex.y - 1 };
 		next[1] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
 		next[2] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x, currentTileIndex.y - 2 };
+		next[4] = { currentTileIndex.x - 1, currentTileIndex.y - 2 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y - 2 };
 		break;
 	case PLAYERDIRECTION::LEFT_TOP:
 		next[0] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
 		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
 		next[2] = { currentTileIndex.x, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x - 2 , currentTileIndex.y - 2 };
+		next[4] = { currentTileIndex.x - 2, currentTileIndex.y - 1 };
+		next[5] = { currentTileIndex.x - 1, currentTileIndex.y - 2 };
 		break;
 	case PLAYERDIRECTION::LEFT:
 		next[0] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
 		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
 		next[2] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x - 2, currentTileIndex.y + 1 };
+		next[4] = { currentTileIndex.x - 2, currentTileIndex.y };
+		next[5] = { currentTileIndex.x - 2, currentTileIndex.y - 1 };
 		break;
 	case PLAYERDIRECTION::LEFT_BOTTOM:
 		next[0] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
 		next[1] = { currentTileIndex.x - 1, currentTileIndex.y };
 		next[2] = { currentTileIndex.x, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x - 2, currentTileIndex.y + 2 };
+		next[4] = { currentTileIndex.x - 2, currentTileIndex.y + 1 };
+		next[5] = { currentTileIndex.x - 1, currentTileIndex.y + 2 };
 		break;
 	case PLAYERDIRECTION::BOTTOM:
 		next[0] = { currentTileIndex.x, currentTileIndex.y + 1 };
 		next[1] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
 		next[2] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x, currentTileIndex.y + 3 };
+		next[4] = { currentTileIndex.x - 1, currentTileIndex.y + 3 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y + 3 };
 		break;
 	case PLAYERDIRECTION::RIGHT_BOTTOM:
 		next[0] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
 		next[1] = { currentTileIndex.x + 1, currentTileIndex.y };
 		next[2] = { currentTileIndex.x, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x + 2, currentTileIndex.y + 2 };
+		next[4] = { currentTileIndex.x + 2, currentTileIndex.y + 1 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y + 2 };
 		break;
 	case PLAYERDIRECTION::RIGHT:
 		next[0] = { currentTileIndex.x + 1, currentTileIndex.y };
 		next[1] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
 		next[2] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+		next[3] = { currentTileIndex.x + 2, currentTileIndex.y };
+		next[4] = { currentTileIndex.x + 2, currentTileIndex.y - 1 };
+		next[5] = { currentTileIndex.x + 2, currentTileIndex.y + 1 };
 		break;
 	case PLAYERDIRECTION::RIGHT_TOP:
 		next[0] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
 		next[1] = { currentTileIndex.x + 1, currentTileIndex.y };
 		next[2] = { currentTileIndex.x, currentTileIndex.y - 1 };
+		next[3] = { currentTileIndex.x + 2, currentTileIndex.y - 2 };
+		next[4] = { currentTileIndex.x + 2, currentTileIndex.y - 1 };
+		next[5] = { currentTileIndex.x + 1, currentTileIndex.y - 2 };
 		break;
 	}
 
-	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
-	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
+	//int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize();
+	//int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize();
 
 
 
-	// 다음 타일
-	for (int i = 0; i < 3; ++i)
-	{
-		if (next[i].x > maxTileX) next[i].x = maxTileX;
-		else if (next[i].x < 0) next[i].x = 0;
-		if (next[i].y > maxTileY) next[i].y = maxTileY;
-		else if (next[i].y < 0) next[i].y = 0;
-	}
+	//// 다음 타일
+	//for (int i = 0; i < 3; ++i)
+	//{
+	//	if (next[i].x > maxTileX) next[i].x = maxTileX;
+	//	else if (next[i].x < 0) next[i].x = 0;
+	//	if (next[i].y > maxTileY) next[i].y = maxTileY;
+	//	else if (next[i].y < 0) next[i].y = 0;
+	//}
 
 
 	RECT temp;
 
-	int _backOrder = _nowOrder;
+	/*int _backOrder = _nowOrder;
 	_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
 	if (_nowOrder == 4 || _nowOrder == 5)
 	{
 		_nowOrder = _backOrder;
-	}
+	}*/
 
-
+	cout << _beginOrder << endl;
 	// 층이 같다면
 	//if (ti->getOrderIndex() == _nowOrder)
 	{
@@ -1149,9 +1329,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i+3].y][next[i+3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						move(0, 4.5f);
@@ -1166,9 +1347,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i + 3].y][next[i + 3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 )
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						moveAngle(PI * 1.75f, moveSpeed);
@@ -1182,9 +1364,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i + 3].y][next[i + 3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 )
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						move(4.5f, 0);
@@ -1199,9 +1382,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i + 3].y][next[i + 3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						moveAngle(PI * 0.25f, moveSpeed);
@@ -1215,9 +1399,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i + 3].y][next[i + 3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 )
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						move(0, -4.5f);
@@ -1232,9 +1417,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i + 3].y][next[i + 3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 )
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						moveAngle(PI * 0.75f, moveSpeed);
@@ -1249,9 +1435,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i + 3].y][next[i + 3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 )
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						move(-4.5f, 0);
@@ -1266,9 +1453,10 @@ void player::playerJumpMove()
 			for (int i = 0; i < 3; ++i)
 			{
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
+				tile* ti2 = SCENEMANAGER->getCurrentScene()->getTiles()[next[i + 3].y][next[i + 3].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 )
+					if (ti->getOrderIndex() > _nowOrder + 1 && ti->getOrderIndex() != 5 && ti->getOrderIndex() != 6 || (ti2->getOrderIndex() == _beginOrder + 2 && _beginOrder == 1))
 					{
 						_jumping = true;
 						moveAngle(PI * 1.25f, moveSpeed);
@@ -1281,24 +1469,24 @@ void player::playerJumpMove()
 
 		if (!_jumping)
 		{
-			if (KEYMANAGER->isStayKeyDown('W'))
+			if (KEYMANAGER->isStayKeyDown('W') && _direction != PLAYERDIRECTION::BOTTOM)
 			{
 				move(0, -moveSpeed);
 			}
-			if (KEYMANAGER->isStayKeyDown('S'))
+			if (KEYMANAGER->isStayKeyDown('S') && _direction != PLAYERDIRECTION::TOP)
 			{
 				move(0, moveSpeed);
 			}
 
-			if (KEYMANAGER->isStayKeyDown('A'))
+			if (KEYMANAGER->isStayKeyDown('A') && _direction != PLAYERDIRECTION::RIGHT)
 			{
-				if (KEYMANAGER->isStayKeyDown('W'))
+				if (KEYMANAGER->isStayKeyDown('W') && _direction != PLAYERDIRECTION::RIGHT_BOTTOM)
 				{
-					moveAngle(PI * 0.75, moveSpeed);
+					moveAngle(PI * 0.75, moveSpeed*0.4);
 				}
-				else if (KEYMANAGER->isStayKeyDown('S'))
+				else if (KEYMANAGER->isStayKeyDown('S') && _direction != PLAYERDIRECTION::RIGHT_TOP)
 				{
-					moveAngle(PI * 1.25, moveSpeed);
+					moveAngle(PI * 1.25, moveSpeed*0.4);
 				}
 				else
 				{
@@ -1306,15 +1494,15 @@ void player::playerJumpMove()
 				}
 			}
 
-			if (KEYMANAGER->isStayKeyDown('D'))
+			if (KEYMANAGER->isStayKeyDown('D') && _direction != PLAYERDIRECTION::LEFT)
 			{
-				if (KEYMANAGER->isStayKeyDown('W'))
+				if (KEYMANAGER->isStayKeyDown('W') && _direction != PLAYERDIRECTION::LEFT_BOTTOM)
 				{
-					moveAngle(PI * 0.25, moveSpeed);
+					moveAngle(PI * 0.25, moveSpeed*0.4);
 				}
-				else if (KEYMANAGER->isStayKeyDown('S'))
+				else if (KEYMANAGER->isStayKeyDown('S') && _direction != PLAYERDIRECTION::LEFT_TOP)
 				{
-					moveAngle(PI * 1.75, moveSpeed);
+					moveAngle(PI * 1.75, moveSpeed*0.4);
 				}
 				else
 				{
@@ -1327,11 +1515,11 @@ void player::playerJumpMove()
 	}
 
 	_jumpPower += _gravity;
-	if (_jumpCount > 14)
+	if (_jumpCount > 29)
 	{
 		_gravity = -3;
 	}
-	if (_jumpCount > 30)
+	if (_jumpCount > 59)
 	{
 		_jumpCount = 0;
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
@@ -1759,12 +1947,47 @@ void player::playerMeleeattack()   //근접 기본공격
 	}
 	if (!_ani->isPlay() && _iscombo && _combo == 3)
 	{
+		cout << _state->getState() << endl;
+		_attackCount = 0;
 		_state->setState(_vState[PLAYERSTATE::RIGHT_FINALATTACK]);
 		_iscombo = false;
 		_combo++;
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			_attackAngle = 0;
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			_attackAngle = 290;
+			break;
+		case PLAYERDIRECTION::LEFT:
+			_attackAngle = 245;
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			_attackAngle = 220;
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			_attackAngle = 180;
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			_attackAngle = 130;
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			_attackAngle = 90;
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			_attackAngle = 40;
+			break;
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			_attackAni[i]->start();
+		}
 	}
 	if (_combo >= 4 && _combocount > 10)
 		_combo = 0;
+
+	
 }
 
 void player::playerDodgeEffect()
