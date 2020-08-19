@@ -30,6 +30,13 @@ private:
 	int _frameCount;
 
 
+	int _chargeCurrentFrameX, _chargeCurrentFrameY;
+	int _chargeCurrentFrameX2, _chargeCurrentFrameY2;
+	int _chargeFrameCount, _chargeFrameCount2;
+	int _chargeFrameX, _chargeFrameY;
+	int _chargeFrameX2, _chargeFrameY2;
+
+
 public:
 
 	flamethrower();
@@ -41,8 +48,12 @@ public:
 	void render();
 
 	void angleUpdate();
+	void frameUpdate();
 	void fire();
 	void move();
+
+	void chargeDraw(float centerX, float centerY);
+	void chargeDraw2(float centerX, float centerY);
 
 
 

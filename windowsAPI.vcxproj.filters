@@ -215,6 +215,10 @@
     <ClCompile Include="puzzleOrangeWall.cpp">
       <Filter>playGround\puzzle</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="flamethrower.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -432,6 +436,11 @@
     <ClInclude Include="mine.h" />
     <ClInclude Include="puzzleDestruct.h">
       <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="puzzleBlueWall.h" />
+    <ClInclude Include="puzzleOrangeWall.h" />
+    <ClInclude Include="flamethrower.h">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
