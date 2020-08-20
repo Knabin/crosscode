@@ -12,15 +12,49 @@ boss::~boss()
 HRESULT boss::init()
 {
 	// ±âº» yÃàWINSIZEY / 2 - 175
-	bossInitialization();
+	_Center._x = (WINSIZEX / 2 - 85);
+	_Center._y = (WINSIZEY / 2 - 175);
+
+	_Center._center.x = (WINSIZEX / 2 - 85);
+	_Center._center.y = (WINSIZEY / 2 - 175);
+
+	_LeftArm._x = (_Center._x - 125) + 100;
+	_LeftArm._y = (_Center._y + 25);
+	_LeftArm._angle = PI2 - (PI / 4);
+	_LeftArm._realAngle = PI2 - (PI / 4);
+
+	_LeftArm._center.x = (_Center._x - 125) + 100;
+	_LeftArm._center.y = (_Center._y + 25);
+
+	_RightArm._x = (_Center._x + 545) - 100;
+	_RightArm._y = (_Center._y + 25);
+	_RightArm._angle = PI2 - (PI / 4);
+	_RightArm._realAngle = PI2 - (PI / 4);
+
+	_RightArm._center.x = (_Center._x + 545) - 100;
+	_RightArm._center.y = (_Center._y + 25);
+
+	_LeftHand._x = _LeftArm._x - 100;
+	_LeftHand._y = _LeftArm._y + 100;
+	_LeftHand._angle = PI2 - (PI / 4);
+	_LeftHand._realAngle = PI2 - (PI / 4);
+
+	_RightHand._x = _RightArm._x + 100;
+	_RightHand._y = _RightArm._y + 100;
+	_RightHand._angle = PI2 - (PI / 4);
+	_RightHand._realAngle = PI2 - (PI / 4);
+
+	_Bottom._x = _Center._x + 160;
+	_Bottom._y = _Center._y + 450;
+	_Center._angle = 0;
 
 	//_bossState = APPEARANCE;
-	//_bossState = STOP;
+	_bossState = STOP;
 	//_bossState = ICETHROWER_READY;
 	//_bossState = MINE_READY;
 	//_bossState = STONESHOWER_READY;
 	//_bossState = FLAMETHROWER_READY;
-	_bossState = ICEGUIDE_READY;
+	//_bossState = ICEGUIDE_READY;
 	
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
@@ -33,6 +67,7 @@ HRESULT boss::init()
 	_stoneAttackDelay = 0;
 	_flamethrowerDelay = 0;
 	_chargeCount = 0;
+	_iceguideDelay = 0;
 
 	_attack1, _attack2, _attack3, _attack4, _attack5 = false;
 
@@ -125,7 +160,7 @@ HRESULT boss::init()
 	_flamethrower->init(_Center._x + 385, _Center._y + 525);
 
 	_iceguide = new iceguide;
-	_iceguide->init(_Center._x + 285, _Center._y + 625);
+	_iceguide->init(_Center._x + 185, _Center._y + 625);
 
 	return S_OK;
 }
@@ -169,6 +204,8 @@ void boss::render()
 
 	_icethrower->render();
 
+	_iceguide->render();
+
 	//================================================================================================================================================================//
 
 	bossDraw();
@@ -179,7 +216,7 @@ void boss::render()
 
 	_flamethrower->render();
 
-	_iceguide->render();
+
 }
 
 void boss::bossState()
@@ -190,49 +227,22 @@ void boss::bossState()
 
 	switch (_bossState)
 	{
-		/*
+		
 	case APPEARANCE:
 	{
-		_appearanceCount++;
+		CAMERA->shakeStart(1.f, 1.2f);
 
-		//BossDownMove2();
+		moveDown();
 
-		if (_appearanceCount < 10)
-		{
-			//test1();
-
-			_Center._angle += 0.003f;
-
-		}
-		if (_appearanceCount >= 10)
-		{
-			//test2();
-
-			_Center._angle -= 0.003f;
-
-		}
-
-		if (_appearanceCount >= 29)
-		{
-			//test3();
-
-			_Center._angle += 0.003f * 2;
-
-		}
-		if (_appearanceCount >= 38)
-		{
-			_appearanceCount = 0;
-		}
-
-		if (WINSIZEY / 2 - 600 < _Center._y)
-		{
-
-			_bossState = LEFTHAND_ATTACK_READY;
+		
+		if (_Center._y == WINSIZEY / 2 - 175)
+		{		
+			_bossState = STOP;
 		}
 
 	}
 	break;
-	*/
+	
 	case STOP:
 	{
 		_currentFrameX = 0;
@@ -242,6 +252,12 @@ void boss::bossState()
 		
 		if (_stopCount >= 200)
 		{
+			if (_attack1 == false && _attack2 == false && _attack3 == false && _attack4 == false)
+			{
+				_stopCount = 0;
+				_bossState = ICETHROWER_READY;
+			}
+
 			if (_attack1 == true && _attack2 == false && _attack3 == false && _attack4 == false)
 			{
 				_stopCount = 0;
@@ -258,6 +274,12 @@ void boss::bossState()
 			{
 				_stopCount = 0;
 				_bossState = FLAMETHROWER_READY;
+			}
+
+			if (_attack1 == true && _attack2 == true && _attack3 == true && _attack4 == true)
+			{
+				_stopCount = 0;
+				_bossState = ICEGUIDE_READY;
 			}
 
 
@@ -344,17 +366,18 @@ void boss::bossState()
 
 	case ICETHROWER:
 	{
+		_icethrower->angleUpdate();
 		_icethrowerDelay++;
 		_Center._angle += 0.042f;
 
-		if (_icethrowerDelay % 5 == 0)
+		if (_icethrowerDelay % 4 == 0)
 		{
 			_icethrower->fire();
 
 		}
 		
 
-		if (_frameCount % 3 == 0)
+		if (_frameCount % 5 == 0)
 		{
 			if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý")->getMaxFrameX())
 			{
@@ -394,7 +417,7 @@ void boss::bossState()
 		_LeftArm._realAngle += 0.8f;
 		_LeftHand._realAngle += 0.6f;
 
-		_Center._angle += 0.15f;
+		_Center._angle += 0.08f;
 
 		if (_LeftHand._rectBody.left <= WINSIZEX / 2 - 243)
 		{
@@ -911,7 +934,7 @@ void boss::bossState()
 	case ICEGUIDE_READY:
 	{
 
-		
+		_attack1 = false;
 
 		_LeftArm._center.x += 1.5f / 1.5f;
 		_LeftArm._center.y -= 2.0f / 1.5f;
@@ -931,7 +954,7 @@ void boss::bossState()
 		_RightHand._realAngle += 0.8f / 1.5f;
 
 
-		_Center._angle += 0.35f;
+		_Center._angle += 0.25f;
 
 		_bossLeftHandMoveFrameY = 0;
 
@@ -963,24 +986,24 @@ void boss::bossState()
 	{
 		_motionDelay++;
 
-		if (_motionDelay >= 125)
+		if (_motionDelay >= 100)
 		{
-			_LeftArm._center.x += 1.5f * 1.5f;
-			_LeftArm._center.y += 2.5f * 1.5f;
+			_LeftArm._center.x += 1.5f * 2.5f;
+			_LeftArm._center.y += 2.5f * 2.5f;
 
-			_LeftArm._angle += 0.024f * 1.5f;
-			_LeftHand._angle += 0.032f * 1.5f;
-			_LeftArm._realAngle -= 1.7f * 1.5f;
-			_LeftHand._realAngle -= 0.5f * 1.5f;
+			_LeftArm._angle += 0.024f * 2.5f;
+			_LeftHand._angle += 0.032f * 2.5f;
+			_LeftArm._realAngle -= 1.7f * 2.5f;
+			_LeftHand._realAngle -= 0.5f * 2.5f;
 
 
-			_RightArm._center.x -= 0.5f / 1.5f;
-			_RightArm._center.y += 2.0f / 1.5f;
+			_RightArm._center.x -= 0.5f / 2.5f;
+			_RightArm._center.y += 2.0f / 2.5f;
 
-			_RightArm._angle += 0.024f / 1.5f;
-			_RightHand._angle += 0.032f / 1.5f;
-			_RightArm._realAngle -= 1.2f / 1.5f;
-			_RightHand._realAngle -= 0.8f / 1.5f;
+			_RightArm._angle += 0.024f / 2.5f;
+			_RightHand._angle += 0.032f / 2.5f;
+			_RightArm._realAngle -= 1.2f / 2.5f;
+			_RightHand._realAngle -= 0.8f / 2.5f;
 
 
 
@@ -1034,8 +1057,17 @@ void boss::bossState()
 
 	case ICEGUIDE:
 	{
-		
+		_iceguideDelay++;
 
+		
+		if (_iceguideDelay % 3 == 0)
+		{
+			_iceguide->fire();
+
+		}
+		
+		_Center._angle -= 0.2f;
+	
 		if (_frameCount % 3 == 0)
 		{
 			if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameX())
@@ -1046,7 +1078,8 @@ void boss::bossState()
 			if (_currentFrameY >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameY())
 			{
 				_currentFrameY = 0;
-				//_bossState = ICEGUIDE_END;
+				_iceguideDelay = 0;
+				_bossState = ICEGUIDE_END;
 			}
 			_bossLeftHandAttackFrameX2 = _currentFrameX;
 			_bossLeftHandAttackFrameY2 = _currentFrameY;
@@ -1059,10 +1092,33 @@ void boss::bossState()
 
 	case ICEGUIDE_END:
 	{
+		_Center._angle += 0.12f;
+
+		_LeftArm._center.x -= 4.30f / 2.0f;
+		_LeftArm._center.y -= 3.60f / 2.0f;
+
+		_LeftArm._angle -= 0.041f / 2.0f;
+		_LeftHand._angle -= 0.048f / 2.0;
+		_LeftArm._realAngle += 2.9f / 2.0f;
+		_LeftHand._realAngle += 0.5f / 2.0f;
+
+
+		_RightArm._center.x -= 0.1f / 1.5f;
+		_RightArm._center.y += 1.9f / 1.5f;
+
+		_RightArm._angle += 0.024f / 2.0f;
+		_RightHand._angle += 0.019f / 2.0f;
+		_RightArm._realAngle -= 0.7f / 2.0f;
+		_RightHand._realAngle -= 0.55f / 2.0f;
+
+
+		if (_LeftHand._rectBody.top < WINSIZEY / 2 - 45)
+		{
+			_bossState = STOP;
+		}
 
 	}
 	break;
-
 
 	}
 
@@ -1263,6 +1319,7 @@ void boss::bossDraw()
 
 	//================================================================================================================================================================//
 
+	/*
 
 	//À§Ä¡ È®ÀÎ¿ë ¸öÅë, ¹ÙÅÒ ·ºÆ®
 
@@ -1294,7 +1351,7 @@ void boss::bossDraw()
 	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_RightHand._center.x, _RightHand._center.y))),
 		(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y))),
 		D2D1::ColorF::Black, 1, 2.0f);
-
+	*/
 }
 
 void boss::moveUp()

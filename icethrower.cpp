@@ -17,6 +17,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 	_center.y = centerY;
 	_centerMeter = 150;
 	_centerMeter2 = 150;
+	_angleCount = 0;
 
 	_attackImage[0] = IMAGEMANAGER->addImage("얼음1", L"images/boss/ice1.png");
 	_attackImage[1] = IMAGEMANAGER->addImage("얼음2", L"images/boss/ice2.png");
@@ -37,7 +38,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 	//================================================================================================================================================================//
 
 	
-	for (int i = 0; i < 18; i++)
+	for (int i = 0; i < 77; i++)
 	{
 		tagIcethrower attack1;
 		ZeroMemory(&attack1, sizeof(attack1));
@@ -64,7 +65,7 @@ void icethrower::release()
 
 void icethrower::update()
 {
-	angleUpdate();
+	//angleUpdate();
 
 	move();
 
@@ -86,7 +87,7 @@ void icethrower::render()
 	{
 		if (!_viIcethrower->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIcethrower->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIcethrower->_rc));
 
 			_viIcethrower->_image->setAngle(_angle);
 			_viIcethrower->_image->render(CAMERA->getRelativeVector2(Vector2(_viIcethrower->_x - _viIcethrower->_size / 2, _viIcethrower->_y - _viIcethrower->_size / 2)));
@@ -120,6 +121,29 @@ void icethrower::angleUpdate()
 
 	_centerEnd2.x = cosf(_angle) + _center.x;
 	_centerEnd2.y = -sinf(_angle) + _center.y;
+
+	_angleCount++;
+
+	if (_angleCount < 10)
+	{
+		_angle += 0.312f / 15;
+	}
+	if (_angleCount >= 10 && _angleCount < 20)
+	{
+		_angle -= 0.256f / 15;
+	}
+	if (_angleCount >= 20 && _angleCount < 30)
+	{
+		_angle += 0.206f / 15;
+	}
+	if (_angleCount >= 30 && _angleCount < 40)
+	{
+		_angle -= 0.251f / 15;
+	}
+	if (_angleCount >= 40 && _angleCount < 50)
+	{
+		_angleCount = 0;
+	}
 }
 
 void icethrower::frameUpdate()
@@ -191,8 +215,8 @@ void icethrower::move()
 
 		if (!_viIcethrower->_fireStart) continue;
 		{
-			_angle -= 0.002f;
-			_angle2 += 0.10f;
+			_angle -= 0.002f / 4;
+			_angle2 += 0.10f / 4;
 			_viIcethrower->_x += cosf(_viIcethrower->_angle) * _viIcethrower->_speed;
 			_viIcethrower->_y += -sinf(_viIcethrower->_angle) * _viIcethrower->_speed;
 

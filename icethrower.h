@@ -33,6 +33,8 @@ private:
 	float _angle;						//얼음 발사 시 각도
 	float _angle2;						//얼음 발사 총구 이펙트 각도
 
+	int _angleCount;
+
 	int _currentFrameX, _currentFrameY;
 	int _frameCount;
 	//int _collisionCurrentFrameX, _collisionCurrentFrameY;

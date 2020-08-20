@@ -87,6 +87,7 @@ private:
 	tagBossPart _LeftHand;		//왼손
 	tagBossPart _RightHand;		//오른손
 
+
 	tagBossPart _Bottom;		//바텀
 
 	//보스 전신 프레임
@@ -130,6 +131,9 @@ private:
 
 	//화염방사 공격 딜레이
 	int _flamethrowerDelay;
+
+	//뾰족얼음 공격 딜레이
+	int _iceguideDelay;
 
 
 	bool _attack1, _attack2, _attack3, _attack4, _attack5;

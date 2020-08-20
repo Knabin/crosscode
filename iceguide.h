@@ -32,15 +32,21 @@ private:
 	vector<tagIceguide>				_vIceguide3;
 	vector<tagIceguide>::iterator	_viIceguide3;
 
+	vector<tagIceguide>				_vIceguide4;
+	vector<tagIceguide>::iterator	_viIceguide4;
+
+	vector<tagIceguide>				_vIceguide5;
+	vector<tagIceguide>::iterator	_viIceguide5;
+
 
 	floatPoint _center;
-	floatPoint _centerEnd;
 	float _centerMeter;
-	float _angle;
-	float _angle2;
+	floatPoint _centerEnd, _centerEnd2, _centerEnd3, _centerEnd4, _centerEnd5;
+	float _angle, _angle2, _angle3, _angle4, _angle5;
+	int _meterCount, _meterCount2, _meterCount3, _meterCount4, _meterCount5;
 
+	int _iceFrameY;
 
-	int _meterCount;
 
 public:
 
@@ -56,6 +62,7 @@ public:
 	void move();
 
 	void angleUpdate();
+	void frameUpdate();
 
 	vector<tagIceguide>& getIceguideVector() { return _vIceguide; }
 	vector<tagIceguide>::iterator& getIceguideIterVector() { return _viIceguide; }
@@ -65,6 +72,12 @@ public:
 
 	vector<tagIceguide>& getIceguideVector3() { return _vIceguide3; }
 	vector<tagIceguide>::iterator& getIceguideIterVector3() { return _viIceguide3; }
+
+	vector<tagIceguide>& getIceguideVector4() { return _vIceguide4; }
+	vector<tagIceguide>::iterator& getIceguideIterVector4() { return _viIceguide4; }
+
+	vector<tagIceguide>& getIceguideVector5() { return _vIceguide5; }
+	vector<tagIceguide>::iterator& getIceguideIterVector5() { return _viIceguide5; }
 
 
 };
