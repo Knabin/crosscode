@@ -2178,3 +2178,8 @@ void player::playerLethalattack()
 	}
 	
 }
+
+void player::setIdle()
+{
+	_state->setState(_vState[PLAYERSTATE::IDLE]);
+}
