@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "objectManager.h"
 #include "gameObject.h"
+#include "tile.h"
+#include "player.h"
 
 objectManager::objectManager()
 {
@@ -116,7 +118,13 @@ void objectManager::render()
 	vector<gameObject*>& objectList = _mObjectContainer.find(objectType::TILEOBJECT)->second;
 	for (int i = 0; i < objectList.size(); ++i)
 	{
-		if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y)
+		if (objectList[i]->getRect().right < CAMERA->getRect().left ||
+			objectList[i]->getRect().left > CAMERA->getRect().right ||
+			objectList[i]->getRect().top > CAMERA->getRect().bottom ||
+			objectList[i]->getRect().bottom < CAMERA->getRect().top) continue;
+		if (dynamic_cast<tile*>(objectList[i])->getOrderIndex() > dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder() &&
+				dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder() != 3 &&
+			objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y)
 			objectList[i]->render();
 	}
 }

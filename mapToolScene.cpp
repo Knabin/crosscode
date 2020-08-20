@@ -1158,6 +1158,7 @@ void mapToolScene::resetSample()
 
 void mapToolScene::saveMap()
 {
+	ShowCursor(true);
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
 	char str[100 + MAXTILEX * MAXTILEY * 18];
@@ -1242,10 +1243,12 @@ void mapToolScene::saveMap()
 	}
 
 	CloseHandle(file);
+	ShowCursor(false);
 }
 
 void mapToolScene::loadMap()
 {
+	ShowCursor(true);
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
 	char str[100 + MAXTILEX * MAXTILEY * 18];
@@ -1370,6 +1373,7 @@ void mapToolScene::loadMap()
 	_clippingPoint = Vector2(0, 0);
 
 	redrawMap();
+	ShowCursor(false);
 }
 
 void mapToolScene::checkAutoTile(int indexX, int indexY)

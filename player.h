@@ -56,6 +56,7 @@ private:
 
 	vector<playerState*>	_vState;
 
+	POINT _backTile;
 	POINT tileIndex;
 	RECT rcCollision;
 	int _nowOrder;
@@ -136,4 +137,6 @@ public:
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
 		CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150) ? true : false; }
+
+	void setIdle();
 };
