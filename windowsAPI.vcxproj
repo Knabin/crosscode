@@ -160,6 +160,8 @@
     <ClInclude Include="collisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="D2DRenderer.h" />
+    <ClInclude Include="dialog.h" />
+    <ClInclude Include="dialogText.h" />
     <ClInclude Include="door.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
@@ -173,6 +175,7 @@
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="hedgehag.h" />
+    <ClInclude Include="iceguide.h" />
     <ClInclude Include="icethrower.h" />
     <ClInclude Include="iEvent.h" />
     <ClInclude Include="image.h" />
@@ -181,7 +184,6 @@
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="keyManager.h" />
-    <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="meerkat.h" />
@@ -240,6 +242,8 @@
     <ClCompile Include="collisionManager.cpp" />
     <ClCompile Include="D2DRenderer+Draw.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
+    <ClCompile Include="dialog.cpp" />
+    <ClCompile Include="dialogText.cpp" />
     <ClCompile Include="door.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
@@ -253,6 +257,7 @@
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="hedgehag.cpp" />
+    <ClCompile Include="iceguide.cpp" />
     <ClCompile Include="icethrower.cpp" />
     <ClCompile Include="iEvent.cpp" />
     <ClCompile Include="image.cpp" />
@@ -261,7 +266,6 @@
     <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyManager.cpp" />
-    <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="meerkat.cpp" />

@@ -233,6 +233,20 @@
     <ClCompile Include="mine.cpp" />
     <ClCompile Include="shop.cpp">
       <Filter>playGround\uiController</Filter>
+      </ClCompile>
+    <ClCompile Include="flamethrower.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="dialog.cpp">
+      <Filter>playGround\uiController</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogText.cpp">
+      <Filter>playGround\uiController</Filter>
+    </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="iceguide.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -465,9 +479,6 @@
     <ClInclude Include="initLoadingScene.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
-    <ClInclude Include="loadingScene.h">
-      <Filter>playGround\scene</Filter>
-    </ClInclude>
     <ClInclude Include="puzzleBlueWall.h" />
     <ClInclude Include="puzzleOrangeWall.h" />
     <ClInclude Include="flamethrower.h">
@@ -476,6 +487,17 @@
     <ClInclude Include="mine.h" />
     <ClInclude Include="shop.h">
       <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="dialog.h">
+      <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogText.h">
+      <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="iceguide.h">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

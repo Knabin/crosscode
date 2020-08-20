@@ -169,3 +169,27 @@ public:
 	void update() override;
 	void exit() override;
 };
+
+class lethalchargeState : public playerState
+{
+public:
+	lethalchargeState(class player* player);
+	~lethalchargeState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+
+};
+
+class lethalattackState : public playerState
+{
+public:
+	lethalattackState(class player* player);
+	~lethalattackState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
+
+};

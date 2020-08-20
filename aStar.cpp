@@ -171,7 +171,7 @@ void aStar::pathFinder(tile* currentTile)
 
 	_currentTile = tempTile;
 
-	if (_stack > 100)
+	if (_stack > 300)
 	{
 		while (_currentTile->getParentTile() != NULL)
 		{
