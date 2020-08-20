@@ -283,11 +283,12 @@ void tabUI::update()
 
 	if (_on)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) || KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 		{
 			outMenu();
 		}
 	}
+
 
 	if (_hp < 0)
 		_hp = 0;

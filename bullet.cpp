@@ -154,13 +154,13 @@ void bullet::collision()
 			else if (_vPlayerBullet[i].next[j].y < 0) _vPlayerBullet[i].next[j].y = 0;
 		}
 
-		if (currentTileIndex.x >= maxTileX)
+		if (currentTileIndex.x >= maxTileX || currentTileIndex.x < 0)
 		{
 			_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
 			break;
 		}
 
-		if (currentTileIndex.y >= maxTileY)
+		if (currentTileIndex.y >= maxTileY || currentTileIndex.y < 0)
 		{
 			_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
 			break;
