@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "hedgehag.h"
 #include "scene.h"
+#include "player.h"
 
 HRESULT hedgehag::init()
 {
@@ -192,18 +193,19 @@ void hedgehag::update()
 	tileGet();//에너미의 타일검출 위치 가져오기
 	currentTileGet();//현재 에너미의 타일번호를 _nowOrder에 대입
 	move();//에너미 무브
+	mapOutCollision();//에너미가 맵밖으로 벗어나는걸 방지하기 위한 함수
 	animationControl();//에너미 애니메이션 컨트롤
 	animationAngleControl();//에너미와 플레이어간의 앵글값에 따른 애니메이션 컨트롤
-	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);//에너미 애니메이션 업데이트
+	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 7);//에너미 애니메이션 업데이트
 	angry();//에너미의 체력이 절반 이하가 되면 능력치 상승(공격력, 스피드, 공격딜레이)
 	if (_effect)//에너미가 공격상태에서 움직이지 않은경우
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x, CAMERA->getRelativeVector2(_position).y + 40);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 40, CAMERA->getRelativeVector2(_position).y + 40);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 40, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
 	}
 	if (!_effect && _isAttack)//에너미가 공격상태이고 움직였을경우
 	{
-		EFFECTMANAGER->play("enemyHedgehogMoveDust", CAMERA->getRelativeVector2(_position).x + 20, CAMERA->getRelativeVector2(_position).y + 40);
+		EFFECTMANAGER->play("enemyHedgehogMoveDust", Vector2(CAMERA->getRelativeVector2(_position).x + 20, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
 	}
 }
 
@@ -222,14 +224,13 @@ void hedgehag::render()
 	{
 		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
 	}
-	//RectangleMakeCenter(getMemDC(), _rc.getCenter().x, _rc.getCenter().y, 10, 10);
-	//RectangleMakeCenter(getMemDC(), _playerX, _playerY, 10, 10);
 }
 
 void hedgehag::move()
 {
 	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x;
 	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y;
+	int playerNowOrder = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder();
 
 	_distance = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
 	_angle = getAngle(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
@@ -245,9 +246,8 @@ void hedgehag::move()
 			_enemyDirection != ENEMY_UP_RIGHT_HIT &&
 			_enemyDirection != ENEMY_DOWN_RIGHT_HIT)
 		{
-			if (!_distanceChange && !_isAttack)//플레이어와 에너미의 거리가 250보다 크면
+			if (!_distanceChange && !_isAttack && playerNowOrder == _nowOrder)//플레이어와 에너미의 거리가 250보다 크면
 			{
-				
 				if (_move.size() != NULL)
 				{
 					float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
@@ -261,27 +261,10 @@ void hedgehag::move()
 					{
 						deleteMove();
 					}
-
 				}
-				else if (tileMove())
-				{
-					_position.x += cosf(_angle) * _speed;
-					_position.y += -sinf(_angle) * _speed;
-				}
-				else
-				{
-					_position.x += cosf(_angle + PI) * _speed;
-					_position.y += -sinf(_angle + PI) * _speed;
-				}
-				
 			}
-			else if (_distanceChange)
+			else if (_distanceChange  && playerNowOrder == _nowOrder)
 			{
-				if (_move.size() != NULL)
-				{
-					clearMove();
-				}
-
 				_attackDelay++;//공격딜레이
 				if (_attackDelay >= _maxAttackDelay && !_isAttack)
 				{
@@ -292,7 +275,7 @@ void hedgehag::move()
 				}
 			}
 
-			if (_isAttack)//에너미 공격시작
+			if (_isAttack && playerNowOrder == _nowOrder)//에너미 공격시작
 			{
 				_effect = true;
 				_attackCount++;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
@@ -324,7 +307,7 @@ void hedgehag::move()
 						}
 					}
 				}
-				else if (_distanceSave < 10 || _distanceSave > 750)
+				else if (_distanceSave < 10 || _distanceSave > 750 && playerNowOrder == _nowOrder)
 				{
 					_effect = false;
 					_isAttack = false;
@@ -350,9 +333,50 @@ void hedgehag::move()
 
 		if (!tileMove())
 		{
+			_effect = false;
 			_isAttack = false;
-			//_position.x += cosf(_angle) * _speed;
-			//_position.y += -sinf(_angle) * _speed;
+			_attackDelay = 0;//공격딜레이
+			_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+
+			if (_move.size() != NULL)
+			{
+				float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+					_move[_move.size() - 1]->getRect().getCenter().y);
+				float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+					_move[_move.size() - 1]->getRect().getCenter().y);
+				_position.x += cosf(an) * _speed;
+				_position.y += -sinf(an) * _speed;
+
+				if (d < 5)
+				{
+					deleteMove();
+				}
+			}
+		}
+
+		if (playerNowOrder != _nowOrder)
+		{
+			_effect = false;
+			_isAttack = false;
+			_attackDelay = 0;//공격딜레이
+			_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+
+			if (_move.size() != NULL)
+			{
+				float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+					_move[_move.size() - 1]->getRect().getCenter().y);
+				float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+					_move[_move.size() - 1]->getRect().getCenter().y);
+				_position.x += cosf(an) * _speed;
+				_position.y += -sinf(an) * _speed;
+
+				if (d < 5)
+				{
+					deleteMove();
+				}
+
+				_enemyDirection = ENEMY_UP_LEFT_ATTACK;
+			}
 		}
 	}
 	else//데미지를 받지 않았을때
@@ -472,53 +496,56 @@ void hedgehag::currentTileGet()
 	_nowOrder = _currentTile->getOrderIndex();
 }
 
+void hedgehag::mapOutCollision()
+{
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
+	maxTileX *= SIZE;
+	maxTileY *= SIZE;
+
+	if (_position.x < 0)
+	{
+		_position.x += abs(0 - _rc.left);
+		_effect = false;
+		_isAttack = false;
+		_attackDelay = 0;//공격딜레이
+		_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+	}
+	if (_position.x > maxTileX)
+	{
+		_position.x -= _rc.right - maxTileX;
+		_effect = false;
+		_isAttack = false;
+		_attackDelay = 0;//공격딜레이
+		_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+	}
+	if (_position.y < 0)
+	{
+		_position.y += abs(0 - _rc.top);
+		_effect = false;
+		_isAttack = false;
+		_attackDelay = 0;//공격딜레이
+		_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+	}
+	if (_position.y > maxTileY)
+	{
+		_position.y -= _rc.bottom - maxTileY;
+		_effect = false;
+		_isAttack = false;
+		_attackDelay = 0;//공격딜레이
+		_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+	}
+}
+
 bool hedgehag::tileMove()
 {
-	/*for (int i = 0; i < 3; i++)
-	{
-		if (_t[i]->getOrderIndex() > _nowOrder &&
-			_t[i]->getOrderIndex() != 4 &&
-			_t[i]->getOrderIndex() != 5)
-		{
-			return true;
-		}
-		else if ((_t[i]->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || _t[i]->getOrderIndex() < _nowOrder)
-		{
-			return true;
-		}
-		else if (_t[i]->getOrderIndex() == 5)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}*/
-		/*
-		else if (ti->getOrderIndex() == 5)
-		{
-			for (int j = 3; j < 6; j++)
-			{
-				ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[j].y][next[j].x];
-
-				if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
-				{
-					_state->setState(_vState[PLAYERSTATE::JUMP]);
-					break;
-				}
-
-			}
-		}
-		*/
-
 	for (int i = 0; i < 3; i++)
 	{
 		//물
 		if (_t[i]->getOrderIndex() == 0)
 		{
 			cout << "물" << endl;
-			return true;
+			return false;
 		}
 
 		//1층

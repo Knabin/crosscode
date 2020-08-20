@@ -101,7 +101,7 @@ private:
 
 	int _chargeCount; //충전할때의 카운트
 
-	int _randomAttackCount;  // 어떤 공격을 할까나~~??
+	int _stopCount;  // 잠시 멈춰있을때 카운트
 
 
 	//움직임 딜레이
@@ -118,6 +118,9 @@ private:
 
 	//화염방사 공격 딜레이
 	int _flamethrowerDelay;
+
+
+	bool _attack1, _attack2, _attack3, _attack4, _attack5;
 
 public:
 

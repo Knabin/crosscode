@@ -37,6 +37,7 @@ public:
 	void animationControl();
 	void tileGet();//타일위치 가져오기
 	void ballTileGet();//미어캣의 볼타일위치 가져오기
+	void mapOutCollision();//에너미들이 맵밖으로 나가지 못하게 하기위한 함수
 	bool ballTileMove();//볼타일 무브
 	bool tileMove();//에너미의 타일무브
 

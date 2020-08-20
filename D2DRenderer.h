@@ -39,6 +39,7 @@ private:
 	void CreateDefaultBrush();
 public:
 	void AddTextFormat(const wstring& font, const float& defaultSize = 1.f);
+	void AddTextBoldFormat(const wstring & font, const float & defaultSize = 1.f);
 	inline ID2D1RenderTarget* const GetRenderTarget()const { return this->mD2DRenderTarget; }
 public:
 	//텍스트 출력(기본 브러쉬 사용) 

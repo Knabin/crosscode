@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "bullet.h"
+#include "tile.h"
+#include "scene.h"
 
 HRESULT bullet::init()
 {
@@ -35,6 +37,7 @@ void bullet::update()
 	}
 
 	move();
+	collision();
 }
 
 void bullet::render()
@@ -73,6 +76,7 @@ void bullet::fire(float x, float y, float angle, float speed)
 	bullet.currentFrameY = 0;
 	bullet.rc.update(Vector2(0, 0), Vector2(48, 42), pivot::CENTER);
 	bullet.rc.set(bullet.position, pivot::CENTER);
+	bullet.nomal = false;
 
 	_vPlayerBullet.push_back(bullet);
 }
@@ -93,6 +97,7 @@ void bullet::nomalFire(float x, float y, float angle, float speed)
 	bullet.currentFrameY = 0;
 	bullet.rc.update(Vector2(0, 0), Vector2(24, 24), pivot::CENTER);
 	bullet.rc.set(bullet.position, pivot::CENTER);
+	bullet.nomal = true;
 
 	_vPlayerBullet.push_back(bullet);
 }
@@ -113,9 +118,105 @@ void bullet::move()
 		}
 		else ++_viPlayerBullet;
 	}
+
+	
 }
 
 void bullet::remove(int arrNum)
 {
 	_vPlayerBullet.erase(_vPlayerBullet.begin() + arrNum);
+}
+
+void bullet::collision()
+{
+	for (int i = 0; i < _vPlayerBullet.size(); ++i)
+	{
+		
+		POINT currentTileIndex = { _vPlayerBullet[i].position.x / SIZE, _vPlayerBullet[i].position.y / SIZE };
+		
+		_vPlayerBullet[i].next[0] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
+		_vPlayerBullet[i].next[1] = { currentTileIndex.x, currentTileIndex.y - 1 };
+		_vPlayerBullet[i].next[2] = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
+		_vPlayerBullet[i].next[3] = { currentTileIndex.x - 1, currentTileIndex.y };
+		_vPlayerBullet[i].next[4] = { currentTileIndex.x + 1, currentTileIndex.y };
+		_vPlayerBullet[i].next[5] = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
+		_vPlayerBullet[i].next[6] = { currentTileIndex.x, currentTileIndex.y + 1 };
+		_vPlayerBullet[i].next[7] = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+
+		int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+		int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
+
+		for (int j = 0; j < 8; ++j)
+		{
+			if (_vPlayerBullet[i].next[j].x > maxTileX) _vPlayerBullet[i].next[j].x = maxTileX;
+			else if (_vPlayerBullet[i].next[j].x < 0) _vPlayerBullet[i].next[j].x = 0;
+			if (_vPlayerBullet[i].next[j].y > maxTileY) _vPlayerBullet[i].next[j].y = maxTileY;
+			else if (_vPlayerBullet[i].next[j].y < 0) _vPlayerBullet[i].next[j].y = 0;
+		}
+
+		if (currentTileIndex.x >= maxTileX || currentTileIndex.x < 0)
+		{
+			_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+			break;
+		}
+
+		if (currentTileIndex.y >= maxTileY || currentTileIndex.y < 0)
+		{
+			_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+			break;
+		}
+
+		_vPlayerBullet[i]._nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
+
+		RECT temp;
+
+		for (int k = 0; k < 8; ++k)
+		{
+			tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[_vPlayerBullet[i].next[k].y][_vPlayerBullet[i].next[k].x];
+			if (IntersectRect(&temp, &ti->getRect().getRect(), &_vPlayerBullet[i].rc.getRect()))
+			{
+				if (ti->getOrderIndex() > _vPlayerBullet[i]._nowOrder )
+				{
+					if (_vPlayerBullet[i].nomal == true)
+					{
+						_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+						break;
+					}
+
+					if (_vPlayerBullet[i].count >= 4)
+					{
+						_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+						break;
+					}
+					float d = getAngle(ti->getRect().getCenter().x, ti->getRect().getCenter().y, _vPlayerBullet[i].rc.getCenter().x, _vPlayerBullet[i].rc.getCenter().y);
+					if ((d >= 0 && d < PI / 4) || (d >= PI + PI / 4 * 3 && d < PI2))
+					{
+						_vPlayerBullet[i].position.x = _vPlayerBullet[i].rc.right +10;
+						_vPlayerBullet[i].angle -= PI;
+					}
+					else if (d >= PI / 4 && d < PI / 4 * 3)
+					{
+						_vPlayerBullet[i].angle = PI2 - _vPlayerBullet[i].angle;
+						_vPlayerBullet[i].position.y = _vPlayerBullet[i].rc.top - 10;
+					}
+					else if (d >= PI + PI / 4 && d < PI2 - PI / 4)
+					{
+						_vPlayerBullet[i].angle = PI2 - _vPlayerBullet[i].angle;
+						_vPlayerBullet[i].position.y = _vPlayerBullet[i].rc.bottom + 10;
+					}
+					else if ((d >= PI / 4 * 3 && d < PI + PI / 4))
+					{
+						_vPlayerBullet[i].position.x = _vPlayerBullet[i].rc.left - 10;
+						_vPlayerBullet[i].angle -= PI;
+					}
+
+					_vPlayerBullet[i].count++;
+					_vPlayerBullet[i].rc.set(_vPlayerBullet[i].position, pivot::CENTER);
+					
+
+					break;
+				}
+			}
+		}
+	}	
 }
