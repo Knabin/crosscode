@@ -4,6 +4,7 @@
 #include "mine.h"
 #include "stoneshower.h"
 #include "flamethrower.h"
+#include "iceguide.h"
 
 enum bossState //보스 상태패턴 enum문
 {
@@ -30,7 +31,12 @@ enum bossState //보스 상태패턴 enum문
 	FLAMETHROWER,
 	FLAMETHROWER_END,
 	FLAMETHROWER_END2,
-	FLAMETHROWER_END3
+	FLAMETHROWER_END3,
+	ICEGUIDE_READY,
+	ICEGUIDE_READY2,
+	ICEGUIDE,
+	ICEGUIDE_END
+
 };
 struct tagBossPart  //보스 파츠별 구조체
 {
@@ -68,6 +74,7 @@ private:
 	mine* _mine;
 	stoneshower* _stoneshower;
 	flamethrower* _flamethrower;
+	iceguide* _iceguide;
 
 	image* image;
 	bossState _bossState;		//상태 패턴
@@ -91,6 +98,11 @@ private:
 	int _bossRightHandAttackFrameX2, _bossRightHandAttackFrameY2;
 	int _bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY;
 	int _bossLeftHandMoveFrameX2, _bossLeftHandMoveFrameY2;
+	int _bossLeftHandAttackFrameX2, _bossLeftHandAttackFrameY2;
+
+	int _centerMoveFrameX, _centerMoveFrameY;
+	int _centerFrameCount;
+	int _centerCurrentFrameX, _centerCurrentFrameY;
 
 	//보스 방어막 프레임
 	int _protectCurrentFrameX, _protectCurrentFrameY;

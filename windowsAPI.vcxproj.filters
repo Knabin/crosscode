@@ -233,6 +233,7 @@
     <ClCompile Include="mine.cpp" />
     <ClCompile Include="shop.cpp">
       <Filter>playGround\uiController</Filter>
+      </ClCompile>
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
@@ -242,6 +243,10 @@
     </ClCompile>
     <ClCompile Include="dialogText.cpp">
       <Filter>playGround\uiController</Filter>
+    </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="iceguide.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -489,6 +494,10 @@
     </ClInclude>
     <ClInclude Include="dialogText.h">
       <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="iceguide.h">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
