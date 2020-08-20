@@ -6,20 +6,20 @@
 #include "buffalo.h"
 #include "hedgehag.h"
 #include "bullets.h"
-//
-//HRESULT collisionManager::init()
-//{
-//	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
-//	_count = 0;
-//	_pushOut = false;
-//
-//	return S_OK;
-//}
-//
-//void collisionManager::release()
-//{
-//}
-//
+
+HRESULT collisionManager::init()
+{
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+	_count = 0;
+	_pushOut = false;
+
+	return S_OK;
+}
+
+void collisionManager::release()
+{
+}
+
 //void collisionManager::update()
 //{
 //	enemyCollision();//에너미끼리 충돌
@@ -32,7 +32,7 @@
 //void collisionManager::render()
 //{
 //}
-
+//
 //void collisionManager::buffaloCollision()
 //{
 //	

@@ -45,6 +45,7 @@ void bullet::render()
 	for (int i = 0; i < _vPlayerBullet.size(); i++)
 	{
 		_vPlayerBullet[i].image->frameRender(CAMERA->getRelativeVector2(_vPlayerBullet[i].rc.getCenter()), _vPlayerBullet[i].currentFrameX, _vPlayerBullet[i].currentFrameY);
+		IMAGEMANAGER->addImage("player_bulletEffect", L"images/player/player_bulletEffect.png");
 		IMAGEMANAGER->findImage("player_bulletEffect")->setAlpha(_alpha);
 		IMAGEMANAGER->findImage("player_bulletEffect")->render(CAMERA->getRelativeVector2(_vPlayerBullet[i].rc.getCenter().x - 24, _vPlayerBullet[i].rc.getCenter().y - 23));
 
