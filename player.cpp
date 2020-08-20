@@ -75,7 +75,7 @@ HRESULT player::init()
 	IMAGEMANAGER->addImage("player longAttackTwoLine", L"images/player/player_longAttack_TwoLine.png");
 	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
 	IMAGEMANAGER->addFrameImage("player aim", L"images/player/player_aim.png", 2, 1);
-	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge.png", 6, 8);
+	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge1.png", 6, 8);
 	
 	IMAGEMANAGER->addFrameImage("player dodgeDust", L"images/player/player_dodgedust.png", 5,1);
 
