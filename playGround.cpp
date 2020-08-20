@@ -145,7 +145,7 @@ void playGround::render()
 		//_enemyManager->render();
 
 		// 상태에 따른 마우스 변경 처리
-		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn() || SCENEMANAGER->getCurrentSceneName() == "title")
+		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn() || SCENEMANAGER->getCurrentSceneName() == "title" || SCENEMANAGER->getCurrentSceneName() == "maptool")
 		{
 			IMAGEMANAGER->findImage("cursor normal")->render(Vector2(_ptMouse));
 		}
