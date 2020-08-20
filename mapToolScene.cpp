@@ -103,7 +103,7 @@ HRESULT mapToolScene::init()
 	_enemyImage = IMAGEMANAGER->addImage("enemy", L"images/tile/tile_enemy.png");
 	_enemyImageBig = IMAGEMANAGER->addFrameImage("enemy b", L"images/tile/tile_enemy_big.png", 16, 18);
 
-
+	IMAGEMANAGER->addFrameImage("foothold prev", L"images/tile/footholdpreview.png", 1, 1);
 	
 	// ºó Å¸ÀÏ
 	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
@@ -191,8 +191,9 @@ void mapToolScene::release()
 	{
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
-			_vTiles[i][j]->release();
-			SAFE_DELETE(_vTiles[i][j]);
+			//delete(_vTiles[i][j]);
+			//_vTiles[i][j]->release();
+			//SAFE_DELETE(_vTiles[i][j]);
 		}
 		_vTiles[i].clear();
 	}
@@ -1019,6 +1020,9 @@ void mapToolScene::renderPreviewTile()
 				case 6:
 					img = IMAGEMANAGER->findImage("roof");
 					break;
+				case 7:
+					img = IMAGEMANAGER->findImage("foothold prev");
+					break;
 				}
 				
 				
@@ -1141,7 +1145,6 @@ void mapToolScene::saveMap()
 	ShowCursor(true);
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXTILEX * MAXTILEY * 18];
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
@@ -1164,24 +1167,28 @@ void mapToolScene::saveMap()
 
 	file = CreateFile(filePathSize, GENERIC_WRITE, NULL, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	ZeroMemory(str, sizeof(str));
-	sprintf_s(str, "x: %d, y: %d\n", _nowIndex.x, _nowIndex.y);
-	WriteFile(file, str, strlen(str), &write, NULL);
+	WriteFile(file, &_nowIndex.x, sizeof(int), &write, NULL);
+	WriteFile(file, &_nowIndex.y, sizeof(int), &write, NULL);
 
 	for (int i = 0; i <= _nowIndex.y; ++i)
 	{
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
-			ZeroMemory(str, sizeof(str));
-			sprintf_s(str, "%d,%d,%d,%d,%d,%d,%d\n",
-			_vTiles[i][j]->getTerrainX(),
-			_vTiles[i][j]->getTerrainY(),
-			_vTiles[i][j]->getObjectX(),
-			_vTiles[i][j]->getObjectY(),
-			_vTiles[i][j]->getTerrainImageNum(),
-			_vTiles[i][j]->getObjectImageNum(),
-			_vTiles[i][j]->getOrderIndex());
-			WriteFile(file, str, strlen(str), &write, NULL);
+			int terX = _vTiles[i][j]->getTerrainX();
+			int terY = _vTiles[i][j]->getTerrainY();
+			int objX = _vTiles[i][j]->getObjectX();
+			int objY = _vTiles[i][j]->getObjectY();
+			int terN = _vTiles[i][j]->getTerrainImageNum();
+			int objN = _vTiles[i][j]->getObjectImageNum();
+			int order = _vTiles[i][j]->getOrderIndex();
+
+			WriteFile(file, &terX, sizeof(int), &write, NULL);
+			WriteFile(file, &terY, sizeof(int), &write, NULL);
+			WriteFile(file, &objX, sizeof(int), &write, NULL);
+			WriteFile(file, &objY, sizeof(int), &write, NULL);
+			WriteFile(file, &terN, sizeof(int), &write, NULL);
+			WriteFile(file, &objN, sizeof(int), &write, NULL);
+			WriteFile(file, &order, sizeof(int), &write, NULL);
 		}
 	}
 
@@ -1206,20 +1213,22 @@ void mapToolScene::saveMap()
 	file = CreateFile(TEXT(s.c_str()), GENERIC_WRITE, NULL, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ZeroMemory(str, sizeof(str));
-	sprintf_s(str, "enemy number: %d\n", _vEnemies.size());
-	WriteFile(file, str, strlen(str), &write, NULL);
+	int size = _vEnemies.size();
+	WriteFile(file, &size, sizeof(int), &write, NULL);
 
 	for (int i = 0; i < _vEnemies.size(); ++i)
 	{
-		ZeroMemory(str, sizeof(str));
-		sprintf_s(str, "%d,%d,%d,%d,%d\n",
-			_vEnemies[i].tileX,
-			_vEnemies[i].tileY,
-			_vEnemies[i].frameX,
-			_vEnemies[i].frameY,
-			_vEnemies[i].enemyType);
-		WriteFile(file, str, strlen(str), &write, NULL);
+		int tileX = _vEnemies[i].tileX;
+		int tileY = _vEnemies[i].tileY;
+		int frameX = _vEnemies[i].frameX;
+		int frameY = _vEnemies[i].frameY;
+		int enemyType = _vEnemies[i].enemyType;
+
+		WriteFile(file, &tileX, sizeof(int), &write, NULL);
+		WriteFile(file, &tileY, sizeof(int), &write, NULL);
+		WriteFile(file, &frameX, sizeof(int), &write, NULL);
+		WriteFile(file, &frameY, sizeof(int), &write, NULL);
+		WriteFile(file, &enemyType, sizeof(int), &write, NULL);
 	}
 
 	CloseHandle(file);
@@ -1231,7 +1240,6 @@ void mapToolScene::loadMap()
 	ShowCursor(true);
 	OPENFILENAME ofn = { 0 };
 	char filePathSize[1028] = "";
-	char str[100 + MAXTILEX * MAXTILEY * 18];
 	char* context = NULL;
 
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -1267,34 +1275,41 @@ void mapToolScene::loadMap()
 	file = CreateFile(filePathSize, GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, str, strlen(str), &read, NULL);
-
-	char* tok = strtok_s(str, "\n", &context);
-	sscanf_s(tok, "x: %d, y: %d", &_nowIndex.x, &_nowIndex.y);
-	tok = strtok_s(NULL, "\n", &context);
+	ReadFile(file, &_nowIndex.x, sizeof(int), &read, NULL);
+	ReadFile(file, &_nowIndex.y, sizeof(int), &read, NULL);
 
 	for (int i = 0; i <= _nowIndex.y; ++i)
 	{
 		vector<tile *> v;
 		for (int j = 0; j <= _nowIndex.x; ++j)
 		{
-			if (tok != NULL)
+			tile* t = new tile();
+			ZeroMemory(t, sizeof(tile));
+
+			int terX;
+			int terY;
+			int objX;
+			int objY;
+			int terN;
+			int objN;
+			int order;
+
+			ReadFile(file, &terX, sizeof(int), &read, NULL);
+			ReadFile(file, &terY, sizeof(int), &read, NULL);
+			ReadFile(file, &objX, sizeof(int), &read, NULL);
+			ReadFile(file, &objY, sizeof(int), &read, NULL);
+			ReadFile(file, &terN, sizeof(int), &read, NULL);
+			ReadFile(file, &objN, sizeof(int), &read, NULL);
+			ReadFile(file, &order, sizeof(int), &read, NULL);
+
+			t->setTiles(terX, terY, objX, objY, terN, objN, order);
+			t->setTileRc(j * SIZE, i * SIZE);
+			v.push_back(t);
+
+			if (objX != -1 && objY != -1 && objN == 3)
 			{
-				int tx = -1, ty = -1, ox = -1, oy = -1, pn = 0, on = 0, oi = 0;
-				sscanf_s(tok, "%d,%d,%d,%d,%d,%d,%d", &tx, &ty, &ox, &oy, &pn, &on, &oi);
-
-				tile * t = new tile();
-				t->setTiles(tx, ty, ox, oy, pn, on, oi);
-				t->setTileRc(j * SIZE, i * SIZE);
-				v.push_back(t);
-
-				if (ox != -1 && oy != -1 && on == 3)
-				{
-					tagObject obj = { j, i, ox, oy, on, (ox > 2) ? 1 : 0 };
-					_mObject.insert(make_pair(tagPoint{ j, i }, obj));
-				}
-
-				tok = strtok_s(NULL, "\n", &context);
+				tagObject obj = { j, i, objX, objY, objN, (objX > 2) ? 1 : 0 };
+				_mObject.insert(make_pair(tagPoint{ j, i }, obj));
 			}
 		}
 		_vTiles.push_back(v);
@@ -1325,28 +1340,27 @@ void mapToolScene::loadMap()
 	if (file == INVALID_HANDLE_VALUE)
 		return;
 
-	ReadFile(file, str2, strlen(str2), &read, NULL);
-
 	int maxNum = 0;
-
-	context = NULL;
-	tok = strtok_s(str2, "\n", &context);
-	sscanf_s(tok, "enemy number: %d", &maxNum);
-	tok = strtok_s(NULL, "\n", &context);
+	ReadFile(file, &maxNum, sizeof(int), &read, NULL);
 
 	_vEnemies.clear();
 
 	for (int i = 0; i < maxNum; ++i)
 	{
-		if (tok != NULL)
-		{
-			int tx = -1, ty = -1, fx = -1, fy = -1, et = 0;
-			sscanf_s(tok, "%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &et);
+		int tileX;
+		int tileY;
+		int frameX;
+		int frameY;
+		int enemyType;
 
-			tagEnemy enemy = { tx, ty, fx, fy, et };
-			_vEnemies.push_back(enemy);
-			tok = strtok_s(NULL, "\n", &context);
-		}
+		ReadFile(file, &tileX, sizeof(int), &read, NULL);
+		ReadFile(file, &tileY, sizeof(int), &read, NULL);
+		ReadFile(file, &frameX, sizeof(int), &read, NULL);
+		ReadFile(file, &frameY, sizeof(int), &read, NULL);
+		ReadFile(file, &enemyType, sizeof(int), &read, NULL);
+
+		tagEnemy enemy = { tileX, tileY, frameX, frameY, enemyType };
+		_vEnemies.push_back(enemy);
 	}
 
 	CloseHandle(file);
@@ -1528,6 +1542,9 @@ void mapToolScene::redrawMap()
 			break;
 		case 6:
 			img = IMAGEMANAGER->findImage("roof");
+			break;
+		case 7:
+			img = IMAGEMANAGER->findImage("foothold prev");
 			break;
 		}
 		img->frameRender(

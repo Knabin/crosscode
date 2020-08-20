@@ -11,7 +11,7 @@ HRESULT puzzleScene::init()
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
-	this->getDataFromFile("puzzlemap.map");
+	this->getDataFromFile("puzzlemap2.map");
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
