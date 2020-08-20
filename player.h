@@ -54,6 +54,7 @@ private:
 
 	vector<playerState*>	_vState;
 
+	POINT _backTile;
 	POINT tileIndex;
 	RECT rcCollision;
 	int _nowOrder;
