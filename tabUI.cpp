@@ -135,7 +135,7 @@ HRESULT tabUI::init()
 	{
 		_eqRect[i].update(Vector2(1223,248+128*i), Vector2(IMAGEMANAGER->findImage("eq_ui")->getWidth() * 0.85f, IMAGEMANAGER->findImage("eq_ui")->getHeight() * 0.85f), pivot::LEFTTOP);
 	}
-
+	
 	return S_OK;
 }
 
@@ -207,6 +207,7 @@ void tabUI::update()
 			OBJECTMANAGER->findObject(objectType::UI, "inven5")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven6")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven7")->setIsActive(true);
+
 			break;
 		case 1:
 			OBJECTMANAGER->findObject(objectType::UI, "inven1")->setIsActive(true);
@@ -216,6 +217,21 @@ void tabUI::update()
 			OBJECTMANAGER->findObject(objectType::UI, "inven5")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven6")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven7")->setIsActive(true);
+
+
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"ÆÈ")
+					{
+						count++;
+						cout << _vIv[i].itemNum << endl;
+						cout << _vIv[i].count << endl;
+					}
+				}
+			}
 			break;
 		case 2:
 			OBJECTMANAGER->findObject(objectType::UI, "inven1")->setIsActive(true);

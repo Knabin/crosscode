@@ -4,6 +4,8 @@
 HRESULT inventory::init()
 {
 	_money = 0;
+	
+	getItem(L"ÆÈ", 0);
 
 	return S_OK;
 }
@@ -20,7 +22,7 @@ void inventory::render()
 {
 }
 
-void inventory::getItem(string _type, int _itemNum, bool shop)
+void inventory::getItem(wstring _type, int _itemNum, bool shop)
 {
 	int maxCount = 0;
 	for (int i = 0; i < _vInven.size(); ++i)
@@ -47,7 +49,7 @@ void inventory::getItem(string _type, int _itemNum, bool shop)
 	}
 }
 
-void inventory::deleteItem(string _type, int _itemNum, bool shop)
+void inventory::deleteItem(wstring _type, int _itemNum, bool shop)
 {
 	for (int i = 0; i < _vInven.size(); ++i)
 	{
