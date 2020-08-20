@@ -12,7 +12,7 @@ HRESULT mountainScene::init()
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
-	this->getDataFromFile("mountainmap.map");
+	this->getDataFromFile("mountainmap2.map");
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
 

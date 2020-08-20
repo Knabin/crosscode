@@ -76,7 +76,6 @@ void scene::getTilesFromFile(string fileName)
 	HANDLE file;
 	DWORD read;
 
-	char str[100 + MAXTILEX * MAXTILEY * 18];
 	char* context = NULL;
 
 	string strfileName = "map/" + fileName;
@@ -87,11 +86,8 @@ void scene::getTilesFromFile(string fileName)
 	if (file == INVALID_HANDLE_VALUE)
 		return;
 
-	ReadFile(file, str, strlen(str), &read, NULL);
-
-	char* tok = strtok_s(str, "\n", &context);
-	sscanf_s(tok, "x: %d, y: %d", &_maxX, &_maxY);
-	tok = strtok_s(NULL, "\n", &context);
+	ReadFile(file, &_maxX, sizeof(int), &read, NULL);
+	ReadFile(file, &_maxY, sizeof(int), &read, NULL);
 
 	_vTiles.clear();
 
@@ -100,134 +96,146 @@ void scene::getTilesFromFile(string fileName)
 		vTileOneLine v;
 		for (int j = 0; j <= _maxX; ++j)
 		{
-			if (tok != NULL)
-			{
-				int tx = -1, ty = -1, ox = -1, oy = -1, pn = 0, on = 0, oi = 0;
-				sscanf_s(tok, "%d,%d,%d,%d,%d,%d,%d", &tx, &ty, &ox, &oy, &pn, &on, &oi);
-				tile* t = new tile();
-				t->setTiles(tx, ty, ox, oy, pn, on, oi);
-				t->setTileRc(j * SIZE, i * SIZE);
-				v.push_back(t);
+			tile* t = new tile();
 
-				if (ox != -1 && oy != -1 && on == 3)
+			int terX;
+			int terY;
+			int objX;
+			int objY;
+			int terN;
+			int objN;
+			int order;
+
+			ReadFile(file, &terX, sizeof(int), &read, NULL);
+			ReadFile(file, &terY, sizeof(int), &read, NULL);
+			ReadFile(file, &objX, sizeof(int), &read, NULL);
+			ReadFile(file, &objY, sizeof(int), &read, NULL);
+			ReadFile(file, &terN, sizeof(int), &read, NULL);
+			ReadFile(file, &objN, sizeof(int), &read, NULL);
+			ReadFile(file, &order, sizeof(int), &read, NULL);
+
+			t->setName("tile");
+			t->setTiles(terX, terY, objX, objY, terN, objN, order);
+			t->setTileRc(j * SIZE, i * SIZE);
+			v.push_back(t);
+
+			if (objX != -1 && objY != -1 && objN == 3)
+			{
+				int type = objX / 3;
+				if (objY == 0)
 				{
-					int type = ox / 3;
-					if (oy == 0)
+					switch (type)
 					{
-						switch (type)
-						{
-						case 0:
-						{
-							vendor* ven = new vendor();
-							ven->setType(ox % 3);
-							ven->setPosition(v[j]->getRect().getCenter());
-							ven->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(ven));
-						}
-						break;
-						case 1:
-						{
-							door* doo = new door();
-							doo->setType(ox % 3);
-							doo->setPosition(Vector2(v[j]->getRect().left, v[j]->getRect().top + SIZE * 0.5f));
-							doo->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(doo));
-						}
-						break;
-						}
+					case 0:
+					{
+						vendor* ven = new vendor();
+						ven->setType(objX % 3);
+						ven->setPosition(v[j]->getRect().getCenter());
+						ven->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(ven));
 					}
-					else if (oy == 1)
+					break;
+					case 1:
 					{
-						switch (type)
-						{
-						case 0:
-						{
-							mapObject* tree = new mapObject(0, ox % 3);
-							tree->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top - SIZE * 2 });
-							tree->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(tree));
-						}
-						break;
-						case 1:
-						{
-							mapObject* grass = new mapObject(1, ox % 3);
-							grass->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
-							grass->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(grass));
-						}
-						break;
-						}
+						door* doo = new door();
+						doo->setType(objX % 3);
+						doo->setPosition(Vector2(v[j]->getRect().left, v[j]->getRect().top + SIZE * 0.5f));
+						doo->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(doo));
 					}
-					else if (oy == 2)
-					{
-						{
-							puzzleTabButton* puzzle = new puzzleTabButton();
-							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
-							puzzle->init();
-							puzzle->setFrameY(ox);
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
-						}
-					}
-					else if (oy == 3)
-					{
-						{
-							puzzleComboButton* puzzle = new puzzleComboButton();
-							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
-							puzzle->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
-						}
-					}
-					else if (oy == 4)
-					{
-						{
-							puzzleDestruct* puzzle = new puzzleDestruct();
-							puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x - SIZE * 0.5f, v[j]->getRect().getCenter().y });
-							puzzle->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
-						}
-					}
-					else if (oy == 5)
-					{
-						switch (ox)
-						{
-						case 0:	// ²ªÀÎ ³×¸ð
-						{
-							puzzleBlueWall* wall = new puzzleBlueWall(ox);
-							wall->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().getCenter().y });
-							wall->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
-						}
-						break;
-						case 1:	// ±ä ³×¸ð
-						{
-							puzzleBlueWall* wall = new puzzleBlueWall(ox);
-							wall->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().getCenter().y});
-							wall->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
-						}
-						break;
-						case 2: // ÂªÀ½
-						case 3: // ±ç
-						{
-							puzzleOrangeWall* wall = new puzzleOrangeWall(ox % 2);
-							wall->setPosition(Vector2{ v[j]->getRect().getCenter() });
-							wall->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
-						}
-						break;
-						}
-					}
-					else if (oy == 6)
-					{
-						{
-							mapObject* roof = new mapObject(2, 0);
-							roof->setPosition(Vector2{ v[j]->getRect().getCenter() });
-							roof->init();
-							OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(roof));
-						}
+					break;
 					}
 				}
-				tok = strtok_s(NULL, "\n", &context);
+				else if (objY == 1)
+				{
+					switch (type)
+					{
+					case 0:
+					{
+						mapObject* tree = new mapObject(0, objX % 3);
+						tree->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top - SIZE * 2 });
+						tree->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(tree));
+					}
+					break;
+					case 1:
+					{
+						mapObject* grass = new mapObject(1, objX % 3);
+						grass->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
+						grass->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(grass));
+					}
+					break;
+					}
+				}
+				else if (objY == 2)
+				{
+					{
+						puzzleTabButton* puzzle = new puzzleTabButton();
+						puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
+						puzzle->init();
+						puzzle->setFrameY(objX);
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
+					}
+				}
+				else if (objY == 3)
+				{
+					{
+						puzzleComboButton* puzzle = new puzzleComboButton();
+						puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().top });
+						puzzle->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
+					}
+				}
+				else if (objY == 4)
+				{
+					{
+						puzzleDestruct* puzzle = new puzzleDestruct();
+						puzzle->setPosition(Vector2{ v[j]->getRect().getCenter().x - SIZE * 0.5f, v[j]->getRect().getCenter().y });
+						puzzle->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(puzzle));
+					}
+				}
+				else if (objY == 5)
+				{
+					switch (objX)
+					{
+					case 0:	// ²ªÀÎ ³×¸ð
+					{
+						puzzleBlueWall* wall = new puzzleBlueWall(objX);
+						wall->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().getCenter().y });
+						wall->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
+					}
+					break;
+					case 1:	// ±ä ³×¸ð
+					{
+						puzzleBlueWall* wall = new puzzleBlueWall(objX);
+						wall->setPosition(Vector2{ v[j]->getRect().getCenter().x, v[j]->getRect().getCenter().y });
+						wall->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
+					}
+					break;
+					case 2: // ÂªÀ½
+					case 3: // ±ç
+					{
+						puzzleOrangeWall* wall = new puzzleOrangeWall(objX % 2);
+						wall->setPosition(Vector2{ v[j]->getRect().getCenter() });
+						wall->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(wall));
+					}
+					break;
+					}
+				}
+				else if (objY == 6)
+				{
+					{
+						mapObject* roof = new mapObject(2, 0);
+						roof->setPosition(Vector2{ v[j]->getRect().getCenter() });
+						roof->init();
+						OBJECTMANAGER->addObject(objectType::MAPOBJECT, dynamic_cast<gameObject*>(roof));
+					}
+				}
 			}
 		}
 		_vTiles.push_back(v);
@@ -241,7 +249,6 @@ void scene::getEnemiesFromFile(string fileName)
 	HANDLE file;
 	DWORD read;
 	
-	char str[1000];
 	char* context = NULL;
 
 	string strfileName = "enemy/" + fileName;
@@ -252,26 +259,31 @@ void scene::getEnemiesFromFile(string fileName)
 	if (file == INVALID_HANDLE_VALUE)
 		return;
 
-	ReadFile(file, str, strlen(str), &read, NULL);
-
 	int maxNum = 0;
 
-	char* tok = strtok_s(str, "\n", &context);
-	sscanf_s(tok, "enemy number: %d", &maxNum);
-	tok = strtok_s(NULL, "\n", &context);
+	ReadFile(file, &maxNum, sizeof(int), &read, NULL);
 
 	for (int i = 0; i < maxNum; ++i)
 	{
-		int tx = -1, ty = -1, fx = -1, fy = -1, et = 0;
-		sscanf_s(tok, "%d,%d,%d,%d,%d", &tx, &ty, &fx, &fy, &et);
+		int tileX;
+		int tileY;
+		int frameX;
+		int frameY;
+		int enemyType;
 
-		switch (et)
+		ReadFile(file, &tileX, sizeof(int), &read, NULL);
+		ReadFile(file, &tileY, sizeof(int), &read, NULL);
+		ReadFile(file, &frameX, sizeof(int), &read, NULL);
+		ReadFile(file, &frameY, sizeof(int), &read, NULL);
+		ReadFile(file, &enemyType, sizeof(int), &read, NULL);
+
+		switch (enemyType)
 		{
 		case 0:
 		{
 			gameObject* hed = new hedgehag();
 			hed->init();
-			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+			hed->setPosition(_vTiles[tileY][tileX]->getRect().getCenter());
 			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
 		}
 		break;
@@ -279,7 +291,7 @@ void scene::getEnemiesFromFile(string fileName)
 		{
 			gameObject* hed = new meerkat();
 			hed->init();
-			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+			hed->setPosition(_vTiles[tileY][tileX]->getRect().getCenter());
 			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
 		}
 		break;
@@ -287,12 +299,11 @@ void scene::getEnemiesFromFile(string fileName)
 		{
 			gameObject* hed = new buffalo();
 			hed->init();
-			hed->setPosition(_vTiles[ty][tx]->getRect().getCenter());
+			hed->setPosition(_vTiles[tileY][tileX]->getRect().getCenter());
 			OBJECTMANAGER->addObject(objectType::ENEMY, hed);
 		}
 		break;
 		}
-		tok = strtok_s(NULL, "\n", &context);
 	}
 
 	CloseHandle(file);

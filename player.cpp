@@ -129,7 +129,11 @@ void player::release()
 void player::update()
 {
 	_bullet->update();
-	
+	if (EVENTMANAGER->isPlayingEvent())
+	{
+		_state->updateState();
+		return;
+	}
 	if (KEYMANAGER->isStayKeyDown('W') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])

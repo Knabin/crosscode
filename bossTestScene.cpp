@@ -11,7 +11,7 @@ HRESULT bossTestScene::init()
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
-	this->getDataFromFile("bossmap.map");
+	this->getDataFromFile("bossmap2.map");
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));

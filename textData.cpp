@@ -74,6 +74,24 @@ vector<string> textData::txtLoad(const char * loadFileName)
 	return charArraySeparation(str);
 }
 
+vector<string> textData::txtLoad(const char * loadFileName, const char * c)
+{
+	HANDLE file;
+	DWORD read;
+
+	char str[700];
+	ZeroMemory(str, sizeof(str));
+
+	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, str, 700, &read, NULL);
+
+	CloseHandle(file);
+
+	return charArraySeperationWith(str, c);
+}
+
 vector<string> textData::charArraySeparation(char charArray[])
 {
 	vector<string> vArray;
@@ -99,4 +117,70 @@ vector<string> textData::charArraySeparation(char charArray[])
 
 
 	return vArray;
+}
+
+vector<string> textData::charArraySeperationWith(char charArray[], const char * c)
+{
+	vector<string> vArray;
+
+	char* temp;
+	const char* separator = c;
+	char* token;
+
+	token = strtok_s(charArray, separator, &temp);
+
+	vArray.push_back(token);
+
+	while (NULL != (token = strtok_s(NULL, separator, &temp)))
+	{
+		vArray.push_back(token);
+	}
+
+	return vArray;
+}
+
+bool textData::canLoadFile(const char * loadFileName)
+{
+	HANDLE file;
+	DWORD read;
+
+	char str[128];
+
+	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, str, 128, &read, NULL);
+
+	CloseHandle(file);
+
+	char* ptr = strchr(str, ',');
+
+	if (ptr != NULL)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool textData::canLoadFile(const char * loadFileName, char c)
+{
+	HANDLE file;
+	DWORD read;
+
+	char str[700];
+
+	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, str, 700, &read, NULL);
+
+	CloseHandle(file);
+
+	char* ptr = strchr(str, c);
+
+	if (ptr != NULL)
+	{
+		return true;
+	}
+	return false;
 }

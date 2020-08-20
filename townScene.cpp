@@ -13,7 +13,7 @@ HRESULT townScene::init()
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
-	this->getDataFromFile("townmap.map");
+	this->getDataFromFile("townmap2.map");
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
@@ -43,9 +43,10 @@ HRESULT townScene::init()
 	_nextScene = "mountain";
 	_nextPoint = Vector2(50, 1700);
 
-	//iPlayerMove* moveEvent = new iPlayerMove(Vector2(36 * SIZE, 47 * SIZE - 400));
-	//iDialog* dialogEvent = new iDialog(new dialog("test.data"));
-	//EVENTMANAGER->addEvent(moveEvent);
+	iPlayerMove* moveEvent = new iPlayerMove(Vector2(36 * SIZE, 47 * SIZE - 400));
+	iDialog* dialogEvent = new iDialog(new dialog("1"));
+	EVENTMANAGER->addEvent(moveEvent);
+	EVENTMANAGER->addEvent(dialogEvent);
 
 	return S_OK;
 }

@@ -58,16 +58,20 @@ iDialog::iDialog(dialog * dialog)
 
 void iDialog::eventStart()
 {
-	_dialog->loadText();
+	_dialog->loadText("1");
+	_dialog->next();
 }
 
 bool iDialog::eventUpdate()
 {
-	if (_dialog->next())
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		// true∏È ∏ÿ√„
-		SAFE_DELETE(_dialog);
-		return true;
+		if (_dialog->next())
+		{
+			// true∏È ∏ÿ√„
+			SAFE_DELETE(_dialog);
+			return true;
+		}
 	}
 	return false;
 }

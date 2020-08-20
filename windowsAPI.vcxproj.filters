@@ -184,69 +184,57 @@
     <ClCompile Include="mine.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="stoneshower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="buffalo.cpp">
       <Filter>enemyTest</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="puzzleTabButton.cpp">
       <Filter>playGround\puzzle</Filter>
     </ClCompile>
     <ClCompile Include="puzzleComboButton.cpp">
       <Filter>playGround\puzzle</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="bullet.cpp">
       <Filter>playerTest</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="puzzleDestruct.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="puzzleBlueWall.cpp">
       <Filter>playGround\puzzle</Filter>
     </ClCompile>
     <ClCompile Include="puzzleOrangeWall.cpp">
       <Filter>playGround\puzzle</Filter>
     </ClCompile>
-    <ClCompile Include="flamethrower.cpp" />
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="townScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
     <ClCompile Include="initLoadingScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
-    <ClCompile Include="loadingScene.cpp">
-      <Filter>playGround\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="shop.cpp">
       <Filter>playGround\uiController</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="dialog.cpp">
       <Filter>playGround\uiController</Filter>
     </ClCompile>
     <ClCompile Include="dialogText.cpp">
       <Filter>playGround\uiController</Filter>
     </ClCompile>
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="iceguide.cpp">
       <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="portrait.cpp">
+      <Filter>playGround\uiController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -442,27 +430,21 @@
     <ClInclude Include="mine.h">
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
-    <ClInclude Include="mine.h" />
     <ClInclude Include="stoneshower.h">
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
     <ClInclude Include="buffalo.h">
       <Filter>enemyTest</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
     <ClInclude Include="puzzleTabButton.h">
       <Filter>playGround\puzzle</Filter>
     </ClInclude>
     <ClInclude Include="puzzleComboButton.h">
       <Filter>playGround\puzzle</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
     <ClInclude Include="bullet.h">
       <Filter>playerTest</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
     <ClInclude Include="puzzleDestruct.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
@@ -484,20 +466,21 @@
     <ClInclude Include="flamethrower.h">
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
     <ClInclude Include="shop.h">
       <Filter>playGround\uiController</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
     <ClInclude Include="dialog.h">
       <Filter>playGround\uiController</Filter>
     </ClInclude>
     <ClInclude Include="dialogText.h">
       <Filter>playGround\uiController</Filter>
     </ClInclude>
-    <ClInclude Include="mine.h" />
     <ClInclude Include="iceguide.h">
       <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="portrait.h">
+      <Filter>playGround\uiController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

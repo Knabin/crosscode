@@ -85,6 +85,8 @@ void initLoadingScene::update()
 		IMAGEMANAGER->addFrameImage("wall4 prev", L"images/tile/wall4preview.png", 1, 1);
 		IMAGEMANAGER->addFrameImage("roof", L"images/object/test.png", 1, 1);
 
+		IMAGEMANAGER->addImage("event back", L"images/UI/eventback.png");
+
 
 		_isInit = true;
 	}
