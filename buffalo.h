@@ -42,6 +42,7 @@ public:
 	void animationDraw();
 	void animationControl();
 	void tileGet();
+	void mapOutCollision();//에너미들이 맵밖으로 나가지 못하게 하기위한 함수
 	bool tileMove();
 };
 
