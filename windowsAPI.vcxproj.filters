@@ -236,6 +236,9 @@
     <ClCompile Include="portrait.cpp">
       <Filter>playGround\uiController</Filter>
     </ClCompile>
+    <ClCompile Include="foothold.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -481,6 +484,9 @@
     <ClInclude Include="mine.h" />
     <ClInclude Include="portrait.h">
       <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="foothold.h">
+      <Filter>playGround\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

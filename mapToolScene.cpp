@@ -103,7 +103,7 @@ HRESULT mapToolScene::init()
 	_enemyImage = IMAGEMANAGER->addImage("enemy", L"images/tile/tile_enemy.png");
 	_enemyImageBig = IMAGEMANAGER->addFrameImage("enemy b", L"images/tile/tile_enemy_big.png", 16, 18);
 
-
+	IMAGEMANAGER->addFrameImage("foothold prev", L"images/tile/footholdpreview.png", 1, 1);
 	
 	// ºó Å¸ÀÏ
 	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
@@ -1020,6 +1020,9 @@ void mapToolScene::renderPreviewTile()
 				case 6:
 					img = IMAGEMANAGER->findImage("roof");
 					break;
+				case 7:
+					img = IMAGEMANAGER->findImage("foothold prev");
+					break;
 				}
 				
 				
@@ -1539,6 +1542,9 @@ void mapToolScene::redrawMap()
 			break;
 		case 6:
 			img = IMAGEMANAGER->findImage("roof");
+			break;
+		case 7:
+			img = IMAGEMANAGER->findImage("foothold prev");
 			break;
 		}
 		img->frameRender(

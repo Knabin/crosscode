@@ -41,7 +41,6 @@ public:
 	void getDataFromFile(string fileName);
 	void getTilesFromFile(string fileName);
 	void getEnemiesFromFile(string fileName);
-	void getObjectsFromFile(string fileName);
 
 	vTiles& getTiles() { return _vTiles; }
 };

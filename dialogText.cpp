@@ -29,7 +29,7 @@ void dialogText::release()
 void dialogText::update()
 {
 	_textCount++;
-	if (_textCount % 3 == 0)
+	if (_textCount % 2 == 0)
 	{
 		if(_textIndex < _str.size()) _textIndex++;
 	}

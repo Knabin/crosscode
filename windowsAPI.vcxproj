@@ -173,6 +173,7 @@
     <ClInclude Include="floatCircle.h" />
     <ClInclude Include="floatPoint.h" />
     <ClInclude Include="floatRect.h" />
+    <ClInclude Include="foothold.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="hedgehag.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="floatCircle.cpp" />
     <ClCompile Include="floatPoint.cpp" />
     <ClCompile Include="floatRect.cpp" />
+    <ClCompile Include="foothold.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="hedgehag.cpp" />
