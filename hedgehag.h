@@ -23,6 +23,7 @@ public:
 	void animationAngleControl();//에너미와 플레이어간에 앵글값에 따른 애니메이션
 	void tileGet();//타일위치 가져오기
 	void currentTileGet();//현재 에너미의 타일위치
+	void mapOutCollision();//에너미들이 맵밖으로 나가지 못하게 하기위한 함수
 	bool tileMove();//에너미의 타일무브
 };
 

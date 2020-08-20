@@ -2,6 +2,7 @@
 #include "meerkat.h"
 #include "scene.h"
 #include "bullets.h"
+#include "player.h"
 
 HRESULT meerkat::init()
 {
@@ -199,8 +200,9 @@ void meerkat::update()
 {
 	tileGet();//에너미의 타울검출 위치 업데이트
 	move();//에너미 무브
+	mapOutCollision();//에너미가 맵밖으로 벗어나지 못하기 하기위한 함수
 	animationControl();//에너미 애니메이션 컨트롤
-	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
+	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 7);
 	angry();//에너미의 체력이 절반 이하가 되면 능력치 상승(스피드, 공격력, 공격딜레이)
 
 	if (_isAttack)//공격상태가 트루면
@@ -249,6 +251,7 @@ void meerkat::move()
 {
 	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x;
 	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y;
+	int playerNowOrder = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder();
 
 	_distance = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
 	_angle = getAngle(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
@@ -260,7 +263,8 @@ void meerkat::move()
 			_enemyDirection != ENEMY_DOWN_LEFT_HIT &&
 			_enemyDirection != ENEMY_RIGHT_HIT &&
 			_enemyDirection != ENEMY_UP_RIGHT_HIT &&
-			_enemyDirection != ENEMY_DOWN_RIGHT_HIT)
+			_enemyDirection != ENEMY_DOWN_RIGHT_HIT &&
+			playerNowOrder == 1)
 		{
 			if (_distance <= _smallDistance && !_isBigMove)//플레이어랑 에너미의 거리가 가까우면
 			{
@@ -272,13 +276,6 @@ void meerkat::move()
 						_isMove = true;
 					}
 				}
-				/*
-				if (!tileMove() && !_reflect && !_isBigMove)//미어캣 주변에 장애물이 있고 장애물의 반대방향으로 이동되게 하기위한 조건
-				{
-					_angleSave += PI;//장애물의 반대방향으로 이동
-					_reflect = true;
-				}
-				*/
 			}
 
 			if (!tileMove() && !_reflect && !_isBigMove)//미어캣 주변에 장애물이 있고 장애물의 반대방향으로 이동되게 하기위한 조건
@@ -440,7 +437,6 @@ void meerkat::move()
 
 					if (_enemyDirection == ENEMY_TUNNEL_MOVE)
 					{
-						//if문 조건문으로 플레이어가 1층에 있을경우에만 되게 해주기
 						_position.x += cosf(an) * _meerkatSpeed;
 						_position.y += -sinf(an) * _meerkatSpeed;
 					}
@@ -860,6 +856,35 @@ void meerkat::ballTileGet()
 		if (ballNextTileIndex[7].y > maxTileY) ballNextTileIndex[7].y = maxTileY;
 		else if (ballNextTileIndex[7].y < 0) ballNextTileIndex[7].y = 0;
 		_ballT[7] = SCENEMANAGER->getCurrentScene()->getTiles()[ballNextTileIndex[7].y][ballNextTileIndex[7].x];
+	}
+}
+
+void meerkat::mapOutCollision()
+{
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
+	maxTileX *= SIZE;
+	maxTileY *= SIZE;
+
+	if (_position.x < 0)
+	{
+		_position.x += abs(0 - _rc.left);
+		_angleSave += PI;
+	}
+	if (_position.x > maxTileX)
+	{
+		_position.x -= _rc.right - maxTileX;
+		_angleSave += PI;
+	}
+	if (_position.y < 0)
+	{
+		_position.y += abs(0 - _rc.top);
+		_angleSave += PI;
+	}
+	if (_position.y > maxTileY)
+	{
+		_position.y -= _rc.bottom - maxTileY;
+		_angleSave += PI;
 	}
 }
 

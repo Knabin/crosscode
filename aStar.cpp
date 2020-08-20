@@ -22,8 +22,10 @@ void aStar::setTiles()
 	_vTotalList.clear();
 	if (_scene->getTiles().size() == 0) return;
 
-	_maxX = _scene->getTiles()[0].size();
-	_maxY = _scene->getTiles().size();
+	_maxX = _scene->getTiles()[0].size() - 1;
+	//_maxX = _scene->getTiles()[0].size(); 원본
+	_maxY = _scene->getTiles().size() - 1;
+	//_maxY = _scene->getTiles().size(); 원본
 	for (int i = 0; i < _maxY; ++i)
 	{
 		for (int j = 0; j < _maxX; j++)

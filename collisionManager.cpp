@@ -260,10 +260,10 @@ void collisionManager::hedgehagCollision()
 					}
 				}
 
-				if (h->getPosition().x > _player->getRect().left &&
-					h->getPosition().x < _player->getRect().right &&
-					h->getPosition().y > _player->getRect().top &&
-					h->getPosition().y < _player->getRect().bottom)
+				if (h->getPosition().x >= _player->getRect().left &&
+					h->getPosition().x <= _player->getRect().right &&
+					h->getPosition().y >= _player->getRect().top &&
+					h->getPosition().y <= _player->getRect().bottom)
 				{
 					if (h->getPosition().x <= _player->getPosition().x)
 					{
