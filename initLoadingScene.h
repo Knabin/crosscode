@@ -1,6 +1,6 @@
 #pragma once
 #include "scene.h"
-#define LOADINGMAX 2000
+#define LOADINGMAX 50
 
 class initLoadingScene : public scene
 {
@@ -11,8 +11,10 @@ private:
 	float _width;
 
 	Vector2 _position;
-	image* _progressBar;
+	floatRect _progressBar;
 	image* _progressBarBack;
+
+	bool _isInit;
 
 public:
 	virtual HRESULT init();

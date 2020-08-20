@@ -85,30 +85,6 @@ void objectManager::update(objectType type)
 
 void objectManager::render()
 {
-	/*
-	objectContainerIter iter = _mObjectContainer.begin();
-	for (; iter != _mObjectContainer.end(); ++iter)
-	{
-		vector<gameObject*>& objectList = iter->second;
-		// UI는 uiController에서 상대 좌표 기준으로 render하기 때문에 하므로 continue 처리합니다.
-		if (iter->first == objectType::UI) continue;
-		else if (iter->first == objectType::TILEOBJECT)
-		{
-			for (int i = 0; i < objectList.size(); ++i)
-			{
-				if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::MAPOBJECT, "player")->getRect().bottom)
-					objectList[i]->render();
-			}
-		}
-		else
-		{
-			for (int i = 0; i < objectList.size(); ++i)
-			{
-				if (objectList[i]->getIsActive())
-					objectList[i]->render();
-			}
-		}
-	}*/
 	for (int i = 0; i < _vZOrderRender.size(); ++i)
 	{
 		if (!_vZOrderRender[i]->getIsAlive()) continue;
@@ -170,22 +146,6 @@ void objectManager::removeObjectsWithoutPlayer()
 	}
 
 	_vZOrderRender.clear();
-
-	//objectContainerIter iter = _mObjectContainer.begin();
-	//for (; iter != _mObjectContainer.end(); ++iter)
-	//{
-	//	vector<gameObject*>::iterator viter = iter->second.begin();
-	//	if (iter->first == objectType::UI) continue;
-	//	for (; viter != iter->second.end(); )
-	//	{
-	//		if ((*viter)->getName() != "player")
-	//		{
-	//			(*viter)->setIsActive(false);
-	//		}
-	//		else viter++;
-	//	}
-	//}
-
 }
 
 gameObject * objectManager::findObject(objectType type, string objectName)

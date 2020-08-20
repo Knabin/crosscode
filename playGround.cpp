@@ -1,13 +1,7 @@
 #include "stdafx.h"
 #include "playGround.h"
-#include "titleScene.h"
-#include "mapToolScene.h"
-#include "testScene.h"
-#include "testScene2.h"
-#include "bossTestScene.h"
-#include "puzzleScene.h"
-#include "mountainScene.h"
-#include "townScene.h"
+
+#include "initLoadingScene.h"
 
 
 playGround::playGround()
@@ -33,19 +27,11 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-	SCENEMANAGER->addScene("title", new titleScene());			// 타이틀 씬
-	SCENEMANAGER->addScene("maptool", new mapToolScene());		// 맵툴 씬
-	SCENEMANAGER->addScene("test", new testScene());			// 테스트용(새 게임 버튼)
-	SCENEMANAGER->addScene("test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
-	SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
-	SCENEMANAGER->addScene("puzzle", new puzzleScene());
-	SCENEMANAGER->addScene("mountain", new mountainScene());
-	SCENEMANAGER->addScene("town", new townScene());
-	SCENEMANAGER->loadScene("title");
 
-	IMAGEMANAGER->addImage("cursor normal", L"cursor/cursor-3.png");
-	IMAGEMANAGER->addImage("cursor melee", L"cursor/cursor-melee-3.png");
-	IMAGEMANAGER->addImage("cursor throw", L"cursor/cursor-throw-3.png");
+	SCENEMANAGER->addScene("loading", new initLoadingScene());
+	SCENEMANAGER->loadScene("loading");
+
+
 
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
@@ -115,14 +101,17 @@ void playGround::update()
 		CAMERA->zoomStart(1.2f, 5.f, true);
 	}
 
+
 	// 이벤트 재생 중, UI가 화면을 가리고 있는 경우에는 업데이트하지 않음
 	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn())
 	{
 		SCENEMANAGER->update();
-		OBJECTMANAGER->update();
+
 		_collisionManager->update();
 		_enemyManager->update();
 	}
+	OBJECTMANAGER->update();
+	EVENTMANAGER->update();
 
 	EFFECTMANAGER->update();
 	CAMERA->update();
@@ -143,6 +132,11 @@ void playGround::render()
 		TIMEMANAGER->render();
 		_ui->render();
 		//_enemyManager->render();
+
+		if (EVENTMANAGER->isPlayingEvent())
+		{
+			D2DRENDERER->DrawRotationFillRectangle(floatRect(Vector2(0, 0), Vector2(WINSIZEX, 80), pivot::LEFTTOP), D2D1::ColorF::Black, 0);
+		}
 
 		// 상태에 따른 마우스 변경 처리
 		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn() || SCENEMANAGER->getCurrentSceneName() == "title" || SCENEMANAGER->getCurrentSceneName() == "maptool")

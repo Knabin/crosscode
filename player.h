@@ -115,6 +115,7 @@ public:
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }
 	void setDirection(PLAYERDIRECTION direction) { _direction = direction; }
+	void setState(PLAYERSTATE state) { _state->setState(_vState[state]); }
 
 	inline int getNowOrder() { return _nowOrder; }
 

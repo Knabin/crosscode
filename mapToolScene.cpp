@@ -77,19 +77,10 @@ HRESULT mapToolScene::init()
 	_penMode = PENMODE::PLUS;
 	_page = TERRAIN_ONE;
 
-	// 배경 이미지
-	IMAGEMANAGER->addImage("map bg", L"images/maptool/map_bg.png");
-	IMAGEMANAGER->addImage("map bg2", L"images/maptool/map_back.png");
 
-	// 버튼 이미지
-	IMAGEMANAGER->addFrameImage("saveload", L"images/maptool/button_saveload.png", 2, 2);
-	IMAGEMANAGER->addFrameImage("editmode", L"images/maptool/button_menu.png", 2, 4);
-	IMAGEMANAGER->addFrameImage("numbutton", L"images/maptool/button_num.png", 2, 3);
-	IMAGEMANAGER->addFrameImage("numobj", L"images/maptool/button_numobj.png", 2, 4);
-	IMAGEMANAGER->addFrameImage("backtotitle", L"images/maptool/button_backtotitle.png", 1, 1);
 
 	// ui 전체 이미지
-	_uiImage = IMAGEMANAGER->addImage("edit ui", L"images/maptool/ui_edit.png");
+	_uiImage = IMAGEMANAGER->findImage("edit ui");
 
 	// 샘플 이미지
 	_terrainImage[TERRAIN_ONE] = IMAGEMANAGER->addImage("terrain1", L"images/tile/terrain1_s.png");
@@ -112,18 +103,7 @@ HRESULT mapToolScene::init()
 	_enemyImage = IMAGEMANAGER->addImage("enemy", L"images/tile/tile_enemy.png");
 	_enemyImageBig = IMAGEMANAGER->addFrameImage("enemy b", L"images/tile/tile_enemy_big.png", 16, 18);
 
-	IMAGEMANAGER->addFrameImage("vendor", L"images/object/vendor.png", 3, 1);
-	IMAGEMANAGER->addFrameImage("door prev", L"images/tile/doorpreview.png", 3, 1);
-	IMAGEMANAGER->addFrameImage("tree", L"images/object/tree.png", 3, 1);
-	IMAGEMANAGER->addFrameImage("grass", L"images/object/grass.png", 3, 1);
-	IMAGEMANAGER->addFrameImage("button prev", L"images/tile/buttonpreview.png", 3, 1);
-	IMAGEMANAGER->addFrameImage("button2 prev", L"images/tile/button2preview.png", 1, 1);
-	IMAGEMANAGER->addFrameImage("destruct", L"images/object/destruct.png", 1, 1);
-	IMAGEMANAGER->addFrameImage("wall prev", L"images/tile/wallpreview.png", 1, 1);
-	IMAGEMANAGER->addFrameImage("wall2 prev", L"images/tile/wall2preview.png", 1, 1);
-	IMAGEMANAGER->addFrameImage("wall3 prev", L"images/tile/wall3preview.png", 1, 1);
-	IMAGEMANAGER->addFrameImage("wall4 prev", L"images/tile/wall4preview.png", 1, 1);
-	IMAGEMANAGER->addFrameImage("roof", L"images/object/test.png", 1, 1);
+
 	
 	// 빈 타일
 	IMAGEMANAGER->addImage("tile null", L"images/tile/tilenull.png");
