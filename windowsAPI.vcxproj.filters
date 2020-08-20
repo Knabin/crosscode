@@ -232,6 +232,10 @@
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
+    <ClCompile Include="mine.cpp" />
+    <ClCompile Include="iceguide.cpp">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -472,6 +476,10 @@
     </ClInclude>
     <ClInclude Include="mine.h" />
     <ClInclude Include="flamethrower.h">
+      <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="mine.h" />
+    <ClInclude Include="iceguide.h">
       <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>

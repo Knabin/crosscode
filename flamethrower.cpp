@@ -37,7 +37,7 @@ HRESULT flamethrower::init(float centerX, float centerY)
 
 		attack3._speed = 20.0f;
 
-		attack3._size = 64.0f;
+		attack3._size = 144.0f;
 
 		attack3._fireStart = false;
 
@@ -98,7 +98,7 @@ void flamethrower::render()
 		if (!_viFlamethrower->_fireStart) continue;
 		{
 			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viFlamethrower->_rc));
-			IMAGEMANAGER->findImage("È­¿°")->frameRender(CAMERA->getRelativeVector2(Vector2(_viFlamethrower->_x, _viFlamethrower->_y)),
+			IMAGEMANAGER->findImage("È­¿°")->frameRender(CAMERA->getRelativeVector2(Vector2(_viFlamethrower->_x, _viFlamethrower->_y )),
 				_viFlamethrower->_frameX, _flameFrameY);
 		}
 	}
@@ -306,5 +306,10 @@ void flamethrower::chargeDraw2(float centerX, float centerY)
 {
 	IMAGEMANAGER->findImage("ÃæÀü2")->frameRender(CAMERA->getRelativeVector2(Vector2(centerX, centerY)),
 		_chargeFrameX2, _chargeFrameY2);
+}
+
+void flamethrower::removeFire(int Num5)
+{
+	_vFlamethrower.erase(_vFlamethrower.begin() + Num5);
 }
 

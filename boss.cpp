@@ -16,13 +16,15 @@ HRESULT boss::init()
 
 	//_bossState = APPEARANCE;
 	//_bossState = STOP;
-	_bossState = ICETHROWER_READY;
+	//_bossState = ICETHROWER_READY;
 	//_bossState = MINE_READY;
 	//_bossState = STONESHOWER_READY;
 	//_bossState = FLAMETHROWER_READY;
-
+	_bossState = ICEGUIDE_READY;
+	
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_protectCurrentFrameX, _protectCurrentFrameY, _protectFrameCount = 0;
+	_centerFrameCount, _centerCurrentFrameX, _centerCurrentFrameY = 0;
 	_moveCount = 0;
 	_motionDelay = 0;
 	_icethrowerDelay = 0;
@@ -44,6 +46,7 @@ HRESULT boss::init()
 	IMAGEMANAGER->addImage("º¸½º¸öÅëÇÏ", L"images/boss/center_down.png");
 
 	IMAGEMANAGER->addFrameImage("º¸½º¸öÅë¿òÁ÷ÀÓ", L"images/boss/center_move.png", 15, 1);
+	IMAGEMANAGER->addFrameImage("º¸½º¸öÅë¿òÁ÷ÀÓ2", L"images/boss/center_move2.png", 10, 1);
 
 	IMAGEMANAGER->addImage("º¸½º¹ÙÅÒ", L"images/boss/bottom.png");
 	IMAGEMANAGER->addFrameImage("º¸½º¹ÙÅÒ¹æ¾î¸·1", L"images/boss/bottom_first.png", 9, 1);
@@ -55,6 +58,7 @@ HRESULT boss::init()
 	IMAGEMANAGER->addImage("¿Þ¼Õ¿òÁ÷ÀÓ3", L"images/boss/left_hand_move3.png");
 
 	IMAGEMANAGER->addFrameImage("¿Þ¼Õ°ø°Ý", L"images/boss/left_hand_attack.png", 20, 2);
+	IMAGEMANAGER->addFrameImage("¿Þ¼Õ°ø°Ý2", L"images/boss/left_hand_attack2.png", 20, 2);
 	IMAGEMANAGER->addFrameImage("¿Þ¼Õ¿òÁ÷ÀÓ1", L"images/boss/left_hand_move.png", 4, 1);
 	IMAGEMANAGER->addFrameImage("¿Þ¼Õ¿òÁ÷ÀÓ2", L"images/boss/left_hand_move2.png", 4, 1);
 
@@ -120,6 +124,9 @@ HRESULT boss::init()
 	_flamethrower = new flamethrower;
 	_flamethrower->init(_Center._x + 385, _Center._y + 525);
 
+	_iceguide = new iceguide;
+	_iceguide->init(_Center._x + 285, _Center._y + 625);
+
 	return S_OK;
 }
 
@@ -153,6 +160,8 @@ void boss::update()
 
 	_flamethrower->update();
 
+	_iceguide->update();
+
 }
 
 void boss::render()
@@ -169,6 +178,8 @@ void boss::render()
 	_stoneshower->render();
 
 	_flamethrower->render();
+
+	_iceguide->render();
 }
 
 void boss::bossState()
@@ -807,8 +818,9 @@ void boss::bossState()
 				++_flamethrower->getFlameIterVector())
 			{
 				
-				_flamethrower->getFlameIterVector()->_fireStart = false;	
+				_flamethrower->getFlameIterVector()->_fireStart = false;
 				_bossState = FLAMETHROWER_END;
+				
 				
 			}
 		}	
@@ -895,6 +907,162 @@ void boss::bossState()
 
 	}
 	break;
+
+	case ICEGUIDE_READY:
+	{
+
+		
+
+		_LeftArm._center.x += 1.5f / 1.5f;
+		_LeftArm._center.y -= 2.0f / 1.5f;
+
+		_LeftArm._angle -= 0.024f / 1.5f;
+		_LeftHand._angle -= 0.032f / 1.5f;
+		_LeftArm._realAngle += 1.2f / 1.5f;
+		_LeftHand._realAngle += 0.8f / 1.5f;
+
+
+		_RightArm._center.x -= 0.5f / 1.5f;
+		_RightArm._center.y -= 2.0f / 1.5f;
+
+		_RightArm._angle -= 0.024f / 1.5f;
+		_RightHand._angle -= 0.032f / 1.5f;
+		_RightArm._realAngle += 1.2f / 1.5f;
+		_RightHand._realAngle += 0.8f / 1.5f;
+
+
+		_Center._angle += 0.35f;
+
+		_bossLeftHandMoveFrameY = 0;
+
+		if (_frameCount % 12 == 0)
+		{
+			if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ2")->getMaxFrameX())
+			{
+			
+				_currentFrameX = 0;
+			}
+			_bossLeftHandMoveFrameX = _currentFrameX;
+			_currentFrameX++;
+			_frameCount = 0;
+
+		}
+
+		
+		if (_LeftHand._rectBody.top < WINSIZEY / 2 - 200)
+		{
+			_bossState = ICEGUIDE_READY2;
+		}
+		
+
+
+	}
+	break;
+
+	case ICEGUIDE_READY2:
+	{
+		_motionDelay++;
+
+		if (_motionDelay >= 125)
+		{
+			_LeftArm._center.x += 1.5f * 1.5f;
+			_LeftArm._center.y += 2.5f * 1.5f;
+
+			_LeftArm._angle += 0.024f * 1.5f;
+			_LeftHand._angle += 0.032f * 1.5f;
+			_LeftArm._realAngle -= 1.7f * 1.5f;
+			_LeftHand._realAngle -= 0.5f * 1.5f;
+
+
+			_RightArm._center.x -= 0.5f / 1.5f;
+			_RightArm._center.y += 2.0f / 1.5f;
+
+			_RightArm._angle += 0.024f / 1.5f;
+			_RightHand._angle += 0.032f / 1.5f;
+			_RightArm._realAngle -= 1.2f / 1.5f;
+			_RightHand._realAngle -= 0.8f / 1.5f;
+
+
+
+			_centerFrameCount++;
+
+			_centerMoveFrameY = 0;
+
+			if (_centerFrameCount % 5 == 0)
+			{
+				if (_centerCurrentFrameX >= IMAGEMANAGER->findImage("º¸½º¸öÅë¿òÁ÷ÀÓ2")->getMaxFrameX())
+				{
+					_centerCurrentFrameX = 0;
+				}
+				_centerMoveFrameX = _centerCurrentFrameX;
+				_centerCurrentFrameX++;
+				_centerFrameCount = 0;
+			}
+
+
+
+			if (_frameCount % 3 == 0)
+			{
+				if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameX())
+				{
+					_currentFrameX = 0;
+					_currentFrameY++;
+				}
+				if (_currentFrameY >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameY())
+				{
+					_currentFrameY = 0;
+					_bossState = ICEGUIDE_END;
+				}
+				_bossLeftHandAttackFrameX2 = _currentFrameX;
+				_bossLeftHandAttackFrameY2 = _currentFrameY;
+				_currentFrameX++;
+				_frameCount = 0;
+			}
+
+
+			if (_LeftHand._rectBody.bottom > WINSIZEY / 2  + 150)
+			{
+				_centerFrameCount = 0;
+				_bossState = ICEGUIDE;
+			}
+
+
+		}
+
+	}
+	break;
+
+	case ICEGUIDE:
+	{
+		
+
+		if (_frameCount % 3 == 0)
+		{
+			if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameX())
+			{
+				_currentFrameX = 0;
+				_currentFrameY++;
+			}
+			if (_currentFrameY >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameY())
+			{
+				_currentFrameY = 0;
+				//_bossState = ICEGUIDE_END;
+			}
+			_bossLeftHandAttackFrameX2 = _currentFrameX;
+			_bossLeftHandAttackFrameY2 = _currentFrameY;
+			_currentFrameX++;
+			_frameCount = 0;
+		}
+
+	}
+	break;
+
+	case ICEGUIDE_END:
+	{
+
+	}
+	break;
+
 
 	}
 
@@ -986,7 +1154,7 @@ void boss::bossDraw()
 			_bossCenterMoveFrameX, _bossCenterMoveFrameY);
 	}
 
-	else if (_bossState == ICETHROWER || _bossState == STONESHOWER_READY2 || _bossState == STONESHOWER_READY3)
+	else if (_bossState == ICETHROWER || _bossState == STONESHOWER_READY2 || _bossState == STONESHOWER_READY3 || _bossState == ICEGUIDE)
 	{
 		IMAGEMANAGER->findImage("º¸½º¸öÅë¿ì")->render(CAMERA->getRelativeVector2(Vector2((_Center._rectBody.left - 191) - 20, _Center._rectBody.top - 193)));
 	}
@@ -995,6 +1163,13 @@ void boss::bossDraw()
 	{
 		IMAGEMANAGER->findImage("º¸½º¸öÅëÇÏ")->render(CAMERA->getRelativeVector2(Vector2((_Center._rectBody.left - 191), (_Center._rectBody.top - 193) + 25)));
 	}
+
+	else if (_bossState == ICEGUIDE_READY2)
+	{
+		IMAGEMANAGER->findImage("º¸½º¸öÅë¿òÁ÷ÀÓ2")->frameRender(CAMERA->getRelativeVector2(Vector2(_Center._rectBody.left + 277, _Center._rectBody.top + 145)),
+			_centerMoveFrameX, _centerMoveFrameY);
+	}
+
 	else
 	{
 		IMAGEMANAGER->findImage("º¸½º¸öÅë")->setAngle(_Center._angle);
@@ -1008,7 +1183,7 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 50, _LeftHand._centerEnd.y + 225)),
 		_bossLeftHandAttackFrameX, _bossLeftHandAttackFrameY);
 	}
-	else if (_bossState == FLAMETHROWER_READY)
+	else if (_bossState == FLAMETHROWER_READY || _bossState == ICEGUIDE_READY)
 	{
 		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ2")->setAngle(_LeftHand._realAngle);
 		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ2")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 45, _LeftHand._centerEnd.y + 220)),
@@ -1025,6 +1200,13 @@ void boss::bossDraw()
 		IMAGEMANAGER->findImage("¿Þ¼Õ¿òÁ÷ÀÓ1")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 40, _LeftHand._centerEnd.y + 190)),
 			_bossLeftHandMoveFrameX2, _bossLeftHandMoveFrameY2);
 	}
+	else if (_bossState == ICEGUIDE_READY2 || _bossState == ICEGUIDE)
+	{
+		IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->setAngle(_LeftHand._realAngle);
+		IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->frameRender(CAMERA->getRelativeVector2(Vector2(_LeftHand._centerEnd.x - 45, _LeftHand._centerEnd.y + 220)),
+			_bossLeftHandAttackFrameX2, _bossLeftHandAttackFrameY2);
+	}
+
 	else
 	{
 		IMAGEMANAGER->findImage("¿Þ¼Õ")->setAngle(_LeftHand._realAngle);
@@ -1259,6 +1441,17 @@ void boss::fireCollision()
 			_stoneshower->removeFire(i);
 			break;
 
+		}
+
+	}
+
+	for (int i = 0; i < _flamethrower->getFlameVector().size(); i++)
+	{
+
+		if (WINSIZEY + 1600 < _flamethrower->getFlameVector()[i]._rc.bottom)
+		{
+			_flamethrower->removeFire(i);
+			break;
 		}
 
 	}
