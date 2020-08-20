@@ -12,7 +12,8 @@
 @@ DefaultBrush brush : 그릴 브러쉬 = DefaultBrush::Black
 @@ DWRITE_TEXT_ALIGNMENT align : 정렬 옵션 = DWRITE_TEXT_ALIGNMENT_LEADING
 @@ bool isRelative : 카메라 보정 여부 = false
-@@ wstring font : 폰트 = 맑은고딕
+@@ wstring font : 폰트 = 
+
 
 기본 정의해둔 브러쉬로 텍스트 렌더링
 ************************************************************************************************/

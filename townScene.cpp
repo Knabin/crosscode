@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "townScene.h"
+#include "iEvent.h"
+#include "dialog.h"
 
 townScene::~townScene()
 {
@@ -40,6 +42,10 @@ HRESULT townScene::init()
 
 	_nextScene = "mountain";
 	_nextPoint = Vector2(50, 1700);
+
+	//iPlayerMove* moveEvent = new iPlayerMove(Vector2(36 * SIZE, 47 * SIZE - 400));
+	//iDialog* dialogEvent = new iDialog(new dialog("test.data"));
+	//EVENTMANAGER->addEvent(moveEvent);
 
 	return S_OK;
 }
