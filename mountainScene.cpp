@@ -28,7 +28,7 @@ HRESULT mountainScene::init()
 				{
 					OBJECTMANAGER->addObject(objectType::TILEOBJECT, _vTiles[i][j]);
 					if (i + 1 > _maxY) continue;
-					OBJECTMANAGER->addObject(objectType::MAPOBJECT, _vTiles[i + 1][j]);
+					OBJECTMANAGER->addObject(objectType::TILEOBJECT, _vTiles[i + 1][j]);
 					//SCENEMANAGER->getObjectImage(_vTiles[i][j]->getObjectImageNum())->frameRender(Vector2(_vTiles[i][j]->getRect().left, _vTiles[i][j]->getRect().top), _vTiles[i][j]->getObjectX(), _vTiles[i][j]->getObjectY());
 				}
 			}
