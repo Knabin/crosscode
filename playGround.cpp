@@ -43,14 +43,9 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("town", new townScene());
 	SCENEMANAGER->loadScene("title");
 
-
-	// ============== 이펙트 넣는 법! =================
-	// 이펙트 사용: VK_F8 쪽 확인
-	IMAGEMANAGER->addFrameImage("test", L"images/test.png", 4, 2);
-	// addEffect(이펙트 이름, 이미지 이름, fps, elapsedTime, 버퍼(여러 개 동시에 쓸 거면 적당히 잡기), 크기(scale))
-	EFFECTMANAGER->addEffect("test", "test", 1, 1.0f, 5, 5.0f);
-
-	//IMAGEMANAGER->addImage(cursor)
+	IMAGEMANAGER->addImage("cursor normal", L"cursor/cursor-3.png");
+	IMAGEMANAGER->addImage("cursor melee", L"cursor/cursor-melee-3.png");
+	IMAGEMANAGER->addImage("cursor throw", L"cursor/cursor-throw-3.png");
 
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
@@ -60,7 +55,7 @@ HRESULT playGround::init()
 
 	_test = 0.f;
 
-	//ShowCursor(false);
+	ShowCursor(false);
 
 	return S_OK;
 }
@@ -97,22 +92,18 @@ void playGround::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{
 		SCENEMANAGER->loadScene("puzzle");
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 33 * SIZE));
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F7))
 	{
 		SCENEMANAGER->loadScene("mountain");
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((float)76 * SIZE, 34.5f * SIZE));
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F8))
 	{
 		SCENEMANAGER->loadScene("town");
-		/*
-		_test += 30.f;
-		// ============== 이펙트 회전해서 사용하는 법! =================
-		// play(이펙트 이름, 위치, 위치, 앵글값)
-		//EFFECTMANAGER->play("test", 200, 200, _test);
-		EFFECTMANAGER->play("test", Vector2(200, 200), 180, 0.3f);
-		*/
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('1'))
@@ -124,8 +115,7 @@ void playGround::update()
 		CAMERA->zoomStart(1.2f, 5.f, true);
 	}
 
-	// 이벤트 재생 중에는 업데이트하지 않음
-	// TODO: UI 켜져 있을 때 화면 멈춰야 하므로 조건 추가
+	// 이벤트 재생 중, UI가 화면을 가리고 있는 경우에는 업데이트하지 않음
 	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn())
 	{
 		SCENEMANAGER->update();
@@ -154,9 +144,18 @@ void playGround::render()
 		_ui->render();
 		//_enemyManager->render();
 
-		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn())
+		// 상태에 따른 마우스 변경 처리
+		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn() || SCENEMANAGER->getCurrentSceneName() == "title" || SCENEMANAGER->getCurrentSceneName() == "maptool")
 		{
-		//	render
+			IMAGEMANAGER->findImage("cursor normal")->render(Vector2(_ptMouse));
+		}
+		else if (_player->mouseCheck())
+		{
+			IMAGEMANAGER->findImage("cursor melee")->render(Vector2(_ptMouse));
+		}
+		else
+		{
+			IMAGEMANAGER->findImage("cursor throw")->render(Vector2(_ptMouse));
 		}
 
 		//=============================================

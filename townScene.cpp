@@ -15,7 +15,6 @@ HRESULT townScene::init()
 
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
-	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(35 * SIZE, (_maxY - 1) * SIZE));
 
 	if (_vTiles.size() != 0)
 	{
@@ -36,6 +35,12 @@ HRESULT townScene::init()
 		}
 	}
 
+	_prevScene = "puzzle";
+	_prevPoint = Vector2(1750, 170);
+
+	_nextScene = "mountain";
+	_nextPoint = Vector2(50, 1700);
+
 	return S_OK;
 }
 
@@ -45,9 +50,22 @@ void townScene::release()
 
 void townScene::update()
 {
+	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
+	{
+		SCENEMANAGER->loadScene(_prevScene);
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 33 * SIZE));
+	}
+
+	if (getDistance(_nextPoint.x, _nextPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
+	{
+		SCENEMANAGER->loadScene(_nextScene);
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((float)76 * SIZE, 34.5f * SIZE));
+	}
 }
 
 void townScene::render()
 {
 	scene::render();
+	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_prevPoint), 10);
+	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_nextPoint), 10);
 }

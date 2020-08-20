@@ -28,7 +28,9 @@ enum bossState //보스 상태패턴 enum문
 	FLAMETHROWER_READY3,
 	FLAMETHROWER_READY4,
 	FLAMETHROWER,
-	FLAMETHROWER_END
+	FLAMETHROWER_END,
+	FLAMETHROWER_END2,
+	FLAMETHROWER_END3
 };
 struct tagBossPart  //보스 파츠별 구조체
 {
@@ -88,6 +90,7 @@ private:
 	int _bossRightHandAttackFrameX, _bossRightHandAttackFrameY;
 	int _bossRightHandAttackFrameX2, _bossRightHandAttackFrameY2;
 	int _bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY;
+	int _bossLeftHandMoveFrameX2, _bossLeftHandMoveFrameY2;
 
 	//보스 방어막 프레임
 	int _protectCurrentFrameX, _protectCurrentFrameY;
@@ -98,7 +101,7 @@ private:
 
 	int _chargeCount; //충전할때의 카운트
 
-	int _randomAttackCount;  // 어떤 공격을 할까나~~??
+	int _stopCount;  // 잠시 멈춰있을때 카운트
 
 
 	//움직임 딜레이
@@ -112,6 +115,12 @@ private:
 
 	//바위 발사 딜레이
 	int _stoneAttackDelay;
+
+	//화염방사 공격 딜레이
+	int _flamethrowerDelay;
+
+
+	bool _attack1, _attack2, _attack3, _attack4, _attack5;
 
 public:
 
@@ -135,6 +144,7 @@ public:
 
 	void bossInitialization();	//보스 stop후 위치 확인용
 
+	
 };
 
 

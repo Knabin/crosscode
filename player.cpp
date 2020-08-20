@@ -479,7 +479,7 @@ void player::update()
 		POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 		int _nowOrder2 = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
 
-		if (_nowOrder2 == 5 || _nowOrder2 == 0 || _nowOrder2 == 6 || _nowOrder2 == 7)
+		if (_nowOrder2 == 5  || _nowOrder2 == 6 || _nowOrder2 == 7)
 		{
 			float an = getAngle(_position.x, _position.y,_tile.left + 24, _tile.top +24);
 			float speed = 40;

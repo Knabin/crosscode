@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "tile.h"
+#include "player.h"
 
 tile::tile()
 	: _terrainX(-1), _terrainY(-1), _objectX(-1), _objectY(-1), _order(ORDER::ONE), _terrainType(NONE)
@@ -30,7 +31,8 @@ void tile::setTiles(int terX, int terY, int objX, int objY, int pageNum, int obj
 
 void tile::render()
 {
-	if (_order == ORDER::BORDER)
+	player* p = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+	if (_order == ORDER::BORDER && p->getNowOrder() != 3)
 	{
 		SCENEMANAGER->getObjectImage(_objectImageNum)->setSize(Vector2(48, 48) * CAMERA->getZoomAmount());
 		SCENEMANAGER->getObjectImage(_objectImageNum)->frameRender(
