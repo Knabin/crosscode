@@ -16,16 +16,16 @@ public:
 	collisionManager() {};
 	~collisionManager() {};
 
-	HRESULT init();
-	void release();
-	void update();
-	void render();
+	//HRESULT init();
+	//void release();
+	//void update();
+	//void render();
 
-	void buffaloCollision();
-	void hedgehagCollision();
-	void meerkatCollision();
+	//void buffaloCollision();
+	//void hedgehagCollision();
+	//void meerkatCollision();
 
-	void enemyCollision();
-	void bulletCollision();
+	//void enemyCollision();
+	//void bulletCollision();
 };
 

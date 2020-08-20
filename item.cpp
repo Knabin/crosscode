@@ -58,3 +58,29 @@ void item::itemSet(wstring type, int _itemNum, const char _itemName[100], int _p
 
 	_tItem.push_back(_mItem);
 }
+
+itemObject item::getItemInfo(wstring type, int num)
+{
+	iterTotalItem _tiItem;
+	miItem _miItem;
+	itemObject result;
+	result.itemNum = -1;
+	for (_tiItem = _tItem.begin(); _tiItem != _tItem.end(); ++_tiItem)
+	{
+		for (_miItem = _tiItem->begin(); _miItem != _tiItem->end(); ++_miItem)
+		{
+			if (!(_miItem->first == type)) break;
+
+			viItem _viItem;
+			for (_viItem = _miItem->second.begin(); _viItem != _miItem->second.end(); ++_viItem)
+			{
+				if ((*_viItem).itemNum != num) continue;
+				
+				result = *_viItem;
+				return result;
+			}
+		}
+	}
+
+	return result;
+}
