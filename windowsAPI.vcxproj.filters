@@ -233,6 +233,7 @@
     <ClCompile Include="mine.cpp" />
     <ClCompile Include="shop.cpp">
       <Filter>playGround\uiController</Filter>
+      </ClCompile>
     <ClCompile Include="flamethrower.cpp">
       <Filter>enemyTest\bossPattern</Filter>
     </ClCompile>
