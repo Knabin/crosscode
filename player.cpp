@@ -2031,3 +2031,8 @@ void player::playerDodgeEffect()
 		EFFECTMANAGER->play("player dodgeDust3", Vector2(CAMERA->getRelativeVector2(_position).x - 25, CAMERA->getRelativeVector2(_position).y - 20), 0, 0.2f);
 	}
 }
+
+void player::setIdle()
+{
+	_state->setState(_vState[PLAYERSTATE::IDLE]);
+}

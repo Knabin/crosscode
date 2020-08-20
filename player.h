@@ -128,4 +128,6 @@ public:
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
 		CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150) ? true : false; }
+
+	void setIdle();
 };

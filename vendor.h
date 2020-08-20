@@ -1,7 +1,14 @@
 #pragma once
 #include "gameObject.h"
+
+
 class vendor : public gameObject
 {
+	class player* _player;
+
+	
+	int _iconNum;
+
 	image* _image;
 	int _type;
 
