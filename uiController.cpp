@@ -20,6 +20,9 @@ HRESULT uiController::init()
 
 	_shop = new shop;
 	_shop->init();
+
+
+
 	return S_OK;
 }
 
