@@ -2117,6 +2117,8 @@ lethalchargeState::~lethalchargeState()
 
 void lethalchargeState::enter()
 {
+	_player->setImage("player charge");
+
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -2260,6 +2262,8 @@ lethalattackState::~lethalattackState()
 
 void lethalattackState::enter()
 {
+	_player->setImage("p_meleeattack_right");
+
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
