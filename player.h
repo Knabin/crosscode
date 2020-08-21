@@ -84,6 +84,7 @@ private:
 	int _pXp;		//플레이어 경험치 적을 죽였을때
 	int _pSp;		//플레이어 SP 적을 때렸을때 차야됨 or 가만히있을때 참
 	int _pSpcharge;	//SP 차징시간
+	int _pLevel;
 
 	int _pDef;		//플레이어 방어력
 	float _pCrt;	//플레이어 크리티컬
@@ -146,6 +147,7 @@ public:
 	void setPlayerY(float y) { _position.y = y; }
 	void setPlayerPlusX(float x) { _position.x += x; }
 	void setPlayerPlusY(float y) { _position.y += y; }
+	
 
 	
 
@@ -182,6 +184,8 @@ public:
 	void setPlayerER(int er) { _pER = er; }
 	int getPlayerPR() { return _pPR; }
 	void setPlayerPR(int pr) { _pPR = pr; }
+	int getPlayerLEVEL() { return _pLevel; }
+	void setPlayerLEVEL(int pl) { _pLevel = pl; }
 
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /

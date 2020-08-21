@@ -56,7 +56,7 @@ player::player()
 	_position.y = 700;
 	_attackAngle = 0;
 
-	_attacking = false;
+	
 
 	_pSp = 0;
 }
@@ -126,6 +126,20 @@ HRESULT player::init()
 	
 	_bullet = new bullet;
 	_bullet->init();
+	_attacking = false;
+	 _pHp = 100;
+	 _pXp = 0;
+	 _pSp = 1;
+	 _pSpcharge = 0;
+	 _pLevel = 1;
+
+	 _pDef = 0;
+	 _pCrt = 0;
+	 _pfR  =0;
+	 _pIR = 0;
+	 _pER = 0;
+	 _pPR = 0;
+
 
 	_attackPower = 50;
 
