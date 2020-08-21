@@ -71,3 +71,31 @@ public:
 	void eventStart() override;
 	bool eventUpdate() override;
 };
+
+class iCameraMove final : public iEvent
+{
+private:
+	class gameObject* _target;
+	float _time;
+	float _speed;
+	float _angle;
+
+public:
+	iCameraMove(gameObject* target, float time);
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};
+
+class iObjectActive final : public iEvent
+{
+private:
+	class gameObject* _target;
+	float _time;
+
+public:
+	iObjectActive(gameObject* object, float time);
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};

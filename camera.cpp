@@ -66,7 +66,7 @@ void camera::moveToTargetSmooth()
 	float angle = getAngle(_position.x, _position.y, _target->getPosition().x, _target->getPosition().y);
 	if (length > 4.5f)
 	{
-		_speed = 5;
+		_speed = 9.0f;
 		position.x += cosf(angle) * _speed;
 		position.y -= sinf(angle) * _speed;
 	}

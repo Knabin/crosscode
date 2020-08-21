@@ -687,6 +687,7 @@ void player::update()
 
 	_attackPower = _pAtk + RND->getFromIntTo(0, _pCrt);
 
+	_rc.set(_position, pivot::CENTER);
 }
 
 void player::render()

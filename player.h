@@ -153,7 +153,7 @@ public:
 	
 
 	
-
+	bool isDashing() { return _state->getState() == _vState[PLAYERSTATE::DODGE]; }
 	inline int getNowOrder() { return _nowOrder; }
 
 	inline bool getAttacking() {return _attacking;}

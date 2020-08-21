@@ -15,6 +15,7 @@ private:
 	bool _firstEvent;		// 마을 첫 번째 이벤트
 	bool _puzzleEvent;		// 퍼즐 맵 이벤트
 	bool _secondEvent;		// 마을 두 번째 이벤트
+	bool _bossFirstEvent;	// 보스 첫 번째 이벤트
 
 public:
 	queue<class iEvent*> _mEventQueue;
@@ -31,5 +32,8 @@ public:
 
 	void setSecondEvent(bool secondEvent) { _secondEvent = secondEvent; }
 	bool getSecondEvent() { return _secondEvent; }
+
+	void setBossFirstEvent(bool bossEvent) { _bossFirstEvent = bossEvent; }
+	bool getBossFirstEvent() { return _bossFirstEvent; }
 };
 

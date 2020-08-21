@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "bossTestScene.h"
+#include "bossBlock.h"
+#include "iEvent.h"
 
 bossTestScene::~bossTestScene()
 {
@@ -39,11 +41,24 @@ HRESULT bossTestScene::init()
 		}
 	}
 
-	// 디버깅용 tile 외곽선 그림
-	//for (int i = 0; i <= _maxY; ++i)
-	//	drawLine(SCENEMANAGER->getTileBuffer()->getMemDC(), 0, i * SIZE, _maxX * SIZE, i * SIZE);
-	//for (int i = 0; i <= _maxX; ++i)
-	//	drawLine(SCENEMANAGER->getTileBuffer()->getMemDC(), i * SIZE, 0, i * SIZE, _maxY * SIZE);
+	bossBlock* block = new bossBlock();
+	block->setPosition(Vector2(1080, 1910));
+	block->init();
+	block->setIsActive(false);
+
+	OBJECTMANAGER->addObject(objectType::MAPOBJECT, block);
+
+	/*iObjectMove* move = new iObjectMove(OBJECTMANAGER->findObject(""))
+	iCameraMove* camera = new iCameraMove(block, 3.0f);
+	iObjectActive* active = new iObjectActive(block, 2.0f);
+	EVENTMANAGER->addEvent(camera);
+	EVENTMANAGER->addEvent(active);*/
+	// ~~이벤트~~
+	// 플레이어가 앞으로 감
+	// block 켜는 이벤트
+	// 다이얼로그
+	// 보스 등장
+
 
 	return S_OK;
 }

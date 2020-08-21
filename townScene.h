@@ -5,7 +5,6 @@
 class townScene : public scene
 {
 private:
-	townBlock _block;
 
 public:
 	virtual ~townScene() override;
