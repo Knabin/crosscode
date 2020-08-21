@@ -593,6 +593,7 @@ void collisionManager::playerHitCollision()
 			{
 				_player->setState(PLAYERSTATE::BE_ATTACKED);
 			}	
+			_player->setPlayerHP(_player->getPlayerHP() - e->getEnemyAttackPower());
 		}
 	}
 }
