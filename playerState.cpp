@@ -2305,7 +2305,7 @@ void lethalattackState::update()
 	default:
 		break;
 	}
-	_player->playerfinalattackMove();
+	_player->playerLethalattackMove();
 	//if (!_player->getAnimation()->isPlay()) _player->getAnimation()->start();
 	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
 }
@@ -2320,4 +2320,5 @@ void lethalattackState::exit()
 	_left_top->stop();
 	_right_bottom->stop();
 	_left_bottom->stop();
+	_player->setAttackRC(0, 0);
 }

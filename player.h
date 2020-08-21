@@ -45,7 +45,7 @@ private:
 	floatRect rc1[12];
 	floatRect rc2[12];
 	floatRect _attackRC;
-	float de;
+	//float de;
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
@@ -126,6 +126,7 @@ public:
 	void playerMeleeattack();
 	void playerDodgeEffect();
 	void playerLethalattack();
+	void playerLethalattackMove();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
