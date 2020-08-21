@@ -81,7 +81,9 @@ private:
 	int _lineCount;		//한번 클릭시 좁혀지는 양쪽 선
 
 	int _pHp;		//플레이어 HP 
+	int _playerMaxHP;  //플레이어 최대HP
 	int _pXp;		//플레이어 경험치 적을 죽였을때
+	int _playerLevelUpXp; //레벨업까지 필요한 XP
 	int _pSp;		//플레이어 SP 적을 때렸을때 차야됨 or 가만히있을때 참
 	int _pSpcharge;	//SP 차징시간
 	int _pLevel;
@@ -112,7 +114,8 @@ private:
 	floatRect _tileRect;
 	POINT next[6];
 
-	int _attackPower;	//플레이어 공격력
+	int _pAtk; //플레이어 본 공격력
+	int _attackPower;	//에너미에게 가해지는 공격력
 
 public:
 	player();
@@ -168,8 +171,12 @@ public:
 	void setPlayerAttackPower(int power) { _attackPower = power; }
 	int getPlayerHP() { return _pHp; }
 	void setPlayerHP(int hp) { _pHp = hp; }
+	int getPlayerMaxHP() { return _playerMaxHP; }
+	void setPlayerMaxHP(int mHp) { _playerMaxHP = mHp; }
 	int getPlayerEXP() { return _pXp; }
 	void setPlayerEXP(int exp) { _pXp = exp; }
+	int getPlayerNextEXP() { return _playerLevelUpXp; }
+	void setPlayerNextEXP(int Nexp) { _playerLevelUpXp = Nexp; }
 	int getPlayerSP() { return _pSp; }
 	void setPlayerSP(int sp) { _pSp = sp; }
 	int getPlayerDef() { return _pDef; }
@@ -186,6 +193,9 @@ public:
 	void setPlayerPR(int pr) { _pPR = pr; }
 	int getPlayerLEVEL() { return _pLevel; }
 	void setPlayerLEVEL(int pl) { _pLevel = pl; }
+	int getPlayerAtk() { return _pAtk;}
+	void setPlayerAtk(int atk) { _pAtk = atk; }
+
 
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
