@@ -451,7 +451,6 @@
     <ClInclude Include="puzzleDestruct.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
-    <ClInclude Include="flamethrower.h" />
     <ClInclude Include="puzzleBlueWall.h">
       <Filter>playGround\puzzle</Filter>
     </ClInclude>
@@ -487,6 +486,9 @@
     </ClInclude>
     <ClInclude Include="foothold.h">
       <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="flamethrower.h">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

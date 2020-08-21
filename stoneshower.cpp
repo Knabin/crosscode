@@ -81,7 +81,7 @@ void stoneshower::render()
 	{
 		if (!_viStoneshower->_fireStart) continue;
 		{
-			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viStoneshower->_rc));
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viStoneshower->_rc));
 
 			IMAGEMANAGER->findImage("¹ÙÀ§")->render(CAMERA->getRelativeVector2(Vector2(_viStoneshower->_x - _viStoneshower->_size / 2, _viStoneshower->_y - _viStoneshower->_size / 2)));
 		}
