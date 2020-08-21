@@ -43,9 +43,12 @@ HRESULT townScene::init()
 
 	_nextScene = "mountain";
 	_nextPoint = Vector2(50, 1700);
+	
+	townBlock* block = new townBlock();
+	block->setPosition(Vector2(150, 1650));
+	block->init();
+	OBJECTMANAGER->addObject(objectType::MAPOBJECT, block);
 
-	_block.setPosition(Vector2(150, 1650));
-	_block.init();
 
 	// 중복 실행되지 않게
 	if (!EVENTMANAGER->getFirstEvent())
@@ -58,8 +61,11 @@ HRESULT townScene::init()
 	}
 	else if (!EVENTMANAGER->getSecondEvent())
 	{
-		// 화면이 장애물로 이동
-		// 다이얼로그 출력
+		iCameraMove* cameraEvent = new iCameraMove(block, 5.f);
+		iDialog* dialogEvent = new iDialog(new dialog("3"));
+		EVENTMANAGER->addEvent(cameraEvent);
+		EVENTMANAGER->addEvent(dialogEvent);
+		EVENTMANAGER->setSecondEvent(true);
 	}
 
 
@@ -97,8 +103,6 @@ void townScene::update()
 			EVENTMANAGER->addEvent(m);
 		}
 	}
-
-	_block.update();
 }
 
 void townScene::render()
@@ -106,6 +110,4 @@ void townScene::render()
 	scene::render();
 	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_prevPoint), 10);
 	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_nextPoint), 10);
-
-	_block.render();
 }

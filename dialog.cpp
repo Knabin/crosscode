@@ -96,6 +96,11 @@ void dialog::loadText()
 		_vText.push_back(L"통행권을 얻었으니 이제 필드로 \n이동할 수 있을 거야. 가 보자!");
 		//_vText.push_back(L"1");
 	}
+	else if (_fileName == "3")
+	{
+		_vText.push_back(L"1");
+		_vText.push_back(L"문이 열렸으니, 저쪽으로 가면\n몬스터를 만날 수 있을 거야.");
+	}
 	lea = new portrait(0);
 	pro = new portrait(1);
 

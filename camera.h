@@ -89,6 +89,7 @@ public:
 	Vector2 getRelativeVector2(Vector2 vector);
 	Vector2 getRelativeVector2(float x, float y);
 
+	Vector2 getPosition() { return _position; }
 	RECT& getRect() { return _rc; }
 	bool getIsZoom() { return _isZoom; }
 	float getZoomAmount() { return _nowZoomAmount; }

@@ -147,6 +147,10 @@ HRESULT tabUI::init()
 	_item = new item;
 	_item->init();
 	
+
+	_time = 0;
+	_timeCount = 0;
+
 	return S_OK;
 }
 
@@ -156,6 +160,14 @@ void tabUI::release()
 
 void tabUI::update()
 {
+	_timeCount++;
+	if (_timeCount > 59)
+	{
+		_time++;
+		_timeCount = 0;
+	}
+	
+
 	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
 	{
 		_on = _on == false ? true : false;
@@ -352,6 +364,11 @@ void tabUI::render()
 			rc.update(Vector2(508 + 16 * i, 162), Vector2(10, 17), pivot::LEFTTOP);
 			D2DRENDERER->DrawRotationFillRectangle(rc, D2D1::ColorF::DeepSkyBlue, 0);
 		}
+
+		Num = to_wstring(_money);
+		D2DRENDERER->RenderText(120, 980, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_time);
+		D2DRENDERER->RenderText(155, 1025, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 	}
 	
 
@@ -737,6 +754,11 @@ void tabUI::render()
 			rc.update(Vector2(117 + 17 * i, 428), Vector2(10, 15), pivot::LEFTTOP);
 			D2DRENDERER->DrawRotationFillRectangle(rc, D2D1::ColorF::DeepSkyBlue, 0);
 		}
+
+		Num = to_wstring(_money);
+		D2DRENDERER->RenderText(120, 980, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_time);
+		D2DRENDERER->RenderText(155, 1025, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 	}
 	
 }

@@ -245,6 +245,9 @@
     <ClCompile Include="townBlock.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="bossBlock.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -494,6 +497,9 @@
       <Filter>playGround\object</Filter>
     </ClInclude>
     <ClInclude Include="townBlock.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="bossBlock.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
     <ClInclude Include="puzzleCollision.h">

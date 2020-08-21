@@ -73,6 +73,12 @@ bool iDialog::eventUpdate()
 			return true;
 		}
 	}
+	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	{
+		SAFE_DELETE(_dialog);
+		return true;
+	}
+
 	return false;
 }
 
@@ -130,5 +136,47 @@ bool iMoveScene::eventUpdate()
 		_player->setState(PLAYERSTATE::IDLE);
 		return true;
 	}
+	return false;
+}
+
+iCameraMove::iCameraMove(gameObject * target, float time)
+	:_target(target), _time(time)
+{
+}
+
+void iCameraMove::eventStart()
+{
+}
+
+bool iCameraMove::eventUpdate()
+{
+	CAMERA->changeTarget(_target);
+	CAMERA->setCameraMode(CAMERASTATE::TARGET);
+
+	_time -= TIMEMANAGER->getElapsedTime();
+
+	if (_time < 0.f)
+	{
+		CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+		return true;
+	}
+
+	return false;
+}
+
+iObjectActive::iObjectActive(gameObject * object, float time)
+	: _target(object), _time(time)
+{
+}
+
+void iObjectActive::eventStart()
+{
+}
+
+bool iObjectActive::eventUpdate()
+{
+	_target->setIsActive(true);
+	_time -= TIMEMANAGER->getElapsedTime();
+	if (_target->getIsActive() && _time <= 0.0f) return true;
 	return false;
 }
