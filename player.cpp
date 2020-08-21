@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "bullet.h"
 
+
 player::player()
 {
 	playerState* idle = new idleState(this);
@@ -54,6 +55,8 @@ player::player()
 	_state = new playerStateController(idle);
 	_position.y = 700;
 	_attackAngle = 0;
+
+	_attacking = false;
 
 	_pSp = 0;
 }
@@ -121,8 +124,6 @@ HRESULT player::init()
 	_bullet->init();
 
 	_attackPower = 50;
-	_count = 0;
-	//_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
 
 	return S_OK;
 }
@@ -223,6 +224,7 @@ void player::update()
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
+			
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
@@ -265,6 +267,7 @@ void player::update()
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
+			vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
@@ -359,6 +362,8 @@ void player::update()
 	if (KEYMANAGER->isOnceKeyDown('V')) //근접공격키
 	{
 		playerMeleeattack();
+		
+
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))	// 가까우면 근접 , 멀면 원거리 공격
@@ -495,6 +500,7 @@ void player::update()
 			for (int i = 0; i < 40; i++)
 			{
 				_attackAni[i]->stop();
+				_attacking = true;
 			}
 			
 		}
@@ -589,6 +595,7 @@ void player::update()
 			if (!_attackAni[_attackCount]->isPlay())
 			{
 				_attackAni[_attackCount]->start();
+				
 			}
 		}
 
@@ -610,6 +617,7 @@ void player::update()
 			if (!_attackAni[i]->isPlay())
 			{
 				_attackAni[i]->start();
+				
 			}
 		}
 		//===================================================================================	
@@ -1996,6 +2004,7 @@ void player::playerMeleeattack()   //근접 기본공격
 	_combocount = 0;
 	if (_state->getState() == _vState[IDLE] && !_iscombo || _state->getState() == _vState[MOVE] && !_iscombo)
 	{
+		
 		_state->setState(_vState[PLAYERSTATE::LEFT_ATTACK]);
 		_iscombo = true;
 		_combo++;
@@ -2045,6 +2054,7 @@ void player::playerMeleeattack()   //근접 기본공격
 	}
 	if (!_ani->isPlay() && _iscombo &&  _combo == 1)
 	{
+		_attacking = true;
 		_state->setState(_vState[PLAYERSTATE::RIGHT_ATTACK]);
 		_combo++;
 		switch (_direction)

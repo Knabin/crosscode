@@ -62,7 +62,6 @@ private:
 	int _nowOrder;
 	int _backOrder;
 	int _beginOrder;
-	int _count;
 
 	int _jumpCount;
 
@@ -94,6 +93,8 @@ private:
 	float _jumpPower;
 	float _gravity;
 	bool _jumping;
+
+	bool _attacking;
 
 	float _angle;
 	float de;
@@ -139,7 +140,12 @@ public:
 	void setPlayerPlusX(float x) { _position.x += x; }
 	void setPlayerPlusY(float y) { _position.y += y; }
 
+	
+
 	inline int getNowOrder() { return _nowOrder; }
+
+	inline bool getAttacking() {return _attacking;}
+	void setAttacking(bool b) { _attacking = b; }
 
 	animation* getAnimation() { return _ani; }
 
