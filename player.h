@@ -92,6 +92,7 @@ private:
 	bool _isLethal; // 필살기 체크용
 
 	bool _beAttacked;	//충돌처리용 불값
+	int _beAttackedCount;	//피격모션용 카운트
 
 	float _jumpPower;
 	float _gravity;
