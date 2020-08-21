@@ -40,9 +40,9 @@ private:
 	animation* _ani;
 	floatRect _tile;		// center x, bottom 기준으로 현재 밟고 있는 tile rect
 
-	floatRect rc1[12];
-	floatRect rc2[12];
-	float de;
+	floatRect rc1[12];		// 조준선 렉트
+	floatRect rc2[12];		// 조준선 렉트
+	floatRect _attackRC;
 
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
@@ -87,6 +87,9 @@ private:
 	bool _jumping;
 
 	float _angle;
+	float de;
+	float d1;
+	float d2;
 
 	floatRect _tileRect;
 	POINT next[6];
@@ -127,4 +130,5 @@ public:
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
 		CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150) ? true : false; }
+
 };

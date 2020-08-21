@@ -33,7 +33,7 @@ public:
 	virtual void render();
 
 	void fire(float x, float y, float angle, float speed);
-	void nomalFire(float x, float y, float angle, float speed);
+	void nomalFire(float x, float y, float angle,float speed);
 	void move();
 	void remove(int arrNum);
 	
