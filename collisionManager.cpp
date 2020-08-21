@@ -12,6 +12,7 @@ HRESULT collisionManager::init()
 {
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	_count = 0;
+	_collisionCount = 0;
 	_pushOut = false;
 
 	return S_OK;
@@ -28,6 +29,21 @@ void collisionManager::update()
 	hedgehagCollision();//고슴도치랑 플레이어 충돌처리
 	meerkatCollision();//미어캣이랑 플레이어 충돌처리
 	bulletCollision();//미어캣의 총알이랑 플레이어 충돌처리
+
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			_collisionCount++;
+			if (_collisionCount % 40 == 0)
+			{
+				e->setEnemyCollision(false);
+				_collisionCount = 0;
+			}
+		}
+	}
 }
 
 void collisionManager::render()
@@ -100,8 +116,11 @@ void collisionManager::buffaloCollision()
 		{
 			if (isCollision(b->getRect(), _player->getPlayerAttackRect()))//버팔로 렉트에 플레이어 공격렉트가 충돌했으면
 			{
-				b->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
-				_player->setPlayerAttackRectRemove();//플레이어공격 렉트삭제
+				if (!b->getEnemyCollision())
+				{
+					b->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
+					b->setEnemyCollision(true);
+				}
 			}
 		}
 
@@ -179,7 +198,7 @@ void collisionManager::hedgehagCollision()
 		{
 			if (isCollision(h->getRect(), _player->getPlayerAttackRect()))//고슴도치 렉트에 플레이어 공격렉트가 충돌시
 			{
-				if (!h->getEnemyIsAttack())
+				if (!h->getEnemyIsAttack() && !h->getEnemyCollision())//고슴도치가 공격중이 아니고 충돌판정이 펄스이면
 				{
 					if (h->getEnemyAngle() * (180 / PI) >= 135 && h->getEnemyAngle() * (180 / PI) <= 225)//왼쪽
 					{
@@ -212,8 +231,11 @@ void collisionManager::hedgehagCollision()
 						h->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 					}
 				}
-				h->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
-				_player->setPlayerAttackRectRemove();//플레이어공격 렉트삭제
+				if (!h->getEnemyCollision())//고슴도치의 충돌판정이 펄스면
+				{
+					h->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
+					h->setEnemyCollision(true);
+				}
 			}
 		}
 
@@ -326,7 +348,7 @@ void collisionManager::meerkatCollision()
 			{
 				if (m->getEnemyDirection() != ENEMY_TUNNEL_MOVE)
 				{
-					if (!m->getEnemyIsAttack())
+					if (!m->getEnemyIsAttack() && !m->getEnemyCollision())//미어캣이 공격중이 아니고 충돌판정이 펄스이면
 					{
 						if (m->getEnemyAngle() * (180 / PI) >= 135 && m->getEnemyAngle() * (180 / PI) <= 225)//왼쪽
 						{
@@ -359,19 +381,12 @@ void collisionManager::meerkatCollision()
 							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 						}
 					}
-					m->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
-					_player->setPlayerAttackRectRemove();//플레이어공격 렉트삭제
+					if (!m->getEnemyCollision())//충돌판정이 펄스이면
+					{
+						m->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
+						m->setEnemyCollision(true);
+					}
 				}
-			}
-		}
-
-		if (m->getEnemyAttackRect().getSize().x != 0 && m->getEnemyAttackRect().getSize().y != 0)
-		{
-			if (isCollision(_player->getRect(), m->getEnemyAttackRect()))//플레이어렉트에 미어캣 공격렉트가 충돌했으면
-			{
-				_player->setPlayerPlusX(cosf(m->getEnemyAngle()) * 10.0f);
-				_player->setPlayerPlusY(-sinf(m->getEnemyAngle()) * 10.0f);
-				m->setIsAttack(false);
 			}
 		}
 

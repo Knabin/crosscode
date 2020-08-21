@@ -120,7 +120,7 @@ HRESULT player::init()
 	_bullet = new bullet;
 	_bullet->init();
 
-	_attackPower = RND->getFromIntTo(30, 100);
+	_attackPower = 50;
 	_count = 0;
 	//_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
 
@@ -625,8 +625,6 @@ void player::update()
 	{
 		_lethalCharge = 0;
 	}
-
-	cout << _attackRC.getCenter().x << endl;
 }
 
 void player::render()
@@ -2096,7 +2094,7 @@ void player::playerMeleeattack()   //근접 기본공격
 	}
 	if (!_ani->isPlay() && _iscombo && _combo == 3)
 	{
-		cout << _state->getState() << endl;
+		//cout << _state->getState() << endl;
 		_attackCount = 0;
 		_state->setState(_vState[PLAYERSTATE::RIGHT_FINALATTACK]);
 		_iscombo = false;
