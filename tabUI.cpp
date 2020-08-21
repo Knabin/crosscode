@@ -694,27 +694,41 @@ void tabUI::render()
 
 
 		wstring Num = to_wstring(_player->getPlayerEXP());
-		D2DRENDERER->RenderText(600, 182, Num, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
-		Num = to_wstring(_player->getPlayerNextEXP());
-		D2DRENDERER->RenderText(680, 182, Num, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
-
-		Num = to_wstring(_player->getPlayerHP());
-		D2DRENDERER->RenderText(230, 315, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(220, 443, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 
 		wstring w = L"/";
-		D2DRENDERER->RenderText(310, 315, w, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(315, 443, w, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 
-		Num = to_wstring(_player->getPlayerLEVEL());
-		D2DRENDERER->RenderText(450, 270, Num, 50, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerNextEXP());
+		D2DRENDERER->RenderText(360, 443, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		Num = to_wstring(_player->getPlayerHP());
+		D2DRENDERER->RenderText(220, 315, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		D2DRENDERER->RenderText(315, 315, w, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 
 		Num = to_wstring(_player->getPlayerMaxHP());
-		D2DRENDERER->RenderText(440, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(360, 315, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(400, 525, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		Num = to_wstring(_player->getPlayerLEVEL());
+		D2DRENDERER->RenderText(450, 265, Num, 50, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
 		Num = to_wstring(_player->getPlayerAtk());
-		D2DRENDERER->RenderText(600, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(400, 570, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_player->getPlayerDef());
-		D2DRENDERER->RenderText(755, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(400, 617, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_player->getPlayerCri());
-		D2DRENDERER->RenderText(890, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(400, 665, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		Num = to_wstring(_player->getPlayerFR());
+		D2DRENDERER->RenderText(400, 725, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerIR());
+		D2DRENDERER->RenderText(400, 770, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerER());
+		D2DRENDERER->RenderText(400, 820, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerPR());
+		D2DRENDERER->RenderText(400, 865, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 
 
 		for (int i = 0; i < _player->getPlayerSP(); ++i)
