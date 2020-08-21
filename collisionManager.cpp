@@ -12,6 +12,7 @@ HRESULT collisionManager::init()
 {
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	_count = 0;
+	_collisionCount = 0;
 	_pushOut = false;
 
 	return S_OK;
@@ -100,8 +101,11 @@ void collisionManager::buffaloCollision()
 		{
 			if (isCollision(b->getRect(), _player->getPlayerAttackRect()))//버팔로 렉트에 플레이어 공격렉트가 충돌했으면
 			{
-				b->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
-				_player->setPlayerAttackRectRemove();//플레이어공격 렉트삭제
+				if (!b->getEnemyCollision())
+				{
+					b->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
+					b->setEnemyCollision(true);
+				}
 			}
 		}
 
@@ -179,7 +183,7 @@ void collisionManager::hedgehagCollision()
 		{
 			if (isCollision(h->getRect(), _player->getPlayerAttackRect()))//고슴도치 렉트에 플레이어 공격렉트가 충돌시
 			{
-				if (!h->getEnemyIsAttack())
+				if (!h->getEnemyIsAttack() && !h->getEnemyCollision())//고슴도치가 공격중이 아니고 충돌판정이 펄스이면
 				{
 					if (h->getEnemyAngle() * (180 / PI) >= 135 && h->getEnemyAngle() * (180 / PI) <= 225)//왼쪽
 					{
@@ -212,8 +216,54 @@ void collisionManager::hedgehagCollision()
 						h->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 					}
 				}
-				h->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
-				_player->setPlayerAttackRectRemove();//플레이어공격 렉트삭제
+				if (!h->getEnemyCollision())//고슴도치의 충돌판정이 펄스면
+				{
+					h->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
+					h->setEnemyCollision(true);
+				}
+			}
+		}
+
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 고슴도치한테 맞으면
+		{
+			if (isCollision(h->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+			{
+				if (!h->getEnemyIsAttack())//고슴도치가 공격중이 아니고
+				{
+					if (h->getEnemyAngle() * (180 / PI) >= 135 && h->getEnemyAngle() * (180 / PI) <= 225)//왼쪽
+					{
+						h->setEnemyDirection(ENEMY_LEFT_HIT);
+					}
+
+					if (h->getEnemyAngle() * (180 / PI) >= 90 && h->getEnemyAngle() * (180 / PI) <= 135)//왼쪽위
+					{
+						h->setEnemyDirection(ENEMY_UP_LEFT_HIT);
+					}
+
+					if (h->getEnemyAngle() * (180 / PI) >= 45 && h->getEnemyAngle() * (180 / PI) <= 90)//오른쪽위
+					{
+						h->setEnemyDirection(ENEMY_UP_RIGHT_HIT);
+					}
+
+					if ((h->getEnemyAngle() * (180 / PI) <= 45 && h->getEnemyAngle() * (180 / PI) >= 0) ||//오른쪽
+						(h->getEnemyAngle() * (180 / PI) <= 360 && h->getEnemyAngle() * (180 / PI) >= 315))
+					{
+						h->setEnemyDirection(ENEMY_RIGHT_HIT);
+					}
+
+					if (h->getEnemyAngle() * (180 / PI) >= 270 && h->getEnemyAngle() * (180 / PI) <= 315)//아래오른쪽
+					{
+						h->setEnemyDirection(ENEMY_DOWN_RIGHT_HIT);
+					}
+
+					if (h->getEnemyAngle() * (180 / PI) >= 225 && h->getEnemyAngle() * (180 / PI) <= 270)//아래왼쪽
+					{
+						h->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
+					}
+				}
+
+				h->setEnemyHP(_player->getPlayerAttackPower());
+				_player->getBullet()->remove(j);
 			}
 		}
 
@@ -298,8 +348,8 @@ void collisionManager::hedgehagCollision()
 				_count++;
 				if (_count <= 3)
 				{
-					_player->setPlayerPlusX(cosf(h->getEnemyAngle()) * 10.0f);
-					_player->setPlayerPlusY(-sinf(h->getEnemyAngle()) * 10.0f);
+					_player->setPlayerPlusX(cosf(h->getEnemyAngleSave()) * 10.0f);
+					_player->setPlayerPlusY(-sinf(h->getEnemyAngleSave()) * 10.0f);
 				}
 				else
 				{
@@ -326,7 +376,7 @@ void collisionManager::meerkatCollision()
 			{
 				if (m->getEnemyDirection() != ENEMY_TUNNEL_MOVE)
 				{
-					if (!m->getEnemyIsAttack())
+					if (!m->getEnemyIsAttack() && !m->getEnemyCollision())//미어캣이 공격중이 아니고 충돌판정이 펄스이면
 					{
 						if (m->getEnemyAngle() * (180 / PI) >= 135 && m->getEnemyAngle() * (180 / PI) <= 225)//왼쪽
 						{
@@ -359,19 +409,58 @@ void collisionManager::meerkatCollision()
 							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 						}
 					}
-					m->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
-					_player->setPlayerAttackRectRemove();//플레이어공격 렉트삭제
+					if (!m->getEnemyCollision())//충돌판정이 펄스이면
+					{
+						m->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
+						m->setEnemyCollision(true);
+					}
 				}
 			}
 		}
 
-		if (m->getEnemyAttackRect().getSize().x != 0 && m->getEnemyAttackRect().getSize().y != 0)
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 미어캣한테 맞으면
 		{
-			if (isCollision(_player->getRect(), m->getEnemyAttackRect()))//플레이어렉트에 미어캣 공격렉트가 충돌했으면
+			if (m->getEnemyDirection() != ENEMY_TUNNEL_MOVE)
 			{
-				_player->setPlayerPlusX(cosf(m->getEnemyAngle()) * 10.0f);
-				_player->setPlayerPlusY(-sinf(m->getEnemyAngle()) * 10.0f);
-				m->setIsAttack(false);
+				if (isCollision(m->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+				{
+					if (!m->getEnemyIsAttack())//미어캣이 공격중이 아니고
+					{
+						if (m->getEnemyAngle() * (180 / PI) >= 135 && m->getEnemyAngle() * (180 / PI) <= 225)//왼쪽
+						{
+							m->setEnemyDirection(ENEMY_LEFT_HIT);
+						}
+
+						if (m->getEnemyAngle() * (180 / PI) >= 90 && m->getEnemyAngle() * (180 / PI) <= 135)//왼쪽위
+						{
+							m->setEnemyDirection(ENEMY_UP_LEFT_HIT);
+						}
+
+						if (m->getEnemyAngle() * (180 / PI) >= 45 && m->getEnemyAngle() * (180 / PI) <= 90)//오른쪽위
+						{
+							m->setEnemyDirection(ENEMY_UP_RIGHT_HIT);
+						}
+
+						if ((m->getEnemyAngle() * (180 / PI) <= 45 && m->getEnemyAngle() * (180 / PI) >= 0) ||//오른쪽
+							(m->getEnemyAngle() * (180 / PI) <= 360 && m->getEnemyAngle() * (180 / PI) >= 315))
+						{
+							m->setEnemyDirection(ENEMY_RIGHT_HIT);
+						}
+
+						if (m->getEnemyAngle() * (180 / PI) >= 270 && m->getEnemyAngle() * (180 / PI) <= 315)//아래오른쪽
+						{
+							m->setEnemyDirection(ENEMY_DOWN_RIGHT_HIT);
+						}
+
+						if (m->getEnemyAngle() * (180 / PI) >= 225 && m->getEnemyAngle() * (180 / PI) <= 270)//아래왼쪽
+						{
+							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
+						}
+					}
+
+					m->setEnemyHP(_player->getPlayerAttackPower());
+					_player->getBullet()->remove(j);
+				}
 			}
 		}
 

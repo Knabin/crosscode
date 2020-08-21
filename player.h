@@ -45,7 +45,7 @@ private:
 	floatRect rc1[12];
 	floatRect rc2[12];
 	floatRect _attackRC;
-	
+
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
 	bullet* _bullet;
@@ -62,7 +62,6 @@ private:
 	int _nowOrder;
 	int _backOrder;
 	int _beginOrder;
-	int _count;
 
 	int _jumpCount;
 
@@ -102,6 +101,8 @@ private:
 	float _gravity;
 	bool _jumping;
 
+	bool _attacking;
+
 	float _angle;
 	float de;
 	float d1;
@@ -132,6 +133,7 @@ public:
 	void playerMeleeattack();
 	void playerDodgeEffect();
 	void playerLethalattack();
+	void playerLethalattackMove();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
@@ -145,7 +147,12 @@ public:
 	void setPlayerPlusX(float x) { _position.x += x; }
 	void setPlayerPlusY(float y) { _position.y += y; }
 
+	
+
 	inline int getNowOrder() { return _nowOrder; }
+
+	inline bool getAttacking() {return _attacking;}
+	void setAttacking(bool b) { _attacking = b; }
 
 	animation* getAnimation() { return _ani; }
 

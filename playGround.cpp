@@ -100,19 +100,22 @@ void playGround::update()
 	{
 		CAMERA->zoomStart(1.2f, 5.f, true);
 	}
+	if (KEYMANAGER->isOnceKeyDown('3'))
+	{
+		CAMERA->fadeStart(1.f, 1.5f);
+	}
 
 
 	// 이벤트 재생 중, UI가 화면을 가리고 있는 경우에는 업데이트하지 않음
 	if (!EVENTMANAGER->isPlayingEvent())
 	{
-		SCENEMANAGER->update();
-
 		_collisionManager->update();
 		_enemyManager->update();
 	}
-	
+
 	EVENTMANAGER->update();
-	if (!_ui->isUIOn() && !_ui->UIon())	OBJECTMANAGER->update();
+	SCENEMANAGER->update();
+	if(!_ui->isUIOn() && !_ui->UIon()) OBJECTMANAGER->update();
 	EFFECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();
@@ -150,6 +153,13 @@ void playGround::render()
 		else
 		{
 			IMAGEMANAGER->findImage("cursor throw")->render(Vector2(_ptMouse));
+		}
+
+		if (CAMERA->getIsFade())
+		{
+			IMAGEMANAGER->findImage("black")->setAlpha(CAMERA->getFadeAmount());
+			IMAGEMANAGER->findImage("black")->setSize(Vector2(WINSIZEX, WINSIZEY));
+			IMAGEMANAGER->findImage("black")->render(Vector2(0, 0));
 		}
 
 		//=============================================

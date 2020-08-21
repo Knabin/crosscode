@@ -35,6 +35,7 @@ HRESULT hedgehag::init()
 	_distanceChange = false;
 	_effect = false;
 	_idleMove = false;
+	_collision = false;
 
 	//고슴도치 기본 애니메이션
 	_idleMotion_L = new animation;
@@ -207,6 +208,7 @@ void hedgehag::update()
 	{
 		EFFECTMANAGER->play("enemyHedgehogMoveDust", Vector2(CAMERA->getRelativeVector2(_position).x + 20, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
 	}
+	//cout << "고슴도치 : " << _currentHP << endl;
 }
 
 void hedgehag::render()
