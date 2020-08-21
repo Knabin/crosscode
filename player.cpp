@@ -55,7 +55,7 @@ player::player()
 	_state = new playerStateController(idle);
 	_position.y = 700;
 	_attackAngle = 0;
-	_pAtk = 5;
+	
 	
 
 	_pSp = 0;
@@ -129,7 +129,7 @@ HRESULT player::init()
 	_attacking = false;
 	 _pHp = 100;
 	 _playerMaxHP = 100;
-	 _pXp = 10;
+	 _pXp = 100;
 	 _playerLevelUpXp = 100;
 	 _pSp = 1;
 	 _pSpcharge = 0;
@@ -141,7 +141,7 @@ HRESULT player::init()
 	 _pIR = 0;
 	 _pER = 0;
 	 _pPR = 0;
-
+	 _pAtk = 5;
 
 	_attackPower = 50;
 
@@ -673,7 +673,7 @@ void player::update()
 		_lethalCharge = 0;
 	}
 
-	if (_pXp >= _playerLevelUpXp)
+	/*if (_pXp >= _playerLevelUpXp)
 	{
 		_pXp -= _playerLevelUpXp;
 		_playerLevelUpXp *= 2;
@@ -683,7 +683,7 @@ void player::update()
 		_pAtk += 5;
 		_pCrt += 1;
 
-	}
+	}*/
 
 	_attackPower = _pAtk + RND->getFromIntTo(0, _pCrt);
 
