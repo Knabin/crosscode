@@ -167,6 +167,8 @@ void player::release()
 
 void player::update()
 {
+	if (_pHp < 0)
+		_pHp = 0;
 	if (_state->getState() != _vState[PLAYERSTATE::JUMP])
 	{
 		if (_jumpCount > 59)

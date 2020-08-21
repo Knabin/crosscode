@@ -14,6 +14,8 @@ private:
 	floatRect _hpRC;
 	floatRect _expRC;
 
+	int _money;
+
 	bool _on;	//메뉴 키고 끄기
 	bool _eq;	//장비
 	bool _iv;	//인벤
@@ -24,6 +26,9 @@ private:
 	LPBYTE StateArray;
 	
 	item* _item;
+
+	int _time;
+	int _timeCount;
 
 	vector<invenObject> _vIv;
 
@@ -47,5 +52,8 @@ public:
 	void equipSelect();
 
 	void setInven(vector<invenObject> inven) { _vIv = inven; }
+
+	inline int getMoney() { return _money; }
+	void setMoney(int m) { _money = m; }
 };
 
