@@ -14,13 +14,15 @@ HRESULT puzzleBlueWall::init()
 {
 	_name = "puzzleBlueWall";
 
+	_frameX = 0;
+
 	if (_type == 0)
 	{
 		_image = IMAGEMANAGER->addImage("wall1", L"images/tile/wallpreview.png");
 	}
 	else
 	{
-		_image = IMAGEMANAGER->addImage("wall2", L"images/tile/wall2preview.png");
+		_image = IMAGEMANAGER->addFrameImage("wall2", L"images/object/wall_blue.png", 8, 1);
 	}
 	_rc.update(_position, Vector2(_image->getSize().x, _image->getSize().y), pivot::CENTER);
 	return S_OK;

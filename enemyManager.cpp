@@ -2,6 +2,9 @@
 #include "enemyManager.h"
 #include "enemy.h"
 #include "player.h"
+#include "hedgehag.h"
+#include "meerkat.h"
+#include "buffalo.h"
 
 HRESULT enemyManager::init()
 {
@@ -71,28 +74,81 @@ void enemyManager::render()
 
 void enemyManager::enemyDead()
 {
-	for (int i = 0; i < _vEnemy.size(); i++)
-	{
-		enemy* e = dynamic_cast<enemy*>(_vEnemy[i]);
-		if (e->getEnemyHP() <= 0)//에너미의 현재 체력이 0이하가 되면
-		{
+	vector<gameObject*> hTemp = OBJECTMANAGER->findObjects(objectType::ENEMY, "hedgehag");
+	vector<gameObject*> mTemp = OBJECTMANAGER->findObjects(objectType::ENEMY, "meerkat");
+	vector<gameObject*> bTemp = OBJECTMANAGER->findObjects(objectType::ENEMY, "buffalo");
 
+	//for (int i = 0; i < _vEnemy.size(); i++)
+	//{
+	//	enemy* e = dynamic_cast<enemy*>(_vEnemy[i]);
+	//	cout << _player->getPlayerEXP() << ", 경험치" << endl;
+	//	//if (e->getEnemyHP() <= 0)//에너미의 현재 체력이 0이하가 되면
+	//	//{
+	//	//
+	//	//	_count++;
+	//	//	if (_count % 5 == 0)
+	//	//	{
+	//	//		e->setIsAlive(false);//에너미 삭제
+	//	//		
+	//	//		for (int j = 0; j < hTemp.size(); j++)
+	//	//		{
+	//	//			hedgehag* h = dynamic_cast<hedgehag*>(hTemp[j]);
+	//	//			_player->setPlayerEXP(10);
+	//	//			break;
+	//	//		}
+	//	//		
+	//	//		_count = 0;
+	//	//
+	//	//		break;
+	//	//	}
+	//	//}
+	//}
+
+	for (int i = 0; i < hTemp.size(); i++)//고슴도치
+	{
+		hedgehag* h = dynamic_cast<hedgehag*>(hTemp[i]);
+		if (h->getEnemyHP() <= 0)
+		{
 			_count++;
 			if (_count % 5 == 0)
 			{
-				e->setIsAlive(false);//에너미 삭제
-				//OBJECTMANAGER->removeObject(objectType::ENEMY, e);
-				// 이거 켜면 터짐??? 잠만
-				//_vEnemy.erase(_vEnemy.begin() + i);
-				_player->setPlayerEXP(10);
-				
+				h->setIsAlive(false);
+				_player->setPlayerEXP(_player->getPlayerEXP() + 10);
 				_count = 0;
-
 				break;
 			}
+		}
+	}
 
+	for (int i = 0; i < mTemp.size(); i++)//미어캣
+	{
+		meerkat* m = dynamic_cast<meerkat*>(mTemp[i]);
+		if (m->getEnemyHP() <= 0)
+		{
+			_count++;
+			if (_count % 5 == 0)
+			{
+				m->setIsAlive(false);
+				_player->setPlayerEXP(_player->getPlayerEXP() + 20);
+				_count = 0;
+				break;
+			}
+		}
+	}
 
-
+	for (int i = 0; i < bTemp.size(); i++)
+	{
+		buffalo* b = dynamic_cast<buffalo*>(bTemp[i]);
+		if (b->getEnemyHP() <= 0)
+		{
+			_count++;
+			if (_count % 5 == 0)
+			{
+				b->setIsAlive(false);
+				_player->setPlayerEXP(_player->getPlayerEXP() + 30);
+				_count = 0;
+				break;
+			}
 		}
 	}
 
