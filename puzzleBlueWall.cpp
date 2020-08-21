@@ -12,6 +12,8 @@ puzzleBlueWall::~puzzleBlueWall()
 
 HRESULT puzzleBlueWall::init()
 {
+	_name = "puzzleBlueWall";
+
 	if (_type == 0)
 	{
 		_image = IMAGEMANAGER->addImage("wall1", L"images/tile/wallpreview.png");

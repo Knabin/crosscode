@@ -46,6 +46,8 @@ public:
 	void remove(int arrNum);
 
 	void collision();
+
+	void setPlayerBullet(int i, float angle) { _vPlayerBullet[i].angle = angle; }
 	
 	vector<tagPlayerBullet> getVPlayerBullet() { return _vPlayerBullet; }
 	vector<tagPlayerBullet>::iterator getViPlayerBullet() { return _viPlayerBullet; }

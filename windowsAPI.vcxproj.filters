@@ -239,6 +239,9 @@
     <ClCompile Include="foothold.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="puzzleCollision.cpp">
+      <Filter>playGround\collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -487,6 +490,9 @@
     </ClInclude>
     <ClInclude Include="foothold.h">
       <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="puzzleCollision.h">
+      <Filter>playGround\collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

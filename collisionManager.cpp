@@ -86,8 +86,8 @@ void collisionManager::buffaloCollision()
 
 		if (_pushOut)
 		{
-			_player->setPlayerPlusX(cosf(b->getEnemyAngle()) * 10.0f);
-			_player->setPlayerPlusY(-sinf(b->getEnemyAngle()) * 10.0f);
+			_player->setPlayerPlusX(cosf(b->getEnemyAngleSave()) * 10.0f);
+			_player->setPlayerPlusY(-sinf(b->getEnemyAngleSave()) * 10.0f);
 
 			_count++;
 			if (_count % 10 == 0)

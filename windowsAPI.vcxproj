@@ -200,6 +200,7 @@
     <ClInclude Include="portrait.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="puzzleBlueWall.h" />
+    <ClInclude Include="puzzleCollision.h" />
     <ClInclude Include="puzzleComboButton.h" />
     <ClInclude Include="puzzleDestruct.h" />
     <ClInclude Include="puzzleOrangeWall.h" />
@@ -283,6 +284,7 @@
     <ClCompile Include="portrait.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="puzzleBlueWall.cpp" />
+    <ClCompile Include="puzzleCollision.cpp" />
     <ClCompile Include="puzzleComboButton.cpp" />
     <ClCompile Include="puzzleDestruct.cpp" />
     <ClCompile Include="puzzleOrangeWall.cpp" />

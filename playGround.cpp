@@ -31,7 +31,8 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("loading", new initLoadingScene());
 	SCENEMANAGER->loadScene("loading");
 
-
+	_puzzleCollision = new puzzleCollision;
+	_puzzleCollision->init();
 
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
@@ -109,6 +110,7 @@ void playGround::update()
 	// 이벤트 재생 중, UI가 화면을 가리고 있는 경우에는 업데이트하지 않음
 	if (!EVENTMANAGER->isPlayingEvent())
 	{
+		_puzzleCollision->update();
 		_collisionManager->update();
 		_enemyManager->update();
 	}
