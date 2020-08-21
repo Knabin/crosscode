@@ -20,6 +20,7 @@ player::player()
 	playerState* rightfinalattackstate = new rightfinalattackState(this);
 	playerState* lethalchargestate = new lethalchargeState(this);
 	playerState* lethalattackstate = new lethalattackState(this);
+	//playerState* beAttackedstate = new beAttackedState(this);
 
 	_vState.push_back(idle);
 	_vState.push_back(move);
@@ -35,6 +36,7 @@ player::player()
 	_vState.push_back(rightfinalattackstate);
 	_vState.push_back(lethalchargestate);
 	_vState.push_back(lethalattackstate);
+	//_vState.push_back(beAttackedstate);
 
 	_name = "player";
 	_isActive = true;
@@ -54,6 +56,8 @@ player::player()
 	_state = new playerStateController(idle);
 	_position.y = 700;
 	_attackAngle = 0;
+
+	_beAttacked = false;
 
 	_pSp = 0;
 }
@@ -76,6 +80,7 @@ HRESULT player::init()
 	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
 	IMAGEMANAGER->addFrameImage("player aim", L"images/player/player_aim.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge1.png", 6, 8);
+	IMAGEMANAGER->addFrameImage("player beAttacked", L"images/player/player_beAttacked", 2, 1);
 	
 	IMAGEMANAGER->addImage("player shadow", L"images/player/player_shadow.png");
 
