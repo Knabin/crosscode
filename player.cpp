@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "bullet.h"
 
+
 player::player()
 {
 	playerState* idle = new idleState(this);
@@ -56,6 +57,9 @@ player::player()
 	_state = new playerStateController(idle);
 	_position.y = 700;
 	_attackAngle = 0;
+	
+	
+
 
 	_beAttacked = false;
 
@@ -84,6 +88,9 @@ HRESULT player::init()
 	
 	IMAGEMANAGER->addImage("player shadow", L"images/player/player_shadow.png");
 
+	IMAGEMANAGER->addImage("player range", L"images/player/player_attackrange.png");
+	EFFECTMANAGER->addEffect("player range", "player range", 1, 0.1f, 1, 1.0f);
+
 	IMAGEMANAGER->addFrameImage("player dodgeDust", L"images/player/player_dodgedust.png", 5,1);
 
 	EFFECTMANAGER->addEffect("player dodgeDust1", "player dodgeDust", 1, 0.2f, 1, 1.f);
@@ -100,6 +107,7 @@ HRESULT player::init()
 	EFFECTMANAGER->addEffect("leftattackeffect", "leftattackeffect",1,0.5f,5,1.0f);
 	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 0.5f, 5, 1.0f);
 	EFFECTMANAGER->addEffect("finalattackeffect", "finalattackeffect", 1, 0.3f, 5, 1.0f);
+
 
 
 	//=================================== 근거리 이펙트 용=================================
@@ -127,10 +135,24 @@ HRESULT player::init()
 	
 	_bullet = new bullet;
 	_bullet->init();
+	_attacking = false;
+	 _pHp = 100;
+	 _playerMaxHP = 100;
+	 _pXp = 100;
+	 _playerLevelUpXp = 100;
+	 _pSp = 1;
+	 _pSpcharge = 0;
+	 _pLevel = 1;
+
+	 _pDef = 0;
+	 _pCrt = 0;
+	 _pfR  =0;
+	 _pIR = 0;
+	 _pER = 0;
+	 _pPR = 0;
+	 _pAtk = 5;
 
 	_attackPower = 50;
-	_count = 0;
-	//_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
 
 	return S_OK;
 }
@@ -143,8 +165,8 @@ void player::update()
 {
 	if (_state->getState() != _vState[PLAYERSTATE::JUMP])
 	{
-		if (_jumpCount >59)
-		_jumpPower = 0;
+		if (_jumpCount > 59)
+			_jumpPower = 0;
 		else
 		{
 			_jumpCount++;
@@ -159,9 +181,6 @@ void player::update()
 				_gravity = 3;
 			}
 		}
-
-	
-		
 	}
 	_bullet->update();
 	if (EVENTMANAGER->isPlayingEvent())
@@ -179,7 +198,7 @@ void player::update()
 			}
 			else if (KEYMANAGER->isStayKeyDown('A'))
 			{
-				_direction = PLAYERDIRECTION::LEFT_TOP;	
+				_direction = PLAYERDIRECTION::LEFT_TOP;
 			}
 			else
 			{
@@ -202,8 +221,8 @@ void player::update()
 			_state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&
 			_state->getState() != _vState[PLAYERSTATE::DODGE] &&
 			_state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] &&
-			_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && 
-			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] && 
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] &&
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] &&
 			_state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
@@ -231,6 +250,7 @@ void player::update()
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
+
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
@@ -243,8 +263,8 @@ void player::update()
 			_state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&
 			_state->getState() != _vState[PLAYERSTATE::DODGE] &&
 			_state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] &&
-			_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && 
-			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] && 
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] &&
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] &&
 			_state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
@@ -268,16 +288,17 @@ void player::update()
 				_direction = PLAYERDIRECTION::LEFT;
 			}
 		}
-		
+
 		// ================== 공격 처리==================
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			playerMeleeattack();
+			vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) && _dodgeCount > 0)
 		{
 			_state->setState(_vState[PLAYERSTATE::DODGE]);
-			_ani->start();	
+			_ani->start();
 			_dodgeCount--;
 		}
 		else if (_state->getState() != _vState[PLAYERSTATE::LEFT_ATTACK] &&
@@ -286,11 +307,11 @@ void player::update()
 			_state->getState() != _vState[PLAYERSTATE::DODGE] &&
 			_state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] &&
 			_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] &&
-			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] && 
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] &&
 			_state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
-		}		
+		}
 	}
 
 	if (KEYMANAGER->isStayKeyDown('D') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
@@ -326,8 +347,8 @@ void player::update()
 			_state->getState() != _vState[PLAYERSTATE::RIGHT_FINALATTACK] &&
 			_state->getState() != _vState[PLAYERSTATE::DODGE] &&
 			_state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] &&
-			_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && 
-			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] && 
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] &&
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACK] &&
 			_state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
@@ -367,13 +388,15 @@ void player::update()
 	if (KEYMANAGER->isOnceKeyDown('V')) //근접공격키
 	{
 		playerMeleeattack();
+
+
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))	// 가까우면 근접 , 멀면 원거리 공격
 	{
 		_fullCount = 0;
-		if (getDistance(_position.x, _position.y, _ptMouse.x / 
-			CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y / 
+		if (getDistance(_position.x, _position.y, _ptMouse.x /
+			CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
 			CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150)
 		{
 			playerMeleeattack();
@@ -385,8 +408,8 @@ void player::update()
 			_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
 			_state->getState()->setLongAttack();
 			_angle = getAngle(_position.x, _position.y,
-							  _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
-							  _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
+				_ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
+				_ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
 			_angle = _angle + RND->getFromFloatTo(-de, de);
 
 			_bullet->nomalFire(_position.x, _position.y, _angle, 17.0f);
@@ -417,8 +440,8 @@ void player::update()
 	}
 
 	// ==================== 가드상태 또는 원거리 공격시 마우스 방향으로 플레이어의 방향 바뀜 ==================== //
-	if (_state->getState() == _vState[PLAYERSTATE::GUARD] || 
-		_state->getState() == _vState[PLAYERSTATE::LONGATTACK] || 
+	if (_state->getState() == _vState[PLAYERSTATE::GUARD] ||
+		_state->getState() == _vState[PLAYERSTATE::LONGATTACK] ||
 		_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
 		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
 	{
@@ -451,7 +474,7 @@ void player::update()
 		}
 	}
 	// ============================================= 회피 이펙트 ============================================= //
-	if (_state->getState() == _vState[PLAYERSTATE::DODGE] && _dodgeCount > 1 )
+	if (_state->getState() == _vState[PLAYERSTATE::DODGE] && _dodgeCount > 1)
 	{
 		playerDodgeEffect();
 	}
@@ -476,7 +499,7 @@ void player::update()
 		if (_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
 			_state->setState(_vState[PLAYERSTATE::LONGATTACKIDLE]);
 	}
-	
+
 	if (KEYMANAGER->isOnceKeyUp('C')
 		|| (KEYMANAGER->isOnceKeyUp(VK_RBUTTON) && _state->getState() == _vState[PLAYERSTATE::GUARD])
 		|| (_state->getState() == _vState[MOVESTOP] && !_ani->isPlay())
@@ -489,8 +512,9 @@ void player::update()
 			for (int i = 0; i < 40; i++)
 			{
 				_attackAni[i]->stop();
+				_attacking = true;
 			}
-			
+
 		}
 
 		_lethalCharge = 0;
@@ -532,9 +556,9 @@ void player::update()
 		POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 		int _nowOrder2 = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
 
-		if (_nowOrder2 == 5  || _nowOrder2 == 6 || _nowOrder2 == 7)
+		if (_nowOrder2 == 5 || _nowOrder2 == 6 || _nowOrder2 == 7)
 		{
-			float an = getAngle(_position.x, _position.y,_tile.left + 24, _tile.top +24);
+			float an = getAngle(_position.x, _position.y, _tile.left + 24, _tile.top + 24);
 			float speed = 40;
 			switch (_direction)
 			{
@@ -576,13 +600,14 @@ void player::update()
 	//=================================== 근거리 이펙트 용=================================
 	if (_state->getState() == _vState[PLAYERSTATE::RIGHT_FINALATTACK] || _state->getState() == _vState[PLAYERSTATE::LETHAL_ATTACK])
 	{
-		_attackEffectCount++;	
+		_attackEffectCount++;
 
 		if (_attackEffectCount > 1)
 		{
 			if (!_attackAni[_attackCount]->isPlay())
 			{
 				_attackAni[_attackCount]->start();
+
 			}
 		}
 
@@ -593,8 +618,8 @@ void player::update()
 
 			_attackEffectCount = 0;
 		}
-	
-		for (int i = _attackCount; i < _attackCount+10; i++)
+
+		for (int i = _attackCount; i < _attackCount + 10; i++)
 		{
 			_attackAni[i]->frameUpdate(TIMEMANAGER->getElapsedTime() * 30);
 		}
@@ -604,12 +629,13 @@ void player::update()
 			if (!_attackAni[i]->isPlay())
 			{
 				_attackAni[i]->start();
+
 			}
 		}
 		//===================================================================================	
 	}
 
-	if(KEYMANAGER->isStayKeyDown(VK_SPACE))
+	if (KEYMANAGER->isStayKeyDown(VK_SPACE))
 	{
 		if (_state->getState() == _vState[IDLE] && !_isLethal && _pSp > 0)
 		{
@@ -641,12 +667,27 @@ void player::update()
 	{
 		_lethalCharge = 0;
 	}
+
+	/*if (_pXp >= _playerLevelUpXp)
+	{
+		_pXp -= _playerLevelUpXp;
+		_playerLevelUpXp *= 2;
+		_playerMaxHP += 50;
+		_pHp = _playerMaxHP;
+		_pDef += 1;
+		_pAtk += 5;
+		_pCrt += 1;
+
+	}*/
+
+	_attackPower = _pAtk + RND->getFromIntTo(0, _pCrt);
+
 }
 
 void player::render()
 {
 	//_rc.render(getMemDC());
-	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
 	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_tileRect));
 	_image->setSize(_image->getFrameSize() * CAMERA->getZoomAmount());
 	_image->aniRender(CAMERA->getRelativeVector2(_position.x, _position.y - _jumpPower), _ani, 1.0f);
@@ -1923,27 +1964,43 @@ void player::playerfinalattackMove() // 근접공격 마지막타 움직이는거 타일체크
 		switch (_direction)
 		{
 		case PLAYERDIRECTION::TOP:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y-15), Vector2(200, 200), pivot::CENTER);
 			move(0, -moveSpeed);
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x-10, _position.y - 10), Vector2(200, 200), pivot::CENTER);
 			moveAngle(PI*0.75, moveSpeed);
 			break;
 		case PLAYERDIRECTION::LEFT:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x-15, _position.y), Vector2(200, 200), pivot::CENTER);
 			move(-moveSpeed, 0);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 10, _position.y + 10), Vector2(200, 200), pivot::CENTER);
 			moveAngle(PI*1.25, moveSpeed);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y + 15), Vector2(200, 200), pivot::CENTER);
 			move(0, moveSpeed);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x+10, _position.y + 10), Vector2(200, 200), pivot::CENTER);
 			moveAngle(PI*1.75, moveSpeed);
 			break;
 		case PLAYERDIRECTION::RIGHT:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 15, _position.y), Vector2(200, 200), pivot::CENTER);
 			move(moveSpeed, 0);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 10, _position.y - 10), Vector2(200, 200), pivot::CENTER);
 			moveAngle(PI*0.25, moveSpeed);
 			break;
 		}
@@ -1972,8 +2029,10 @@ void player::moveAngle(const float & cangle, const float & speed)
 void player::playerMeleeattack()   //근접 기본공격
 {
 	_combocount = 0;
+	EFFECTMANAGER->play("player range", Vector2(CAMERA->getRelativeVector2(_position).x+140, CAMERA->getRelativeVector2(_position).y+150));
 	if (_state->getState() == _vState[IDLE] && !_iscombo || _state->getState() == _vState[MOVE] && !_iscombo)
 	{
+		
 		_state->setState(_vState[PLAYERSTATE::LEFT_ATTACK]);
 		_iscombo = true;
 		_combo++;
@@ -1981,92 +2040,92 @@ void player::playerMeleeattack()   //근접 기본공격
 		{
 		case PLAYERDIRECTION::TOP:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50));
-			//_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
 			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y-30), Vector2(180, 100), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), 315);
-			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x-15, _position.y-30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 60), 270);
 			_attackRC.set(Vector2(_position.x + 70, _position.y + 60), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x-30, _position.y), Vector2(100, 180), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), 225);
-			_attackRC.set(Vector2(_position.x + 70, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x-15, _position.y+30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), 180);
-			_attackRC.set(Vector2(_position.x + 90, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y+30), Vector2(180, 100), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), 135);
-			_attackRC.set(Vector2(_position.x + 100, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x+15, _position.y+30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 70), 90);
 			_attackRC.set(Vector2(_position.x + 100, _position.y + 70), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x+30, _position.y), Vector2(100, 180), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), 45);
-			_attackRC.set(Vector2(_position.x + 100, _position.y + 60), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 15, _position.y - 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		}
 	}
 	if (!_ani->isPlay() && _iscombo &&  _combo == 1)
 	{
+		_attacking = true;
 		_state->setState(_vState[PLAYERSTATE::RIGHT_ATTACK]);
 		_combo++;
 		switch (_direction)
 		{
 		case PLAYERDIRECTION::TOP:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50));
-			_attackRC.set(Vector2(_position.x + 90, _position.y + 50), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y - 30), Vector2(180, 100), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), 315);
-			_attackRC.set(Vector2(_position.x + 70, _position.y + 50), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 15, _position.y - 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 60), 270);
 			_attackRC.set(Vector2(_position.x + 70, _position.y + 60), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 30, _position.y), Vector2(100, 180), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), 225);
-			_attackRC.set(Vector2(_position.x + 70, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 15, _position.y + 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), 180);
-			_attackRC.set(Vector2(_position.x + 90, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y + 30), Vector2(180, 100), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), 135);
-			_attackRC.set(Vector2(_position.x + 100, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 15, _position.y + 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 70), 90);
 			_attackRC.set(Vector2(_position.x + 100, _position.y + 70), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 30, _position.y), Vector2(100, 180), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
 			EFFECTMANAGER->play("rightattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), 45);
-			_attackRC.set(Vector2(_position.x + 100, _position.y + 60), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 15, _position.y - 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		}
 	}
@@ -2079,43 +2138,43 @@ void player::playerMeleeattack()   //근접 기본공격
 		{
 		case PLAYERDIRECTION::TOP:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50));
-			_attackRC.set(Vector2(_position.x + 90, _position.y + 50), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y - 30), Vector2(180, 100), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT_TOP:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), 315);
-			_attackRC.set(Vector2(_position.x + 70, _position.y + 50), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 50), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 15, _position.y - 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 60), 270);
 			_attackRC.set(Vector2(_position.x + 70, _position.y + 60), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 30, _position.y), Vector2(100, 180), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::LEFT_BOTTOM:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), 225);
-			_attackRC.set(Vector2(_position.x + 70, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 15, _position.y + 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::BOTTOM:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), 180);
-			_attackRC.set(Vector2(_position.x + 90, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 90, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y + 30), Vector2(180, 100), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT_BOTTOM:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), 135);
-			_attackRC.set(Vector2(_position.x + 100, _position.y + 80), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 15, _position.y + 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 70), 90);
 			_attackRC.set(Vector2(_position.x + 100, _position.y + 70), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 30, _position.y), Vector2(100, 180), pivot::CENTER);
 			break;
 		case PLAYERDIRECTION::RIGHT_TOP:
 			EFFECTMANAGER->play("leftattackeffect", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), 45);
-			_attackRC.set(Vector2(_position.x + 100, _position.y + 60), pivot::CENTER);
-			_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
+			_attackRC.set(Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 60), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 15, _position.y - 30), Vector2(130, 120), pivot::CENTER);
 			break;
 		}
 	}
@@ -2260,6 +2319,99 @@ void player::playerLethalattack()
 			//_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
 	}
 	
+}
+
+void player::playerLethalattackMove()
+{
+	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
+	POINT nextTileIndex;
+	float moveSpeed = 6.0f;
+
+	switch (_direction)
+	{
+	case PLAYERDIRECTION::TOP:
+		nextTileIndex = { currentTileIndex.x, currentTileIndex.y - 1 };
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
+		break;
+	case PLAYERDIRECTION::LEFT:
+		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y };
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		nextTileIndex = { currentTileIndex.x - 1, currentTileIndex.y + 1 };
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		nextTileIndex = { currentTileIndex.x, currentTileIndex.y + 1 };
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y + 1 };
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y };
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		nextTileIndex = { currentTileIndex.x + 1, currentTileIndex.y - 1 };
+		break;
+	}
+
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
+
+	if (nextTileIndex.x > maxTileX) nextTileIndex.x = maxTileX;
+	else if (nextTileIndex.x < 0) nextTileIndex.x = 0;
+	if (nextTileIndex.y > maxTileY) nextTileIndex.y = maxTileY;
+	else if (nextTileIndex.y < 0) nextTileIndex.y = 0;
+	tile* t = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex.y][nextTileIndex.x];
+
+	if (t->getOrderIndex() == _nowOrder)
+	{
+		switch (_direction)
+		{
+		case PLAYERDIRECTION::TOP:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y - 15), Vector2(240, 240), pivot::CENTER);
+			move(0, -moveSpeed);
+			break;
+		case PLAYERDIRECTION::LEFT_TOP:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 10, _position.y - 10), Vector2(240, 240), pivot::CENTER);
+			moveAngle(PI*0.75, moveSpeed);
+			break;
+		case PLAYERDIRECTION::LEFT:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 15, _position.y), Vector2(240, 240), pivot::CENTER);
+			move(-moveSpeed, 0);
+			break;
+		case PLAYERDIRECTION::LEFT_BOTTOM:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x - 10, _position.y + 10), Vector2(240, 240), pivot::CENTER);
+			moveAngle(PI*1.25, moveSpeed);
+			break;
+		case PLAYERDIRECTION::BOTTOM:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y + 15), Vector2(240, 240), pivot::CENTER);
+			move(0, moveSpeed);
+			break;
+		case PLAYERDIRECTION::RIGHT_BOTTOM:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 10, _position.y + 10), Vector2(240, 240), pivot::CENTER);
+			moveAngle(PI*1.75, moveSpeed);
+			break;
+		case PLAYERDIRECTION::RIGHT:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 15, _position.y), Vector2(240, 240), pivot::CENTER);
+			move(moveSpeed, 0);
+			break;
+		case PLAYERDIRECTION::RIGHT_TOP:
+			_attackRC.set(Vector2(_position.x, _position.y), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x + 10, _position.y - 10), Vector2(240, 240), pivot::CENTER);
+			moveAngle(PI*0.25, moveSpeed);
+			break;
+		}
+		_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
+		_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
+	}
 }
 
 void player::setIdle()

@@ -3,6 +3,7 @@
 #include "iEvent.h"
 
 eventManager::eventManager()
+	: _firstEvent(false), _puzzleEvent(false)
 {
 }
 

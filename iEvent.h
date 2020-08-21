@@ -58,7 +58,16 @@ public:
 	bool eventUpdate() override;
 };
 
-class iMoveScene final :public iEvent
+class iMoveScene final : public iEvent
 {
-	
+private:
+	class player* _player;
+	string _sceneName;
+	Vector2 _location;
+
+public:
+	iMoveScene(string sceneName, Vector2 location);
+
+	void eventStart() override;
+	bool eventUpdate() override;
 };

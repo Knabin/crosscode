@@ -208,7 +208,7 @@ void hedgehag::update()
 	{
 		EFFECTMANAGER->play("enemyHedgehogMoveDust", Vector2(CAMERA->getRelativeVector2(_position).x + 20, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
 	}
-	cout << "°í½¿µµÄ¡ : " << _currentHP << endl;
+	//cout << "°í½¿µµÄ¡ : " << _currentHP << endl;
 }
 
 void hedgehag::render()

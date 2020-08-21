@@ -4,19 +4,32 @@
 HRESULT item::init()
 {
 	///////////////¼Ò¸ðÅÛ///////////////
-	itemSet(L"¼Ò¸ð", 0, "Ã¼·ÂÆ÷¼Ç", 50, 50);
+	itemSet(L"¼Ò¸ð", 0, L"Ã¼·ÂÆ÷¼Ç", 50, 50);
+	itemSet(L"¼Ò¸ð", 1, L"Ã¼·ÂÆ÷¼Ç´ë", 50, 100);
 	///////////////ÆÈÀåºñ///////////////
-	itemSet(L"ÆÈ", 0, "±âº»Ä®",100, 0, 0,50);
+	itemSet(L"ÆÈ", 0, L"±âº»Ä®",100, 0, 50);
+	itemSet(L"ÆÈ", 1, L"´õ ÁÁÀº ±âº»Ä®", 120, 0, 55);
+	itemSet(L"ÆÈ", 2, L"´õ ½Ú ±âº»Ä®", 140, 0, 60);
+	itemSet(L"ÆÈ", 3, L"½Ú Ä®", 160, 0, 65);
+	itemSet(L"ÆÈ", 4, L"¹«Áö ½Ú Ä®", 180, 0, 70);
+	itemSet(L"ÆÈ", 5, L"Á¦ÀÏ ½Ú Ä®", 200, 0, 75);
 	//////////////¸Ó¸®Àåºñ//////////////
-	itemSet(L"¸Ó¸®", 0, "±âº»Åõ±¸",100, 0,0,50);
+	itemSet(L"¸Ó¸®", 0, L"±âº»Åõ±¸",100, 0,0,50);
+	itemSet(L"¸Ó¸®", 1, L"´õ ÁÁÀº ±âº»Åõ±¸", 100, 0, 0, 50);
 	//////////////´Ù¸®Àåºñ//////////////
-	itemSet(L"´Ù¸®", 0, "±âº»½Å¹ß",100, 0,0,50);
+	itemSet(L"´Ù¸®", 0, L"±âº»½Å¹ß",100, 0,0,50);
+	itemSet(L"´Ù¸®", 1, L"´õ ÁÁÀº ±âº»½Å¹ß", 100, 0, 0, 50);
 	/////////////¸öÅëÀåºñ//////////////
-	itemSet(L"¸öÅë", 0, "±âº»°©¿Ê",100, 0,0,50);
+	itemSet(L"¸öÅë", 0, L"±âº»°©¿Ê",100, 0,0,50);
+	itemSet(L"¸öÅë", 1, L"´õ ÁÁÀº ±âº»°©¿Ê", 100, 0, 0, 70, 10, 10);
 	///////////////////////////////////
-	itemSet(L"°Å·¡", 0, "Àç·á", 100, 0, 0, 50);
+	itemSet(L"°Å·¡", 0, L"°í½ºµÍÄ¡ ¹Ù´Ã", 100, 0, 0, 50);
+	itemSet(L"°Å·¡", 1, L"Çìµå¼Â", 100, 0, 0, 50);
+	itemSet(L"°Å·¡", 2, L"»Ô", 100, 0, 0, 50);
+	itemSet(L"°Å·¡", 3, L"¿­¸Å", 100, 0, 0, 50);
 	///////////////////////////////////
-	itemSet(L"Áß¿ä", 0, "Ä«µå", 100, 0, 0, 50);
+	itemSet(L"Áß¿ä", 0, L"Ä«µå", 100, 0, 0, 0);
+	itemSet(L"Áß¿ä", 1, L"½ÅºÐÁõ", 100, 0, 0, 0);
 	///////////////////////////////////
 
 	return S_OK;
@@ -35,13 +48,13 @@ void item::render()
 {
 }
 
-void item::itemSet(wstring type, int _itemNum, const char _itemName[100], int _price,int _hp,int _atk,int _def ,int _crt,int _fireR,int _iceR ,int _electricR ,int _psycoR)
+void item::itemSet(wstring type, int _itemNum, wstring _itemName, int _price,int _hp,int _atk,int _def ,int _crt,int _fireR,int _iceR ,int _electricR ,int _psycoR)
 {
 	vItem _vItem;
 	mItem _mItem;
 	itemObject _item;
 	_item.itemNum = _itemNum;
-	_item.itemName[100] = _itemName[100];
+	_item.itemName = _itemName;
 	_item.price = _price;
 	_item.hp = _hp;
 	_item.atk = _atk;
@@ -64,13 +77,13 @@ itemObject item::getItemInfo(wstring type, int num)
 	iterTotalItem _tiItem;
 	miItem _miItem;
 	itemObject result;
-	result.itemNum = -1;
+	//result.itemNum = -1;
 	for (_tiItem = _tItem.begin(); _tiItem != _tItem.end(); ++_tiItem)
 	{
 		for (_miItem = _tiItem->begin(); _miItem != _tiItem->end(); ++_miItem)
 		{
 			if (!(_miItem->first == type)) break;
-
+			
 			viItem _viItem;
 			for (_viItem = _miItem->second.begin(); _viItem != _miItem->second.end(); ++_viItem)
 			{

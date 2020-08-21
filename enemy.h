@@ -166,6 +166,7 @@ public:
 	floatRect getEnemyAttackRect() { return _attackRC; }//에너미 공격렉트
 
 	float getEnemyAngle() { return _angle; }//에너미와 플레이어간의 각도
+	float getEnemyAngleSave() { return _angleSave; }
 
 	int getEnemyHP() { return _currentHP; }//에너미의 현재 체력 얻어오기
 	int getEnemyAttackPower() { return _attackPower; }//에너미의 현재 공격력 얻어오기

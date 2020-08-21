@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "button.h"
 #include "inventory.h"
+#include "item.h"
 
 class tabUI : public gameNode
 {
@@ -22,6 +23,8 @@ private:
 	int _invenIndex;
 	LPBYTE StateArray;
 	
+	item* _item;
+
 	vector<invenObject> _vIv;
 
 	floatRect _eqRect[5];
