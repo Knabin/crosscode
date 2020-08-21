@@ -84,6 +84,9 @@ HRESULT player::init()
 	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
 	IMAGEMANAGER->addFrameImage("player aim", L"images/player/player_aim.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge1.png", 6, 8);
+	IMAGEMANAGER->addFrameImage("player chargeeffect", L"images/player/player_chargeeffect.png", 6, 1);
+
+	
 	IMAGEMANAGER->addFrameImage("player beAttacked", L"images/player/player_beAttacked.png", 2, 8);
 	
 	IMAGEMANAGER->addImage("player shadow", L"images/player/player_shadow.png");
@@ -108,6 +111,7 @@ HRESULT player::init()
 	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 0.5f, 5, 1.0f);
 	EFFECTMANAGER->addEffect("finalattackeffect", "finalattackeffect", 1, 0.3f, 5, 1.0f);
 
+	EFFECTMANAGER->addEffect("player chargeeffect", "player chargeeffect", 1, 0.5f, 1, 1.0f);
 
 
 	//=================================== 근거리 이펙트 용=================================
@@ -138,7 +142,7 @@ HRESULT player::init()
 	_attacking = false;
 	 _pHp = 100;
 	 _playerMaxHP = 100;
-	 _pXp = 100;
+	 _pXp = 0;
 	 _playerLevelUpXp = 100;
 	 _pSp = 1;
 	 _pSpcharge = 0;
@@ -163,6 +167,8 @@ void player::release()
 
 void player::update()
 {
+	if (_pHp < 0)
+		_pHp = 0;
 	if (_state->getState() != _vState[PLAYERSTATE::JUMP])
 	{
 		if (_jumpCount > 59)
@@ -637,12 +643,13 @@ void player::update()
 
 	if (KEYMANAGER->isStayKeyDown(VK_SPACE))
 	{
-		if (_state->getState() == _vState[IDLE] && !_isLethal && _pSp > 0)
+		if ((_state->getState() == _vState[IDLE] || _state->getState() == _vState[MOVE]) && !_isLethal && _pSp > 0)
 		{
 			_pSp--;
 			_isLethal = true;
 			_lethalCount--;
 			_state->setState(_vState[PLAYERSTATE::LETHAL_CHARGE]);
+			EFFECTMANAGER->play("player chargeeffect", Vector2(CAMERA->getRelativeVector2(_position).x+100, CAMERA->getRelativeVector2(_position).y+100),0,0.5f);
 		}
 		playerLethalattack();
 	}
@@ -667,18 +674,7 @@ void player::update()
 		_lethalCharge = 0;
 	}
 
-	/*if (_pXp >= _playerLevelUpXp)
-	{
-		_pXp -= _playerLevelUpXp;
-		_playerLevelUpXp *= 2;
-		_playerMaxHP += 50;
-		_pHp = _playerMaxHP;
-		_pDef += 1;
-		_pAtk += 5;
-		_pCrt += 1;
-
-	}*/
-
+	
 	_attackPower = _pAtk + RND->getFromIntTo(0, _pCrt);
 	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 }

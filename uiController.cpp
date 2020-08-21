@@ -20,6 +20,9 @@ HRESULT uiController::init()
 
 	_shop = new shop;
 	_shop->init();
+
+
+
 	return S_OK;
 }
 
@@ -97,6 +100,7 @@ void uiController::update()
 		}
 	}
 
+	
 	if (_uiOn && (KEYMANAGER->isOnceKeyDown(VK_ESCAPE) || KEYMANAGER->isOnceKeyDown(VK_RBUTTON)))
 	{
 		for (int i = 0; i < _vVendor.size(); ++i)
@@ -112,6 +116,7 @@ void uiController::update()
 	if (_tu->getOn())
 	{
 		_tu->setInven(_inven->getInven());
+		_tu->setMoney(_inven->getMoney());
 	}
 
 }

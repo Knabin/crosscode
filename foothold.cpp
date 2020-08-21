@@ -5,7 +5,7 @@ HRESULT foothold::init()
 {
 	_name = "foothold";
 	_image = IMAGEMANAGER->addFrameImage("foothold", L"images/object/foothold.png", 3, 1);
-	_isOn = true;
+	_isOn = false;
 	_isStepOn = false;
 	_count = 0;
 

@@ -11,6 +11,8 @@ private:
 	scene* _sc;
 	aStar* _as;
 
+	class player* _player;
+
 	int _time;
 	int _index;
 

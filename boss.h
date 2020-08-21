@@ -35,13 +35,43 @@ enum bossState //보스 상태패턴 enum문
 	ICEGUIDE_READY,
 	ICEGUIDE_READY2,
 	ICEGUIDE,
-	ICEGUIDE_END
+	ICEGUIDE_END,
+	STUN,
+	STUN2,
+	STUN3,
+	STUN4,
+	DEATH,
+	DEATH2
 
 };
+struct tagEffect
+{
+	image* _image;
+
+	floatRect _rc;
+
+	float _x, _y;
+	float _angle;
+	float _speed;
+	float _size;
+
+	float _centerMeter;
+	floatPoint _center;
+	floatPoint _centerEnd;
+
+	int _frameX;
+	int _frameCount;
+	int _currentFrameX;
+
+	bool _fireStart;
+};
+
 struct tagBossPart  //보스 파츠별 구조체
 {
 	image* _bossBodyImage;
 	floatRect _rectBody;
+
+	floatRect _rectBody2;
 
 	float _x, _y;
 	float _speed;
@@ -70,6 +100,11 @@ class boss : public gameObject
 
 private:
 
+	//파괴 이펙트
+	vector<tagEffect>				_vEffect;
+	vector<tagEffect>::iterator	    _viEffect;
+
+	//참조 클래스
 	icethrower* _icethrower;
 	mine* _mine;
 	stoneshower* _stoneshower;
@@ -100,15 +135,25 @@ private:
 	int _bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY;
 	int _bossLeftHandMoveFrameX2, _bossLeftHandMoveFrameY2;
 	int _bossLeftHandAttackFrameX2, _bossLeftHandAttackFrameY2;
-
 	int _centerMoveFrameX, _centerMoveFrameY;
 	int _centerFrameCount;
 	int _centerCurrentFrameX, _centerCurrentFrameY;
+
 
 	//보스 방어막 프레임
 	int _protectCurrentFrameX, _protectCurrentFrameY;
 	int _protectFrameCount;
 	int _bossShieldOneFrameX, _bossShieldOneFrameY;
+
+	int _protectCurrentFrameX2, _protectCurrentFrameY2;
+	int _protectFrameCount2;
+	int _bossShieldOneFrameX2, _bossShieldOneFrameY2;
+
+	int _protectCurrentFrameX3, _protectCurrentFrameY3;
+	int _protectFrameCount3;
+	int _bossShieldOneFrameX3, _bossShieldOneFrameY3;
+
+	int _deathFrameY;
 
 	int _moveCount;  //움직이고 있을때의 카운트
 
@@ -116,6 +161,7 @@ private:
 
 	int _stopCount;  // 잠시 멈춰있을때 카운트
 
+	int _stunCount; //스턴 걸렸을때 딜레이 카운트
 
 	//움직임 딜레이
 	int _motionDelay;
@@ -135,8 +181,12 @@ private:
 	//뾰족얼음 공격 딜레이
 	int _iceguideDelay;
 
+	//파괴 이펙트 딜레이
+	int _effectDelay;
 
 	bool _attack1, _attack2, _attack3, _attack4, _attack5;
+
+	
 
 public:
 
@@ -152,15 +202,38 @@ public:
 	void bossState();		//보스 현재 상태패턴 
 	void bossMove();		//보스 실시간 움직임 
 	void bossDraw();		//보스 전신 렌더 이미지
+	void protectFrame();	//방어막 프레임 관리
 
 	void moveUp();
 	void moveDown();
 
+	void effectFire();
+	void effectMove();
+	void effectFrame();
+	void effectAngleMove();
+	void effectDraw();
+
 	void fireCollision();
 
 	void bossInitialization();	//보스 stop후 위치 확인용
+	void bossInitialization2();	//보스 stop후 위치 확인용
 
+								
+///////////////////////////////////////////////////////////////
+//렉트 접근
+//
+//
+//
+//
+//		
+
+	floatRect getRightHandRect() { return _RightHand._rectBody2; }
+	floatRect getLeftHandRect() { return _LeftHand._rectBody2; }
+	floatRect getBottomRect() { return _Bottom._rectBody; }
 	
 };
+
+
+
 
 
