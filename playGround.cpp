@@ -83,7 +83,7 @@ void playGround::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F7))
 	{
 		SCENEMANAGER->loadScene("mountain");
-		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((float)76 * SIZE, 34.5f * SIZE));
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((float)76 * SIZE, 34.0f * SIZE));
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F8))
@@ -106,13 +106,13 @@ void playGround::update()
 	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn() && !_ui->UIon())
 	{
 		SCENEMANAGER->update();
-		OBJECTMANAGER->update();
+
 		_collisionManager->update();
 		_enemyManager->update();
 	}
 	
 	EVENTMANAGER->update();
-
+	OBJECTMANAGER->update();
 	EFFECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();

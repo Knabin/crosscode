@@ -44,10 +44,15 @@ HRESULT townScene::init()
 	_nextScene = "mountain";
 	_nextPoint = Vector2(50, 1700);
 
-	iPlayerMove* moveEvent = new iPlayerMove(Vector2(36 * SIZE, 47 * SIZE - 400));
-	iDialog* dialogEvent = new iDialog(new dialog("1"));
-	EVENTMANAGER->addEvent(moveEvent);
-	EVENTMANAGER->addEvent(dialogEvent);
+	// 중복 실행되지 않게
+	if (!EVENTMANAGER->getFirstEvent())
+	{
+		iPlayerMove* moveEvent = new iPlayerMove(Vector2(36 * SIZE, 47 * SIZE - 400));
+		iDialog* dialogEvent = new iDialog(new dialog("1"));
+		EVENTMANAGER->addEvent(moveEvent);
+		EVENTMANAGER->addEvent(dialogEvent);
+		EVENTMANAGER->setFirstEvent(true);
+	}
 
 	return S_OK;
 }
