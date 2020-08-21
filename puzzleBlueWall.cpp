@@ -40,6 +40,6 @@ void puzzleBlueWall::render()
 {
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_rc), D2D1::ColorF::Azure, 0);
 	_image->setSize(Vector2(_image->getSize()) * CAMERA->getZoomAmount());
-	_image->frameRender(CAMERA->getRelativeVector2(Vector2(_rc.getCenter())), _frameX, 0);
+	_image->frameRender(CAMERA->getRelativeVector2(_rc.getCenter()), _frameX, 0);
 	//_image->render(CAMERA->getRelativeVector2(Vector2(_rc.left, _rc.top)));
 }

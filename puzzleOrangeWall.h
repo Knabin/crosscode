@@ -13,7 +13,12 @@ public:
 	puzzleOrangeWall(int type);
 	~puzzleOrangeWall();
 
+	image* getImage() { return _image; }
+
+	int getFrameX() { return _frameX; }
+
 	void setType(int type) { _type = type; }
+	void setFrameX(int frameX) { _frameX = frameX; }
 
 	virtual HRESULT init();
 	virtual void release();
