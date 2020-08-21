@@ -162,6 +162,9 @@ void tabUI::update()
 	}
 	if (_on)
 	{
+		_hp = (float)_player->getPlayerHP() / (float)_player->getPlayerMaxHP() * 165;
+		_exp = (float)_player->getPlayerEXP() / (float)_player->getPlayerNextEXP() * 162;
+
 		_hpRC.update(Vector2(298, 188), Vector2(_hp, 12), pivot::LEFTTOP);
 		_expRC.update(Vector2(309, 203), Vector2(_exp, 2), pivot::LEFTTOP);
 
@@ -320,6 +323,35 @@ void tabUI::render()
 			D2DRENDERER->SkewRectangle(_hpRC, D2D1::ColorF::Red, 0, 45);
 
 		D2DRENDERER->DrawRotationFillRectangle(_expRC, D2D1::ColorF::MediumPurple, 0);	
+
+
+		wstring Num = to_wstring(_player->getPlayerEXP());
+		D2DRENDERER->RenderText(600, 182, Num, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerNextEXP());
+		D2DRENDERER->RenderText(680, 182, Num, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		Num = to_wstring(_player->getPlayerHP());
+		D2DRENDERER->RenderText(350, 152, Num, 30, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		Num = to_wstring(_player->getPlayerLEVEL());
+		D2DRENDERER->RenderText(300, 80, Num, 50, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		Num = to_wstring(_player->getPlayerMaxHP());
+		D2DRENDERER->RenderText(440, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerAtk());
+		D2DRENDERER->RenderText(600, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerDef());
+		D2DRENDERER->RenderText(755, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		Num = to_wstring(_player->getPlayerCri());
+		D2DRENDERER->RenderText(890, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+
+		for (int i = 0; i < _player->getPlayerSP(); ++i)
+		{
+			floatRect rc;
+			rc.update(Vector2(508 + 16 * i, 162), Vector2(10, 17), pivot::LEFTTOP);
+			D2DRENDERER->DrawRotationFillRectangle(rc, D2D1::ColorF::DeepSkyBlue, 0);
+		}
 	}
 	
 
