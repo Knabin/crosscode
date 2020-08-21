@@ -882,7 +882,8 @@ void player::playerMove()
 	RECT temp;
 	
 	_backOrder = _nowOrder;
-	_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
+	if(currentTileIndex.x < maxTileX && currentTileIndex.y < maxTileY)
+		_nowOrder = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x]->getOrderIndex();
 	if (_nowOrder == 4 || _nowOrder == 5)
 	{
 		_nowOrder = _backOrder;
