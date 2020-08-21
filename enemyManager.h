@@ -15,6 +15,7 @@ private:
 
 	int _time;
 	int _index;
+	
 
 	int _count;//에너미 사망시 히트 애니메이션을 실행하고 에너미를 벡터에서 삭제하는데 딜레이를 주기위해 필요한 변수
 public:
@@ -23,5 +24,7 @@ public:
 	virtual void render();
 
 	void enemyDead();//에너미 사망
+
+	
 };
 

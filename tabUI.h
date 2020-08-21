@@ -27,6 +27,8 @@ private:
 	
 	item* _item;
 
+	int _equip[5];
+
 	int _time;
 	int _timeCount;
 
