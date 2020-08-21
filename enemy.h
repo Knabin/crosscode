@@ -142,6 +142,7 @@ protected:
 	bool _isAttack;//에너미가 공격상태인지 확인하기 위한 변수
 	bool _distanceChange;//거리에 따른 상태처리
 	bool _idleMove;//공격당하기전에 움직이는 거리, 각도값을 한번만 저장시켜놓고 사용하기 위한 변수
+	bool _collision;//에너미들이 공격당할때 한번만 공격을 맞게하기 위한 변수
 
 	int _nowOrder;//현재 에너미의 층이 몇층인지 확인하기 위한 변수
 
@@ -165,11 +166,13 @@ public:
 	floatRect getEnemyAttackRect() { return _attackRC; }//에너미 공격렉트
 
 	float getEnemyAngle() { return _angle; }//에너미와 플레이어간의 각도
+	float getEnemyAngleSave() { return _angleSave; }
 
 	int getEnemyHP() { return _currentHP; }//에너미의 현재 체력 얻어오기
 	int getEnemyAttackPower() { return _attackPower; }//에너미의 현재 공격력 얻어오기
 
 	bool getEnemyIsAttack() { return _isAttack; }//에너미의 공격상태값 얻어오기
+	bool getEnemyCollision() { return _collision; }
 	//접근자
 
 	//설정자
@@ -180,6 +183,7 @@ public:
 	void setEnemyAttackRect() { _attackRC.update(Vector2(0,0), Vector2(0,0), pivot::CENTER); }//에너미의 공격렉트 지우기
 	void setEnemyIsActive(bool isActive) { _isActive = isActive; }//에너미 사망
 	void setIsAttack(bool isAttack) { _isAttack = isAttack; }
+	void setEnemyCollision(bool collision) { _collision = collision; }
 	//설정자
 
 	vector<tile*>& getMove() { return _move; }

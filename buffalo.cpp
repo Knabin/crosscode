@@ -325,6 +325,7 @@ void buffalo::update()
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75), 0, 0.5f);
 	}
+	//cout << "¹öÆÈ·Î : " << _currentHP << endl;
 }
 
 void buffalo::render()
