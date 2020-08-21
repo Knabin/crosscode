@@ -128,6 +128,28 @@ void player::release()
 
 void player::update()
 {
+	if (_state->getState() != _vState[PLAYERSTATE::JUMP])
+	{
+		if (_jumpCount >59)
+		_jumpPower = 0;
+		else
+		{
+			_jumpCount++;
+
+			_jumpPower += _gravity;
+			if (_jumpCount > 29)
+			{
+				_gravity = -3;
+			}
+			else
+			{
+				_gravity = 3;
+			}
+		}
+
+	
+		
+	}
 	_bullet->update();
 	if (EVENTMANAGER->isPlayingEvent())
 	{

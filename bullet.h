@@ -14,7 +14,7 @@ struct tagPlayerBullet
 	POINT next[8];
 	int _nowOrder;
 	bool nomal;
-
+	int floor;
 
 };
 
