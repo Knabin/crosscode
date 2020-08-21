@@ -1,13 +1,15 @@
 #pragma once
 #include "gameNode.h"
 #include "button.h"
-#include "inventory.h"
+
 #include "item.h"
 
 class tabUI : public gameNode
 {
 private:
 	class player* _player;
+	class inventory* _inven;
+
 	int _hp;
 	int _exp;
 
@@ -27,12 +29,17 @@ private:
 	
 	item* _item;
 
+	int _equipList;
+	int _eqSelectNum;
+	//[1]¸Ó¸®,[2]ÆÈ1,[3]ÆÈ3,[4]¸öÅë,[5]´Ù¸®, ¹ÌÂø¿ë½Ã 99999
 	int _equip[5];
+
+	vector<int> _equipItemNum;
 
 	int _time;
 	int _timeCount;
 
-	vector<invenObject> _vIv;
+	vector<struct invenObject> _vIv;
 
 	floatRect _eqRect[5];
 public:
@@ -57,5 +64,7 @@ public:
 
 	inline int getMoney() { return _money; }
 	void setMoney(int m) { _money = m; }
+
+	void setInventory(class inventory* inven) { _inven = inven; }
 };
 

@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "tabUI.h"
 #include "player.h"
+#include "inventory.h"
 #include <codecvt>
 
 HRESULT tabUI::init()
 {
 	_invenIndex = 0;
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+
 	IMAGEMANAGER->addImage("menu", L"images/menu/menu.png");
 	IMAGEMANAGER->addImage("equip", L"images/equip/eq.png");
 	IMAGEMANAGER->addImage("eq_armL", L"images/equip/eq_armL.png");
@@ -41,6 +43,7 @@ HRESULT tabUI::init()
 	IMAGEMANAGER->addImage("inven06", L"images/menu/inven06.png");
 	IMAGEMANAGER->addImage("inven07", L"images/menu/inven07.png");
 	
+	IMAGEMANAGER->addFrameImage("weapon", L"images/equip/weapon.png", 4, 1);
 
 	_on = false;
 
@@ -143,6 +146,14 @@ HRESULT tabUI::init()
 		_eqRect[i].update(Vector2(1223,248+128*i), Vector2(IMAGEMANAGER->findImage("eq_ui")->getWidth() * 0.85f, IMAGEMANAGER->findImage("eq_ui")->getHeight() * 0.85f), pivot::LEFTTOP);
 	}
 
+	//¿Â∫Ò √ ±‚ º≥¡§
+	for (int i = 0; i < 5; i++)
+	{
+		_equip[i] = 99999;
+	}
+	
+
+
 
 	_item = new item;
 	_item->init();
@@ -150,7 +161,7 @@ HRESULT tabUI::init()
 
 	_time = 0;
 	_timeCount = 0;
-
+	_eqSelectNum = 0;
 	return S_OK;
 }
 
@@ -223,6 +234,11 @@ void tabUI::update()
 
 	if (_iv)
 	{
+		if (_player->getPlayerHP() >= _player->getPlayerMaxHP())
+		{
+			_player->setPlayerHP(_player->getPlayerMaxHP());
+		}
+
 		switch (_invenIndex)
 		{
 		case 0:
@@ -305,9 +321,61 @@ void tabUI::update()
 				{
 					_eq = false;
 					_eqSelect = true;
+					_equipList = i;
+
+					_eqSelectNum = 0;
+					for (int j = 0; j < _vIv.size(); ++j)
+					{
+						
+						switch (i)
+						{
+						case 0:
+							if (_vIv[j].type == L"∏”∏Æ")
+							{
+								_eqSelectNum++;
+								int num = _vIv[j].itemNum;
+								_equipItemNum.push_back(num);
+							}
+							break;
+						case 1:
+						case 2:
+							if (_vIv[j].type == L"∆»")
+							{
+								_eqSelectNum++;
+								int num = _vIv[j].itemNum;
+								_equipItemNum.push_back(num);
+							}
+							break;
+						case 3:
+							if (_vIv[j].type == L"∏ˆ≈Î")
+							{
+								_eqSelectNum++;
+								int num = _vIv[j].itemNum;
+								_equipItemNum.push_back(num);
+							}
+							break;
+						case 4:
+							if (_vIv[j].type == L"¥Ÿ∏Æ")
+							{
+								_eqSelectNum++;
+								int num = _vIv[j].itemNum;
+								_equipItemNum.push_back(num);
+							}
+							break;
+						}
+
+					}
 				}
 				break;
 			}
+		}
+	}
+
+	if (_equipList)
+	{
+		if (_player->getPlayerHP() >= _player->getPlayerMaxHP())
+		{
+			_player->setPlayerHP(_player->getPlayerMaxHP());
 		}
 	}
 
@@ -319,6 +387,42 @@ void tabUI::update()
 		}
 	}
 
+
+	//ºº¿Ã∫Í ¡∏
+	if (_sv)
+	{
+		_player->getPlayerHP();     //«√∑π¿ÃæÓ √º∑¬
+		_player->getPlayerMaxHP();	//«√∑π¿ÃæÓ ∏∆Ω∫ √º∑¬
+		_player->getPlayerEXP();	//«√∑π¿ÃæÓ ∞Ê«Ëƒ°
+		_player->getPlayerNextEXP();//∑π∫ßæ˜ « ø‰ ∞Ê«Ëƒ°
+		_player->getPlayerAtk();	//«√∑π¿ÃæÓ ∞¯∞›∑¬
+		_player->getPlayerDef();	//«√∑π¿ÃæÓ πÊæÓ∑¬
+		_player->getPlayerCri();	//«√∑π¿ÃæÓ ≈©∏Æ∆ºƒ√
+		_player->getPlayerFR();		//«√∑π¿ÃæÓ ∫“ ¿˙«◊∑¬
+		_player->getPlayerIR();		//«√∑π¿ÃæÓ æÛ¿Ω ¿˙«◊∑¬
+		_player->getPlayerER();		//«√∑π¿ÃæÓ ¿¸±‚ ¿˙«◊∑¬
+		_player->getPlayerPR();		//«√∑π¿ÃæÓ ∆ƒµø ¿˙«◊∑¬
+
+		for (int i = 0; i < _vIv.size(); ++i)
+		{
+			//¿Œ∫•≈‰∏Æ ∫§≈Õ
+			_vIv[i].type;		//æ∆¿Ã≈€ ¡æ∑˘ wstring
+			_vIv[i].itemNum;	//æ∆¿Ã≈€ π¯»£ int
+			_vIv[i].count;		//æ∆¿Ã≈€ ∞πºˆ int
+		}
+
+		//¿Â∫Ò πËø≠ 1.∏”∏Æ 2.∆» 3.∆» 4.∏ˆ≈Î 5.¥Ÿ∏Æ
+		for (int i = 0; i < 5; ++i)
+		{
+			_equip[i];
+		}
+		
+		//µ∑
+		_money;
+
+		//Ω√∞£
+		_time;
+	}
 
 	if (_hp < 0)
 		_hp = 0;
@@ -351,11 +455,11 @@ void tabUI::render()
 		Num = to_wstring(_player->getPlayerMaxHP());
 		D2DRENDERER->RenderText(440, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_player->getPlayerAtk());
-		D2DRENDERER->RenderText(600, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(592, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_player->getPlayerDef());
-		D2DRENDERER->RenderText(755, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(730, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_player->getPlayerCri());
-		D2DRENDERER->RenderText(890, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(868, 98, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 
 
 		for (int i = 0; i < _player->getPlayerSP(); ++i)
@@ -399,14 +503,431 @@ void tabUI::render()
 				}
 			}
 		}
+
+		for (int i = 0; i < 5; ++i)
+		{
+			if (_equip[i] != 99999)
+			{
+				switch (i)
+				{
+					case 0:
+					{
+						IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 290), 0, 0);
+
+						itemObject it = _item->getItemInfo(L"∏”∏Æ", _equip[0]);
+						D2DRENDERER->RenderText(1380, 264, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						break; 
+					}
+					case 1:
+					{
+						IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 418), 1, 0);
+						itemObject it = _item->getItemInfo(L"∆»", _equip[1]);
+						D2DRENDERER->RenderText(1380, 392, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						break;
+					}
+					case 2:
+					{
+						IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 546), 1, 0);
+						itemObject it = _item->getItemInfo(L"∆»", _equip[2]);
+						D2DRENDERER->RenderText(1380, 520, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						break;
+					}
+					case 3:
+					{
+						IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 674), 2, 0);
+						itemObject it = _item->getItemInfo(L"∏ˆ≈Î", _equip[3]);
+						D2DRENDERER->RenderText(1380, 648, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						break;
+					}
+					case 4:
+					{
+						IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 802), 3, 0);
+						itemObject it = _item->getItemInfo(L"¥Ÿ∏Æ", _equip[4]);
+						D2DRENDERER->RenderText(1380, 776, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						break;
+					}
+				}
+
+			}
+		}
+		
 	}
 
 	if (_eqSelect)
 	{
+
 		IMAGEMANAGER->findImage("eq_select")->render(Vector2(0, 0));
-	}
-	
 		
+		//¿Â∫Ò «•Ω√
+		switch (_equipList)
+		{
+			case 0:
+			{
+				itemObject it = _item->getItemInfo(L"∏”∏Æ", _equip[0]);
+				IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 178), 0, 0);
+				D2DRENDERER->RenderText(1380, 152, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				int list = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type != L"∏”∏Æ") continue;
+					IMAGEMANAGER->findImage("inven03")->render(Vector2(1270, 275 + 75 * list), 1.1f);
+					itemObject it = _item->getItemInfo(L"∏”∏Æ", _vIv[i].itemNum);
+					D2DRENDERER->RenderText(1350, 285 + 75 * list, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num = to_wstring(_vIv[i].count);
+					D2DRENDERER->RenderText(1750, 285 + 75 * list, Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					list++;
+				}
+				break;
+			}
+			case 1:
+			{
+				itemObject it = _item->getItemInfo(L"∆»", _equip[1]);
+				IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 178), 1, 0);
+				D2DRENDERER->RenderText(1380, 152, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				int list = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type != L"∆»") continue;
+					IMAGEMANAGER->findImage("inven02")->render(Vector2(1270, 275 + 75 * list), 1.1f);
+					itemObject it = _item->getItemInfo(L"∆»", _vIv[i].itemNum);
+					D2DRENDERER->RenderText(1350, 285 + 75 * list, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num = to_wstring(_vIv[i].count);
+					D2DRENDERER->RenderText(1750, 285 + 75 * list, Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					list++;
+				}
+				break;
+			}
+			case 2:
+			{
+				itemObject it = _item->getItemInfo(L"∆»", _equip[2]);
+				IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 178), 1, 0);
+				D2DRENDERER->RenderText(1380, 152, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				int list = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type != L"∆»") continue;
+					IMAGEMANAGER->findImage("inven02")->render(Vector2(1270, 275 + 75 * list), 1.1f);
+					itemObject it = _item->getItemInfo(L"∆»", _vIv[i].itemNum);
+					D2DRENDERER->RenderText(1350, 285 + 75 * list, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num = to_wstring(_vIv[i].count);
+					D2DRENDERER->RenderText(1750, 285 + 75 * list, Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					list++;
+				}
+				break;
+			}
+			case 3:
+			{
+				itemObject it = _item->getItemInfo(L"∏ˆ≈Î", _equip[3]);
+				IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 178), 2, 0);
+				D2DRENDERER->RenderText(1380, 152, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				int list = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type != L"∏ˆ≈Î") continue;
+					IMAGEMANAGER->findImage("inven04")->render(Vector2(1270, 275 + 75 * list), 1.1f);
+					itemObject it = _item->getItemInfo(L"∏ˆ≈Î", _vIv[i].itemNum);
+					D2DRENDERER->RenderText(1350, 285 + 75 * list, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num = to_wstring(_vIv[i].count);
+					D2DRENDERER->RenderText(1750, 285 + 75 * list, Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					list++;
+				}
+				break;
+			}
+			case 4:
+			{
+				itemObject it = _item->getItemInfo(L"¥Ÿ∏Æ", _equip[4]);
+				IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 178), 3, 0);
+				D2DRENDERER->RenderText(1380, 152, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				int list = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type != L"¥Ÿ∏Æ") continue;
+					IMAGEMANAGER->findImage("inven05")->render(Vector2(1270, 275 + 75 * list), 1.1f);
+					itemObject it = _item->getItemInfo(L"¥Ÿ∏Æ", _vIv[i].itemNum);
+					D2DRENDERER->RenderText(1350, 285 + 75 * list, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num = to_wstring(_vIv[i].count);
+					D2DRENDERER->RenderText(1750, 285 + 75 * list, Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					list++;
+				}
+				break;
+			}
+		}
+
+		//¿Â∫Ò ¿Œ∫• ∏ÆΩ∫∆Æ ¡§∫∏
+		for (int i = 0; i < _eqSelectNum; ++i)
+		{
+			floatRect rc;
+			rc.update(Vector2(1270, 275 + 75 * i), Vector2((float)IMAGEMANAGER->findImage("inven03")->getWidth(), (float)IMAGEMANAGER->findImage("inven03")->getHeight()), pivot::LEFTTOP);
+
+			switch (_equipList)
+			{
+			case 0:
+			{
+				itemObject it = _item->getItemInfo(L"∏”∏Æ", _equipItemNum[_eqSelectNum - 1]);
+				if (PtInRect(&rc.getRect(), _ptMouse))
+				{
+					int x = 420;
+					int y = 110;
+					int d = 49;
+					wstring Num1 = to_wstring(it.hp);
+					D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num2 = to_wstring(it.atk);
+					D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num3 = to_wstring(it.def);
+					D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num4 = to_wstring(it.crt);
+					D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num5 = to_wstring(it.fireR);
+					D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num6 = to_wstring(it.iceR);
+					D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num7 = to_wstring(it.electricR);
+					D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					wstring Num8 = to_wstring(it.psycoR);
+					D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+					if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+					{
+						_inven->deleteItem(L"∏”∏Æ", _eqSelectNum - 1);
+						if (_equip[0] != 99999)
+						{
+							_inven->getItem(L"∏”∏Æ", _equip[0]);
+							_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
+							_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
+							_player->setPlayerDef(_player->getPlayerDef() - it.def);
+							_player->setPlayerCri(_player->getPlayerCri() - it.crt);
+							_player->setPlayerFR(_player->getPlayerFR() - it.fireR);
+							_player->setPlayerIR(_player->getPlayerIR() - it.iceR);
+							_player->setPlayerER(_player->getPlayerER() - it.electricR);
+							_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
+						}
+
+						it = _item->getItemInfo(L"∏”∏Æ", _eqSelectNum - 1);
+						_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
+						_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
+						_player->setPlayerDef(_player->getPlayerDef() + it.def);
+						_player->setPlayerCri(_player->getPlayerCri() + it.crt);
+						_player->setPlayerFR(_player->getPlayerFR() + it.fireR);
+						_player->setPlayerIR(_player->getPlayerIR() + it.iceR);
+						_player->setPlayerER(_player->getPlayerER() + it.electricR);
+						_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
+
+						_equip[0] = _eqSelectNum - 1;
+						outMenu();
+					}
+				}
+				break;
+			}
+			case 1:
+			case 2:
+			{itemObject it = _item->getItemInfo(L"∆»", _equipItemNum[_eqSelectNum - 1]);
+			if (PtInRect(&rc.getRect(), _ptMouse))
+			{
+				int x = 420;
+				int y = 110;
+				int d = 49;
+				wstring Num1 = to_wstring(it.hp);
+				D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num2 = to_wstring(it.atk);
+				D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num3 = to_wstring(it.def);
+				D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num4 = to_wstring(it.crt);
+				D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num5 = to_wstring(it.fireR);
+				D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num6 = to_wstring(it.iceR);
+				D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num7 = to_wstring(it.electricR);
+				D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num8 = to_wstring(it.psycoR);
+				D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_inven->deleteItem(L"∆»", _eqSelectNum - 1);
+					if (_equip[_equipList] != 99999)
+					{
+						_inven->getItem(L"∆»", _equip[_equipList]);
+						_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
+						_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
+						_player->setPlayerDef(_player->getPlayerDef() - it.def);
+						_player->setPlayerCri(_player->getPlayerCri() - it.crt);
+						_player->setPlayerFR(_player->getPlayerFR() - it.fireR);
+						_player->setPlayerIR(_player->getPlayerIR() - it.iceR);
+						_player->setPlayerER(_player->getPlayerER() - it.electricR);
+						_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
+					}
+
+					it = _item->getItemInfo(L"∆»", _eqSelectNum - 1);
+					_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
+					_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
+					_player->setPlayerDef(_player->getPlayerDef() + it.def);
+					_player->setPlayerCri(_player->getPlayerCri() + it.crt);
+					_player->setPlayerFR(_player->getPlayerFR() + it.fireR);
+					_player->setPlayerIR(_player->getPlayerIR() + it.iceR);
+					_player->setPlayerER(_player->getPlayerER() + it.electricR);
+					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
+
+					_equip[_equipList] = _eqSelectNum - 1;
+					outMenu();
+				}
+			}
+			break;
+			}
+
+			case 3:
+			{itemObject it = _item->getItemInfo(L"∏ˆ≈Î", _equipItemNum[_eqSelectNum - 1]);
+			if (PtInRect(&rc.getRect(), _ptMouse))
+			{
+				int x = 420;
+				int y = 110;
+				int d = 49;
+				wstring Num1 = to_wstring(it.hp);
+				D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num2 = to_wstring(it.atk);
+				D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num3 = to_wstring(it.def);
+				D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num4 = to_wstring(it.crt);
+				D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num5 = to_wstring(it.fireR);
+				D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num6 = to_wstring(it.iceR);
+				D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num7 = to_wstring(it.electricR);
+				D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num8 = to_wstring(it.psycoR);
+				D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_inven->deleteItem(L"∏ˆ≈Î", _eqSelectNum - 1);
+					if (_equip[3] != 99999)
+					{
+						_inven->getItem(L"∏ˆ≈Î", _equip[3]);
+						_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
+						_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
+						_player->setPlayerDef(_player->getPlayerDef() - it.def);
+						_player->setPlayerCri(_player->getPlayerCri() - it.crt);
+						_player->setPlayerFR(_player->getPlayerFR() - it.fireR);
+						_player->setPlayerIR(_player->getPlayerIR() - it.iceR);
+						_player->setPlayerER(_player->getPlayerER() - it.electricR);
+						_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
+					}
+
+					it = _item->getItemInfo(L"∏ˆ≈Î", _eqSelectNum - 1);
+					_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
+					_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
+					_player->setPlayerDef(_player->getPlayerDef() + it.def);
+					_player->setPlayerCri(_player->getPlayerCri() + it.crt);
+					_player->setPlayerFR(_player->getPlayerFR() + it.fireR);
+					_player->setPlayerIR(_player->getPlayerIR() + it.iceR);
+					_player->setPlayerER(_player->getPlayerER() + it.electricR);
+					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
+
+					_equip[3] = _eqSelectNum - 1;
+					outMenu();
+				}
+			}
+			break;
+			}
+
+			case 4:
+			{itemObject it = _item->getItemInfo(L"¥Ÿ∏Æ", _equipItemNum[_eqSelectNum - 1]);
+			if (PtInRect(&rc.getRect(), _ptMouse))
+			{
+				int x = 420;
+				int y = 110;
+				int d = 49;
+				wstring Num1 = to_wstring(it.hp);
+				D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num2 = to_wstring(it.atk);
+				D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num3 = to_wstring(it.def);
+				D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num4 = to_wstring(it.crt);
+				D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num5 = to_wstring(it.fireR);
+				D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num6 = to_wstring(it.iceR);
+				D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num7 = to_wstring(it.electricR);
+				D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+				wstring Num8 = to_wstring(it.psycoR);
+				D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_inven->deleteItem(L"¥Ÿ∏Æ", _eqSelectNum - 1);
+					if (_equip[4] != 99999)
+					{
+						_inven->getItem(L"¥Ÿ∏Æ", _equip[4]);
+						_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
+						_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
+						_player->setPlayerDef(_player->getPlayerDef() - it.def);
+						_player->setPlayerCri(_player->getPlayerCri() - it.crt);
+						_player->setPlayerFR(_player->getPlayerFR() - it.fireR);
+						_player->setPlayerIR(_player->getPlayerIR() - it.iceR);
+						_player->setPlayerER(_player->getPlayerER() - it.electricR);
+						_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
+					}
+
+					it = _item->getItemInfo(L"¥Ÿ∏Æ", _eqSelectNum - 1);
+					_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
+					_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
+					_player->setPlayerDef(_player->getPlayerDef() + it.def);
+					_player->setPlayerCri(_player->getPlayerCri() + it.crt);
+					_player->setPlayerFR(_player->getPlayerFR() + it.fireR);
+					_player->setPlayerIR(_player->getPlayerIR() + it.iceR);
+					_player->setPlayerER(_player->getPlayerER() + it.electricR);
+					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
+
+					_equip[4] = _eqSelectNum - 1;
+					outMenu();
+				}
+			}
+			break;
+			}
+
+			}
+		}
+	}
+
+	if (_eq || _eqSelect)
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			if (_equip[i] != 99999)
+			{
+				switch (i)
+				{
+				case 0:
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(958, 155), 0, 0);
+					break;
+				case 1:
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(813, 465), 1, 0);
+					break;
+
+				case 2:
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1100, 465), 1, 0);
+					break;
+				case 3:
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(958, 482), 2, 0);
+					break;
+				case 4:
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1006, 927), 3, 0);
+					break;
+				}
+
+			}
+		}
+	}
 
 	if (_iv)
 	{
@@ -435,6 +956,11 @@ void tabUI::render()
 
 						if (PtInRect(&rc.getRect(), _ptMouse))
 						{
+							if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+							{
+								_inven->deleteItem(L"º“∏", _vIv[i].itemNum);
+								_player->setPlayerHP(_player->getPlayerHP() + it.hp);
+							}
 							
 						}
 
@@ -729,7 +1255,7 @@ void tabUI::render()
 		D2DRENDERER->RenderText(400, 525, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 
 		Num = to_wstring(_player->getPlayerLEVEL());
-		D2DRENDERER->RenderText(450, 265, Num, 50, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+		D2DRENDERER->RenderText(440, 195, Num, 50, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 
 		Num = to_wstring(_player->getPlayerAtk());
 		D2DRENDERER->RenderText(400, 570, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
@@ -759,6 +1285,53 @@ void tabUI::render()
 		D2DRENDERER->RenderText(120, 980, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_time);
 		D2DRENDERER->RenderText(155, 1025, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+		for (int i = 0; i < 5; ++i)
+		{
+			if (_equip[i] != 99999)
+			{
+				switch (i)
+				{
+				case 0:
+				{
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 275), 0, 0);
+
+					itemObject it = _item->getItemInfo(L"∏”∏Æ", _equip[0]);
+					D2DRENDERER->RenderText(1380, 248, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					break;
+				}
+				case 1:
+				{
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 363), 1, 0);
+					itemObject it = _item->getItemInfo(L"∆»", _equip[1]);
+					D2DRENDERER->RenderText(1380, 336, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					break;
+				}
+				case 2:
+				{
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 450), 1, 0);
+					itemObject it = _item->getItemInfo(L"∆»", _equip[2]);
+					D2DRENDERER->RenderText(1380, 423, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					break;
+				}
+				case 3:
+				{
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 537), 2, 0);
+					itemObject it = _item->getItemInfo(L"∏ˆ≈Î", _equip[3]);
+					D2DRENDERER->RenderText(1380, 510, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					break;
+				}
+				case 4:
+				{
+					IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 625), 3, 0);
+					itemObject it = _item->getItemInfo(L"¥Ÿ∏Æ", _equip[4]);
+					D2DRENDERER->RenderText(1380, 597, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+					break;
+				}
+				}
+
+			}
+		}
 	}
 	
 }
@@ -857,6 +1430,7 @@ void tabUI::outMenu()
 	{
 		_st = false;
 	}
+	
 	
 }
 

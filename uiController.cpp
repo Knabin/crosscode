@@ -21,6 +21,8 @@ HRESULT uiController::init()
 	_shop = new shop;
 	_shop->init();
 
+	_tu->setInventory(_inven);
+	
 
 
 	return S_OK;
