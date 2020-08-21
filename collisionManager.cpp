@@ -363,8 +363,8 @@ void collisionManager::hedgehagCollision()
 				_count++;
 				if (_count <= 3)
 				{
-					_player->setPlayerPlusX(cosf(h->getEnemyAngle()) * 10.0f);
-					_player->setPlayerPlusY(-sinf(h->getEnemyAngle()) * 10.0f);
+					_player->setPlayerPlusX(cosf(h->getEnemyAngleSave()) * 10.0f);
+					_player->setPlayerPlusY(-sinf(h->getEnemyAngleSave()) * 10.0f);
 				}
 				else
 				{
