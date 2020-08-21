@@ -35,7 +35,6 @@ void bullet::update()
 	{
 		_isAlpha = false;
 	}
-
 	move();
 	collision();
 }
@@ -68,6 +67,7 @@ void bullet::fire(float x, float y, float angle, float speed)
 	ZeroMemory(&bullet, sizeof(tagPlayerBullet));
 
 	bullet.image = IMAGEMANAGER->addFrameImage("playerBullet", L"images/player/player_bullet.png", 4, 1);
+	IMAGEMANAGER->addImage("player_bulletEffect", L"images/player/player_bulletEffect.png");
 	bullet.speed = speed;
 	bullet.angle = angle;
 	bullet.position.x = bullet.firePosition.x = x;
@@ -115,6 +115,7 @@ void bullet::move()
 {
 	for (_viPlayerBullet = _vPlayerBullet.begin(); _viPlayerBullet != _vPlayerBullet.end(); )
 	{
+
 		_viPlayerBullet->position.x += cosf(_viPlayerBullet->angle) * _viPlayerBullet->speed;
 		_viPlayerBullet->position.y += -sinf(_viPlayerBullet->angle) * _viPlayerBullet->speed;
 

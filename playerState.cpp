@@ -1452,7 +1452,7 @@ rightattackState::~rightattackState()
 
 void rightattackState::enter()
 {
-	//cout << "rightattackState enter()" << endl;
+	cout << "rightattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 
 	switch (_player->getDirection())
@@ -1532,7 +1532,7 @@ void rightattackState::update()
 
 void rightattackState::exit()
 {
-	//cout << "rightattackState exit()" << endl;
+	cout << "rightattackState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();
@@ -1541,6 +1541,7 @@ void rightattackState::exit()
 	_right_top->stop();
 	_right->stop();
 	_right_bottom->stop();
+	_player->setAttackRC(0, 0);
 }
 
 // =========================== 플레이어 근거리 왼손공격 =========================== //
@@ -1699,6 +1700,7 @@ void leftattackState::exit()
 	_right_top->stop();
 	_right->stop();
 	_right_bottom->stop();
+	_player->setAttackRC(0, 0);
 }
 
 // =========================== 플레이어 근거리 마지막공격 =========================== //
@@ -1859,6 +1861,7 @@ void rightfinalattackState::exit()
 	_right_top->stop();
 	_right->stop();
 	_right_bottom->stop();
+	_player->setAttackRC(0, 0);
 }
 
 longAttackIdleState::longAttackIdleState(player * player)

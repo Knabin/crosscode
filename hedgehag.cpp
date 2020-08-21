@@ -746,42 +746,42 @@ bool hedgehag::tileMove()
 		//물
 		if (_t[i]->getOrderIndex() == 0)
 		{
-			cout << "물" << endl;
+			//cout << "물" << endl;
 			return false;
 		}
 
 		//1층
 		if (_t[i]->getOrderIndex() == 1)
 		{
-			cout << "1층" << endl;
+			//cout << "1층" << endl;
 			return true;
 		}
 
 		//2층
 		if (_t[i]->getOrderIndex() == 2 && _t[0]->getOrderIndex() - _nowOrder == 1)
 		{
-			cout << "2층" << endl;
+			//cout << "2층" << endl;
 			return true;
 		}
 
 		//3층
 		if (_t[i]->getOrderIndex() == 3 && _t[0]->getOrderIndex() - _nowOrder == 1)
 		{
-			cout << "3층" << endl;
+			//cout << "3층" << endl;
 			return true;
 		}
 
 		//2층 모서리(Z-ORDER용)
 		if (_t[i]->getOrderIndex() == 4 || _nowOrder == 4)
 		{
-			cout << "2층 모서리" << endl;
+			//cout << "2층 모서리" << endl;
 			return false;
 		}
 
 		//갈 수 있는 모서리
 		if (_t[i]->getOrderIndex() == 5 || _nowOrder == 5)
 		{
-			cout << "갈 수 있는 모서리" << endl;
+			//cout << "갈 수 있는 모서리" << endl;
 			return false;
 		}
 
@@ -791,14 +791,14 @@ bool hedgehag::tileMove()
 			_t[1]->getOrderIndex() == _nowOrder &&
 			_t[2]->getOrderIndex() == _nowOrder)
 		{
-			cout << "현재 내 타일 == 검사타일" << endl;
+			//cout << "현재 내 타일 == 검사타일" << endl;
 			return true;
 		}
 
 		//이동불가능
 		if (_t[i]->getOrderIndex() == 6 || _nowOrder == 6)
 		{
-			cout << "이동불가" << endl;
+			//cout << "이동불가" << endl;
 			return false;
 		}
 	}
