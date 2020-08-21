@@ -125,6 +125,7 @@ public:
 	void playerMeleeattack();
 	void playerDodgeEffect();
 	void playerLethalattack();
+	void playerLethalattackMove();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
