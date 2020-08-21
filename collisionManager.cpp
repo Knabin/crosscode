@@ -282,7 +282,7 @@ void collisionManager::hedgehagCollision()
 				_player->getBullet()->remove(j);
 			}
 		}
-		}
+		
 		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
 		{
 			if (isCollision(h->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
@@ -384,7 +384,6 @@ void collisionManager::hedgehagCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-
 }
 
 void collisionManager::meerkatCollision()
