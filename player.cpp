@@ -142,7 +142,7 @@ HRESULT player::init()
 	_attacking = false;
 	 _pHp = 100;
 	 _playerMaxHP = 100;
-	 _pXp = 100;
+	 _pXp = 0;
 	 _playerLevelUpXp = 100;
 	 _pSp = 1;
 	 _pSpcharge = 0;
@@ -673,18 +673,7 @@ void player::update()
 		_lethalCharge = 0;
 	}
 
-	/*if (_pXp >= _playerLevelUpXp)
-	{
-		_pXp -= _playerLevelUpXp;
-		_playerLevelUpXp *= 2;
-		_playerMaxHP += 50;
-		_pHp = _playerMaxHP;
-		_pDef += 1;
-		_pAtk += 5;
-		_pCrt += 1;
-
-	}*/
-
+	
 	_attackPower = _pAtk + RND->getFromIntTo(0, _pCrt);
 
 }

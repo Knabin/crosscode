@@ -12,6 +12,8 @@ puzzleOrangeWall::~puzzleOrangeWall()
 
 HRESULT puzzleOrangeWall::init()
 {
+	_name = "puzzleOrangeWall";
+
 	if (_type == 0)
 	{
 		_image = IMAGEMANAGER->addFrameImage("wall3", L"images/tile/wall3preview.png", 1, 1);

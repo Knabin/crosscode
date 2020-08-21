@@ -11,6 +11,11 @@ private:
 	floatRect _hpRC;
 	floatRect _expRC;
 
+	int _lvUPCount;
+	
+
+	bool _lvUP;
+	animation* _lvAnim;
 public:
 	nomalUI() {};
 	~nomalUI() {};

@@ -9,6 +9,7 @@ HRESULT enemyManager::init()
 	_as = new aStar;
 
 	_vEnemy = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 
 	_time = _index = 0;
 	_count = 0;
@@ -83,7 +84,8 @@ void enemyManager::enemyDead()
 				//OBJECTMANAGER->removeObject(objectType::ENEMY, e);
 				// 이거 켜면 터짐??? 잠만
 				//_vEnemy.erase(_vEnemy.begin() + i);
-
+				_player->setPlayerEXP(10);
+				
 				_count = 0;
 
 				break;
