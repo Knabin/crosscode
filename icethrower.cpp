@@ -45,7 +45,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 		attack1._image = _attackImage[2];
 		attack1._size = _attackSize[2];
 
-		attack1._speed = 15.5f;
+		attack1._speed = 30.5f;
 
 		attack1._fireStart = false;
 
@@ -87,7 +87,7 @@ void icethrower::render()
 	{
 		if (!_viIcethrower->_fireStart) continue;
 		{
-			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIcethrower->_rc));
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIcethrower->_rc));
 
 			_viIcethrower->_image->setAngle(_angle);
 			_viIcethrower->_image->render(CAMERA->getRelativeVector2(Vector2(_viIcethrower->_x - _viIcethrower->_size / 2, _viIcethrower->_y - _viIcethrower->_size / 2)));
@@ -126,19 +126,19 @@ void icethrower::angleUpdate()
 
 	if (_angleCount < 10)
 	{
-		_angle += 0.312f / 15;
+		_angle += 0.312f / 8;
 	}
 	if (_angleCount >= 10 && _angleCount < 20)
 	{
-		_angle -= 0.256f / 15;
+		_angle -= 0.256f / 8;
 	}
 	if (_angleCount >= 20 && _angleCount < 30)
 	{
-		_angle += 0.206f / 15;
+		_angle += 0.206f / 8;
 	}
 	if (_angleCount >= 30 && _angleCount < 40)
 	{
-		_angle -= 0.251f / 15;
+		_angle -= 0.251f / 8;
 	}
 	if (_angleCount >= 40 && _angleCount < 50)
 	{
@@ -215,8 +215,8 @@ void icethrower::move()
 
 		if (!_viIcethrower->_fireStart) continue;
 		{
-			_angle -= 0.002f / 4;
-			_angle2 += 0.10f / 4;
+			_angle -= 0.002f / 2;
+			_angle2 += 0.10f / 2;
 			_viIcethrower->_x += cosf(_viIcethrower->_angle) * _viIcethrower->_speed;
 			_viIcethrower->_y += -sinf(_viIcethrower->_angle) * _viIcethrower->_speed;
 

@@ -97,7 +97,7 @@ void flamethrower::render()
 	{
 		if (!_viFlamethrower->_fireStart) continue;
 		{
-			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viFlamethrower->_rc));
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viFlamethrower->_rc));
 			IMAGEMANAGER->findImage("È­¿°")->frameRender(CAMERA->getRelativeVector2(Vector2(_viFlamethrower->_x, _viFlamethrower->_y )),
 				_viFlamethrower->_frameX, _flameFrameY);
 		}

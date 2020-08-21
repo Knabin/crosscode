@@ -117,7 +117,7 @@ iMoveScene::iMoveScene(string sceneName, Vector2 location)
 
 void iMoveScene::eventStart()
 {
-	CAMERA->fadeStart(1.f, 1.5f);
+	CAMERA->fadeStart(1.f, 1.3f);
 }
 
 bool iMoveScene::eventUpdate()
@@ -126,7 +126,7 @@ bool iMoveScene::eventUpdate()
 	{
 		SCENEMANAGER->loadScene(_sceneName);
 		_player->setPosition(_location);
-		_player->setDirection(PLAYERDIRECTION::BOTTOM);
+		//_player->setDirection(PLAYERDIRECTION::BOTTOM);
 		_player->setState(PLAYERSTATE::IDLE);
 		return true;
 	}
