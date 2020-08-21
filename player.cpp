@@ -112,7 +112,7 @@ HRESULT player::init()
 	_beginOrder = 1;
 	_backOrder = 1;
 	_tileRect.update(Vector2(0, 0), Vector2(40, 40), pivot::CENTER);
-	_jumpCount = 0;
+	_jumpCount = 60;
 	_jumpPower = 0;
 	_gravity = 3;
 	_jumping = false;
@@ -942,6 +942,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
+						_jumpCount = 0;
 						
 						break;
 					}
@@ -954,6 +955,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5 )
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 							
@@ -981,6 +983,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
+						_jumpCount = 0;
 
 						break;
 					}
@@ -993,6 +996,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 
@@ -1020,7 +1024,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
-
+						_jumpCount = 0;
 						break;
 					}
 					else if (ti->getOrderIndex() == 5)
@@ -1032,6 +1036,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 
@@ -1059,7 +1064,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
-
+						_jumpCount = 0;
 						break;
 					}
 					else if (ti->getOrderIndex() == 5)
@@ -1071,6 +1076,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 
@@ -1098,7 +1104,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
-
+						_jumpCount = 0;
 						break;
 					}
 					else if (ti->getOrderIndex() == 5)
@@ -1110,6 +1116,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 
@@ -1137,7 +1144,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
-
+						_jumpCount = 0;
 						break;
 					}
 					else if (ti->getOrderIndex() == 5)
@@ -1149,6 +1156,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 
@@ -1176,7 +1184,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
-
+						_jumpCount = 0;
 						break;
 					}
 					else if (ti->getOrderIndex() == 5)
@@ -1188,6 +1196,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 
@@ -1215,7 +1224,7 @@ void player::playerMove()
 					else if ((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder)
 					{
 						_state->setState(_vState[PLAYERSTATE::JUMP]);
-
+						_jumpCount = 0;
 						break;
 					}
 					else if (ti->getOrderIndex() == 5)
@@ -1227,6 +1236,7 @@ void player::playerMove()
 							if (((ti->getOrderIndex() == _nowOrder + 1 && _nowOrder != 3) || ti->getOrderIndex() < _nowOrder) && ti->getOrderIndex() != 5)
 							{
 								_state->setState(_vState[PLAYERSTATE::JUMP]);
+								_jumpCount = 0;
 								break;
 							}
 
@@ -1643,7 +1653,7 @@ void player::playerJumpMove()
 	}
 	if (_jumpCount > 59)
 	{
-		_jumpCount = 0;
+		//_jumpCount = 0;
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 		_jumpPower = 0;
 		_gravity = 3;

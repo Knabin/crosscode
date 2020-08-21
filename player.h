@@ -45,8 +45,7 @@ private:
 	floatRect rc1[12];
 	floatRect rc2[12];
 	floatRect _attackRC;
-	float de;
-
+	
 	playerStateController* _state;
 	PLAYERDIRECTION _direction;
 	bullet* _bullet;
