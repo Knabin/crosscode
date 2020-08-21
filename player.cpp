@@ -79,6 +79,8 @@ HRESULT player::init()
 	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
 	IMAGEMANAGER->addFrameImage("player aim", L"images/player/player_aim.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge1.png", 6, 8);
+	IMAGEMANAGER->addFrameImage("player chargeeffect", L"images/player/player_chargeeffect.png", 6, 1);
+
 	
 	IMAGEMANAGER->addImage("player shadow", L"images/player/player_shadow.png");
 
@@ -99,6 +101,7 @@ HRESULT player::init()
 	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 0.5f, 5, 1.0f);
 	EFFECTMANAGER->addEffect("finalattackeffect", "finalattackeffect", 1, 0.3f, 5, 1.0f);
 
+	EFFECTMANAGER->addEffect("player chargeeffect", "player chargeeffect", 1, 0.5f, 1, 1.0f);
 
 
 	//=================================== 근거리 이펙트 용=================================
@@ -643,12 +646,13 @@ void player::update()
 
 	if(KEYMANAGER->isStayKeyDown(VK_SPACE))
 	{
-		if (_state->getState() == _vState[IDLE] && !_isLethal && _pSp > 0)
+		if ((_state->getState() == _vState[IDLE] || _state->getState() == _vState[MOVE]) && !_isLethal && _pSp > 0)
 		{
 			_pSp--;
 			_isLethal = true;
 			_lethalCount--;
 			_state->setState(_vState[PLAYERSTATE::LETHAL_CHARGE]);
+			EFFECTMANAGER->play("player chargeeffect", Vector2(CAMERA->getRelativeVector2(_position).x+100, CAMERA->getRelativeVector2(_position).y+100),0,0.5f);
 		}
 		playerLethalattack();
 	}
