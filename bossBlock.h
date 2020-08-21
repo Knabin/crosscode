@@ -1,17 +1,18 @@
 #pragma once
 #include "gameObject.h"
-class townBlock : public gameObject
+class bossBlock : public gameObject
 {
 private:
 	image* _img;
-	bool _isOpen;
+	int _frameX;
+	int _count;
+
 public:
-	~townBlock() override;
+	~bossBlock() override;
 
 	HRESULT init() override;
 	void release() override;
 	void update() override;
 	void render() override;
-
 };
 
