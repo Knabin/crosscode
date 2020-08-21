@@ -36,7 +36,7 @@ HRESULT mountainScene::init()
 	}
 
 	_prevScene = "town";
-	_prevPoint = Vector2((_maxX - 1) * SIZE, 1680);
+	_prevPoint = Vector2((_maxX - 1) * SIZE, 1650);
 
 	_nextScene = "boss";
 	_nextPoint = Vector2(50, 1700);

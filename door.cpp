@@ -54,5 +54,5 @@ void door::render()
 {
 	if (_type == 1) _image->setAlpha(0.5f);
 	_image->frameRender(CAMERA->getRelativeVector2(_position), _frameX, _type);
-	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_moveRect), D2D1::ColorF::Beige, 0);
+	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_moveRect), D2D1::ColorF::Beige, 0);
 }
