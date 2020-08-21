@@ -32,7 +32,7 @@ HRESULT tabUI::init()
 
 	IMAGEMANAGER->addFrameImage("invenList", L"images/menu/invenList.png", 7, 1);
 
-
+	IMAGEMANAGER->addImage("inven02", L"images/menu/inven02.png");
 
 
 	_on = false;
@@ -219,19 +219,7 @@ void tabUI::update()
 			OBJECTMANAGER->findObject(objectType::UI, "inven7")->setIsActive(true);
 
 
-			if (_vIv.size() != NULL)
-			{
-				int count = 0;
-				for (int i = 0; i < _vIv.size(); ++i)
-				{
-					if (_vIv[i].type == L"ÆÈ")
-					{
-						count++;
-						cout << _vIv[i].itemNum << endl;
-						cout << _vIv[i].count << endl;
-					}
-				}
-			}
+		
 			break;
 		case 2:
 			OBJECTMANAGER->findObject(objectType::UI, "inven1")->setIsActive(true);
@@ -366,24 +354,110 @@ void tabUI::render()
 		{
 		case 0:
 			IMAGEMANAGER->findImage("inven1")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"¼Ò¸ð")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 1:
 			IMAGEMANAGER->findImage("inven2")->render(Vector2(0, 0));
+
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"ÆÈ")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count /2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 2:
 			IMAGEMANAGER->findImage("inven3")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"¸Ó¸®")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						
+						count++;
+					}
+				}
+			}
 			break;
 		case 3:
 			IMAGEMANAGER->findImage("inven4")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"´Ù¸®")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 4:
 			IMAGEMANAGER->findImage("inven5")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"¸öÅë")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 5:
 			IMAGEMANAGER->findImage("inven6")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"°Å·¡")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 6:
 			IMAGEMANAGER->findImage("inven7")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"Áß¿ä")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		}
 	}

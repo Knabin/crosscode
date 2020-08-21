@@ -77,6 +77,8 @@ HRESULT player::init()
 	IMAGEMANAGER->addFrameImage("player aim", L"images/player/player_aim.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge1.png", 6, 8);
 	
+	IMAGEMANAGER->addImage("player shadow", L"images/player/player_shadow.png");
+
 	IMAGEMANAGER->addFrameImage("player dodgeDust", L"images/player/player_dodgedust.png", 5,1);
 
 	EFFECTMANAGER->addEffect("player dodgeDust1", "player dodgeDust", 1, 0.2f, 1, 1.f);
@@ -93,14 +95,12 @@ HRESULT player::init()
 
 
 	//=================================== 근거리 이펙트 용=================================
-
 	for (int i = 0; i < 40; i++)
 	{
 		_attackAni[i] = new animation;
 		_attackAni[i]->init(_attackImg->getWidth(), _attackImg->getHeight(), _attackImg->getFrameSize().x, _attackImg->getFrameSize().y);
 		_attackAni[i]->setPlayFrame(0, 3, false, false);
 		_attackAni[i]->setFPS(3);
-	
 	}
 	//===================================================================================
 
@@ -116,7 +116,7 @@ HRESULT player::init()
 	_jumpPower = 0;
 	_gravity = 3;
 	_jumping = false;
-
+	
 	_bullet = new bullet;
 	_bullet->init();
 
@@ -134,7 +134,11 @@ void player::release()
 void player::update()
 {
 	_bullet->update();
-	
+	if (EVENTMANAGER->isPlayingEvent())
+	{
+		_state->updateState();
+		return;
+	}
 	if (KEYMANAGER->isStayKeyDown('W') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
@@ -174,7 +178,6 @@ void player::update()
 		{
 			_state->setState(_vState[PLAYERSTATE::MOVE]);
 		}
-
 	}
 
 	if (KEYMANAGER->isStayKeyDown('S') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
@@ -351,9 +354,15 @@ void player::update()
 		{
 			_state->setState(_vState[PLAYERSTATE::LONGATTACK]);
 			_state->getState()->setLongAttack();
+			_angle = getAngle(_position.x, _position.y,
+							  _ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
+							  _ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
+			_angle = _angle + RND->getFromFloatTo(-de, de);
+
 			_bullet->nomalFire(_position.x, _position.y, _angle, 17.0f);
 		}
 	}
+	
 
 	/*if (_state->getState() == _vState[LONGATTACK])
 	{
@@ -445,13 +454,12 @@ void player::update()
 	if ((KEYMANAGER->isOnceKeyUp('A') || KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('D') || KEYMANAGER->isOnceKeyUp('S') ||
 		KEYMANAGER->isOnceKeyUp('A') && KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('D') && KEYMANAGER->isOnceKeyUp('W') ||
 		KEYMANAGER->isOnceKeyUp('A') && KEYMANAGER->isOnceKeyUp('S') || KEYMANAGER->isOnceKeyUp('D') && KEYMANAGER->isOnceKeyUp('S')))
-		{
-			if (_state->getState() == _vState[PLAYERSTATE::MOVE])
-				_state->setState(_vState[PLAYERSTATE::MOVESTOP]);
-			if (_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
-				_state->setState(_vState[PLAYERSTATE::LONGATTACKIDLE]);
-		}
-
+	{
+		if (_state->getState() == _vState[PLAYERSTATE::MOVE])
+			_state->setState(_vState[PLAYERSTATE::MOVESTOP]);
+		if (_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
+			_state->setState(_vState[PLAYERSTATE::LONGATTACKIDLE]);
+	}
 	
 	if (KEYMANAGER->isOnceKeyUp('C')
 		|| (KEYMANAGER->isOnceKeyUp(VK_RBUTTON) && _state->getState() == _vState[PLAYERSTATE::GUARD])
@@ -552,8 +560,7 @@ void player::update()
 	//=================================== 근거리 이펙트 용=================================
 	if (_state->getState() == _vState[PLAYERSTATE::RIGHT_FINALATTACK] || _state->getState() == _vState[PLAYERSTATE::LETHAL_ATTACK])
 	{
-		_attackEffectCount++;
-		
+		_attackEffectCount++;	
 
 		if (_attackEffectCount > 1)
 		{
@@ -583,9 +590,7 @@ void player::update()
 				_attackAni[i]->start();
 			}
 		}
-		//===================================================================================
-		
-
+		//===================================================================================	
 	}
 
 	if(KEYMANAGER->isStayKeyDown(VK_SPACE))
@@ -631,6 +636,8 @@ void player::render()
 	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_tileRect));
 	_image->setSize(_image->getFrameSize() * CAMERA->getZoomAmount());
 	_image->aniRender(CAMERA->getRelativeVector2(_position.x, _position.y - _jumpPower), _ani, 1.0f);
+	IMAGEMANAGER->findImage("player shadow")->setAlpha(0.2);
+	IMAGEMANAGER->findImage("player shadow")->render(CAMERA->getRelativeVector2(_position.x - 25, _position.y + 10));
 	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_attackRC));
@@ -646,15 +653,12 @@ void player::render()
 	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
 		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE])
 	{
-		float angle = getAngle(_position.x, _position.y,
+		_angle = getAngle(_position.x, _position.y,
 			_ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
 			_ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
 
-		if (de < 0)	de = 0;
+		float d1 = _angle;
 
-		float d1 = angle - de;
-
-		//IMAGEMANAGER->findImage("player aim")->frameRender(CAMERA->getRelativeVector2(_ptMouse.x, _ptMouse.y),1,1);
 		for (int i = 0; i < 12; i++)
 		{
 			IMAGEMANAGER->findImage("player longAttackLine")->render
@@ -664,16 +668,16 @@ void player::render()
 
 	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK])
 	{
-		float angle = getAngle(_position.x, _position.y,
+		_angle = getAngle(_position.x, _position.y,
 			_ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
 			_ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
 
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))	de -= PI / 50;
-		if (de < 0)	de = 0;
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))	de = PI / 4;
+		if (de < 0)	de = 0;
 
-		float d1 = angle - de;
-		float d2 = angle + de;
+		d1 = _angle - de;
+		d2 = _angle + de;
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -871,8 +875,6 @@ void player::playerMove()
 	
 	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
 	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
-	
-	
 	
 	// 다음 타일
 	for (int i = 0; i < 6; ++i)
@@ -1324,8 +1326,6 @@ void player::playerJumpMove()
 
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	
-
-
 	switch (_direction)
 	{
 	case PLAYERDIRECTION::TOP:
@@ -1633,7 +1633,7 @@ void player::playerLongAttackMove()
 {
 	POINT currentTileIndex = { _tile.left / SIZE, _tile.top / SIZE };
 	POINT nextTileIndex;
-	float moveSpeed = 1.0f;
+	float moveSpeed = 2.f;
 
 	nextTileIndex = { currentTileIndex.x, currentTileIndex.y };
 

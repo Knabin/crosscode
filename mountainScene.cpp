@@ -12,7 +12,7 @@ HRESULT mountainScene::init()
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
-	this->getDataFromFile("mountainmap.map");
+	this->getDataFromFile("mountainmap2.map");
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
 
@@ -36,9 +36,9 @@ HRESULT mountainScene::init()
 	}
 
 	_prevScene = "town";
-	_prevPoint = Vector2(_maxX * SIZE - 30, 1680);
+	_prevPoint = Vector2((_maxX - 1) * SIZE, 1680);
 
-	_nextScene = "mountain";
+	_nextScene = "boss";
 	_nextPoint = Vector2(50, 1700);
 
 	return S_OK;
@@ -53,7 +53,7 @@ void mountainScene::update()
 	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
 	{
 		SCENEMANAGER->loadScene(_prevScene);
-		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(150, 1700));
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(200, 1700));
 	}
 
 	if (getDistance(_nextPoint.x, _nextPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)

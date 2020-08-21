@@ -93,7 +93,7 @@ void mine::render(float centerX, float centerY)
 	{
 		if (!_viMine->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine->_rc));
 
 			IMAGEMANAGER->findImage("Áö·Ú")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine->_x , _viMine->_y)),
 				_mineFrameX, _mineFrameY);
@@ -127,7 +127,7 @@ void mine::render(float centerX, float centerY)
 
 		if (!_viMine2->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine2->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine2->_rc));
 
 			IMAGEMANAGER->findImage("Áö·Ú")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine2->_x, _viMine2->_y)),
 				_mineFrameX, _mineFrameY);

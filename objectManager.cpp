@@ -98,7 +98,8 @@ void objectManager::render()
 			objectList[i]->getRect().left > CAMERA->getRect().right ||
 			objectList[i]->getRect().top > CAMERA->getRect().bottom ||
 			objectList[i]->getRect().bottom < CAMERA->getRect().top) continue;
-		if (dynamic_cast<tile*>(objectList[i])->getOrderIndex() > dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder() &&
+		if (dynamic_cast<tile*>(objectList[i])->getOrderIndex() > 
+			dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder() &&
 				dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder() != 3 &&
 			objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y)
 			objectList[i]->render();

@@ -97,6 +97,9 @@ private:
 	bool _jumping;
 
 	float _angle;
+	float de;
+	float d1;
+	float d2;
 
 	floatRect _tileRect;
 	POINT next[6];
