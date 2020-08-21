@@ -44,15 +44,24 @@ HRESULT townScene::init()
 	_nextScene = "mountain";
 	_nextPoint = Vector2(50, 1700);
 
+	_block.setPosition(Vector2(150, 1650));
+	_block.init();
+
 	// 중복 실행되지 않게
 	if (!EVENTMANAGER->getFirstEvent())
 	{
-		iPlayerMove* moveEvent = new iPlayerMove(Vector2(36 * SIZE, 47 * SIZE - 400));
+		iPlayerMove* moveEvent = new iPlayerMove(Vector2(36 * SIZE, 47 * SIZE - 300));
 		iDialog* dialogEvent = new iDialog(new dialog("1"));
 		EVENTMANAGER->addEvent(moveEvent);
 		EVENTMANAGER->addEvent(dialogEvent);
 		EVENTMANAGER->setFirstEvent(true);
 	}
+	else if (!EVENTMANAGER->getSecondEvent())
+	{
+		// 화면이 장애물로 이동
+		// 다이얼로그 출력
+	}
+
 
 	return S_OK;
 }
@@ -65,8 +74,11 @@ void townScene::update()
 {
 	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
 	{
-		SCENEMANAGER->loadScene(_prevScene);
-		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 33 * SIZE));
+		if (!EVENTMANAGER->isPlayingEvent())
+		{
+			iMoveScene* m = new iMoveScene("puzzle", Vector2(9 * SIZE, 33 * SIZE));
+			EVENTMANAGER->addEvent(m);
+		}
 	}
 	else if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 200 &&
 		!EVENTMANAGER->getPuzzleEvent())
@@ -79,9 +91,14 @@ void townScene::update()
 	if (getDistance(_nextPoint.x, _nextPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80 &&
 		!EVENTMANAGER->getPuzzleEvent())
 	{
-		SCENEMANAGER->loadScene(_nextScene);
-		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((float)76 * SIZE, 34.5f * SIZE));
+		if (!EVENTMANAGER->isPlayingEvent())
+		{
+			iMoveScene* m = new iMoveScene("mountain", Vector2((float)76 * SIZE, 34.5f * SIZE));
+			EVENTMANAGER->addEvent(m);
+		}
 	}
+
+	_block.update();
 }
 
 void townScene::render()
@@ -89,4 +106,6 @@ void townScene::render()
 	scene::render();
 	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_prevPoint), 10);
 	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_nextPoint), 10);
+
+	_block.render();
 }
