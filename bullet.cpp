@@ -9,6 +9,7 @@ HRESULT bullet::init()
 	_alpha = 1.f;
 	_isAlpha = false;
 
+	_deleteBulletAngle = 0;
 	return S_OK;
 }
 
@@ -47,7 +48,6 @@ void bullet::render()
 		IMAGEMANAGER->addImage("player_bulletEffect", L"images/player/player_bulletEffect.png");
 		IMAGEMANAGER->findImage("player_bulletEffect")->setAlpha(_alpha);
 		IMAGEMANAGER->findImage("player_bulletEffect")->render(CAMERA->getRelativeVector2(_vPlayerBullet[i].rc.getCenter().x - 24, _vPlayerBullet[i].rc.getCenter().y - 23));
-
 		_vPlayerBullet[i].count++;
 		if (_vPlayerBullet[i].count % 5 == 0)
 		{
@@ -137,11 +137,17 @@ void bullet::remove(int arrNum)
 	_vPlayerBullet.erase(_vPlayerBullet.begin() + arrNum);
 }
 
+void bullet::removeEffect(float x, float y)
+{
+	
+	EFFECTMANAGER->play("player bulletRemoveEffect", CAMERA->getRelativeVector2(Vector2(x,y)), _deleteBulletAngle, 1);
+}
+
 void bullet::collision()
 {
 	for (int i = 0; i < _vPlayerBullet.size(); ++i)
 	{
-		
+	
 		POINT currentTileIndex = { _vPlayerBullet[i].position.x / SIZE, _vPlayerBullet[i].position.y / SIZE };
 		
 		_vPlayerBullet[i].next[0] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
@@ -189,6 +195,8 @@ void bullet::collision()
 				{
 					if (_vPlayerBullet[i].nomal == true)
 					{
+						_deleteBulletAngle = getAngle(ti->getRect().getCenter().x, ti->getRect().getCenter().y,_vPlayerBullet[i].position.x, _vPlayerBullet[i].position.y) * 180 / PI;
+						removeEffect((temp.right + temp.left) * 0.5f, (temp.top + temp.bottom) * 0.5f);
 						_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
 						break;
 					}

@@ -7,6 +7,8 @@ puzzleDestruct::~puzzleDestruct()
 
 HRESULT puzzleDestruct::init()
 {
+	_name = "puzzleDestruct";
+
 	_image = IMAGEMANAGER->addImage("destruct", L"images/object/destruct.png");
 	_rc.update(_position, _image->getSize(), pivot::CENTER);
 	return S_OK;

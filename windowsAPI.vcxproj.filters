@@ -239,6 +239,9 @@
     <ClCompile Include="foothold.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="puzzleCollision.cpp">
+      <Filter>playGround\collision</Filter>
+    </ClCompile>
     <ClCompile Include="townBlock.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
@@ -457,7 +460,6 @@
     <ClInclude Include="puzzleDestruct.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
-    <ClInclude Include="flamethrower.h" />
     <ClInclude Include="puzzleBlueWall.h">
       <Filter>playGround\puzzle</Filter>
     </ClInclude>
@@ -499,6 +501,12 @@
     </ClInclude>
     <ClInclude Include="bossBlock.h">
       <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="puzzleCollision.h">
+      <Filter>playGround\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="flamethrower.h">
+      <Filter>enemyTest\bossPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

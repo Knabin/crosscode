@@ -21,6 +21,7 @@ player::player()
 	playerState* rightfinalattackstate = new rightfinalattackState(this);
 	playerState* lethalchargestate = new lethalchargeState(this);
 	playerState* lethalattackstate = new lethalattackState(this);
+	playerState* beAttackedstate = new beAttackedState(this);
 
 	_vState.push_back(idle);
 	_vState.push_back(move);
@@ -36,6 +37,7 @@ player::player()
 	_vState.push_back(rightfinalattackstate);
 	_vState.push_back(lethalchargestate);
 	_vState.push_back(lethalattackstate);
+	_vState.push_back(beAttackedstate);
 
 	_name = "player";
 	_isActive = true;
@@ -55,8 +57,11 @@ player::player()
 	_state = new playerStateController(idle);
 	_position.y = 700;
 	_attackAngle = 0;
-	_pAtk = 5;
 	
+	
+
+
+	_beAttacked = false;
 
 	_pSp = 0;
 }
@@ -79,6 +84,10 @@ HRESULT player::init()
 	IMAGEMANAGER->addImage("player longAttackLine", L"images/player/player_longAttack_Line.png");
 	IMAGEMANAGER->addFrameImage("player aim", L"images/player/player_aim.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge1.png", 6, 8);
+	IMAGEMANAGER->addFrameImage("player chargeeffect", L"images/player/player_chargeeffect.png", 6, 1);
+
+	
+	IMAGEMANAGER->addFrameImage("player beAttacked", L"images/player/player_beAttacked.png", 2, 8);
 	
 	IMAGEMANAGER->addImage("player shadow", L"images/player/player_shadow.png");
 
@@ -91,6 +100,9 @@ HRESULT player::init()
 	EFFECTMANAGER->addEffect("player dodgeDust2", "player dodgeDust", 1, 0.4f, 1, 1.f);
 	EFFECTMANAGER->addEffect("player dodgeDust3", "player dodgeDust", 1, 0.6f, 1, 1.f);
 
+	IMAGEMANAGER->addFrameImage("player bulletRemoveEffectImg", L"images/player/player_bulletRemoveEffect.png", 5, 1);
+	EFFECTMANAGER->addEffect("player bulletRemoveEffect", "player bulletRemoveEffectImg", 1, 0.5f, 10, 1.f);
+
 	IMAGEMANAGER->addFrameImage("leftattackeffect", L"images/player/leftattackeffect.png", 7, 1);
 	IMAGEMANAGER->addFrameImage("rightattackeffect", L"images/player/rightattackeffect.png", 7, 1);
 	_attackImg = IMAGEMANAGER->addFrameImage("finalattackeffect", L"images/player/finalattackeffect.png", 4, 1);
@@ -99,6 +111,7 @@ HRESULT player::init()
 	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 0.5f, 5, 1.0f);
 	EFFECTMANAGER->addEffect("finalattackeffect", "finalattackeffect", 1, 0.3f, 5, 1.0f);
 
+	EFFECTMANAGER->addEffect("player chargeeffect", "player chargeeffect", 1, 0.5f, 1, 1.0f);
 
 
 	//=================================== 근거리 이펙트 용=================================
@@ -129,7 +142,7 @@ HRESULT player::init()
 	_attacking = false;
 	 _pHp = 100;
 	 _playerMaxHP = 100;
-	 _pXp = 10;
+	 _pXp = 0;
 	 _playerLevelUpXp = 100;
 	 _pSp = 1;
 	 _pSpcharge = 0;
@@ -141,7 +154,7 @@ HRESULT player::init()
 	 _pIR = 0;
 	 _pER = 0;
 	 _pPR = 0;
-
+	 _pAtk = 5;
 
 	_attackPower = 50;
 
@@ -154,6 +167,8 @@ void player::release()
 
 void player::update()
 {
+	if (_pHp < 0)
+		_pHp = 0;
 	if (_state->getState() != _vState[PLAYERSTATE::JUMP])
 	{
 		if (_jumpCount > 59)
@@ -406,32 +421,8 @@ void player::update()
 			_bullet->nomalFire(_position.x, _position.y, _angle, 17.0f);
 		}
 	}
-
-
-	/*if (_state->getState() == _vState[LONGATTACK])
-	{
-		float angle = getAngle(_position.x, _position.y,
-			_ptMouse.x / CAMERA->getZoomAmount() + CAMERA->getRect().left,
-			_ptMouse.y / CAMERA->getZoomAmount() + CAMERA->getRect().top);
-
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))	de -= PI / 50;
-		if (de < 0)	de = 0;
-		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))	de = PI / 4;
-
-		float d1 = angle - de;
-		float d2 = angle + de;
-
-		for (int i = 0; i < 12; i++)
-		{
-			rc1[i].update(Vector2(_position.x + cosf(d1) * 20 * i, _position.y + -sinf(d1) * 20 * i), Vector2(10, 10), pivot::CENTER);
-		}
-		for (int i = 0; i < 12; i++)
-		{
-			rc2[i].update(Vector2(_position.x + cosf(d2) * 20 * i, _position.y + -sinf(d2) * 20 * i), Vector2(10, 10), pivot::CENTER);
-		}
-	}*/
-	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) &&
-		_state->getState() != _vState[PLAYERSTATE::LONGATTACK] &&
+	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && 
+		_state->getState() != _vState[PLAYERSTATE::LONGATTACK] && 
 		_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE])
 	{
 		_fullCount++;
@@ -492,6 +483,16 @@ void player::update()
 	if (_state->getState() == _vState[PLAYERSTATE::DODGE] && _dodgeCount > 1)
 	{
 		playerDodgeEffect();
+	}
+
+	if (_state->getState() == _vState[PLAYERSTATE::BE_ATTACKED])
+	{
+		_beAttackedCount++;
+		if (_beAttackedCount >= 25)
+		{
+			_state->setState(_vState[PLAYERSTATE::IDLE]);
+			_beAttackedCount = 0;
+		}
 	}
 
 	//========================================움직이고 나서 정지하는 모션 ====================================================
@@ -642,12 +643,13 @@ void player::update()
 
 	if (KEYMANAGER->isStayKeyDown(VK_SPACE))
 	{
-		if (_state->getState() == _vState[IDLE] && !_isLethal && _pSp > 0)
+		if ((_state->getState() == _vState[IDLE] || _state->getState() == _vState[MOVE]) && !_isLethal && _pSp > 0)
 		{
 			_pSp--;
 			_isLethal = true;
 			_lethalCount--;
 			_state->setState(_vState[PLAYERSTATE::LETHAL_CHARGE]);
+			EFFECTMANAGER->play("player chargeeffect", Vector2(CAMERA->getRelativeVector2(_position).x+100, CAMERA->getRelativeVector2(_position).y+100),0,0.5f);
 		}
 		playerLethalattack();
 	}
@@ -673,18 +675,7 @@ void player::update()
 		_lethalCharge = 0;
 	}
 
-	if (_pXp >= _playerLevelUpXp)
-	{
-		_pXp -= _playerLevelUpXp;
-		_playerLevelUpXp *= 2;
-		_playerMaxHP += 50;
-		_pHp = _playerMaxHP;
-		_pDef += 1;
-		_pAtk += 5;
-		_pCrt += 1;
-
-	}
-
+	
 	_attackPower = _pAtk + RND->getFromIntTo(0, _pCrt);
 
 	_rc.set(_position, pivot::CENTER);

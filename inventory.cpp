@@ -3,7 +3,7 @@
 
 HRESULT inventory::init()
 {
-	_money = 0;
+	_money = 1000;
 	
 	getItem(L"ÆÈ", 0);
 	getItem(L"ÆÈ", 1);

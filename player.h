@@ -32,6 +32,7 @@ enum PLAYERSTATE : int
 	RIGHT_FINALATTACK,
 	LETHAL_CHARGE,
 	LETHAL_ATTACK,
+	BE_ATTACKED,
 	END,
 };
 
@@ -99,6 +100,8 @@ private:
 	int _lethalCharge;	// 필살기 충전시간
 	bool _isLethal; // 필살기 체크용
 
+	bool _beAttacked;	//충돌처리용 불값
+	int _beAttackedCount;	//피격모션용 카운트
 
 	float _jumpPower;
 	float _gravity;
@@ -150,6 +153,8 @@ public:
 	void setPlayerY(float y) { _position.y = y; }
 	void setPlayerPlusX(float x) { _position.x += x; }
 	void setPlayerPlusY(float y) { _position.y += y; }
+	void setBeAttacked(bool beAttacked) { _beAttacked = beAttacked; }
+
 	
 
 	
@@ -200,6 +205,7 @@ public:
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
 		CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150) ? true : false; }
+	bool getBeAttacked() { return _beAttacked; }
 
 	void setIdle();
 };
