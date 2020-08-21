@@ -29,6 +29,22 @@ void collisionManager::update()
 	hedgehagCollision();//고슴도치랑 플레이어 충돌처리
 	meerkatCollision();//미어캣이랑 플레이어 충돌처리
 	bulletCollision();//미어캣의 총알이랑 플레이어 충돌처리
+	playerHitCollision();//에너미공격렉트랑 플레이어 충돌처리
+
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			_collisionCount++;
+			if (_collisionCount % 40 == 0)
+			{
+				e->setEnemyCollision(false);
+				_collisionCount = 0;
+			}
+		}
+	}
 }
 
 void collisionManager::render()
@@ -86,8 +102,8 @@ void collisionManager::buffaloCollision()
 
 		if (_pushOut)
 		{
-			_player->setPlayerPlusX(cosf(b->getEnemyAngle()) * 10.0f);
-			_player->setPlayerPlusY(-sinf(b->getEnemyAngle()) * 10.0f);
+			_player->setPlayerPlusX(cosf(b->getEnemyAngleSave()) * 10.0f);
+			_player->setPlayerPlusY(-sinf(b->getEnemyAngleSave()) * 10.0f);
 
 			_count++;
 			if (_count % 10 == 0)
@@ -100,7 +116,7 @@ void collisionManager::buffaloCollision()
 		if (_player->getPlayerAttackRect().getSize().x != 0 && _player->getPlayerAttackRect().getSize().y != 0)
 		{
 			if (isCollision(b->getRect(), _player->getPlayerAttackRect()))//버팔로 렉트에 플레이어 공격렉트가 충돌했으면
-			{
+			{ 
 				if (!b->getEnemyCollision())
 				{
 					b->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
@@ -266,6 +282,15 @@ void collisionManager::hedgehagCollision()
 				_player->getBullet()->remove(j);
 			}
 		}
+		
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
+		{
+			if (isCollision(h->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+			{
+				h->setEnemyHP(_player->getPlayerAttackPower());
+				_player->getBullet()->remove(j);
+			}
+		}
 
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
@@ -359,7 +384,6 @@ void collisionManager::hedgehagCollision()
 		}
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
-
 }
 
 void collisionManager::meerkatCollision()
@@ -463,6 +487,14 @@ void collisionManager::meerkatCollision()
 				}
 			}
 		}
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
+		{
+			if (isCollision(m->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+			{
+				m->setEnemyHP(_player->getPlayerAttackPower());
+				_player->getBullet()->remove(j);
+			}
+		}
 
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
@@ -517,6 +549,52 @@ void collisionManager::meerkatCollision()
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 	}
 
+}
+
+void collisionManager::playerHitCollision()
+{
+	vector<gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+
+		if (isCollision(_player->getRect(), e->getEnemyAttackRect()))
+		{
+			if(_player->getDirection() == PLAYERDIRECTION::TOP)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}
+			if (_player->getDirection() == PLAYERDIRECTION::LEFT)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}
+			if (_player->getDirection() == PLAYERDIRECTION::RIGHT)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}
+			if (_player->getDirection() == PLAYERDIRECTION::BOTTOM)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}
+			if (_player->getDirection() == PLAYERDIRECTION::LEFT_BOTTOM)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}
+			if (_player->getDirection() == PLAYERDIRECTION::RIGHT_TOP)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}
+			if (_player->getDirection() == PLAYERDIRECTION::RIGHT_BOTTOM)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}
+			if (_player->getDirection() == PLAYERDIRECTION::LEFT_BOTTOM)
+			{
+				_player->setState(PLAYERSTATE::BE_ATTACKED);
+			}	
+		}
+	}
 }
 
 void collisionManager::bulletCollision()

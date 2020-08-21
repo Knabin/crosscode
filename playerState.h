@@ -191,5 +191,15 @@ public:
 	void enter() override;
 	void update() override;
 	void exit() override;
+};
 
+class beAttackedState : public playerState
+{
+public:
+	beAttackedState(class player* player);
+	~beAttackedState();
+
+	void enter() override;
+	void update() override;
+	void exit() override;
 };

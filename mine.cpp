@@ -52,7 +52,7 @@ HRESULT mine::init(float centerX, float centerY)
 		ZeroMemory(&_Mine, sizeof(_Mine));
 		_Mine._center.x = centerX - 268 + (57 * i);
 		_Mine._center.y = centerY  - (44 * i);
-		_Mine._speed = 20.0f;
+		_Mine._speed = 40.0f;
 
 		_Mine._fireStart = false;
 
@@ -65,7 +65,7 @@ HRESULT mine::init(float centerX, float centerY)
 		ZeroMemory(&_Mine2, sizeof(_Mine2));
 		_Mine2._center.x = centerX + 403 - (57 * i);
 		_Mine2._center.y = centerY - (44 * i);
-		_Mine2._speed = 20.0f;
+		_Mine2._speed = 40.0f;
 
 		_Mine2._fireStart = false;
 
@@ -93,31 +93,10 @@ void mine::render(float centerX, float centerY)
 	{
 		if (!_viMine->_fireStart) continue;
 		{
-			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine->_rc));
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine->_rc));
 
 			IMAGEMANAGER->findImage("瘤汾")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine->_x , _viMine->_y)),
 				_mineFrameX, _mineFrameY);
-		}
-
-		if (_vMine.begin()->_fireStart && !(_vMine.begin() + 1)->_fireStart)
-		{
-			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX - 268) + 25, centerY - 45)),
-				_explosionFrameX, _explosionFrameY);
-
-		}
-
-		if ((_vMine.begin() + 1)->_fireStart && !(_vMine.begin() + 2)->_fireStart)
-		{
-			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX - 211) + 25, (centerY - 44) - 35)),
-				_explosionFrameX, _explosionFrameY);
-
-
-		}
-
-		if ((_vMine.begin() + 2)->_fireStart && (_vMine.begin() + 1)->_y < 100)
-		{
-			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX - 154) + 25 , (centerY - 88) - 35)),
-				_explosionFrameX, _explosionFrameY);
 		}
 
 	}
@@ -127,29 +106,12 @@ void mine::render(float centerX, float centerY)
 
 		if (!_viMine2->_fireStart) continue;
 		{
-			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine2->_rc));
+			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine2->_rc));
 
 			IMAGEMANAGER->findImage("瘤汾")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine2->_x, _viMine2->_y)),
 				_mineFrameX, _mineFrameY);
 		}
 
-		if (_vMine2.begin()->_fireStart && !(_vMine2.begin() + 1)->_fireStart)
-		{
-			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX + 403) + 25, centerY - 45)),
-				_explosionFrameX, _explosionFrameY);
-		}
-
-		if ((_vMine2.begin() + 1)->_fireStart && !(_vMine2.begin() + 2)->_fireStart)
-		{
-			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX + 346) + 25, (centerY - 44) - 35)),
-				_explosionFrameX, _explosionFrameY);
-		}
-
-		if ((_vMine2.begin() + 2)->_fireStart && (_vMine2.begin() + 1)->_y < 100)
-		{
-			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX + 289) + 25, (centerY - 88) - 35)),
-				_explosionFrameX, _explosionFrameY);
-		}
 	}
 
 }
@@ -323,5 +285,62 @@ void mine::move()
 		(_vMine2.begin() + 2)->_speed = 0;
 	}
 	
+}
+
+void mine::explotion(float centerX, float centerY)
+{
+	for (_viMine = _vMine.begin(); _viMine != _vMine.end(); ++_viMine)
+	{
+
+		if (_vMine.begin()->_fireStart && !(_vMine.begin() + 1)->_fireStart)
+		{
+			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX - 268) + 25, centerY - 45)),
+				_explosionFrameX, _explosionFrameY);
+
+		}
+
+		if ((_vMine.begin() + 1)->_fireStart && !(_vMine.begin() + 2)->_fireStart)
+		{
+			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX - 211) + 25, (centerY - 44) - 35)),
+				_explosionFrameX, _explosionFrameY);
+
+
+		}
+
+		if ((_vMine.begin() + 2)->_fireStart && (_vMine.begin() + 1)->_y < 100)
+		{
+			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX - 154) + 25, (centerY - 88) - 35)),
+				_explosionFrameX, _explosionFrameY);
+		}
+
+	}
+
+	for (_viMine2 = _vMine2.begin(); _viMine2 != _vMine2.end(); ++_viMine2)
+	{
+
+		if (_vMine2.begin()->_fireStart && !(_vMine2.begin() + 1)->_fireStart)
+		{
+			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX + 403) + 25, centerY - 45)),
+				_explosionFrameX, _explosionFrameY);
+		}
+
+		if ((_vMine2.begin() + 1)->_fireStart && !(_vMine2.begin() + 2)->_fireStart)
+		{
+			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX + 346) + 25, (centerY - 44) - 35)),
+				_explosionFrameX, _explosionFrameY);
+		}
+
+		if ((_vMine2.begin() + 2)->_fireStart && (_vMine2.begin() + 1)->_y < 100)
+		{
+			IMAGEMANAGER->findImage("气惯")->frameRender(CAMERA->getRelativeVector2(Vector2((centerX + 289) + 25, (centerY - 88) - 35)),
+				_explosionFrameX, _explosionFrameY);
+		}
+	}
+
+
+
+
+
+
 }
 

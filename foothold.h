@@ -15,6 +15,8 @@ public:
 	virtual void update();
 	virtual void render();
 
+	void setIsOn(bool isOn) { _isOn = isOn; }
+
 	bool canChangeScene() { return _isOn && _isStepOn && (_count > 50); }
 };
 
