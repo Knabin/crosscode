@@ -44,6 +44,7 @@ private:
 
 	floatRect rc1[12];
 	floatRect rc2[12];
+	floatRect _attackRC;
 	float de;
 
 	playerStateController* _state;
@@ -100,6 +101,8 @@ private:
 	floatRect _tileRect;
 	POINT next[6];
 
+	int _attackPower;
+
 public:
 	player();
 	virtual ~player();
@@ -125,7 +128,13 @@ public:
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }
 	void setDirection(PLAYERDIRECTION direction) { _direction = direction; }
+	void setAttackRC(int a, int b) { _attackRC.update(Vector2(0, 0), Vector2(a, b), pivot::CENTER); }
 	void setState(PLAYERSTATE state) { _state->setState(_vState[state]); }
+	void setPlayerAttackRectRemove() { _attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER); }
+	void setPlayerX(float x) { _position.x = x; }
+	void setPlayerY(float y) { _position.y = y; }
+	void setPlayerPlusX(float x) { _position.x += x; }
+	void setPlayerPlusY(float y) { _position.y += y; }
 
 	inline int getNowOrder() { return _nowOrder; }
 
@@ -134,6 +143,10 @@ public:
 	PLAYERDIRECTION getDirection() { return _direction; }
 
 	bullet* getBullet() { return _bullet; }
+
+	floatRect& getPlayerAttackRect() { return _attackRC; }
+
+	int getPlayerAttackPower() { return _attackPower; }
 
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
