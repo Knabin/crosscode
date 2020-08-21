@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "puzzleScene.h"
+#include "door.h"
+#include "foothold.h"
+#include "iEvent.h"
+#include "dialog.h"
 
 puzzleScene::~puzzleScene()
 {
@@ -35,6 +39,12 @@ HRESULT puzzleScene::init()
 		}
 	}
 
+	_prevScene = "town";
+	_prevPoint = Vector2(450, 1670);
+
+	_nextScene = "town";
+	_nextPoint = Vector2(2300, 1750);
+
 	return S_OK;
 }
 
@@ -44,9 +54,39 @@ void puzzleScene::release()
 
 void puzzleScene::update()
 {
+	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
+	{
+		if (!EVENTMANAGER->isPlayingEvent())
+		{
+			iMoveScene* m = new iMoveScene("town", Vector2(1730, 300));
+			EVENTMANAGER->addEvent(m);
+		}
+	}
+	else if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 200)
+	{
+		dynamic_cast<door*>(OBJECTMANAGER->findObject(objectType::MAPOBJECT, "door"))->setIsOpen(true);
+	}
+	else
+		dynamic_cast<door*>(OBJECTMANAGER->findObject(objectType::MAPOBJECT, "door"))->setIsOpen(false);
+
+	if (getDistance(_nextPoint.x, _nextPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
+	{
+		if (dynamic_cast<foothold*>(OBJECTMANAGER->findObject(objectType::MAPOBJECT, "foothold"))->canChangeScene())
+		{
+			if (!EVENTMANAGER->getPuzzleEvent())
+			{
+				iDialog* d = new iDialog(new dialog("2"));
+				iMoveScene* m = new iMoveScene("town", Vector2(1730, 300));
+				EVENTMANAGER->addEvent(d);
+				EVENTMANAGER->addEvent(m);
+				EVENTMANAGER->setPuzzleEvent(true);
+			}
+		}
+	}
 }
 
 void puzzleScene::render()
 {
 	scene::render();
+	D2DRENDERER->FiilEllipse(CAMERA->getRelativeVector2(_nextPoint), 10);
 }

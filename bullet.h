@@ -14,7 +14,7 @@ struct tagPlayerBullet
 	POINT next[8];
 	int _nowOrder;
 	bool nomal;
-
+	int floor;
 
 };
 
@@ -28,7 +28,7 @@ private:
 	float _alpha;
 	bool _isAlpha;
 
-	
+	float _deleteBulletAngle;
 	
 
 public:
@@ -44,6 +44,7 @@ public:
 	void nomalFire(float x, float y, float angle,float speed);
 	void move();
 	void remove(int arrNum);
+	void removeEffect(float x, float y);
 
 	void collision();
 	

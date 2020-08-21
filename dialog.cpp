@@ -4,7 +4,7 @@
 #include "portrait.h"
 
 dialog::dialog(string fileName)
-	: _textIndex(0)
+	: _textIndex(0), _fileName(fileName)
 {
 	IMAGEMANAGER->addImage("lea", L"images/portrait/lea.png");
 	IMAGEMANAGER->addImage("pro", L"images/portrait/pro.png");
@@ -14,6 +14,7 @@ dialog::~dialog()
 {
 	lea->setIsAlive(false);
 	pro->setIsAlive(false);
+	_vText.clear();
 	// 메모리 해제는 object manager에서 진행함
 	for (int i = 0; i < _vObjects.size(); ++i)
 	{
@@ -54,9 +55,9 @@ bool dialog::next()
 	return false;
 }
 
-void dialog::loadText(string fileName)
+void dialog::loadText()
 {
-	if (fileName == "1")
+	if (_fileName == "1")
 	{
 		_vText.push_back(L"1");
 		_vText.push_back(L"레아! 첫 접속의 소감은 어때?");
@@ -65,7 +66,7 @@ void dialog::loadText(string fileName)
 		_vText.push_back(L"1");
 		_vText.push_back(L"멋진걸!");
 		_vText.push_back(L"1");
-		_vText.push_back(L"이미 알고 있겠지만,\nW A S D 키로 이동할 수 있어.");
+		_vText.push_back(L"W A S D 키로 이동할 수 있어.\n이미 알고 있을 수도 있지만.");
 		_vText.push_back(L"1");
 		_vText.push_back(L"공격은 마우스 클릭을 누르면 돼!");
 		_vText.push_back(L"2");
@@ -83,9 +84,17 @@ void dialog::loadText(string fileName)
 		_vText.push_back(L"1");
 		_vText.push_back(L"그럼 행운을 빈다!");
 	}
-	else if (fileName == "2")
+	else if (_fileName == "2")
 	{
-
+		_vText.push_back(L"1");
+		_vText.push_back(L"해냈구나, 레아!");
+		_vText.push_back(L"1");
+		_vText.push_back(L"생각했던 것보다 적응이 빠른데?");
+		_vText.push_back(L"2");
+		_vText.push_back(L"(끄덕)");
+		_vText.push_back(L"1");
+		_vText.push_back(L"통행권을 얻었으니 이제 필드로 \n이동할 수 있을 거야. 가 보자!");
+		//_vText.push_back(L"1");
 	}
 	lea = new portrait(0);
 	pro = new portrait(1);

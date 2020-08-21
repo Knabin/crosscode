@@ -239,6 +239,9 @@
     <ClCompile Include="foothold.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="townBlock.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -485,6 +488,9 @@
       <Filter>playGround\uiController</Filter>
     </ClInclude>
     <ClInclude Include="foothold.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="townBlock.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
     <ClInclude Include="flamethrower.h">

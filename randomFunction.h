@@ -26,7 +26,10 @@ public:
 	//정수와 정수 사이에 범위에서 랜덤한 수를 뽑게하는 함수
 	inline int getFromIntTo(int fromNum, int toNum)
 	{
-		return rand() % (toNum - fromNum) + fromNum;
+		if (toNum != 0)
+			return rand() % (toNum - fromNum) + fromNum;
+		else
+			return 0;
 	}
 
 	//=========================================

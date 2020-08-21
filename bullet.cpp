@@ -9,6 +9,7 @@ HRESULT bullet::init()
 	_alpha = 1.f;
 	_isAlpha = false;
 
+	_deleteBulletAngle = 0;
 	return S_OK;
 }
 
@@ -47,7 +48,6 @@ void bullet::render()
 		IMAGEMANAGER->addImage("player_bulletEffect", L"images/player/player_bulletEffect.png");
 		IMAGEMANAGER->findImage("player_bulletEffect")->setAlpha(_alpha);
 		IMAGEMANAGER->findImage("player_bulletEffect")->render(CAMERA->getRelativeVector2(_vPlayerBullet[i].rc.getCenter().x - 24, _vPlayerBullet[i].rc.getCenter().y - 23));
-
 		_vPlayerBullet[i].count++;
 		if (_vPlayerBullet[i].count % 5 == 0)
 		{
@@ -79,6 +79,10 @@ void bullet::fire(float x, float y, float angle, float speed)
 	bullet.rc.set(bullet.position, pivot::CENTER);
 	bullet.nomal = false;
 
+	POINT currentTileIndex = { x/ SIZE, y / SIZE };
+	tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x];
+	bullet.floor = ti->getOrderIndex();
+
 	_vPlayerBullet.push_back(bullet);
 }
 
@@ -99,6 +103,10 @@ void bullet::nomalFire(float x, float y, float angle, float speed)
 	bullet.rc.update(Vector2(0, 0), Vector2(24, 24), pivot::CENTER);
 	bullet.rc.set(bullet.position, pivot::CENTER);
 	bullet.nomal = true;
+
+	POINT currentTileIndex = { x / SIZE, y / SIZE };
+	tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[currentTileIndex.y][currentTileIndex.x];
+	bullet.floor = ti->getOrderIndex();
 
 	_vPlayerBullet.push_back(bullet);
 }
@@ -129,11 +137,17 @@ void bullet::remove(int arrNum)
 	_vPlayerBullet.erase(_vPlayerBullet.begin() + arrNum);
 }
 
+void bullet::removeEffect(float x, float y)
+{
+	
+	EFFECTMANAGER->play("player bulletRemoveEffect", CAMERA->getRelativeVector2(Vector2(x,y)), _deleteBulletAngle, 1);
+}
+
 void bullet::collision()
 {
 	for (int i = 0; i < _vPlayerBullet.size(); ++i)
 	{
-		
+	
 		POINT currentTileIndex = { _vPlayerBullet[i].position.x / SIZE, _vPlayerBullet[i].position.y / SIZE };
 		
 		_vPlayerBullet[i].next[0] = { currentTileIndex.x - 1, currentTileIndex.y - 1 };
@@ -177,7 +191,53 @@ void bullet::collision()
 			tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[_vPlayerBullet[i].next[k].y][_vPlayerBullet[i].next[k].x];
 			if (IntersectRect(&temp, &ti->getRect().getRect(), &_vPlayerBullet[i].rc.getRect()))
 			{
-				if (ti->getOrderIndex() > _vPlayerBullet[i]._nowOrder )
+				if (ti->getOrderIndex() > _vPlayerBullet[i]._nowOrder  && _vPlayerBullet[i].floor != 3)
+				{
+					if (_vPlayerBullet[i].nomal == true)
+					{
+						_deleteBulletAngle = getAngle(ti->getRect().getCenter().x, ti->getRect().getCenter().y,_vPlayerBullet[i].position.x, _vPlayerBullet[i].position.y) * 180 / PI;
+						removeEffect((temp.right + temp.left) * 0.5f, (temp.top + temp.bottom) * 0.5f);
+						_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+						break;
+					}
+
+					if (_vPlayerBullet[i].count >= 4)
+					{
+						_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+						break;
+					}
+					float d = getAngle(ti->getRect().getCenter().x, ti->getRect().getCenter().y, _vPlayerBullet[i].rc.getCenter().x, _vPlayerBullet[i].rc.getCenter().y);
+					if ((d >= 0 && d < PI / 4) || (d >= PI + PI / 4 * 3 && d < PI2))
+					{
+						_vPlayerBullet[i].position.x = _vPlayerBullet[i].rc.right +10;
+						_vPlayerBullet[i].angle -= PI;
+					}
+					else if (d >= PI / 4 && d < PI / 4 * 3)
+					{
+						_vPlayerBullet[i].angle = PI2 - _vPlayerBullet[i].angle;
+						_vPlayerBullet[i].position.y = _vPlayerBullet[i].rc.top - 10;
+					}
+					else if (d >= PI + PI / 4 && d < PI2 - PI / 4)
+					{
+						_vPlayerBullet[i].angle = PI2 - _vPlayerBullet[i].angle;
+						_vPlayerBullet[i].position.y = _vPlayerBullet[i].rc.bottom + 10;
+					}
+					else if ((d >= PI / 4 * 3 && d < PI + PI / 4))
+					{
+						_vPlayerBullet[i].position.x = _vPlayerBullet[i].rc.left - 10;
+						_vPlayerBullet[i].angle -= PI;
+					}
+
+					_vPlayerBullet[i].count++;
+					_vPlayerBullet[i].rc.set(_vPlayerBullet[i].position, pivot::CENTER);
+					
+
+					break;
+				}
+			}
+			if (IntersectRect(&temp, &ti->getRect().getRect(), &_vPlayerBullet[i].rc.getRect()))
+			{
+				if (ti->getOrderIndex() > _vPlayerBullet[i]._nowOrder  && _vPlayerBullet[i].floor != 3)
 				{
 					if (_vPlayerBullet[i].nomal == true)
 					{
@@ -215,6 +275,47 @@ void bullet::collision()
 					_vPlayerBullet[i].count++;
 					_vPlayerBullet[i].rc.set(_vPlayerBullet[i].position, pivot::CENTER);
 					
+
+					break;
+				}
+				else if (ti->getOrderIndex() == 6  && _vPlayerBullet[i].floor == 3)
+				{
+					if (_vPlayerBullet[i].nomal == true)
+					{
+						_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+						break;
+					}
+
+					if (_vPlayerBullet[i].count >= 4)
+					{
+						_vPlayerBullet.erase(_vPlayerBullet.begin() + i);
+						break;
+					}
+					float d = getAngle(ti->getRect().getCenter().x, ti->getRect().getCenter().y, _vPlayerBullet[i].rc.getCenter().x, _vPlayerBullet[i].rc.getCenter().y);
+					if ((d >= 0 && d < PI / 4) || (d >= PI + PI / 4 * 3 && d < PI2))
+					{
+						_vPlayerBullet[i].position.x = _vPlayerBullet[i].rc.right + 10;
+						_vPlayerBullet[i].angle -= PI;
+					}
+					else if (d >= PI / 4 && d < PI / 4 * 3)
+					{
+						_vPlayerBullet[i].angle = PI2 - _vPlayerBullet[i].angle;
+						_vPlayerBullet[i].position.y = _vPlayerBullet[i].rc.top - 10;
+					}
+					else if (d >= PI + PI / 4 && d < PI2 - PI / 4)
+					{
+						_vPlayerBullet[i].angle = PI2 - _vPlayerBullet[i].angle;
+						_vPlayerBullet[i].position.y = _vPlayerBullet[i].rc.bottom + 10;
+					}
+					else if ((d >= PI / 4 * 3 && d < PI + PI / 4))
+					{
+						_vPlayerBullet[i].position.x = _vPlayerBullet[i].rc.left - 10;
+						_vPlayerBullet[i].angle -= PI;
+					}
+
+					_vPlayerBullet[i].count++;
+					_vPlayerBullet[i].rc.set(_vPlayerBullet[i].position, pivot::CENTER);
+
 
 					break;
 				}

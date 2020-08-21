@@ -29,12 +29,12 @@ private:
 	Vector2 _mapSize;		// 맵의 크기
 	float _speed;			// 카메라 이동 속도
 
-	// 이벤트용 변수(미구현)
+	// 이벤트용 변수
 	float _moveTime;
 	float _stopTime;
 	float _worldTime;
 
-	// 카메라 셰이크용 변수(미구현)
+	// 카메라 셰이크용 변수
 	bool _isShake;
 	float _shakeAmount;
 	float _shakeTime;
@@ -49,6 +49,14 @@ private:
 	float _zoomAmount;
 	float _zoomTime;
 
+	// 페이드인/페이드아웃용 변수
+	bool _isFade;
+	float _fadeAmount;
+	float _nowFadeAmount;
+	float _fadeTime;
+	float _fadeNowTime;
+	float _fadeInOutChangeTime;
+
 	class gameObject* _target;	// 타겟팅될 게임 오브젝트
 
 public:
@@ -61,6 +69,7 @@ public:
 	void updateZoom();
 	void checkRect();
 	void updateRect();
+	void updateFade();
 
 	void setCameraMode(CAMERASTATE state) { _state = state; }
 
@@ -73,6 +82,7 @@ public:
 
 	void shakeStart(float amount, float time);
 	void zoomStart(float amount, float time, bool isZoomOutSmooth = FALSE);
+	void fadeStart(float amount, float time);
 
 	RECT getRelativeRect(RECT rc);
 	floatRect getRelativeRect(floatRect rc);
@@ -82,5 +92,11 @@ public:
 	RECT& getRect() { return _rc; }
 	bool getIsZoom() { return _isZoom; }
 	float getZoomAmount() { return _nowZoomAmount; }
+
+	bool getIsFade() { return _isFade; }
+
+	float getFadeAmount() { return _nowFadeAmount; }
+	bool getIsFadeOut() { return _fadeTime <= 0.0f; }
+
 };
 

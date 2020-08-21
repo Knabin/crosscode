@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "playerState.h"
 #include "player.h"
+#include "enemy.h"
 
 // =========================== 플레이어 아이들 =========================== //
 idleState::idleState(player * player)
@@ -1452,6 +1453,16 @@ rightattackState::~rightattackState()
 
 void rightattackState::enter()
 {
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			e->setEnemyCollision(false);
+		}
+	}
+
 	//cout << "rightattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 
@@ -1541,6 +1552,7 @@ void rightattackState::exit()
 	_right_top->stop();
 	_right->stop();
 	_right_bottom->stop();
+	_player->setAttackRC(0, 0);
 }
 
 // =========================== 플레이어 근거리 왼손공격 =========================== //
@@ -1610,6 +1622,15 @@ leftattackState::~leftattackState()
 
 void leftattackState::enter()
 {
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			e->setEnemyCollision(false);
+		}
+	}
 	//cout << "leftattackState enter()" << endl;
 	_player->setImage("p_meleeattack_left");
 
@@ -1699,11 +1720,13 @@ void leftattackState::exit()
 	_right_top->stop();
 	_right->stop();
 	_right_bottom->stop();
+	_player->setAttackRC(0, 0);
 }
 
 // =========================== 플레이어 근거리 마지막공격 =========================== //
 rightfinalattackState::rightfinalattackState(player * player)
 {
+	
 	_player = player;
 
 	int top[] = { 47,46,45,44,43,42,41,40,48,0,8 };
@@ -1770,6 +1793,15 @@ rightfinalattackState::~rightfinalattackState()
 
 void rightfinalattackState::enter()
 {
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			e->setEnemyCollision(false);
+		}
+	}
 	//cout << "rightfinalattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 
@@ -1859,6 +1891,7 @@ void rightfinalattackState::exit()
 	_right_top->stop();
 	_right->stop();
 	_right_bottom->stop();
+	_player->setAttackRC(0, 0);
 }
 
 longAttackIdleState::longAttackIdleState(player * player)
@@ -2007,7 +2040,6 @@ void longAttackIdleState::update()
 
 void longAttackIdleState::exit()
 {
-	//cout << "longAttackIdleState exit()" << endl;
 	_top->stop();
 	_right->stop();
 	_bottom->stop();
@@ -2085,8 +2117,6 @@ lethalchargeState::~lethalchargeState()
 
 void lethalchargeState::enter()
 {
-	_player->setImage("player charge");
-
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -2230,8 +2260,6 @@ lethalattackState::~lethalattackState()
 
 void lethalattackState::enter()
 {
-	_player->setImage("p_meleeattack_right");
-
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -2302,12 +2330,164 @@ void lethalattackState::update()
 	default:
 		break;
 	}
-	_player->playerfinalattackMove();
+	_player->playerLethalattackMove();
 	//if (!_player->getAnimation()->isPlay()) _player->getAnimation()->start();
 	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
 }
 
 void lethalattackState::exit()
+{
+	_top->stop();
+	_right->stop();
+	_bottom->stop();
+	_left->stop();
+	_right_top->stop();
+	_left_top->stop();
+	_right_bottom->stop();
+	_left_bottom->stop();
+	_player->setAttackRC(0, 0);
+}
+
+beAttackedState::beAttackedState(player * player)
+{
+	_player = player;
+
+	int top[] = { 0,1 };
+	_top = new animation;
+	_top->init(192, 768, 96, 96);
+	_top->setPlayFrame(top, 2, false);
+	_top->setFPS(1);
+
+	int rtop[] = { 2,3 };
+	_right_top = new animation;
+	_right_top->init(192, 768, 96, 96);
+	_right_top->setPlayFrame(rtop, 2, false);
+	_right_top->setFPS(1);
+
+	int right[] = { 4,5 };
+	_right = new animation;
+	_right->init(192, 768, 96, 96);
+	_right->setPlayFrame(right, 2, false);
+	_right->setFPS(1);
+
+	int rbottom[] = { 6,7 };
+	_right_bottom = new animation;
+	_right_bottom->init(192, 768, 96, 96);
+	_right_bottom->setPlayFrame(rbottom, 2, false);
+	_right_bottom->setFPS(1);
+
+	int bottom[] = { 8,9 };
+	_bottom = new animation;
+	_bottom->init(192, 768, 96, 96);
+	_bottom->setPlayFrame(bottom, 2, false);
+	_bottom->setFPS(1);
+
+	int ltop[] = { 10,11 };
+	_left_top = new animation;
+	_left_top->init(192, 768, 96, 96);
+	_left_top->setPlayFrame(ltop, 2, false);
+	_left_top->setFPS(1);
+
+	int left[] = { 12,13 };
+	_left = new animation;
+	_left->init(192, 768, 96, 96);
+	_left->setPlayFrame(left, 2, false);
+	_left->setFPS(1);
+
+	int lbottom[] = { 13,14 };
+	_left_bottom = new animation;
+	_left_bottom->init(192, 768, 96, 96);
+	_left_bottom->setPlayFrame(lbottom, 2, false);
+	_left_bottom->setFPS(1);
+}
+
+beAttackedState::~beAttackedState()
+{
+	SAFE_DELETE(_top);
+	SAFE_DELETE(_left_top);
+	SAFE_DELETE(_left);
+	SAFE_DELETE(_left_bottom);
+	SAFE_DELETE(_bottom);
+	SAFE_DELETE(_right_bottom);
+	SAFE_DELETE(_right);
+	SAFE_DELETE(_right_top);
+}
+
+void beAttackedState::enter()
+{
+	_player->setImage("player beAttacked");
+
+	switch (_player->getDirection())
+	{
+	case PLAYERDIRECTION::TOP:
+		_player->setAnimation(_top);
+		_top->start();
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		_player->setAnimation(_right_top);
+		_right_top->start();
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		_player->setAnimation(_right);
+		_right->start();
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		_player->setAnimation(_right_bottom);
+		_right_bottom->start();
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		_player->setAnimation(_bottom);
+		_bottom->start();
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		_player->setAnimation(_left_top);
+		_left_top->start();
+		break;
+	case PLAYERDIRECTION::LEFT:
+		_player->setAnimation(_left);
+		_left->start();
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		_player->setAnimation(_left_bottom);
+		_left_bottom->start();
+		break;
+	}
+}
+
+void beAttackedState::update()
+{
+	switch (_player->getDirection())
+	{
+	case PLAYERDIRECTION::TOP:
+		_player->setAnimation(_top);
+		break;
+	case PLAYERDIRECTION::RIGHT_TOP:
+		_player->setAnimation(_right_top);
+		break;
+	case PLAYERDIRECTION::RIGHT:
+		_player->setAnimation(_right);
+		break;
+	case PLAYERDIRECTION::RIGHT_BOTTOM:
+		_player->setAnimation(_right_bottom);
+		break;
+	case PLAYERDIRECTION::BOTTOM:
+		_player->setAnimation(_bottom);
+		break;
+	case PLAYERDIRECTION::LEFT_TOP:
+		_player->setAnimation(_left_top);
+		break;
+	case PLAYERDIRECTION::LEFT:
+		_player->setAnimation(_left);
+		break;
+	case PLAYERDIRECTION::LEFT_BOTTOM:
+		_player->setAnimation(_left_bottom);
+		break;
+	}
+	//if (!_player->getAnimation()->isPlay()) _player->getAnimation()->start();
+	_player->getAnimation()->frameUpdate(TIMEMANAGER->getElapsedTime() * 10);
+}
+
+void beAttackedState::exit()
 {
 	_top->stop();
 	_right->stop();

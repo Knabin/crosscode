@@ -10,19 +10,20 @@ HRESULT inventory::init()
 	getItem(L"ÆÈ", 2);
 	getItem(L"ÆÈ", 3);
 	getItem(L"ÆÈ", 4);
+	getItem(L"ÆÈ", 4);
 	getItem(L"ÆÈ", 5);
 
 	getItem(L"¼Ò¸ð", 0);
 
-	getItem(L"Áß¿ä", 2);
+	getItem(L"Áß¿ä", 0);
 	getItem(L"¸Ó¸®", 0);
 	getItem(L"´Ù¸®", 0);
 	getItem(L"¸öÅë", 0); getItem(L"¸öÅë", 1);
 	getItem(L"°Å·¡", 0);
 	getItem(L"°Å·¡", 0);
-	getItem(L"°Å·¡", 4);
-	getItem(L"°Å·¡", 100);
-	getItem(L"°Å·¡", 10);
+	getItem(L"°Å·¡", 1);
+	getItem(L"°Å·¡", 2);
+	getItem(L"°Å·¡", 3);
 
 	return S_OK;
 }

@@ -39,6 +39,7 @@ void camera::update()
 	}
 
 	updateZoom();
+	updateFade();
 }
 
 void camera::release()
@@ -156,6 +157,27 @@ void camera::updateRect()
 	_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX / _nowZoomAmount, WINSIZEY / _nowZoomAmount);
 }
 
+void camera::updateFade()
+{
+	if (_isFade)
+	{
+		if (_fadeTime > 0.0f)
+		{
+			_fadeTime -= TIMEMANAGER->getElapsedTime();
+			
+			if (_nowFadeAmount >= _fadeAmount)
+				_nowFadeAmount = _fadeAmount;
+			else _nowFadeAmount += 0.02f;
+		}
+		else
+		{
+			_nowFadeAmount -= 0.02f;
+			if (_nowFadeAmount <= 0.0f)
+				_isFade = false;
+		}
+	}
+}
+
 void camera::changeTarget(gameObject* gameObject)
 {
 	_target = gameObject;
@@ -178,6 +200,14 @@ void camera::zoomStart(float amount, float time, bool isZoomOutSmooth)
 	_zoomTime = time;
 	_isZoom = true;
 	_isZoomOutSmooth = isZoomOutSmooth;
+}
+
+void camera::fadeStart(float amount, float time)
+{
+	_nowFadeAmount = 0.0f;
+	_fadeAmount = 1.0f;
+	_fadeTime = time;
+	_isFade = true;
 }
 
 RECT camera::getRelativeRect(RECT rc)

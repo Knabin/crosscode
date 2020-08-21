@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "mountainScene.h"
+#include "iEvent.h"
 
 mountainScene::~mountainScene()
 {
@@ -36,10 +37,10 @@ HRESULT mountainScene::init()
 	}
 
 	_prevScene = "town";
-	_prevPoint = Vector2((_maxX - 1) * SIZE, 1680);
+	_prevPoint = Vector2((_maxX - 1) * SIZE, 1650);
 
 	_nextScene = "boss";
-	_nextPoint = Vector2(50, 1700);
+	_nextPoint = Vector2(450, 1100);
 
 	return S_OK;
 }
@@ -52,14 +53,20 @@ void mountainScene::update()
 {
 	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
 	{
-		SCENEMANAGER->loadScene(_prevScene);
-		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(200, 1700));
+		if (!EVENTMANAGER->isPlayingEvent())
+		{
+			iMoveScene* m = new iMoveScene("town", Vector2(200, 1700));
+			EVENTMANAGER->addEvent(m);
+		}
 	}
 
 	if (getDistance(_nextPoint.x, _nextPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
 	{
-		SCENEMANAGER->loadScene(_nextScene);
-		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(76 * SIZE, 34 * SIZE));
+		if (!EVENTMANAGER->isPlayingEvent())
+		{
+			iMoveScene* m = new iMoveScene("boss", Vector2(1070, 1850));
+			EVENTMANAGER->addEvent(m);
+		}
 	}
 }
 
