@@ -149,7 +149,7 @@ HRESULT player::init()
 	 _pLevel = 1;
 
 	 _pDef = 0;
-	 _pCrt = 0;
+	 _pCrt = 5;
 	 _pfR  =0;
 	 _pIR = 0;
 	 _pER = 0;
@@ -654,7 +654,6 @@ void player::update()
 		playerLethalattack();
 	}
 
-
 	if (_pSp == 0 && _pSpcharge < 200 && (_state->getState() == _vState[IDLE] || _state->getState() == _vState[MOVE]))
 	{
 		_pSpcharge++;
@@ -677,8 +676,7 @@ void player::update()
 
 	
 	_attackPower = _pAtk + RND->getFromIntTo(0, _pCrt);
-
-	_rc.set(_position, pivot::CENTER);
+	_rc = RectMakePivot(_position, Vector2(_width, _height), _pivot);
 }
 
 void player::render()

@@ -12,7 +12,7 @@ private:
 	int interW, interH;
 
 	bool _pushOut;
-
+	int _damaged;
 public:
 	collisionManager() {};
 	~collisionManager() {};
@@ -30,5 +30,6 @@ public:
 
 	void enemyCollision();
 	void bulletCollision();
+
 };
 
