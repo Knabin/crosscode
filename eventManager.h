@@ -13,6 +13,7 @@ private:
 	~eventManager();
 
 	bool _firstEvent;
+	bool _puzzleEvent;
 
 public:
 	queue<class iEvent*> _mEventQueue;
@@ -23,5 +24,8 @@ public:
 
 	void setFirstEvent(bool firstEvent) { _firstEvent = firstEvent; }
 	bool getFirstEvent() { return _firstEvent; }
+
+	void setPuzzleEvent(bool puzzleEvent) { _puzzleEvent = puzzleEvent; }
+	bool getPuzzleEvent() { return _puzzleEvent; }
 };
 

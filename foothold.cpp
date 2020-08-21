@@ -7,6 +7,8 @@ HRESULT foothold::init()
 	_image = IMAGEMANAGER->addFrameImage("foothold", L"images/object/foothold.png", 3, 1);
 	_isOn = true;
 	_isStepOn = false;
+	_count = 0;
+
 	return S_OK;
 }
 
@@ -19,10 +21,14 @@ void foothold::update()
 	if (isCollision(_rc, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getRect()))
 	{
 		_isStepOn = true;
+		_count++;
 		// 만약 아이템을 못 먹었으면 아이템 먹는 처리
 	}
 	else
+	{
 		_isStepOn = false;
+		_count = 0;
+	}
 }
 
 void foothold::render()

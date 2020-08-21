@@ -58,7 +58,7 @@ iDialog::iDialog(dialog * dialog)
 
 void iDialog::eventStart()
 {
-	_dialog->loadText("1");
+	_dialog->loadText();
 	_dialog->next();
 }
 
@@ -106,5 +106,29 @@ bool iPlayerMove::eventUpdate()
 		return true;
 	}
 
+	return false;
+}
+
+iMoveScene::iMoveScene(string sceneName, Vector2 location)
+	:_sceneName(sceneName), _location(location)
+{
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+}
+
+void iMoveScene::eventStart()
+{
+	CAMERA->fadeStart(1.f, 1.5f);
+}
+
+bool iMoveScene::eventUpdate()
+{
+	if (CAMERA->getIsFadeOut())
+	{
+		SCENEMANAGER->loadScene(_sceneName);
+		_player->setPosition(_location);
+		_player->setDirection(PLAYERDIRECTION::BOTTOM);
+		_player->setState(PLAYERSTATE::IDLE);
+		return true;
+	}
 	return false;
 }
