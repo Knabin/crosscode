@@ -1452,7 +1452,7 @@ rightattackState::~rightattackState()
 
 void rightattackState::enter()
 {
-	cout << "rightattackState enter()" << endl;
+	//cout << "rightattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 
 	switch (_player->getDirection())
@@ -1532,7 +1532,7 @@ void rightattackState::update()
 
 void rightattackState::exit()
 {
-	cout << "rightattackState exit()" << endl;
+	//cout << "rightattackState exit()" << endl;
 	_top->stop();
 	_left_top->stop();
 	_left->stop();

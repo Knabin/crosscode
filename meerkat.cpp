@@ -225,6 +225,7 @@ void meerkat::update()
 			}
 		}
 	}
+	cout << "¹Ì¾îÄ¹ : " << _currentHP << endl;
 }
 
 void meerkat::render()
