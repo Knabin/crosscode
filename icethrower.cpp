@@ -11,6 +11,8 @@ icethrower::~icethrower()
 
 HRESULT icethrower::init(float centerX, float centerY)
 {
+	_name = "icethrower";
+
 	_angle = PI2;
 	_angle2 = PI2;
 	_center.x = centerX;
@@ -94,6 +96,7 @@ void icethrower::render()
 			
 		}
 		
+		/*
 		if (_viIcethrower->_fireStart && _angle >= PI - (PI / 8))
 		{
 			IMAGEMANAGER->findImage("얼음이펙트")->setAngle(_angle2);
@@ -109,8 +112,9 @@ void icethrower::render()
 				_iceEffectFrameX, _iceEffectFrameY);
 
 			//IMAGEMANAGER->findImage("얼음충돌")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIcethrower->_x, _viIcethrower->_y)), _collisionFrameX, _collisionFrameY);
-
+			
 		}
+	*/
 	}
 }
 

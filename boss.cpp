@@ -11,6 +11,26 @@ boss::~boss()
 
 HRESULT boss::init()
 {
+	_icethrower = new icethrower;
+	_icethrower->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 1150);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _icethrower);
+
+	_mine = new mine;
+	_mine->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 550);
+
+	_stoneshower = new stoneshower;
+	_stoneshower->init(WINSIZEX / 2 - 85 + 215, WINSIZEY / 2 - 675 - 499);
+
+	_flamethrower = new flamethrower;
+	_flamethrower->init(WINSIZEX / 2 - 85 + 385, WINSIZEY / 2 - 675 + 1025);
+
+	_iceguide = new iceguide;
+	_iceguide->init(WINSIZEX / 2 - 85 + 185, WINSIZEY / 2 - 675 + 1125);
+
+	_name = "boss";
+
+
 	// ±âº» yÃàWINSIZEY / 2 - 675
 	bossInitialization();
 
@@ -153,20 +173,8 @@ HRESULT boss::init()
 	}
 
 	//================================================================================================================================================================//
-	_icethrower = new icethrower;
-	_icethrower->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 1150);
 
-	_mine = new mine;
-	_mine->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 550);
 
-	_stoneshower = new stoneshower;
-	_stoneshower->init(WINSIZEX / 2 - 85 + 215, WINSIZEY / 2 - 675 - 499);
-
-	_flamethrower = new flamethrower;
-	_flamethrower->init(WINSIZEX / 2 - 85 + 385, WINSIZEY / 2 - 675 + 1025);
-
-	_iceguide = new iceguide;
-	_iceguide->init(WINSIZEX / 2 - 85 + 185, WINSIZEY / 2 - 675 + 1125);
 
 	return S_OK;
 }
@@ -177,6 +185,8 @@ void boss::release()
 
 void boss::update()
 {
+
+
 
 	_frameCount++;
 
@@ -190,7 +200,7 @@ void boss::update()
 
 	//================================================================================================================================================================//
 
-	_icethrower->update();
+	//_icethrower->update();
 
 	_mine->update();
 
@@ -205,7 +215,7 @@ void boss::update()
 void boss::render()
 {
 
-	_icethrower->render();
+	//_icethrower->render();
 
 	_iceguide->render();
 

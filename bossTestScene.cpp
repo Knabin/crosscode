@@ -21,7 +21,9 @@ HRESULT bossTestScene::init()
 
 	_boss = new boss;
 	_boss->init();
+
 	OBJECTMANAGER->addObject(objectType::BOSS, _boss);
+
 
 	if (_vTiles.size() != 0)
 	{
@@ -69,6 +71,7 @@ void bossTestScene::release()
 
 void bossTestScene::update()
 {
+
 }
 
 void bossTestScene::render()
