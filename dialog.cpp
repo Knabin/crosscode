@@ -66,7 +66,7 @@ void dialog::loadText()
 		_vText.push_back(L"1");
 		_vText.push_back(L"멋진걸!");
 		_vText.push_back(L"1");
-		_vText.push_back(L"이미 알고 있겠지만,\nW A S D 키로 이동할 수 있어.");
+		_vText.push_back(L"W A S D 키로 이동할 수 있어.\n이미 알고 있을 수도 있지만.");
 		_vText.push_back(L"1");
 		_vText.push_back(L"공격은 마우스 클릭을 누르면 돼!");
 		_vText.push_back(L"2");
@@ -93,7 +93,7 @@ void dialog::loadText()
 		_vText.push_back(L"2");
 		_vText.push_back(L"(끄덕)");
 		_vText.push_back(L"1");
-		_vText.push_back(L"이제 막혀 있던 필드로 이동할 수 있어.");
+		_vText.push_back(L"통행권을 얻었으니 이제 필드로 \n이동할 수 있을 거야. 가 보자!");
 		//_vText.push_back(L"1");
 	}
 	lea = new portrait(0);

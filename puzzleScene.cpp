@@ -56,8 +56,11 @@ void puzzleScene::update()
 {
 	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
 	{
-		SCENEMANAGER->loadScene(_prevScene);
-		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 33 * SIZE));
+		if (!EVENTMANAGER->isPlayingEvent())
+		{
+			iMoveScene* m = new iMoveScene("town", Vector2(1730, 300));
+			EVENTMANAGER->addEvent(m);
+		}
 	}
 	else if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 200)
 	{
@@ -73,13 +76,11 @@ void puzzleScene::update()
 			if (!EVENTMANAGER->getPuzzleEvent())
 			{
 				iDialog* d = new iDialog(new dialog("2"));
-				iMoveScene* m = new iMoveScene("town", Vector2(1750, 300));
+				iMoveScene* m = new iMoveScene("town", Vector2(1730, 300));
 				EVENTMANAGER->addEvent(d);
 				EVENTMANAGER->addEvent(m);
 				EVENTMANAGER->setPuzzleEvent(true);
 			}
-			//SCENEMANAGER->loadScene(_nextScene);
-			//OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((float)76 * SIZE, 34.5f * SIZE));
 		}
 	}
 }
