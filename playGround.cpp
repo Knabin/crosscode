@@ -133,6 +133,7 @@ void playGround::render()
 		EFFECTMANAGER->render();
 		OBJECTMANAGER->render();
 		TIMEMANAGER->render();
+		_collisionManager->render();
 		_ui->render();
 		//_enemyManager->render();
 

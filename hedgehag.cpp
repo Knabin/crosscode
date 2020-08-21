@@ -808,7 +808,7 @@ bool hedgehag::tileMove()
 
 void hedgehag::animationControl()
 {
-	_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);
+	//_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);
 	switch (_enemyDirection)
 	{
 	case ENEMY_LEFT_IDLE:
