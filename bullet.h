@@ -11,6 +11,11 @@ struct tagPlayerBullet
 	float speed;
 	int currentFrameX, currentFrameY;
 	int count;
+	POINT next[8];
+	int _nowOrder;
+	bool nomal;
+
+
 };
 
 class bullet : public gameObject
@@ -22,6 +27,9 @@ private:
 	float _range;
 	float _alpha;
 	bool _isAlpha;
+
+	
+	
 
 public:
 	bullet() {};
@@ -36,6 +44,8 @@ public:
 	void nomalFire(float x, float y, float angle,float speed);
 	void move();
 	void remove(int arrNum);
+
+	void collision();
 	
 	vector<tagPlayerBullet> getVPlayerBullet() { return _vPlayerBullet; }
 	vector<tagPlayerBullet>::iterator getViPlayerBullet() { return _viPlayerBullet; }

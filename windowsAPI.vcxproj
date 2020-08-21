@@ -49,7 +49,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -138,6 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\ppoxx\Desktop\crosscode-d2d ver\map;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +161,8 @@
     <ClInclude Include="collisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="D2DRenderer.h" />
+    <ClInclude Include="dialog.h" />
+    <ClInclude Include="dialogText.h" />
     <ClInclude Include="door.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
@@ -170,9 +173,11 @@
     <ClInclude Include="floatCircle.h" />
     <ClInclude Include="floatPoint.h" />
     <ClInclude Include="floatRect.h" />
+    <ClInclude Include="foothold.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="hedgehag.h" />
+    <ClInclude Include="iceguide.h" />
     <ClInclude Include="icethrower.h" />
     <ClInclude Include="iEvent.h" />
     <ClInclude Include="image.h" />
@@ -181,19 +186,18 @@
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="keyManager.h" />
-    <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="meerkat.h" />
     <ClInclude Include="mine.h" />
     <ClInclude Include="mountainScene.h" />
-    <ClInclude Include="mine.h" />
     <ClInclude Include="nomalUI.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
     <ClInclude Include="playerStateController.h" />
     <ClInclude Include="playGround.h" />
+    <ClInclude Include="portrait.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="puzzleBlueWall.h" />
     <ClInclude Include="puzzleComboButton.h" />
@@ -205,6 +209,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="shop.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stoneshower.h" />
@@ -239,6 +244,8 @@
     <ClCompile Include="collisionManager.cpp" />
     <ClCompile Include="D2DRenderer+Draw.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
+    <ClCompile Include="dialog.cpp" />
+    <ClCompile Include="dialogText.cpp" />
     <ClCompile Include="door.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
@@ -249,9 +256,11 @@
     <ClCompile Include="floatCircle.cpp" />
     <ClCompile Include="floatPoint.cpp" />
     <ClCompile Include="floatRect.cpp" />
+    <ClCompile Include="foothold.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="hedgehag.cpp" />
+    <ClCompile Include="iceguide.cpp" />
     <ClCompile Include="icethrower.cpp" />
     <ClCompile Include="iEvent.cpp" />
     <ClCompile Include="image.cpp" />
@@ -260,19 +269,18 @@
     <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyManager.cpp" />
-    <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="meerkat.cpp" />
     <ClCompile Include="mine.cpp" />
     <ClCompile Include="mountainScene.cpp" />
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="nomalUI.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerState.cpp" />
     <ClCompile Include="playerStateController.cpp" />
     <ClCompile Include="playGround.cpp" />
+    <ClCompile Include="portrait.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="puzzleBlueWall.cpp" />
     <ClCompile Include="puzzleComboButton.cpp" />
@@ -282,6 +290,7 @@
     <ClCompile Include="puzzleTabButton.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="shop.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

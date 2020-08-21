@@ -4,6 +4,7 @@
 #include "mine.h"
 #include "stoneshower.h"
 #include "flamethrower.h"
+#include "iceguide.h"
 
 enum bossState //보스 상태패턴 enum문
 {
@@ -30,7 +31,12 @@ enum bossState //보스 상태패턴 enum문
 	FLAMETHROWER,
 	FLAMETHROWER_END,
 	FLAMETHROWER_END2,
-	FLAMETHROWER_END3
+	FLAMETHROWER_END3,
+	ICEGUIDE_READY,
+	ICEGUIDE_READY2,
+	ICEGUIDE,
+	ICEGUIDE_END
+
 };
 struct tagBossPart  //보스 파츠별 구조체
 {
@@ -68,6 +74,7 @@ private:
 	mine* _mine;
 	stoneshower* _stoneshower;
 	flamethrower* _flamethrower;
+	iceguide* _iceguide;
 
 	image* image;
 	bossState _bossState;		//상태 패턴
@@ -80,6 +87,7 @@ private:
 	tagBossPart _LeftHand;		//왼손
 	tagBossPart _RightHand;		//오른손
 
+
 	tagBossPart _Bottom;		//바텀
 
 	//보스 전신 프레임
@@ -91,6 +99,11 @@ private:
 	int _bossRightHandAttackFrameX2, _bossRightHandAttackFrameY2;
 	int _bossLeftHandMoveFrameX, _bossLeftHandMoveFrameY;
 	int _bossLeftHandMoveFrameX2, _bossLeftHandMoveFrameY2;
+	int _bossLeftHandAttackFrameX2, _bossLeftHandAttackFrameY2;
+
+	int _centerMoveFrameX, _centerMoveFrameY;
+	int _centerFrameCount;
+	int _centerCurrentFrameX, _centerCurrentFrameY;
 
 	//보스 방어막 프레임
 	int _protectCurrentFrameX, _protectCurrentFrameY;
@@ -101,7 +114,7 @@ private:
 
 	int _chargeCount; //충전할때의 카운트
 
-	int _randomAttackCount;  // 어떤 공격을 할까나~~??
+	int _stopCount;  // 잠시 멈춰있을때 카운트
 
 
 	//움직임 딜레이
@@ -118,6 +131,12 @@ private:
 
 	//화염방사 공격 딜레이
 	int _flamethrowerDelay;
+
+	//뾰족얼음 공격 딜레이
+	int _iceguideDelay;
+
+
+	bool _attack1, _attack2, _attack3, _attack4, _attack5;
 
 public:
 

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "objectManager.h"
 #include "gameObject.h"
+#include "tile.h"
+#include "player.h"
 
 objectManager::objectManager()
 {
@@ -83,30 +85,6 @@ void objectManager::update(objectType type)
 
 void objectManager::render()
 {
-	/*
-	objectContainerIter iter = _mObjectContainer.begin();
-	for (; iter != _mObjectContainer.end(); ++iter)
-	{
-		vector<gameObject*>& objectList = iter->second;
-		// UI는 uiController에서 상대 좌표 기준으로 render하기 때문에 하므로 continue 처리합니다.
-		if (iter->first == objectType::UI) continue;
-		else if (iter->first == objectType::TILEOBJECT)
-		{
-			for (int i = 0; i < objectList.size(); ++i)
-			{
-				if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::MAPOBJECT, "player")->getRect().bottom)
-					objectList[i]->render();
-			}
-		}
-		else
-		{
-			for (int i = 0; i < objectList.size(); ++i)
-			{
-				if (objectList[i]->getIsActive())
-					objectList[i]->render();
-			}
-		}
-	}*/
 	for (int i = 0; i < _vZOrderRender.size(); ++i)
 	{
 		if (!_vZOrderRender[i]->getIsAlive()) continue;
@@ -116,7 +94,14 @@ void objectManager::render()
 	vector<gameObject*>& objectList = _mObjectContainer.find(objectType::TILEOBJECT)->second;
 	for (int i = 0; i < objectList.size(); ++i)
 	{
-		if (objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y)
+		if (objectList[i]->getRect().right < CAMERA->getRect().left ||
+			objectList[i]->getRect().left > CAMERA->getRect().right ||
+			objectList[i]->getRect().top > CAMERA->getRect().bottom ||
+			objectList[i]->getRect().bottom < CAMERA->getRect().top) continue;
+		if (dynamic_cast<tile*>(objectList[i])->getOrderIndex() > 
+			dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder() &&
+				dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder() != 3 &&
+			objectList[i]->getRect().bottom > OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y)
 			objectList[i]->render();
 	}
 }
@@ -162,22 +147,6 @@ void objectManager::removeObjectsWithoutPlayer()
 	}
 
 	_vZOrderRender.clear();
-
-	//objectContainerIter iter = _mObjectContainer.begin();
-	//for (; iter != _mObjectContainer.end(); ++iter)
-	//{
-	//	vector<gameObject*>::iterator viter = iter->second.begin();
-	//	if (iter->first == objectType::UI) continue;
-	//	for (; viter != iter->second.end(); )
-	//	{
-	//		if ((*viter)->getName() != "player")
-	//		{
-	//			(*viter)->setIsActive(false);
-	//		}
-	//		else viter++;
-	//	}
-	//}
-
 }
 
 gameObject * objectManager::findObject(objectType type, string objectName)

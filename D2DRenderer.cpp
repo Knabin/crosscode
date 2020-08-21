@@ -11,6 +11,7 @@ D2DRenderer::D2DRenderer()
 	this->CreateRenderTarget();
 	this->CreateDefaultBrush();
 	this->AddTextFormat(L"¸¼Àº°íµñ");
+	this->AddTextBoldFormat(L"¸¼Àº°íµñBold");
 	mD2DRenderTarget->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 }
 
@@ -163,4 +164,25 @@ void D2DRenderer::AddTextFormat(const wstring& font, const float& defaultSize)
 	this->mFontList.insert(make_pair(font, format));
 }
 
+void D2DRenderer::AddTextBoldFormat(const wstring& font, const float& defaultSize)
+{
+	HRESULT hr;
+	IDWriteTextFormat* format = NULL;
+
+	hr = this->mDWFactory->CreateTextFormat(
+		font.c_str(),
+		NULL,
+		DWRITE_FONT_WEIGHT_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		defaultSize,
+		L"ko",
+		&format
+	);
+#ifdef _DEBUG
+	assert(SUCCEEDED(hr));
+#endif
+
+	this->mFontList.insert(make_pair(font, format));
+}
 

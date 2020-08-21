@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "buffalo.h"
 #include "scene.h"
+#include "player.h"
 
 HRESULT buffalo::init()
 {
@@ -271,57 +272,58 @@ void buffalo::update()
 {
 	tileGet();//버팔로 타일 검출 업데이트
 	move();//버팔로 무브
+	mapOutCollision();//에너미가 맵밖으로 벗어나는걸 방지하기 위한 함수
 	animationControl();//변경된 디렉션 상태값에 따라 애니메이션 실행
-	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 5);//버팔로 애니메이션 업데이트
+	_enemyMotion->frameUpdate(TIMEMANAGER->getElapsedTime() * 7);//버팔로 애니메이션 업데이트
 	angry();//버팔로의 체력이 절반이하가 되면 능력치 상승(스피드, 공격속도, 공격력)
 
 	if (_enemyDirection == ENEMY_UP_LEFT_ATTACK || _enemyDirection == ENEMY_UP_RIGHT_ATTACK || _enemyDirection == ENEMY_LEFT_ATTACK || _enemyDirection == ENEMY_RIGHT_ATTACK ||
 		_enemyDirection == ENEMY_DOWN_LEFT_ATTACK || _enemyDirection == ENEMY_DOWN_RIGHT_ATTACK)
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x, CAMERA->getRelativeVector2(_position).y + 40);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 40, CAMERA->getRelativeVector2(_position).y + 40);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 40, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
 	}
 
 	if (_enemyDirection == ENEMY_UP_LEFT_MELEE_ATTACK)
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y - 30);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 25, CAMERA->getRelativeVector2(_position).y - 30);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y - 5);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y - 30), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 25, CAMERA->getRelativeVector2(_position).y - 30), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y - 5), 0, 0.5f);
 	}
 
 	if (_enemyDirection == ENEMY_UP_RIGHT_MELEE_ATTACK)
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y - 30);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 45, CAMERA->getRelativeVector2(_position).y - 30);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y - 5);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y - 30), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 45, CAMERA->getRelativeVector2(_position).y - 30), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 70, CAMERA->getRelativeVector2(_position).y - 5), 0, 0.5f);
 	}
 
 	if (_enemyDirection == ENEMY_LEFT_MELEE_ATTACK)
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y + 40);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y + 80);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 50, CAMERA->getRelativeVector2(_position).y + 80), 0, 0.5f);
 	}
 
 	if (_enemyDirection == ENEMY_RIGHT_MELEE_ATTACK)
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 40);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 100, CAMERA->getRelativeVector2(_position).y + 80), 0, 0.5f);
 	}
 
 	if (_enemyDirection == ENEMY_DOWN_LEFT_MELEE_ATTACK)
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 40, CAMERA->getRelativeVector2(_position).y + 100);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 15, CAMERA->getRelativeVector2(_position).y + 100);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x - 40, CAMERA->getRelativeVector2(_position).y + 75);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 40, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 15, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x - 40, CAMERA->getRelativeVector2(_position).y + 75), 0, 0.5f);
 	}
 
 	if (_enemyDirection == ENEMY_DOWN_RIGHT_MELEE_ATTACK)
 	{
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 100);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100);
-		EFFECTMANAGER->play("enemyHedgehogDust", CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
+		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75), 0, 0.5f);
 	}
 }
 
@@ -344,6 +346,7 @@ void buffalo::move()
 {
 	_playerX = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x;
 	_playerY = OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y;
+	int playerNowOrder = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"))->getNowOrder();
 
 	_distance = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
 	_angle = getAngle(_rc.getCenter().x, _rc.getCenter().y, _playerX, _playerY);
@@ -373,7 +376,7 @@ void buffalo::move()
 				_enemyDirection != ENEMY_DOWN_LEFT_ATTACK &&
 				_enemyDirection != ENEMY_DOWN_RIGHT_ATTACK)
 			{
-				if (_move.size() != NULL)
+				if (_move.size() != NULL && playerNowOrder == 1)
 				{
 					d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
 						_move[_move.size() - 1]->getRect().getCenter().y);
@@ -419,12 +422,12 @@ void buffalo::move()
 					}
 				}
 			}
-			else if (_distanceChange && _distance > 200 && !_isAttack && !_wallCollision)
+			else if (_distanceChange && _distance > 200 && !_isAttack && !_wallCollision && playerNowOrder == 1)
 			{
 				_attackDelay++;
 			}
 
-			if (_attackDelay >= _maxAttackDelay && !_isAttack && !_wallCollision)
+			if (_attackDelay >= _maxAttackDelay && !_isAttack && !_wallCollision && playerNowOrder == 1)
 			{
 				_angleSave = _angle;
 				_playerSaveX = _playerX;
@@ -484,13 +487,10 @@ void buffalo::move()
 				}
 				else//장애물에 부딪혔으면
 				{
+					_wallCollision = true;
 					_isAttack = false;
 				}
 				_attackRC.update(Vector2(0, 0), Vector2(100, 100), pivot::CENTER);
-			}
-			else if (!tileMove())
-			{
-				_wallCollision = true;
 			}
 
 			if (_wallCollision)
@@ -1328,7 +1328,7 @@ void buffalo::animationControl()
 
 void buffalo::tileGet()
 {
-	vector<vector<tile*>> _vTilesSave = SCENEMANAGER->getCurrentScene()->getTiles();
+	//vector<vector<tile*>> _vTilesSave = SCENEMANAGER->getCurrentScene()->getTiles();
 
 	_tile.set(Vector2(((int)_position.x / SIZE) * SIZE, ((int)(_rc.bottom + 10 - SIZE * 0.5f) / SIZE) * SIZE), pivot::LEFTTOP);
 
@@ -1385,21 +1385,57 @@ void buffalo::tileGet()
 	else if (nextTileIndex[0].x < 0) nextTileIndex[0].x = 0;
 	if (nextTileIndex[0].y > maxTileY) nextTileIndex[0].y = maxTileY;
 	else if (nextTileIndex[0].y < 0) nextTileIndex[0].y = 0;
-	_t[0] = _vTilesSave[nextTileIndex[0].y][nextTileIndex[0].x];
+	_t[0] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[0].y][nextTileIndex[0].x];
+	//_t[0] = _vTilesSave[nextTileIndex[0].y][nextTileIndex[0].x];
 
 	//다음 타일
 	if (nextTileIndex[1].x > maxTileX) nextTileIndex[1].x = maxTileX;
 	else if (nextTileIndex[1].x < 0) nextTileIndex[1].x = 0;
 	if (nextTileIndex[1].y > maxTileY) nextTileIndex[1].y = maxTileY;
 	else if (nextTileIndex[1].y < 0) nextTileIndex[1].y = 0;
-	_t[1] = _vTilesSave[nextTileIndex[1].y][nextTileIndex[1].x];
+	_t[1] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[1].y][nextTileIndex[1].x];
+	//_t[1] = _vTilesSave[nextTileIndex[1].y][nextTileIndex[1].x];
 
 	//다음 타일
 	if (nextTileIndex[2].x > maxTileX) nextTileIndex[2].x = maxTileX;
 	else if (nextTileIndex[2].x < 0) nextTileIndex[2].x = 0;
 	if (nextTileIndex[2].y > maxTileY) nextTileIndex[2].y = maxTileY;
 	else if (nextTileIndex[2].y < 0) nextTileIndex[2].y = 0;
-	_t[2] = _vTilesSave[nextTileIndex[2].y][nextTileIndex[2].x];
+	_t[2] = SCENEMANAGER->getCurrentScene()->getTiles()[nextTileIndex[2].y][nextTileIndex[2].x];
+	//_t[2] = _vTilesSave[nextTileIndex[2].y][nextTileIndex[2].x];
+}
+
+void buffalo::mapOutCollision()
+{
+	int maxTileX = SCENEMANAGER->getCurrentSceneMapXSize() - 1;
+	int maxTileY = SCENEMANAGER->getCurrentSceneMapYSize() - 1;
+	maxTileX *= SIZE;
+	maxTileY *= SIZE;
+
+	if (_position.x < 0)
+	{
+		_position.x += abs(0 - _rc.left);
+		_isAttack = false;
+		_wallCollision = true;
+	}
+	if (_position.x > maxTileX)
+	{
+		_position.x -= _rc.right - maxTileX;
+		_isAttack = false;
+		_wallCollision = true;
+	}
+	if (_position.y < 0)
+	{
+		_position.y += abs(0 - _rc.top);
+		_isAttack = false;
+		_wallCollision = true;
+	}
+	if (_position.y > maxTileY)
+	{
+		_position.y -= _rc.bottom - maxTileY;
+		_isAttack = false;
+		_wallCollision = true;
+	}
 }
 
 bool buffalo::tileMove()

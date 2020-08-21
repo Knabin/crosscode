@@ -30,6 +30,8 @@ enum PLAYERSTATE : int
 	LEFT_ATTACK,
 	RIGHT_ATTACK,
 	RIGHT_FINALATTACK,
+	LETHAL_CHARGE,
+	LETHAL_ATTACK,
 	END,
 };
 
@@ -54,6 +56,7 @@ private:
 
 	vector<playerState*>	_vState;
 
+	POINT _backTile;
 	POINT tileIndex;
 	RECT rcCollision;
 	int _nowOrder;
@@ -80,7 +83,13 @@ private:
 
 	int _pHp;		//플레이어 HP 
 	int _pXp;		//플레이어 경험치 적을 죽였을때
-	int _pSp;		//플레이어 SP 적을 때렸을때 차야됨
+	int _pSp;		//플레이어 SP 적을 때렸을때 차야됨 or 가만히있을때 참
+	int _pSpcharge;	//SP 차징시간
+
+	int _lethalCount;   // 필살기 횟수?
+	int _lethalCharge;	// 필살기 충전시간
+	bool _isLethal; // 필살기 체크용
+
 
 	float _jumpPower;
 	float _gravity;
@@ -113,11 +122,13 @@ public:
 	void moveAngle(const float& cangle, const float& speed);
 	void playerMeleeattack();
 	void playerDodgeEffect();
+	void playerLethalattack();
 
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }
 	void setDirection(PLAYERDIRECTION direction) { _direction = direction; }
+	void setState(PLAYERSTATE state) { _state->setState(_vState[state]); }
 
 	inline int getNowOrder() { return _nowOrder; }
 
@@ -131,4 +142,5 @@ public:
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
 		CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150) ? true : false; }
 
+	void setIdle();
 };

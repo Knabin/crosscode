@@ -33,3 +33,32 @@ public:
 	void eventStart() override;
 	bool eventUpdate() override;
 };
+
+class iPlayerMove final : public iEvent
+{
+	class player* _player;
+	Vector2 _targetLocation;
+	float _speed;
+
+public:
+	iPlayerMove(Vector2 targetLocation);
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};
+
+class iDialog final : public iEvent
+{
+	class dialog* _dialog;
+
+public:
+	iDialog(dialog* dialog);
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};
+
+class iMoveScene final :public iEvent
+{
+	
+};

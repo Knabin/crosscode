@@ -12,6 +12,10 @@ struct tagFlamethrower
 	float _speed;
 	float _size;
 
+	int _frameX;
+	int _frameCount;
+	int _currentFrameX;
+
 	bool _fireStart;
 };
 
@@ -39,14 +43,11 @@ private:
 	float _centerMeter2;
 	float _angle2;
 
-	int _currentFrameX, _currentFrameY;
-	int _frameCount;
-	int _flameFrameX, _flameFrameY;
+	//»≠ø∞πﬂªÁ ¿Ã∆Â∆Æ
+	int _flameFrameY;
 
-	//»≠ø∞√—±∏¿Ã∆Â∆Æ ƒ´øÓ∆Æ
-	int _firePointCurrentFrameX, _firePointCurrentFrameY;
-	int _firePointFrameX, _firePointFrameY;
-	int _firePointFrameCount;
+	//»≠ø∞√—±∏¿Ã∆Â∆Æ 
+	int _firePointFrameY;
 
 	//√Ê¿¸¿Ã∆Â∆Æ ƒ´øÓ∆Æ
 	int _chargeCurrentFrameX, _chargeCurrentFrameY;
@@ -77,15 +78,14 @@ public:
 	//√Ê¿¸¿Ã∆Â∆Æ ∑ª¥ı
 	void chargeDraw(float centerX, float centerY);
 	void chargeDraw2(float centerX, float centerY);
-	void fireEffectDraw();
 
+	void removeFire(int Num5);
 
 	vector<tagFlamethrower>& getFlameVector() { return _vFlamethrower; }
 	vector<tagFlamethrower>::iterator& getFlameIterVector() { return _viFlamethrower; }
 
 	vector<tagFlamethrower>& getFlameEffectVector() { return _vFlameEffect; }
 	vector<tagFlamethrower>::iterator& getFlameEffectIterVector() { return _viFlameEffect; }
-
 
 };
 
