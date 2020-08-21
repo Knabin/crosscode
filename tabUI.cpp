@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "tabUI.h"
 #include "player.h"
+#include <codecvt>
 
 HRESULT tabUI::init()
 {
@@ -32,8 +33,14 @@ HRESULT tabUI::init()
 
 	IMAGEMANAGER->addFrameImage("invenList", L"images/menu/invenList.png", 7, 1);
 
+	IMAGEMANAGER->addImage("inven01", L"images/menu/inven01.png");
 	IMAGEMANAGER->addImage("inven02", L"images/menu/inven02.png");
-
+	IMAGEMANAGER->addImage("inven03", L"images/menu/inven03.png");
+	IMAGEMANAGER->addImage("inven04", L"images/menu/inven04.png");
+	IMAGEMANAGER->addImage("inven05", L"images/menu/inven05.png");
+	IMAGEMANAGER->addImage("inven06", L"images/menu/inven06.png");
+	IMAGEMANAGER->addImage("inven07", L"images/menu/inven07.png");
+	
 
 	_on = false;
 
@@ -135,6 +142,10 @@ HRESULT tabUI::init()
 	{
 		_eqRect[i].update(Vector2(1223,248+128*i), Vector2(IMAGEMANAGER->findImage("eq_ui")->getWidth() * 0.85f, IMAGEMANAGER->findImage("eq_ui")->getHeight() * 0.85f), pivot::LEFTTOP);
 	}
+
+
+	_item = new item;
+	_item->init();
 	
 	return S_OK;
 }
@@ -361,7 +372,23 @@ void tabUI::render()
 				{
 					if (_vIv[i].type == L"º“∏")
 					{
-						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						itemObject it;
+						it = _item->getItemInfo(L"º“∏", _vIv[i].itemNum);
+
+						IMAGEMANAGER->findImage("inven01")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+
+						D2DRENDERER->RenderText(770 + 570 * (count % 2), 228 + 67 * (count / 2), it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						wstring Num = to_wstring(_vIv[i].count);
+						D2DRENDERER->RenderText(1150 + 570 * (count % 2), 228 + 67 * (count / 2), Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+						floatRect rc;
+						rc.update(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)), Vector2((float)IMAGEMANAGER->findImage("inven02")->getWidth(), (float)IMAGEMANAGER->findImage("inven02")->getHeight()), pivot::LEFTTOP);
+
+						if (PtInRect(&rc.getRect(), _ptMouse))
+						{
+							
+						}
+
 						count++;
 					}
 				}
@@ -377,7 +404,43 @@ void tabUI::render()
 				{
 					if (_vIv[i].type == L"∆»")
 					{
+						itemObject it;
+						it = _item->getItemInfo(L"∆»",_vIv[i].itemNum);
+
 						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count /2)));
+						
+						D2DRENDERER->RenderText(770 + 570 * (count % 2), 228 + 67 * (count / 2), it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						wstring Num = to_wstring(_vIv[i].count);
+						D2DRENDERER->RenderText(1150 + 570 * (count % 2), 228 + 67 * (count / 2), Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						
+						floatRect rc;
+						rc.update(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)), Vector2((float)IMAGEMANAGER->findImage("inven02")->getWidth(), (float)IMAGEMANAGER->findImage("inven02")->getHeight()), pivot::LEFTTOP);
+
+						if (PtInRect(&rc.getRect(), _ptMouse))
+						{
+							int x = 420;
+							int y = 110;
+							int d = 49;
+							wstring Num1 = to_wstring(it.hp);
+							D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num2 = to_wstring(it.atk);
+							D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num3 = to_wstring(it.def);
+							D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num4 = to_wstring(it.crt);
+							D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num5 = to_wstring(it.fireR);
+							D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num6 = to_wstring(it.iceR);
+							D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num7 = to_wstring(it.electricR);
+							D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num8 = to_wstring(it.psycoR);
+							D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						}
+
+						
+
 						count++;
 					}
 				}
@@ -392,8 +455,40 @@ void tabUI::render()
 				{
 					if (_vIv[i].type == L"∏”∏Æ")
 					{
-						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						itemObject it;
+						it = _item->getItemInfo(L"∏”∏Æ", _vIv[i].itemNum);
+
+						IMAGEMANAGER->findImage("inven03")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+
+						D2DRENDERER->RenderText(770 + 570 * (count % 2), 228 + 67 * (count / 2), it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						wstring Num = to_wstring(_vIv[i].count);
+						D2DRENDERER->RenderText(1150 + 570 * (count % 2), 228 + 67 * (count / 2), Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 						
+						floatRect rc;
+						rc.update(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)), Vector2((float)IMAGEMANAGER->findImage("inven02")->getWidth(), (float)IMAGEMANAGER->findImage("inven02")->getHeight()), pivot::LEFTTOP);
+
+						if (PtInRect(&rc.getRect(), _ptMouse))
+						{
+							int x = 420;
+							int y = 110;
+							int d = 49;
+							wstring Num1 = to_wstring(it.hp);
+							D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num2 = to_wstring(it.atk);
+							D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num3 = to_wstring(it.def);
+							D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num4 = to_wstring(it.crt);
+							D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num5 = to_wstring(it.fireR);
+							D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num6 = to_wstring(it.iceR);
+							D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num7 = to_wstring(it.electricR);
+							D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num8 = to_wstring(it.psycoR);
+							D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						}
 						count++;
 					}
 				}
@@ -406,9 +501,42 @@ void tabUI::render()
 				int count = 0;
 				for (int i = 0; i < _vIv.size(); ++i)
 				{
-					if (_vIv[i].type == L"¥Ÿ∏Æ")
+					if (_vIv[i].type == L"∏ˆ≈Î")
 					{
-						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						itemObject it;
+						it = _item->getItemInfo(L"∏ˆ≈Î", _vIv[i].itemNum);
+
+						IMAGEMANAGER->findImage("inven04")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+
+						D2DRENDERER->RenderText(770 + 570 * (count % 2), 228 + 67 * (count / 2), it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						wstring Num = to_wstring(_vIv[i].count);
+						D2DRENDERER->RenderText(1150 + 570 * (count % 2), 228 + 67 * (count / 2), Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+						floatRect rc;
+						rc.update(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)), Vector2((float)IMAGEMANAGER->findImage("inven02")->getWidth(), (float)IMAGEMANAGER->findImage("inven02")->getHeight()), pivot::LEFTTOP);
+
+						if (PtInRect(&rc.getRect(), _ptMouse))
+						{
+							int x = 420;
+							int y = 110;
+							int d = 49;
+							wstring Num1 = to_wstring(it.hp);
+							D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num2 = to_wstring(it.atk);
+							D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num3 = to_wstring(it.def);
+							D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num4 = to_wstring(it.crt);
+							D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num5 = to_wstring(it.fireR);
+							D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num6 = to_wstring(it.iceR);
+							D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num7 = to_wstring(it.electricR);
+							D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num8 = to_wstring(it.psycoR);
+							D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						}
 						count++;
 					}
 				}
@@ -421,9 +549,42 @@ void tabUI::render()
 				int count = 0;
 				for (int i = 0; i < _vIv.size(); ++i)
 				{
-					if (_vIv[i].type == L"∏ˆ≈Î")
+					if (_vIv[i].type == L"¥Ÿ∏Æ")
 					{
-						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						itemObject it;
+						it = _item->getItemInfo(L"¥Ÿ∏Æ", _vIv[i].itemNum);
+
+						IMAGEMANAGER->findImage("inven05")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+
+						D2DRENDERER->RenderText(770 + 570 * (count % 2), 228 + 67 * (count / 2), it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						wstring Num = to_wstring(_vIv[i].count);
+						D2DRENDERER->RenderText(1150 + 570 * (count % 2), 228 + 67 * (count / 2), Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+						floatRect rc;
+						rc.update(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)), Vector2((float)IMAGEMANAGER->findImage("inven02")->getWidth(), (float)IMAGEMANAGER->findImage("inven02")->getHeight()), pivot::LEFTTOP);
+
+						if (PtInRect(&rc.getRect(), _ptMouse))
+						{
+							int x = 420;
+							int y = 110;
+							int d = 49;
+							wstring Num1 = to_wstring(it.hp);
+							D2DRENDERER->RenderText(x, y, Num1, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num2 = to_wstring(it.atk);
+							D2DRENDERER->RenderText(x, y + d, Num2, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num3 = to_wstring(it.def);
+							D2DRENDERER->RenderText(x, y + d * 2, Num3, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num4 = to_wstring(it.crt);
+							D2DRENDERER->RenderText(x, y + d * 3, Num4, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num5 = to_wstring(it.fireR);
+							D2DRENDERER->RenderText(x, y + d * 4, Num5, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num6 = to_wstring(it.iceR);
+							D2DRENDERER->RenderText(x, y + d * 5, Num6, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num7 = to_wstring(it.electricR);
+							D2DRENDERER->RenderText(x, y + d * 6, Num7, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num8 = to_wstring(it.psycoR);
+							D2DRENDERER->RenderText(x, y + d * 7, Num8, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						}
 						count++;
 					}
 				}
@@ -438,7 +599,16 @@ void tabUI::render()
 				{
 					if (_vIv[i].type == L"∞≈∑°")
 					{
-						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						itemObject it;
+						it = _item->getItemInfo(L"∞≈∑°", _vIv[i].itemNum);
+
+						IMAGEMANAGER->findImage("inven06")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+
+						D2DRENDERER->RenderText(770 + 570 * (count % 2), 228 + 67 * (count / 2), it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						wstring Num = to_wstring(_vIv[i].count);
+						D2DRENDERER->RenderText(1150 + 570 * (count % 2), 228 + 67 * (count / 2), Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
+
 						count++;
 					}
 				}
@@ -453,7 +623,14 @@ void tabUI::render()
 				{
 					if (_vIv[i].type == L"¡ﬂø‰")
 					{
-						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						itemObject it;
+						it = _item->getItemInfo(L"¡ﬂø‰", _vIv[i].itemNum);
+
+						IMAGEMANAGER->findImage("inven07")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+
+						D2DRENDERER->RenderText(770 + 570 * (count % 2), 228 + 67 * (count / 2), it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+						wstring Num = to_wstring(_vIv[i].count);
+						D2DRENDERER->RenderText(1150 + 570 * (count % 2), 228 + 67 * (count / 2), Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 						count++;
 					}
 				}

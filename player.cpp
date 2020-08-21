@@ -56,7 +56,7 @@ player::player()
 	_position.y = 700;
 	_attackAngle = 0;
 
-	_attacking = false;
+	
 
 	_pSp = 0;
 }
@@ -82,6 +82,9 @@ HRESULT player::init()
 	
 	IMAGEMANAGER->addImage("player shadow", L"images/player/player_shadow.png");
 
+	IMAGEMANAGER->addImage("player range", L"images/player/player_attackrange.png");
+	EFFECTMANAGER->addEffect("player range", "player range", 1, 0.1f, 1, 1.0f);
+
 	IMAGEMANAGER->addFrameImage("player dodgeDust", L"images/player/player_dodgedust.png", 5,1);
 
 	EFFECTMANAGER->addEffect("player dodgeDust1", "player dodgeDust", 1, 0.2f, 1, 1.f);
@@ -95,6 +98,7 @@ HRESULT player::init()
 	EFFECTMANAGER->addEffect("leftattackeffect", "leftattackeffect",1,0.5f,5,1.0f);
 	EFFECTMANAGER->addEffect("rightattackeffect", "rightattackeffect", 1, 0.5f, 5, 1.0f);
 	EFFECTMANAGER->addEffect("finalattackeffect", "finalattackeffect", 1, 0.3f, 5, 1.0f);
+
 
 
 	//=================================== 근거리 이펙트 용=================================
@@ -122,6 +126,20 @@ HRESULT player::init()
 	
 	_bullet = new bullet;
 	_bullet->init();
+	_attacking = false;
+	 _pHp = 100;
+	 _pXp = 0;
+	 _pSp = 1;
+	 _pSpcharge = 0;
+	 _pLevel = 1;
+
+	 _pDef = 0;
+	 _pCrt = 0;
+	 _pfR  =0;
+	 _pIR = 0;
+	 _pER = 0;
+	 _pPR = 0;
+
 
 	_attackPower = 50;
 
@@ -2002,6 +2020,7 @@ void player::moveAngle(const float & cangle, const float & speed)
 void player::playerMeleeattack()   //근접 기본공격
 {
 	_combocount = 0;
+	EFFECTMANAGER->play("player range", Vector2(CAMERA->getRelativeVector2(_position).x+140, CAMERA->getRelativeVector2(_position).y+150));
 	if (_state->getState() == _vState[IDLE] && !_iscombo || _state->getState() == _vState[MOVE] && !_iscombo)
 	{
 		

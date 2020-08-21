@@ -84,6 +84,14 @@ private:
 	int _pXp;		//플레이어 경험치 적을 죽였을때
 	int _pSp;		//플레이어 SP 적을 때렸을때 차야됨 or 가만히있을때 참
 	int _pSpcharge;	//SP 차징시간
+	int _pLevel;
+
+	int _pDef;		//플레이어 방어력
+	float _pCrt;	//플레이어 크리티컬
+	int _pfR;		//플레이어 불 저항력
+	int _pIR;		//플레이어 얼음 저항력
+	int _pER;		//플레이어 전기 저항력
+	int _pPR;		//플레이어 파동 저항력
 
 	int _lethalCount;   // 필살기 횟수?
 	int _lethalCharge;	// 필살기 충전시간
@@ -104,7 +112,7 @@ private:
 	floatRect _tileRect;
 	POINT next[6];
 
-	int _attackPower;
+	int _attackPower;	//플레이어 공격력
 
 public:
 	player();
@@ -139,6 +147,7 @@ public:
 	void setPlayerY(float y) { _position.y = y; }
 	void setPlayerPlusX(float x) { _position.x += x; }
 	void setPlayerPlusY(float y) { _position.y += y; }
+	
 
 	
 
@@ -156,6 +165,27 @@ public:
 	floatRect& getPlayerAttackRect() { return _attackRC; }
 
 	int getPlayerAttackPower() { return _attackPower; }
+	void setPlayerAttackPower(int power) { _attackPower = power; }
+	int getPlayerHP() { return _pHp; }
+	void setPlayerHP(int hp) { _pHp = hp; }
+	int getPlayerEXP() { return _pXp; }
+	void setPlayerEXP(int exp) { _pXp = exp; }
+	int getPlayerSP() { return _pSp; }
+	void setPlayerSP(int sp) { _pSp = sp; }
+	int getPlayerDef() { return _pDef; }
+	void setPlayerDef(int def) { _pDef = def; }
+	int getPlayerCri() { return _pCrt; }
+	void setPlayerCri(int cri) { _pCrt = cri; }
+	int getPlayerFR() { return _pfR; }
+	void setPlayerFR(int fr) { _pfR = fr; }
+	int getPlayerIR() { return _pIR; }
+	void setPlayerIR(int ir) { _pIR = ir; }
+	int getPlayerER() { return _pER; }
+	void setPlayerER(int er) { _pER = er; }
+	int getPlayerPR() { return _pPR; }
+	void setPlayerPR(int pr) { _pPR = pr; }
+	int getPlayerLEVEL() { return _pLevel; }
+	void setPlayerLEVEL(int pl) { _pLevel = pl; }
 
 	bool mouseCheck() { return (getDistance(_position.x, _position.y, _ptMouse.x /
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
