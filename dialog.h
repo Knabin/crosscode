@@ -10,12 +10,13 @@ private:
 	class portrait* pro;
 
 	int _textIndex;
+	string _fileName;
 
 public:
 	dialog(string fileName);
 	~dialog();
 
 	bool next();
-	void loadText(string fileName);
+	void loadText();
 
 };

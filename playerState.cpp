@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "playerState.h"
 #include "player.h"
+#include "enemy.h"
 
 // =========================== 플레이어 아이들 =========================== //
 idleState::idleState(player * player)
@@ -1452,6 +1453,16 @@ rightattackState::~rightattackState()
 
 void rightattackState::enter()
 {
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			e->setEnemyCollision(false);
+		}
+	}
+
 	//cout << "rightattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 
@@ -1611,6 +1622,15 @@ leftattackState::~leftattackState()
 
 void leftattackState::enter()
 {
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			e->setEnemyCollision(false);
+		}
+	}
 	//cout << "leftattackState enter()" << endl;
 	_player->setImage("p_meleeattack_left");
 
@@ -1706,6 +1726,7 @@ void leftattackState::exit()
 // =========================== 플레이어 근거리 마지막공격 =========================== //
 rightfinalattackState::rightfinalattackState(player * player)
 {
+	
 	_player = player;
 
 	int top[] = { 47,46,45,44,43,42,41,40,48,0,8 };
@@ -1772,6 +1793,15 @@ rightfinalattackState::~rightfinalattackState()
 
 void rightfinalattackState::enter()
 {
+	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		enemy* e = dynamic_cast<enemy*>(temp[i]);
+		if (e->getEnemyCollision())
+		{
+			e->setEnemyCollision(false);
+		}
+	}
 	//cout << "rightfinalattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
 

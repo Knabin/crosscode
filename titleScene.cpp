@@ -130,7 +130,8 @@ void titleScene::render()
 
 void titleScene::cbStart()
 {
-	SCENEMANAGER->loadScene("test");
+	SCENEMANAGER->loadScene("town");
+	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
 }
 
 void titleScene::cbContinue()

@@ -29,21 +29,6 @@ void collisionManager::update()
 	hedgehagCollision();//고슴도치랑 플레이어 충돌처리
 	meerkatCollision();//미어캣이랑 플레이어 충돌처리
 	bulletCollision();//미어캣의 총알이랑 플레이어 충돌처리
-
-	vector <gameObject*> temp = OBJECTMANAGER->getObjectList(objectType::ENEMY);
-	for (int i = 0; i < temp.size(); i++)
-	{
-		enemy* e = dynamic_cast<enemy*>(temp[i]);
-		if (e->getEnemyCollision())
-		{
-			_collisionCount++;
-			if (_collisionCount % 40 == 0)
-			{
-				e->setEnemyCollision(false);
-				_collisionCount = 0;
-			}
-		}
-	}
 }
 
 void collisionManager::render()
@@ -363,8 +348,8 @@ void collisionManager::hedgehagCollision()
 				_count++;
 				if (_count <= 3)
 				{
-					_player->setPlayerPlusX(cosf(h->getEnemyAngle()) * 10.0f);
-					_player->setPlayerPlusY(-sinf(h->getEnemyAngle()) * 10.0f);
+					_player->setPlayerPlusX(cosf(h->getEnemyAngleSave()) * 10.0f);
+					_player->setPlayerPlusY(-sinf(h->getEnemyAngleSave()) * 10.0f);
 				}
 				else
 				{
