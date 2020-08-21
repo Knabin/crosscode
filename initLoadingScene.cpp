@@ -88,6 +88,8 @@ void initLoadingScene::update()
 		IMAGEMANAGER->addImage("event back", L"images/UI/eventback.png");
 		IMAGEMANAGER->addImage("black", L"images/UI/black.png");
 
+		IMAGEMANAGER->addFrameImage("townblock", L"images/object/townblock.png", 2, 1);
+
 
 		_isInit = true;
 	}

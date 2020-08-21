@@ -678,7 +678,7 @@ void player::update()
 void player::render()
 {
 	//_rc.render(getMemDC());
-	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
 	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_tileRect));
 	_image->setSize(_image->getFrameSize() * CAMERA->getZoomAmount());
 	_image->aniRender(CAMERA->getRelativeVector2(_position.x, _position.y - _jumpPower), _ani, 1.0f);
