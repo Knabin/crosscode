@@ -6,6 +6,9 @@ private:
 	vector<wstring> _vText;
 	vector<class dialogText*> _vObjects;
 
+	class portrait* lea;
+	class portrait* pro;
+
 	int _textIndex;
 
 public:
@@ -13,6 +16,6 @@ public:
 	~dialog();
 
 	bool next();
-	void loadText();
+	void loadText(string fileName);
 
 };

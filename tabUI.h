@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "button.h"
+#include "inventory.h"
 
 class tabUI : public gameNode
 {
@@ -21,6 +22,8 @@ private:
 	int _invenIndex;
 	LPBYTE StateArray;
 	
+	vector<invenObject> _vIv;
+
 	floatRect _eqRect[5];
 public:
 	tabUI() {};
@@ -39,5 +42,7 @@ public:
 	void outMenu();
 	void InventoryList();
 	void equipSelect();
+
+	void setInven(vector<invenObject> inven) { _vIv = inven; }
 };
 

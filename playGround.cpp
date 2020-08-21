@@ -106,11 +106,11 @@ void playGround::update()
 	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn() && !_ui->UIon())
 	{
 		SCENEMANAGER->update();
-
+		OBJECTMANAGER->update();
 		_collisionManager->update();
 		_enemyManager->update();
 	}
-	OBJECTMANAGER->update();
+	
 	EVENTMANAGER->update();
 
 	EFFECTMANAGER->update();

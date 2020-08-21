@@ -79,6 +79,8 @@ public:
 	void chargeDraw(float centerX, float centerY);
 	void chargeDraw2(float centerX, float centerY);
 
+	void removeFire(int Num5);
+
 	vector<tagFlamethrower>& getFlameVector() { return _vFlamethrower; }
 	vector<tagFlamethrower>::iterator& getFlameIterVector() { return _viFlamethrower; }
 

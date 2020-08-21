@@ -246,7 +246,143 @@ void hedgehag::move()
 			_enemyDirection != ENEMY_UP_RIGHT_HIT &&
 			_enemyDirection != ENEMY_DOWN_RIGHT_HIT)
 		{
-			if (!_distanceChange && !_isAttack && playerNowOrder == _nowOrder)//플레이어와 에너미의 거리가 250보다 크면
+			if (!_distanceChange && !_isAttack) //거리가 멀고 공격중이 아니면
+			{
+				if (_move.size() != NULL)
+				{
+					float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+					float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+					_position.x += cosf(an) * _speed;
+					_position.y += -sinf(an) * _speed;
+
+					if (d < 5)
+					{
+						deleteMove();
+					}
+				}
+
+				if (_t[0]->getOrderIndex() == 4 ||
+					_t[0]->getOrderIndex() == 5 ||
+					_t[0]->getOrderIndex() == 6 ||
+					_t[1]->getOrderIndex() == 4 ||
+					_t[1]->getOrderIndex() == 5 ||
+					_t[1]->getOrderIndex() == 6 ||
+					_t[2]->getOrderIndex() == 4 ||
+					_t[2]->getOrderIndex() == 5 ||
+					_t[2]->getOrderIndex() == 6 ||
+					_nowOrder == 4 ||
+					_nowOrder == 5 ||
+					_nowOrder == 6)
+				{
+					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
+					{
+						_enemyDirection = ENEMY_LEFT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
+					{
+						_enemyDirection = ENEMY_UP_LEFT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
+					{
+						_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
+					}
+
+					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
+					{
+						_enemyDirection = ENEMY_RIGHT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
+					{
+						_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
+					{
+						_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
+					}
+				}
+			}
+
+			if (_distanceChange && !_isAttack && _nowOrder < playerNowOrder) //거리가 멀고 공격중이 아니면
+			{
+				if (_move.size() != NULL)
+				{
+					float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+					float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+					_position.x += cosf(an) * _speed;
+					_position.y += -sinf(an) * _speed;
+
+					if (d < 5)
+					{
+						deleteMove();
+					}
+				}
+
+				if (_t[0]->getOrderIndex() == 4 ||
+					_t[0]->getOrderIndex() == 5 ||
+					_t[0]->getOrderIndex() == 6 ||
+					_t[1]->getOrderIndex() == 4 ||
+					_t[1]->getOrderIndex() == 5 ||
+					_t[1]->getOrderIndex() == 6 ||
+					_t[2]->getOrderIndex() == 4 ||
+					_t[2]->getOrderIndex() == 5 ||
+					_t[2]->getOrderIndex() == 6 ||
+					_nowOrder == 4 ||
+					_nowOrder == 5 ||
+					_nowOrder == 6)
+				{
+					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
+					{
+						_enemyDirection = ENEMY_LEFT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
+					{
+						_enemyDirection = ENEMY_UP_LEFT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
+					{
+						_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
+					}
+
+					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
+					{
+						_enemyDirection = ENEMY_RIGHT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
+					{
+						_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK;
+					}
+
+					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
+					{
+						_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
+					}
+				}
+			}
+
+			if (!_isAttack && _t[0]->getOrderIndex() == 4 ||
+				!_isAttack && _t[0]->getOrderIndex() == 5 ||
+				!_isAttack && _t[0]->getOrderIndex() == 6 ||
+				!_isAttack && _t[1]->getOrderIndex() == 4 ||
+				!_isAttack && _t[1]->getOrderIndex() == 5 ||
+				!_isAttack && _t[1]->getOrderIndex() == 6 ||
+				!_isAttack && _t[2]->getOrderIndex() == 4 ||
+				!_isAttack && _t[2]->getOrderIndex() == 5 ||
+				!_isAttack && _t[2]->getOrderIndex() == 6 ||
+				!_isAttack && _nowOrder == 4 ||
+				!_isAttack && _nowOrder == 5 ||
+				!_isAttack && _nowOrder == 6 ||
+				!_isAttack && _nowOrder > playerNowOrder)
 			{
 				if (_move.size() != NULL)
 				{
@@ -263,7 +399,92 @@ void hedgehag::move()
 					}
 				}
 			}
-			else if (_distanceChange  && playerNowOrder == _nowOrder)
+
+			if (_distanceChange && _nowOrder == playerNowOrder)//거리가 가깝고 층이 같으면
+			{
+				_attackDelay++;//공격딜레이
+				if (_attackDelay >= _maxAttackDelay && !_isAttack)//공격딜레이가 일정시간 도달했고 공격상태가 아니면
+				{
+					_angleSave = _angle;
+					_playerSaveX = _playerX;
+					_playerSaveY = _playerY;
+					_isAttack = true;
+				}
+			}
+
+			if (_isAttack)
+			{
+				_effect = true;
+				_attackCount++;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+				_distanceSave = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerSaveX, _playerSaveY) + 200;
+			}
+
+			if (_distanceSave > 10 && _distanceSave < 750)//에너미와 플레이어간의 임시적으로 저장해놨던 거리값이 10보다 크면 계속 이동
+			{
+				if (_attackCount >= 25)//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+				{
+					_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);//에너미 공격렉트
+					_effect = false;
+
+					if (_t[0]->getOrderIndex() - _nowOrder == 1 ||
+						_t[1]->getOrderIndex() - _nowOrder == 1 ||
+						_t[2]->getOrderIndex() - _nowOrder == 1 ||
+						_t[0]->getOrderIndex() == 4 ||
+						_t[1]->getOrderIndex() == 4 ||
+						_t[2]->getOrderIndex() == 4 ||
+						_t[0]->getOrderIndex() == 5 ||
+						_t[1]->getOrderIndex() == 5 ||
+						_t[2]->getOrderIndex() == 5 ||
+						_nowOrder == playerNowOrder)
+					{
+						_position.x += cosf(_angleSave) * _attackSpeed;
+						_position.y += -sinf(_angleSave) * _attackSpeed;
+					}
+
+					else
+					{
+						_isAttack = false;
+						_attackDelay = 0;//공격딜레이
+						_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+					}
+				}
+			}
+			else if(_distanceSave <= 10 && _isAttack || _distanceSave >= 750 && _isAttack)
+			{
+				_effect = false;
+				_isAttack = false;
+				_attackDelay = 0;//공격딜레이
+				_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+			}
+
+			if (_distance > 500)//플레이어와 에너미의 거리가 250보다 크면
+			{
+				_distanceChange = false;
+			}
+			else
+			{
+				_distanceChange = true;
+			}
+
+			/*
+			if (!_distanceChange && !_isAttack)//플레이어와 에너미의 거리가 250보다 크면
+			{
+				if (_move.size() != NULL)
+				{
+					float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+					float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+						_move[_move.size() - 1]->getRect().getCenter().y);
+					_position.x += cosf(an) * _speed;
+					_position.y += -sinf(an) * _speed;
+
+					if (d < 5)
+					{
+						deleteMove();
+					}
+				}
+			}
+			else if (_distanceChange && _nowOrder == playerNowOrder)
 			{
 				_attackDelay++;//공격딜레이
 				if (_attackDelay >= _maxAttackDelay && !_isAttack)
@@ -280,40 +501,51 @@ void hedgehag::move()
 				_effect = true;
 				_attackCount++;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
 				_distanceSave = getDistance(_rc.getCenter().x, _rc.getCenter().y, _playerSaveX, _playerSaveY) + 200;//일시적으로 저장해놓은 플레이어 좌표와 에너미간의 거리값을 업데이트 하는 변수
-				_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);//에너미 공격렉트
+			}
 
-				if (_distanceSave > 10 && _distanceSave < 750)//에너미와 플레이어간의 임시적으로 저장해놨던 거리값이 10보다 크면 계속 이동
+			if (_distanceSave > 10 && _distanceSave < 750)//에너미와 플레이어간의 임시적으로 저장해놨던 거리값이 10보다 크면 계속 이동
+			{
+				if (_attackCount >= 25)//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
 				{
-					if (_attackCount >= 25)//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+					_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);//에너미 공격렉트
+					_effect = false;
+
+					if (_t[0]->getOrderIndex() - _nowOrder == 1 ||
+						_t[1]->getOrderIndex() - _nowOrder == 1 ||
+						_t[2]->getOrderIndex() - _nowOrder == 1 ||
+						_t[0]->getOrderIndex() == 4 ||
+						_t[1]->getOrderIndex() == 4 ||
+						_t[2]->getOrderIndex() == 4 ||
+						_t[0]->getOrderIndex() == 5 ||
+						_t[1]->getOrderIndex() == 5 ||
+						_t[2]->getOrderIndex() == 5 ||
+						_nowOrder == playerNowOrder)
 					{
-						if (tileMove())
-						{
-							_position.x += cosf(_angleSave) * _attackSpeed;
-							_position.y -= sinf(_angleSave) * _attackSpeed;
-							_effect = false;
-						}
-						else
-						{
-							//_angleSave += PI;
-							//_angleCount++;
-							//if (_angleCount % 10 == 0)
-							//{
-							_effect = false;
-							_isAttack = false;
-							_attackDelay = 0;//공격딜레이
-							_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
-							//_angleCount = 0;
-						//}
-						}
+						_position.x += cosf(_angleSave) * _attackSpeed;
+						_position.y -= sinf(_angleSave) * _attackSpeed;
+					}
+
+					else 
+					{
+						//_angleSave += PI;
+						//_angleCount++;
+						//if (_angleCount % 10 == 0)
+						//{
+						//_effect = false;
+						_isAttack = false;
+						_attackDelay = 0;//공격딜레이
+						_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
+						//_angleCount = 0;
+					//}
 					}
 				}
-				else if (_distanceSave < 10 || _distanceSave > 750 && playerNowOrder == _nowOrder)
-				{
-					_effect = false;
-					_isAttack = false;
-					_attackDelay = 0;//공격딜레이
-					_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
-				}
+			}
+			else if (_distanceSave < 10 || _distanceSave > 750)
+			{
+				_effect = false;
+				_isAttack = false;
+				_attackDelay = 0;//공격딜레이
+				_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
 			}
 
 			if (_distance > 500)//플레이어와 에너미의 거리가 250보다 크면
@@ -326,57 +558,27 @@ void hedgehag::move()
 			}
 		}
 
+		if (!tileMove() && _distanceChange)
+		{
+			if (_move.size() != NULL)
+			{
+				float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+					_move[_move.size() - 1]->getRect().getCenter().y);
+				float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
+					_move[_move.size() - 1]->getRect().getCenter().y);
+				_position.x += cosf(an) * _speed;
+				_position.y += -sinf(an) * _speed;
+
+				if (d < 5)
+				{
+					deleteMove();
+				}
+			}
+			*/
+		}
 		if (!_isAttack)//에너미의 공격상태값이 펄스면
 		{
 			_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);//에너미의 공격 렉트크기 0
-		}
-
-		if (!tileMove())
-		{
-			_effect = false;
-			_isAttack = false;
-			_attackDelay = 0;//공격딜레이
-			_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
-
-			if (_move.size() != NULL)
-			{
-				float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
-					_move[_move.size() - 1]->getRect().getCenter().y);
-				float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
-					_move[_move.size() - 1]->getRect().getCenter().y);
-				_position.x += cosf(an) * _speed;
-				_position.y += -sinf(an) * _speed;
-
-				if (d < 5)
-				{
-					deleteMove();
-				}
-			}
-		}
-
-		if (playerNowOrder != _nowOrder)
-		{
-			_effect = false;
-			_isAttack = false;
-			_attackDelay = 0;//공격딜레이
-			_attackCount = 0;//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
-
-			if (_move.size() != NULL)
-			{
-				float d = getDistance(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
-					_move[_move.size() - 1]->getRect().getCenter().y);
-				float an = getAngle(_position.x, _position.y, _move[_move.size() - 1]->getRect().getCenter().x,
-					_move[_move.size() - 1]->getRect().getCenter().y);
-				_position.x += cosf(an) * _speed;
-				_position.y += -sinf(an) * _speed;
-
-				if (d < 5)
-				{
-					deleteMove();
-				}
-
-				_enemyDirection = ENEMY_UP_LEFT_ATTACK;
-			}
 		}
 	}
 	else//데미지를 받지 않았을때

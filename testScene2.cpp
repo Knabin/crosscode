@@ -11,7 +11,7 @@ HRESULT testScene2::init()
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
-	this->getDataFromFile("2.map");
+	this->getDataFromFile("22.map");
 
 	CAMERA->setMapSize(Vector2(_maxX * SIZE, _maxY * SIZE));
 

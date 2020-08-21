@@ -18,7 +18,7 @@ public:
 
 	HRESULT init();
 	void release();
-	void update();
+	/*void update();
 	void render();
 
 	void buffaloCollision();
@@ -26,6 +26,6 @@ public:
 	void meerkatCollision();
 
 	void enemyCollision();
-	void bulletCollision();
+	void bulletCollision();*/
 };
 

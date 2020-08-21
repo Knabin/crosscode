@@ -32,7 +32,7 @@ HRESULT tabUI::init()
 
 	IMAGEMANAGER->addFrameImage("invenList", L"images/menu/invenList.png", 7, 1);
 
-
+	IMAGEMANAGER->addImage("inven02", L"images/menu/inven02.png");
 
 
 	_on = false;
@@ -135,7 +135,7 @@ HRESULT tabUI::init()
 	{
 		_eqRect[i].update(Vector2(1223,248+128*i), Vector2(IMAGEMANAGER->findImage("eq_ui")->getWidth() * 0.85f, IMAGEMANAGER->findImage("eq_ui")->getHeight() * 0.85f), pivot::LEFTTOP);
 	}
-
+	
 	return S_OK;
 }
 
@@ -207,6 +207,7 @@ void tabUI::update()
 			OBJECTMANAGER->findObject(objectType::UI, "inven5")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven6")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven7")->setIsActive(true);
+
 			break;
 		case 1:
 			OBJECTMANAGER->findObject(objectType::UI, "inven1")->setIsActive(true);
@@ -216,6 +217,9 @@ void tabUI::update()
 			OBJECTMANAGER->findObject(objectType::UI, "inven5")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven6")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "inven7")->setIsActive(true);
+
+
+		
 			break;
 		case 2:
 			OBJECTMANAGER->findObject(objectType::UI, "inven1")->setIsActive(true);
@@ -350,24 +354,110 @@ void tabUI::render()
 		{
 		case 0:
 			IMAGEMANAGER->findImage("inven1")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"소모")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 1:
 			IMAGEMANAGER->findImage("inven2")->render(Vector2(0, 0));
+
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"팔")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count /2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 2:
 			IMAGEMANAGER->findImage("inven3")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"머리")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						
+						count++;
+					}
+				}
+			}
 			break;
 		case 3:
 			IMAGEMANAGER->findImage("inven4")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"다리")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 4:
 			IMAGEMANAGER->findImage("inven5")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"몸통")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 5:
 			IMAGEMANAGER->findImage("inven6")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"거래")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		case 6:
 			IMAGEMANAGER->findImage("inven7")->render(Vector2(0, 0));
+			if (_vIv.size() != NULL)
+			{
+				int count = 0;
+				for (int i = 0; i < _vIv.size(); ++i)
+				{
+					if (_vIv[i].type == L"중요")
+					{
+						IMAGEMANAGER->findImage("inven02")->render(Vector2(690 + 570 * (count % 2), 220 + 67 * (count / 2)));
+						count++;
+					}
+				}
+			}
 			break;
 		}
 	}

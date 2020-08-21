@@ -57,3 +57,8 @@ public:
 	void eventStart() override;
 	bool eventUpdate() override;
 };
+
+class iMoveScene final :public iEvent
+{
+	
+};

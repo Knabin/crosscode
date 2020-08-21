@@ -129,7 +129,11 @@ void player::release()
 void player::update()
 {
 	_bullet->update();
-	
+	if (EVENTMANAGER->isPlayingEvent())
+	{
+		_state->updateState();
+		return;
+	}
 	if (KEYMANAGER->isStayKeyDown('W') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
@@ -898,7 +902,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() -1 !=  _nowOrder)
 					{
 						move(0, 4.5f);
 						break;
@@ -937,7 +941,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() - 1 != _nowOrder)
 					{
 						moveAngle(PI * 1.75f, moveSpeed);
 						break;
@@ -976,7 +980,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() - 1 != _nowOrder)
 					{
 						move(4.5f, 0);
 						break;
@@ -1015,7 +1019,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() - 1 != _nowOrder)
 					{
 						moveAngle(PI * 0.25f, moveSpeed);
 						break;
@@ -1054,7 +1058,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() - 1 != _nowOrder)
 					{
 						move(0, -4.5f);
 						break;
@@ -1093,7 +1097,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() - 1 != _nowOrder)
 					{
 						moveAngle(PI * 0.75f, moveSpeed);
 						break;
@@ -1132,7 +1136,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() - 1 != _nowOrder)
 					{
 						move(-4.5f, 0);
 						break;
@@ -1171,7 +1175,7 @@ void player::playerMove()
 				tile* ti = SCENEMANAGER->getCurrentScene()->getTiles()[next[i].y][next[i].x];
 				if (IntersectRect(&temp, &ti->getRect().getRect(), &_tileRect.getRect()))
 				{
-					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5)
+					if (ti->getOrderIndex() > _nowOrder && ti->getOrderIndex() != 4 && ti->getOrderIndex() != 5 && ti->getOrderIndex() - 1 != _nowOrder)
 					{
 						moveAngle(PI * 1.25f, moveSpeed);
 						break;
