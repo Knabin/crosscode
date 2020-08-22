@@ -8,7 +8,8 @@
 
 enum bossState //보스 상태패턴 enum문
 {
-	APPEARANCE = 0,
+	APPEARANCE_READY = 0,
+	APPEARANCE,
 	STOP,
 	ICETHROWER_READY,
 	ICETHROWER_READY2,
@@ -163,6 +164,8 @@ private:
 
 	int _stunCount; //스턴 걸렸을때 딜레이 카운트
 
+	int _appearanceCount;
+
 	//움직임 딜레이
 	int _motionDelay;
 
@@ -193,6 +196,7 @@ private:
 
 	bool _attackCollision;
 	bool _stunTrue;
+
 
 public:
 

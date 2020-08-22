@@ -14,6 +14,9 @@ HRESULT mine::init(float centerX, float centerY)
 {
 	_name = "mine";
 
+
+	SOUNDMANAGER->addSound("boss mine", "sounds/boss/explosion-2.ogg", false, false);
+
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 
 	_angle = PI / 2;
