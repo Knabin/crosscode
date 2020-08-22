@@ -22,6 +22,9 @@ HRESULT titleScene::init()
 	IMAGEMANAGER->addImage("sky", L"images/title/sky.png");
 	IMAGEMANAGER->addImage("logo", L"images/title/logo.png");
 
+	SOUNDMANAGER->addSound("bgm title", "sounds/bgm/muTitle.ogg", true, true);
+	SOUNDMANAGER->playBGM("bgm title");
+
 	//로딩이미지
 	//IMAGEMANAGER->addFrameImage("load", "images/loading.png", 4371, 141, 31, 1, true, RGB(255, 0, 255));
 	

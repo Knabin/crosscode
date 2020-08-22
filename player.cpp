@@ -58,9 +58,6 @@ player::player()
 	_position.y = 700;
 	_attackAngle = 0;
 	
-	
-
-
 	_beAttacked = false;
 
 	_pSp = 0;
@@ -85,7 +82,6 @@ HRESULT player::init()
 	IMAGEMANAGER->addFrameImage("player aim", L"images/player/player_aim.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("player charge", L"images/player/player_charge1.png", 6, 8);
 	IMAGEMANAGER->addFrameImage("player chargeeffect", L"images/player/player_chargeeffect.png", 6, 1);
-
 	
 	IMAGEMANAGER->addFrameImage("player beAttacked", L"images/player/player_beAttacked.png", 2, 8);
 	
@@ -102,6 +98,7 @@ HRESULT player::init()
 
 	IMAGEMANAGER->addFrameImage("player bulletRemoveEffectImg", L"images/player/player_bulletRemoveEffect.png", 5, 1);
 	EFFECTMANAGER->addEffect("player bulletRemoveEffect", "player bulletRemoveEffectImg", 1, 0.5f, 10, 1.f);
+	//EFFECTMANAGER->addEffect("player bulletRemoveEffect1", "player bulletRemoveEffectImg", 1, 0.5f, 1, 1.f);
 
 	IMAGEMANAGER->addFrameImage("leftattackeffect", L"images/player/leftattackeffect.png", 7, 1);
 	IMAGEMANAGER->addFrameImage("rightattackeffect", L"images/player/rightattackeffect.png", 7, 1);
@@ -140,6 +137,7 @@ HRESULT player::init()
 	_bullet = new bullet;
 	_bullet->init();
 	_attacking = false;
+	_attackCollision = false;
 	 _pHp = 100;
 	 _playerMaxHP = 100;
 	 _pXp = 0;
@@ -198,9 +196,14 @@ void player::update()
 		_state->updateState();
 		return;
 	}
-	if (KEYMANAGER->isStayKeyDown('W') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
+	if (KEYMANAGER->isStayKeyDown('W') 
+		&& _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && 
+		_state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK] &&
+		_state->getState() != _vState[PLAYERSTATE::GUARD])
 	{
-		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
+		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && 
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && 
+			_state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
 			if (KEYMANAGER->isStayKeyDown('D'))
 			{
@@ -239,9 +242,13 @@ void player::update()
 		}
 	}
 
-	if (KEYMANAGER->isStayKeyDown('S') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
+	if (KEYMANAGER->isStayKeyDown('S') && 
+		_state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK] &&
+		_state->getState() != _vState[PLAYERSTATE::GUARD])
 	{
-		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
+		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && 
+			_state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && 
+			_state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
 			if (KEYMANAGER->isStayKeyDown('D'))
 			{
@@ -281,7 +288,9 @@ void player::update()
 		}
 	}
 
-	if (KEYMANAGER->isStayKeyDown('A') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
+	if (KEYMANAGER->isStayKeyDown('A') && 
+		_state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK] &&
+		_state->getState() != _vState[PLAYERSTATE::GUARD])
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
@@ -324,7 +333,9 @@ void player::update()
 		}
 	}
 
-	if (KEYMANAGER->isStayKeyDown('D') && _state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK])
+	if (KEYMANAGER->isStayKeyDown('D') && 
+		_state->getState() != _vState[PLAYERSTATE::LETHAL_CHARGE] && _state->getState() != _vState[PLAYERSTATE::LETHAL_ATTACK] &&
+		_state->getState() != _vState[PLAYERSTATE::GUARD])
 	{
 		if (_state->getState() != _vState[PLAYERSTATE::LONGATTACKMOVE] && _state->getState() != _vState[PLAYERSTATE::LONGATTACKIDLE] && _state->getState() != _vState[PLAYERSTATE::JUMP])
 		{
@@ -394,12 +405,11 @@ void player::update()
 		(KEYMANAGER->isStayKeyDown('C') || KEYMANAGER->isStayKeyDown(VK_RBUTTON)))
 	{
 		_state->setState(_vState[PLAYERSTATE::GUARD]);
+		_pDef += 10;
 	}
 	if (KEYMANAGER->isOnceKeyDown('V')) //근접공격키
 	{
 		playerMeleeattack();
-
-
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))	// 가까우면 근접 , 멀면 원거리 공격
@@ -524,7 +534,6 @@ void player::update()
 				_attackAni[i]->stop();
 				_attacking = true;
 			}
-
 		}
 
 		_lethalCharge = 0;
@@ -540,7 +549,6 @@ void player::update()
 		_attackEffectCount = 0;
 		_state->setState(_vState[PLAYERSTATE::IDLE]);
 	}
-
 
 	if (_state->getState() == _vState[PLAYERSTATE::LONGATTACK] && _state->getState()->isAttack() == false && _state->getState()->isLongAttack() == false)
 	{

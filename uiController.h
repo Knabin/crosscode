@@ -28,5 +28,7 @@ public:
 
 	bool isUIOn() { return _tu->getOn(); }
 	bool UIon() { return _uiOn; }
+
+	class inventory* getInven() { return _inven; }
 };
 

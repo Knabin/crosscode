@@ -45,6 +45,9 @@ HRESULT tabUI::init()
 	IMAGEMANAGER->addImage("inven07", L"images/menu/inven07.png");
 	
 	IMAGEMANAGER->addFrameImage("weapon", L"images/equip/weapon.png", 4, 1);
+	IMAGEMANAGER->addFrameImage("eq_effect", L"images/equip/eq_eff.png", 5, 1);
+
+	EFFECTMANAGER->addEffect("eq_effect", "eq_effect", 1, 0.3f, 1, 0.74f);
 
 	_on = false;
 
@@ -386,6 +389,7 @@ void tabUI::update()
 		}
 	}
 
+	
 	if (_on)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) || KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
@@ -626,7 +630,7 @@ void tabUI::render()
 				itemObject it = _item->getItemInfo(L"¥Ÿ∏Æ", _equip[4]);
 				IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 178), 3, 0);
 				D2DRENDERER->RenderText(1380, 152, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
-
+				
 				int list = 0;
 				for (int i = 0; i < _vIv.size(); ++i)
 				{
@@ -703,6 +707,7 @@ void tabUI::render()
 						_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 						_equip[0] = _equipItemNum[i];
+						EFFECTMANAGER->play("eq_effect", Vector2(1025, 222), 0, 0.7f);
 						outMenu();
 					}
 				}
@@ -761,6 +766,16 @@ void tabUI::render()
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 					_equip[_equipList] = _equipItemNum[i];
+
+					switch (_equipList)
+					{
+					case 1:
+						EFFECTMANAGER->play("eq_effect", Vector2(879, 533), 0, 0.7f);
+						break;
+					case 2:
+						EFFECTMANAGER->play("eq_effect", Vector2(1166, 533), 0, 0.7f);
+						break;
+					}
 					outMenu();
 				}
 			}
@@ -819,6 +834,7 @@ void tabUI::render()
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 					_equip[_equipList] = _equipItemNum[i];
+					EFFECTMANAGER->play("eq_effect", Vector2(1024, 550), 0, 0.7f);
 					outMenu();
 				}
 			}
@@ -877,6 +893,7 @@ void tabUI::render()
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 					_equip[_equipList] = _equipItemNum[i];
+					EFFECTMANAGER->play("eq_effect", Vector2(1072, 995),0,0.7f);
 					outMenu();
 				}
 			}
@@ -1332,7 +1349,6 @@ void tabUI::render()
 			}
 		}
 	}
-	
 }
 
 void tabUI::inEquip()
