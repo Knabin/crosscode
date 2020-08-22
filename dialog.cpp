@@ -60,11 +60,11 @@ void dialog::loadText()
 	if (_fileName == "1")
 	{
 		_vText.push_back(L"1");
-		_vText.push_back(L"레아! 첫 접속의 소감은 어때?");
+		_vText.push_back(L"레아! 첫 접속 소감은 어때?");
 		_vText.push_back(L"2");
 		_vText.push_back(L"(끄덕)");
 		_vText.push_back(L"1");
-		_vText.push_back(L"멋진걸!");
+		_vText.push_back(L"음! 좋아. 멋진걸!");
 		_vText.push_back(L"1");
 		_vText.push_back(L"W A S D 키로 이동할 수 있어.\n이미 알고 있을 수도 있지만.");
 		_vText.push_back(L"1");
@@ -99,8 +99,42 @@ void dialog::loadText()
 	else if (_fileName == "3")
 	{
 		_vText.push_back(L"1");
-		_vText.push_back(L"문이 열렸으니, 저쪽으로 가면\n몬스터를 만날 수 있을 거야.");
+		_vText.push_back(L"저쪽으로 가면 드디어 몬스터를 만날 수 있어.");
+		_vText.push_back(L"1");
+		_vText.push_back(L"긴장하지 말고, 파이팅!");
+		_vText.push_back(L"2");
+		_vText.push_back(L"...?");
+		_vText.push_back(L"1");
+		_vText.push_back(L"미안...");
 	}
+	else if (_fileName == "4")
+	{
+		_vText.push_back(L"1");
+		_vText.push_back(L"자, 잠깐만 레아!");
+		_vText.push_back(L"1");
+		_vText.push_back(L"동굴은 들어가지 말라고 했잖아!");
+		_vText.push_back(L"2");
+		_vText.push_back(L"...!");
+		_vText.push_back(L"1");
+		_vText.push_back(L"한눈판 사이에 들어와 버리다니...");
+		_vText.push_back(L"1");
+		_vText.push_back(L"뭐 별일이야 있겠어?");
+	}
+	else if (_fileName == "5")
+	{
+		_vText.push_back(L"2");
+		_vText.push_back(L"...!");
+		_vText.push_back(L"1");
+		_vText.push_back(L"아, 이런... 뭔가 불길한 예감이...");
+	}
+	else if (_fileName == "6")
+	{
+		_vText.push_back(L"2");
+		_vText.push_back(L"...");
+		_vText.push_back(L"1");
+		_vText.push_back(L"온다! 조심해, 레아!");
+	}
+
 	lea = new portrait(0);
 	pro = new portrait(1);
 

@@ -8,6 +8,7 @@ class bossTestScene : public scene
 private:
 
 	boss* _boss;
+	gameObject* _cameraTarget;
 
 
 public:
