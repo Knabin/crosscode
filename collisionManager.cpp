@@ -13,6 +13,7 @@ HRESULT collisionManager::init()
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	_count = 0;
 	_collisionCount = 0;
+	_playerCollisionCount = 0;
 	_pushOut = false;
 	
 	return S_OK;
@@ -45,6 +46,18 @@ void collisionManager::update()
 			}
 		}
 	}
+
+	//에너미가 플레이어게 중첩데미지를 먹이는걸 방지하기 위한 코드
+	if (_player->getAttackCollision())
+	{
+		_playerCollisionCount++;
+		if (_playerCollisionCount % 40 == 0)
+		{
+			_player->setAttackCollision(false);
+			_playerCollisionCount = 0;
+		}
+	}
+	//에너미가 플레이어게 중첩데미지를 먹이는걸 방지하기 위한 코드
 }
 
 void collisionManager::render()
@@ -439,8 +452,8 @@ void collisionManager::hedgehagCollision()
 				_count++;
 				if (_count <= 3)
 				{
-					_player->setPlayerPlusX(cosf(h->getEnemyAngleSave()) * 10.0f);
-					_player->setPlayerPlusY(-sinf(h->getEnemyAngleSave()) * 10.0f);
+					_player->setPlayerPlusX(cosf(h->getEnemyAngleSave()) * 5.0f);
+					_player->setPlayerPlusY(-sinf(h->getEnemyAngleSave()) * 5.0f);
 				}
 				else
 				{
@@ -672,7 +685,11 @@ void collisionManager::playerHitCollision()
 			}	
 			if (_player->getPlayerDef() < e->getEnemyAttackPower())
 			{
-				_player->setPlayerHP(_player->getPlayerHP() - (e->getEnemyAttackPower() - _player->getPlayerDef()));
+				if (!_player->getAttackCollision())
+				{
+					_player->setPlayerHP(_player->getPlayerHP() - (e->getEnemyAttackPower() - _player->getPlayerDef()));
+					_player->setAttackCollision(true);
+				}
 			}
 		}
 	}
@@ -726,12 +743,12 @@ void collisionManager::bulletCollision()
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
 				EFFECTMANAGER->play("enemyMeerkatBallEffect", CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).x + 25, CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).y + 25);
-				m->getBullets()->remove(j);//해당 총알의 벡터를 삭제
-				break;
 				if (_player->getPlayerDef() < m->getEnemyAttackPower())
 				{
 					_player->setPlayerHP(_player->getPlayerHP() - (m->getEnemyAttackPower() - _player->getPlayerDef()));
 				}
+				m->getBullets()->remove(j);//해당 총알의 벡터를 삭제
+				break;
 			}
 		}
 	}

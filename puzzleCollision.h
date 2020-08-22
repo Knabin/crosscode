@@ -20,7 +20,6 @@ public:
 	void update();
 	void puzzleBlueWallCollision();
 	void puzzleOrangeWallCollision();
-	void puzzleComboButtonCollision();
 	void puzzleTabButtonCollision();
 	void puzzleDestructCollision();
 	void puzzleComplete();

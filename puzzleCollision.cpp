@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "puzzleCollision.h"
 #include "puzzleTabButton.h"
-#include "puzzleComboButton.h"
 #include "puzzleDestruct.h"
 #include "puzzleBlueWall.h"
 #include "puzzleOrangeWall.h"
@@ -30,7 +29,6 @@ void puzzleCollision::update()
 {
 	puzzleBlueWallCollision();//블루벽에 플레이어의 충전된 총알이 충돌시 반사 + 플레이어가 블루벽에 밀려나게 하기위한 함수
 	puzzleOrangeWallCollision();//오렌지벽이랑 플레이어 렉트가 충돌하면 플레이어를 밀어나게 하기위한 함수
-	puzzleComboButtonCollision();//플레이어의 총알렉트 + 근접공격 렉트가 충돌할때 단시간안에 여러번 충돌되면 퍼즐패턴을 진행하기 위한 함수
 	puzzleTabButtonCollision();//탑버튼이 플레이어의 총알공격렉트 + 근접공격 렉트에 충돌되면 벽을 내려가게 하기위한 함수
 	puzzleDestructCollision();//플레이어의 총알공격렉트 + 근접공격렉트가 충돌되면 벽HP가 깍이고 벽HP가 0이되면 이펙트를 발생하고 렉트를 제거하기 위한 함수
 	puzzleComplete();//탑버튼이 모두 충돌됬고 탑버튼들의 프레임재생도 모두 끝났다면 발판상태를 트루로 바꿔주기 위한 함수
@@ -161,27 +159,6 @@ void puzzleCollision::puzzleOrangeWallCollision()
 		//오렌지벽 렉트랑 플레이어 렉트가 충돌하면 플레이어 렉트를 밀어버리기 위한 코드
 	}
 }
-
-void puzzleCollision::puzzleComboButtonCollision()
-{
-	vector<gameObject*> footholdTemp = OBJECTMANAGER->findObjects(objectType::MAPOBJECT, "foothold");
-
-	for (int i = 0; i < footholdTemp.size(); i++)
-	{
-		foothold* footholdP = dynamic_cast<foothold*>(footholdTemp[i]);
-
-		if (_puzzleComplete[0] &&//모든 탑버튼들의 충돌이 끝나고 프레임 재생까지 끝났다면
-			_puzzleComplete[1] &&
-			_puzzleComplete[2] &&
-			_puzzleComplete[3] &&
-			_puzzleComplete[4] &&
-			_puzzleComplete[5])
-		{
-			footholdP->setIsOn(true);//발판상태값 트루
-		}
-	}
-}
-
 
 void puzzleCollision::puzzleTabButtonCollision()
 {
@@ -495,7 +472,7 @@ void puzzleCollision::puzzleDestructCollision()
 			{
 				if (d->getHP() > 0)
 				{
-					d->setHP(_player->getPlayerAttackPower());//플레이어의 공격력 만큼 데미지 주기
+					d->setHP(50);//플레이어의 공격력 만큼 데미지 주기
 					_player->getBullet()->remove(j);//플레이어의 총알 벡터 삭제
 					break;
 				}
@@ -552,4 +529,20 @@ void puzzleCollision::puzzleDestructCollision()
 
 void puzzleCollision::puzzleComplete()
 {
+	vector<gameObject*> footholdTemp = OBJECTMANAGER->findObjects(objectType::MAPOBJECT, "foothold");
+
+	for (int i = 0; i < footholdTemp.size(); i++)
+	{
+		foothold* footholdP = dynamic_cast<foothold*>(footholdTemp[i]);
+
+		if (_puzzleComplete[0] &&//모든 탑버튼들의 충돌이 끝나고 프레임 재생까지 끝났다면
+			_puzzleComplete[1] &&
+			_puzzleComplete[2] &&
+			_puzzleComplete[3] &&
+			_puzzleComplete[4] &&
+			_puzzleComplete[5])
+		{
+			footholdP->setIsOn(true);//발판상태값 트루
+		}
+	}
 }

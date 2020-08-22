@@ -137,6 +137,7 @@ HRESULT player::init()
 	_bullet = new bullet;
 	_bullet->init();
 	_attacking = false;
+	_attackCollision = false;
 	 _pHp = 100;
 	 _playerMaxHP = 100;
 	 _pXp = 0;
