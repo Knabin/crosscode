@@ -50,7 +50,7 @@ void puzzleOrangeWall::update()
 
 void puzzleOrangeWall::render()
 {
-	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_rc), D2D1::ColorF::Azure, 0);
+	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_rc), D2D1::ColorF::Azure, 0);
 	_image->setSize(Vector2(_image->getFrameSize()) * CAMERA->getZoomAmount());
 	_image->frameRender(CAMERA->getRelativeVector2(_rc.getCenter()), _frameX, 0);
 }
