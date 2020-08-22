@@ -21,6 +21,8 @@ HRESULT uiController::init()
 	_shop = new shop;
 	_shop->init();
 
+	_tu->setInventory(_inven);
+	_shop->setInventory(_inven);
 
 
 	return S_OK;
@@ -61,6 +63,7 @@ void uiController::update()
 		_tu->update();
 		_shop->update();
 		_inven->update();
+		
 	}
 	
 	if (_vVendor.size() != NULL)
@@ -116,7 +119,6 @@ void uiController::update()
 	if (_tu->getOn())
 	{
 		_tu->setInven(_inven->getInven());
-		_tu->setMoney(_inven->getMoney());
 	}
 
 }

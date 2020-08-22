@@ -13,7 +13,7 @@ puzzleOrangeWall::~puzzleOrangeWall()
 HRESULT puzzleOrangeWall::init()
 {
 	_name = "puzzleOrangeWall";
-
+	_frameX = 0;
 	if (_type == 0)
 	{
 		_image = IMAGEMANAGER->addFrameImage("wall3", L"images/tile/wall3preview.png", 1, 1);
@@ -34,7 +34,7 @@ void puzzleOrangeWall::release()
 
 void puzzleOrangeWall::update()
 {
-	
+	/*
 	if (_type != 0)
 	{
 		_count++;
@@ -45,6 +45,7 @@ void puzzleOrangeWall::update()
 			_count = 0;
 		}
 	}
+	*/
 }
 
 void puzzleOrangeWall::render()

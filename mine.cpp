@@ -11,6 +11,8 @@ mine::~mine()
 
 HRESULT mine::init(float centerX, float centerY)
 {
+	_name = "mine";
+
 	_angle = PI / 2;
 	_centerMeter = 50;
 

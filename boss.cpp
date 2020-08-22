@@ -11,6 +11,34 @@ boss::~boss()
 
 HRESULT boss::init()
 {
+	_icethrower = new icethrower;
+	_icethrower->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 1150);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _icethrower);
+
+	_mine = new mine;
+	_mine->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 550);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _mine);
+
+	_stoneshower = new stoneshower;
+	_stoneshower->init(WINSIZEX / 2 - 85 + 215, WINSIZEY / 2 - 675 - 499);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _stoneshower);
+
+	_flamethrower = new flamethrower;
+	_flamethrower->init(WINSIZEX / 2 - 85 + 385, WINSIZEY / 2 - 675 + 1025);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _flamethrower);
+
+	_iceguide = new iceguide;
+	_iceguide->init(WINSIZEX / 2 - 85 + 185, WINSIZEY / 2 - 675 + 1125);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _iceguide);
+
+	_name = "boss";
+
+
 	// 기본 y축WINSIZEY / 2 - 675
 	bossInitialization();
 
@@ -153,20 +181,8 @@ HRESULT boss::init()
 	}
 
 	//================================================================================================================================================================//
-	_icethrower = new icethrower;
-	_icethrower->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 1150);
 
-	_mine = new mine;
-	_mine->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 550);
 
-	_stoneshower = new stoneshower;
-	_stoneshower->init(WINSIZEX / 2 - 85 + 215, WINSIZEY / 2 - 675 - 499);
-
-	_flamethrower = new flamethrower;
-	_flamethrower->init(WINSIZEX / 2 - 85 + 385, WINSIZEY / 2 - 675 + 1025);
-
-	_iceguide = new iceguide;
-	_iceguide->init(WINSIZEX / 2 - 85 + 185, WINSIZEY / 2 - 675 + 1125);
 
 	return S_OK;
 }
@@ -190,24 +206,24 @@ void boss::update()
 
 	//================================================================================================================================================================//
 
-	_icethrower->update();
+	//_icethrower->update();
 
-	_mine->update();
+	//_mine->update();
 
-	_stoneshower->update();
+	//_stoneshower->update();
 
-	_flamethrower->update();
+	//_flamethrower->update();
 
-	_iceguide->update();
+	//_iceguide->update();
 
 }
 
 void boss::render()
 {
 
-	_icethrower->render();
+	//_icethrower->render();
 
-	_iceguide->render();
+	//_iceguide->render();
 
 	_mine->render(_Center._x + 115, _Center._y + 50);
 
@@ -215,9 +231,9 @@ void boss::render()
 
 	_mine->explotion(_Center._x + 115, _Center._y + 50);
 
-	_stoneshower->render();
+	//_stoneshower->render();
 
-	_flamethrower->render();
+	//_flamethrower->render();
 
 }
 
@@ -384,6 +400,18 @@ void boss::bossState()
 		}
 		
 
+		if (_icethrowerDelay >= 205)
+		{
+			for (_icethrower->getIcethrowerIterVector() = _icethrower->getIcethrowerVector().begin();
+				_icethrower->getIcethrowerIterVector() != _icethrower->getIcethrowerVector().end();
+				++_icethrower->getIcethrowerIterVector())
+			{
+				_icethrower->getIcethrowerIterVector()->_fireStart = false;
+				_bossState = ICETHROWER_END;
+			}
+		}
+
+
 		if (_frameCount % 5 == 0)
 		{
 			if (_currentFrameX >= IMAGEMANAGER->findImage("왼손공격")->getMaxFrameX())
@@ -395,7 +423,6 @@ void boss::bossState()
 			{
 				_currentFrameY = 0;
 				_icethrowerDelay = 0;
-				_bossState = ICETHROWER_END;
 			}
 			_bossLeftHandAttackFrameX = _currentFrameX;
 			_bossLeftHandAttackFrameY = _currentFrameY;

@@ -146,6 +146,10 @@ protected:
 
 	int _nowOrder;//현재 에너미의 층이 몇층인지 확인하기 위한 변수
 
+	int _damaged;
+	bool _dealing;
+	int _dealingCount;
+
 private:
 	bool _oneAngry;//앵그리 함수를 한번만 실행되게 하기 위한 변수
 
@@ -190,5 +194,15 @@ public:
 	void setMove(vector<tile*> moveV) { _move = moveV; }
 	void deleteMove() { _move.erase(_move.begin() + _move.size() - 1); }
 	void clearMove() { _move.clear(); }
+
+	int getDamaged() { return _damaged; }
+	void setDamaged(int d) { _damaged = d; }
+
+	bool getDealing() { return _dealing; }
+	void setDealing(bool b) { _dealing = b; }
+
+	int getCount() { return _dealingCount; }
+	void setCount(int t) { _dealingCount = t;}
+	void plusCount(int t) { _dealingCount += t; }
 };
 

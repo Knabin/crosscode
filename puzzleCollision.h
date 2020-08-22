@@ -8,7 +8,7 @@ private:
 
 	int _count;
 
-	bool _puzzleTabButtonCollision;
+	bool _puzzleTabButtonCollision[6];
 
 public:
 	puzzleCollision() {};

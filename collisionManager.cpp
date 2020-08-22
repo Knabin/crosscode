@@ -14,7 +14,7 @@ HRESULT collisionManager::init()
 	_count = 0;
 	_collisionCount = 0;
 	_pushOut = false;
-	_damaged = 0;
+	
 	return S_OK;
 }
 
@@ -67,12 +67,37 @@ void collisionManager::render()
 	for (int i = 0; i < temp.size(); i++)
 	{
 		enemy* e = dynamic_cast<enemy*>(temp[i]);
-		wstring a = to_wstring(_damaged);
+		wstring a = to_wstring(e->getDamaged());
 
-		if (e->getEnemyCollision())
-		D2DRENDERER->RenderText(Vector2(CAMERA->getRelativeVector2(e->getPosition())).x,
-			Vector2(CAMERA->getRelativeVector2(e->getPosition())).y - 80,
-			a, RND->getFromIntTo(15, 20), D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+		//if (e->getEnemyCollision())
+
+		int r = 0;
+		if (e->getCount() % 10)
+		{
+			r = RND->getFromIntTo(40, 50);
+		}
+
+		if (e->getDealing() && e->getCount() < 50)
+		{
+			if (e->getCount() < 10)
+			{
+				D2DRENDERER->RenderText(Vector2(CAMERA->getRelativeVector2(e->getPosition())).x,
+					Vector2(CAMERA->getRelativeVector2(e->getPosition())).y - 80,
+					a, 40, D2DRenderer::DefaultBrush::Red, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+			}
+			else
+			{
+				D2DRENDERER->RenderText(Vector2(CAMERA->getRelativeVector2(e->getPosition())).x,
+					Vector2(CAMERA->getRelativeVector2(e->getPosition())).y - 80,
+					a, r, D2DRenderer::DefaultBrush::Red, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+
+			}
+			
+			e->plusCount(1);
+		}
+		
+		if (e->getCount() >= 50)
+			e->setDealing(false);
 	}
 }
 
@@ -145,7 +170,10 @@ void collisionManager::buffaloCollision()
 				if (!b->getEnemyCollision())
 				{
 					b->setEnemyHP(_player->getPlayerAttackPower());//플레이어가 에너미(버팔로)한테 주는 데미지
+					b->setDamaged(_player->getPlayerAttackPower());
 					b->setEnemyCollision(true);
+					b->setDealing(true);
+					b->setCount(0);
 				}
 			}
 		}
@@ -155,7 +183,10 @@ void collisionManager::buffaloCollision()
 			if (isCollision(b->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
 				b->setEnemyHP(_player->getPlayerAttackPower());
+				b->setDamaged(_player->getPlayerAttackPower());
 				_player->getBullet()->remove(j);
+				b->setDealing(true);
+				b->setCount(0);
 			}
 		}
 
@@ -261,8 +292,10 @@ void collisionManager::hedgehagCollision()
 				if (!h->getEnemyCollision())//고슴도치의 충돌판정이 펄스면
 				{
 					h->setEnemyHP(_player->getPlayerAttackPower());//플레이어가 에너미(고슴도치)한테 주는 데미지
-					_damaged = _player->getPlayerAttackPower();
+					h->setDamaged(_player->getPlayerAttackPower());
 					h->setEnemyCollision(true);
+					h->setDealing(true);
+					h->setCount(0);
 				}
 			}
 		}
@@ -306,7 +339,9 @@ void collisionManager::hedgehagCollision()
 				}
 
 				h->setEnemyHP(_player->getPlayerAttackPower());
-				_damaged = _player->getPlayerAttackPower();
+				h->setDamaged(_player->getPlayerAttackPower());
+				h->setDealing(true);
+				h->setCount(0);
 				_player->getBullet()->remove(j);
 			}
 		}
@@ -316,6 +351,9 @@ void collisionManager::hedgehagCollision()
 			if (isCollision(h->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
 				h->setEnemyHP(_player->getPlayerAttackPower());//플레이어가 에너미(고슴도치)한테 주는 데미지
+				h->setDamaged(_player->getPlayerAttackPower());
+				h->setDealing(true);
+				h->setCount(0);
 				_player->getBullet()->remove(j);
 			}
 		}
@@ -464,6 +502,9 @@ void collisionManager::meerkatCollision()
 					if (!m->getEnemyCollision())//충돌판정이 펄스이면
 					{
 						m->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
+						m->setDamaged(_player->getPlayerAttackPower());
+						m->setDealing(true);
+						m->setCount(0);
 						m->setEnemyCollision(true);
 					}
 				}
@@ -511,6 +552,9 @@ void collisionManager::meerkatCollision()
 					}
 
 					m->setEnemyHP(_player->getPlayerAttackPower());
+					m->setDamaged(_player->getPlayerAttackPower());
+					m->setDealing(true);
+					m->setCount(0);
 					_player->getBullet()->remove(j);
 				}
 			}
@@ -520,6 +564,9 @@ void collisionManager::meerkatCollision()
 			if (isCollision(m->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
 				m->setEnemyHP(_player->getPlayerAttackPower());
+				m->setDamaged(_player->getPlayerAttackPower());
+				m->setDealing(true);
+				m->setCount(0);
 				_player->getBullet()->remove(j);
 			}
 		}

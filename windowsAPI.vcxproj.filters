@@ -248,6 +248,9 @@
     <ClCompile Include="bossBlock.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="bossCollision.cpp">
+      <Filter>playGround\collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -507,6 +510,9 @@
     </ClInclude>
     <ClInclude Include="flamethrower.h">
       <Filter>enemyTest\bossPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="bossCollision.h">
+      <Filter>playGround\collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

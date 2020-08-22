@@ -16,7 +16,7 @@ HRESULT enemyManager::init()
 
 	_time = _index = 0;
 	_count = 0;
-
+	
 	return S_OK;
 }
 

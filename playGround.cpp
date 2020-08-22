@@ -27,7 +27,6 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-
 	SCENEMANAGER->addScene("loading", new initLoadingScene());
 	SCENEMANAGER->loadScene("loading");
 
@@ -36,6 +35,9 @@ HRESULT playGround::init()
 
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
+
+	_bossCollision = new bossCollision;
+	_bossCollision->init();
 
 	_ui = new uiController();
 	_ui->init();
@@ -113,6 +115,7 @@ void playGround::update()
 		_puzzleCollision->update();
 		_collisionManager->update();
 		_enemyManager->update();
+		_bossCollision->update();
 	}
 
 	EVENTMANAGER->update();
