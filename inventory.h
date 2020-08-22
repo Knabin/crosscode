@@ -32,8 +32,8 @@ public:
 	void render();
 
 	//아이템종료,아이템번호,상점이용
-	void getItem(wstring _type, int _itemNum, bool shop = 0);
-	void deleteItem(wstring _type, int _itemNum, bool shop = 0);
+	void getItem(wstring _type, int _itemNum, int count = 1, bool shop = 0);
+	void deleteItem(wstring _type, int _itemNum, int count = 1, bool shop = 0);
 
 	inline int getMoney() { return _money; }
 	//소지금 변경(로드용)

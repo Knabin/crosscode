@@ -10,6 +10,9 @@ HRESULT bullet::init()
 	_isAlpha = false;
 
 	_deleteBulletAngle = 0;
+
+	SOUNDMANAGER->addSound("pS lcattack", "sounds/player/throw-ball-charged.ogg", false, false);
+
 	return S_OK;
 }
 
@@ -65,6 +68,7 @@ void bullet::fire(float x, float y, float angle, float speed)
 {
 	tagPlayerBullet bullet;
 	ZeroMemory(&bullet, sizeof(tagPlayerBullet));
+	SOUNDMANAGER->play("pS lcattack");
 
 	bullet.image = IMAGEMANAGER->addFrameImage("playerBullet", L"images/player/player_bullet.png", 4, 1);
 	IMAGEMANAGER->addImage("player_bulletEffect", L"images/player/player_bulletEffect.png");

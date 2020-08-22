@@ -45,6 +45,9 @@ HRESULT puzzleScene::init()
 	_nextScene = "town";
 	_nextPoint = Vector2(2300, 1750);
 
+	SOUNDMANAGER->addSound("bgm puzzle", "sounds/bgm/puzzle-bgm.ogg", true, true);
+	SOUNDMANAGER->playBGM("bgm puzzle");
+
 	return S_OK;
 }
 

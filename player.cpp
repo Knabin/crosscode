@@ -684,6 +684,11 @@ void player::update()
 		_pSpcharge++;
 	}
 
+	if (_pSp >= 1 && _pSp <= 3 &&(_state->getState() == _vState[LEFT_ATTACK] || _state->getState() == _vState[RIGHT_ATTACK] || _state->getState() == _vState[RIGHT_FINALATTACK] || _state->getState() == _vState[LONGATTACK]))
+	{
+		_pSpcharge++;
+	}
+
 	if (_pSpcharge > 190)
 	{
 		_pSp++;
