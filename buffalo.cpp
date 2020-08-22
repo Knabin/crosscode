@@ -330,7 +330,7 @@ void buffalo::update()
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75), 0, 0.5f);
 	}
-	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 25), pivot::LEFTTOP);
+	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 5), pivot::LEFTTOP);
 	//cout << "¹öÆÈ·Î : " << _currentHP << endl;
 }
 

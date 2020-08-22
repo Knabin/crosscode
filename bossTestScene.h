@@ -9,6 +9,8 @@ private:
 
 	boss* _boss;
 	gameObject* _cameraTarget;
+	floatRect _hpBar;
+	int _hp;
 
 
 public:

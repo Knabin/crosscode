@@ -132,7 +132,7 @@ void shop::render()
 					if (_inven->getMoney() >= _it->getItemInfo(L"팔", 1).price
 						&& _inven->getCount(L"거래",2) >= 2 && _inven->getCount(L"거래", 0) >= 3)
 					{
-						_inven->getItem(L"팔", 1, true);
+						_inven->getItem(L"팔", 1, 1, true);
 						_inven->deleteItem(L"거래", 2);
 						_inven->deleteItem(L"거래", 2);
 						_inven->deleteItem(L"거래", 0);
@@ -169,7 +169,7 @@ void shop::render()
 					if (_inven->getMoney() >= _it->getItemInfo(L"머리", 1).price
 						&& _inven->getCount(L"거래", 1) >= 1 && _inven->getCount(L"거래", 5) >= 3)
 					{
-						_inven->getItem(L"머리", 1, true);
+						_inven->getItem(L"머리", 1, 1, true);
 						_inven->deleteItem(L"거래", 1);
 						_inven->deleteItem(L"거래", 5);
 						_inven->deleteItem(L"거래", 5);
@@ -210,7 +210,7 @@ void shop::render()
 					if (_inven->getMoney() >= _it->getItemInfo(L"몸통", 1).price
 						&& _inven->getCount(L"거래", 3) >= 1 && _inven->getCount(L"거래", 4) >= 2)
 					{
-						_inven->getItem(L"몸통", 1, true);
+						_inven->getItem(L"몸통", 1, 1, true);
 						_inven->deleteItem(L"거래", 3);
 						_inven->deleteItem(L"거래", 4);
 						_inven->deleteItem(L"거래", 4);
