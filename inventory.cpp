@@ -3,14 +3,9 @@
 
 HRESULT inventory::init()
 {
+	_name = "inventory";
 	_money = 0;
 	
-	getItem(L"ÆÈ", 0);
-	getItem(L"ÆÈ", 0);
-	getItem(L"¼Ò¸ð", 0);
-	getItem(L"¸Ó¸®", 0);
-	getItem(L"´Ù¸®", 0);
-	getItem(L"¸öÅë", 0);
 
 	/*getItem(L"°Å·¡", 2);
 	getItem(L"°Å·¡", 2);
@@ -33,6 +28,8 @@ HRESULT inventory::init()
 
 	_it = new item;
 	_it->init();
+
+	OBJECTMANAGER->addObject(objectType::UI, this);
 
 	return S_OK;
 }

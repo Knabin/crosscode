@@ -3,6 +3,7 @@
 #include "gameObject.h"
 #include "player.h"
 #include "dialog.h"
+#include "inventory.h"
 
 iObjectMove::iObjectMove(gameObject * targetObject, Vector2 targetLocation, float speed)
 {
@@ -214,5 +215,27 @@ void iPlayerTurn::eventStart()
 
 bool iPlayerTurn::eventUpdate()
 {
+	return true;
+}
+
+iItemAdd::iItemAdd()
+{
+}
+
+void iItemAdd::eventStart()
+{
+	_inven = dynamic_cast<inventory*>(OBJECTMANAGER->findObject(objectType::UI, "inventory"));
+}
+
+bool iItemAdd::eventUpdate()
+{
+	_inven->getItem(L"ÆÈ", 0);
+	_inven->getItem(L"ÆÈ", 0);
+	_inven->getItem(L"¼Ò¸ð", 0);
+	_inven->getItem(L"¸Ó¸®", 0);
+	_inven->getItem(L"´Ù¸®", 0);
+	_inven->getItem(L"¸öÅë", 0);
+	_inven->getItem(L"Áß¿ä", 0);
+
 	return true;
 }

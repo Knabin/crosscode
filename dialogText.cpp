@@ -8,7 +8,7 @@ dialogText::dialogText(wstring str, int type)
 
 HRESULT dialogText::init()
 {
-	if (_type == 1)
+	if (_type % 2 == 0)
 	{
 		// ¿ÞÂÊ
 		_img = IMAGEMANAGER->addImage("left d", L"images/UI/left-2.png");
@@ -45,7 +45,7 @@ void dialogText::render()
 		temp += _str[i];
 	}
 
-	if (_type == 1)
+	if (_type % 2 == 0)
 		D2DRENDERER->RenderTextField(_rc.getCenter().x + 40, _rc.getCenter().y, temp, 30, _rc.getSize().x, _rc.getSize().y, D2DRenderer::DefaultBrush::White);
 	else 
 		D2DRENDERER->RenderTextField(_rc.getCenter().x + 20, _rc.getCenter().y, temp, 30, _rc.getSize().x, _rc.getSize().y, D2DRenderer::DefaultBrush::White);

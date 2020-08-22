@@ -80,8 +80,10 @@ void puzzleScene::update()
 			{
 				iDialog* d = new iDialog(new dialog("2"));
 				iMoveScene* m = new iMoveScene(L"town", Vector2(1730, 300));
+				iItemAdd* a = new iItemAdd();
 				EVENTMANAGER->addEvent(d);
 				EVENTMANAGER->addEvent(m);
+				EVENTMANAGER->addEvent(a);
 				EVENTMANAGER->setPuzzleEvent(true);
 			}
 		}

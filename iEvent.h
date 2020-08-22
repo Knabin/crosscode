@@ -125,3 +125,15 @@ public:
 	void eventStart() override;
 	bool eventUpdate() override;
 };
+
+class iItemAdd final : public iEvent
+{
+private:
+	class inventory* _inven;
+
+public:
+	iItemAdd();
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};
