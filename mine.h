@@ -48,13 +48,6 @@ private:
 	int _mineFrameX, _mineFrameY;
 	int _explosionFrameX, _explosionFrameY;
 
-	bool mineMove;
-	bool mineMove2;
-	bool mineMove3;
-	bool mineMove4;
-	bool mineMove5;
-	bool mineMove6;
-
 
 public:
 
@@ -74,13 +67,14 @@ public:
 	void collision(int Num1, float angle);  //Áö·Ú Ãæµ¹
 	void collision2(int Num2, float angle);  //Áö·Ú Ãæµ¹2
 
+	void mineRemove(int Num1);
+	void mineRemove2(int Num2);
+
 	vector<tagMine>& getMineVector() { return _vMine; }
 	vector<tagMine>::iterator& getMineIterVector() { return _viMine; }
 
 	vector<tagMine>& getMine2Vector() { return _vMine2; }
 	vector<tagMine>::iterator& getMine2IterVector() { return _viMine2; }
-
-	bool& getMineMove() { return mineMove; }
 
 };
 
