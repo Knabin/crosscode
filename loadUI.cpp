@@ -151,12 +151,12 @@ void loadUI::loadData()
 
 			for (int i = 0; i < ivSize; ++i)
 			{
-				/*wstring type;
-				int num, count;
+				//wstring type;
+				//int num, count;
 
-				ReadFile(file, &type, sizeof(type), &read, NULL);
-				ReadFile(file, &num, sizeof(int), &read, NULL);
-				ReadFile(file, &count, sizeof(int), &read, NULL);*/
+				//ReadFile(file, &type, 128, &read, NULL);
+				//ReadFile(file, &num, sizeof(int), &read, NULL);
+				//ReadFile(file, &count, sizeof(int), &read, NULL);
 				invenObject o;
 				ReadFile(file, &o, sizeof(invenObject), &read, NULL);
 				

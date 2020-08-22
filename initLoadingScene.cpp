@@ -89,8 +89,23 @@ void initLoadingScene::update()
 		IMAGEMANAGER->addImage("event back", L"images/UI/eventback.png");
 		IMAGEMANAGER->addImage("black", L"images/UI/black.png");
 
+		// 타이틀 씬
+		IMAGEMANAGER->addFrameImage("buttons", L"images/title/button_title.png", 1, 5);
+		IMAGEMANAGER->addFrameImage("leaTitle", L"images/title/lea.png", 6, 1);
+
+		IMAGEMANAGER->addImage("clouds1", L"images/title/clouds-1.png");
+		IMAGEMANAGER->addImage("clouds2", L"images/title/clouds-2.png");
+		IMAGEMANAGER->addImage("ground", L"images/title/ground.png");
+		IMAGEMANAGER->addImage("planet", L"images/title/planet.png");
+		IMAGEMANAGER->addImage("railings", L"images/title/railings.png");
+		IMAGEMANAGER->addImage("sky", L"images/title/sky.png");
+		IMAGEMANAGER->addImage("logo", L"images/title/logo.png");
+
 		IMAGEMANAGER->addFrameImage("townblock", L"images/object/townblock.png", 2, 1);
 
+
+		// 사운드
+		SOUNDMANAGER->addSound("bgm title", "sounds/bgm/muTitle.ogg", true, true);
 
 		_isInit = true;
 	}

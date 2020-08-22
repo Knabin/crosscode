@@ -6,6 +6,7 @@
 #include "puzzleOrangeWall.h"
 #include "foothold.h"
 #include "bullet.h"
+#include "iEvent.h"
 
 HRESULT puzzleCollision::init()
 {
@@ -166,6 +167,7 @@ void puzzleCollision::puzzleTabButtonCollision()
 	vector<gameObject*> blueWallTemp = OBJECTMANAGER->findObjects(objectType::MAPOBJECT, "puzzleBlueWall");
 	vector<gameObject*> orangeTemp = OBJECTMANAGER->findObjects(objectType::MAPOBJECT, "puzzleOrangeWall");
 
+
 	for (int i = 0; i < topButtonTemp.size(); i++)
 	{
 		puzzleTabButton* allButtonP = dynamic_cast<puzzleTabButton*>(topButtonTemp[i]);//해당 충돌된 탑버튼이 몇번째 방인지 알기위한 모든 탑버튼
@@ -175,6 +177,9 @@ void puzzleCollision::puzzleTabButtonCollision()
 		puzzleTabButton* buttonP4 = dynamic_cast<puzzleTabButton*>(topButtonTemp[0]);//위쪽 컨테이너 탑버튼
 		puzzleTabButton* buttonP5 = dynamic_cast<puzzleTabButton*>(topButtonTemp[3]);//아래쪽 컨테이너 탑버튼
 		puzzleTabButton* buttonP6 = dynamic_cast<puzzleTabButton*>(topButtonTemp[4]);//근접공격용 탑버튼
+		
+		puzzleBlueWall* blueP = dynamic_cast<puzzleBlueWall*>(blueWallTemp[0]);//1번째 블루벽
+		puzzleOrangeWall* orangeP1 = dynamic_cast<puzzleOrangeWall*>(orangeTemp[1]);//1번째 오렌지벽
 
 		if (isCollision(buttonP1->getRect(), _player->getPlayerAttackRect()))//1번째 탑버튼 렉트에 플레이어 근접공격 렉트가 충돌하면
 		{
@@ -195,6 +200,8 @@ void puzzleCollision::puzzleTabButtonCollision()
 				_puzzleTabButtonCollision[0] = true;//1번째 탑버튼이 충돌했다는 bool값 트루
 				buttonP1->setRect(RectMakePivot(Vector2(buttonP1->getRect().getCenter().x, buttonP1->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//1번째 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
+				iCameraMove* i = new iCameraMove(blueP, 1.5f);
+				EVENTMANAGER->addEvent(i);
 				break;
 			}
 
@@ -204,6 +211,8 @@ void puzzleCollision::puzzleTabButtonCollision()
 				_puzzleTabButtonCollision[1] = true;//2번째 탑버튼이 충돌했다는 bool값 트루
 				buttonP2->setRect(RectMakePivot(Vector2(buttonP2->getRect().getCenter().x, buttonP2->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//2번째 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
+				iCameraMove* i = new iCameraMove(orangeP1, 1.5f);
+				EVENTMANAGER->addEvent(i);
 				break;
 			}
 
@@ -348,7 +357,6 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 
 		//1번째 탑버튼이 충돌처리 되서 프레임이 끝났으면
-		puzzleBlueWall* blueP = dynamic_cast<puzzleBlueWall*>(blueWallTemp[0]);//1번째 블루벽
 
 		if (_puzzleTabButtonCollision[0])//1번째 탑버튼이 충돌됬으면
 		{
@@ -376,7 +384,6 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 
 		//2번째 탑버튼이 충돌처리 되서 프레임이 끝났으면
-		puzzleOrangeWall* orangeP1 = dynamic_cast<puzzleOrangeWall*>(orangeTemp[1]);//1번째 오렌지벽
 
 		if (_puzzleTabButtonCollision[1])//2번째 탑버튼이 충돌됬으면
 		{
@@ -542,6 +549,11 @@ void puzzleCollision::puzzleComplete()
 			_puzzleComplete[4] &&
 			_puzzleComplete[5])
 		{
+			if (!footholdP->getIsOn())
+			{
+				iCameraMove* i = new iCameraMove(footholdP, 2.0f);
+				EVENTMANAGER->addEvent(i);
+			}
 			footholdP->setIsOn(true);//발판상태값 트루
 		}
 	}

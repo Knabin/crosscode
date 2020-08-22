@@ -68,6 +68,7 @@ HRESULT townScene::init()
 		EVENTMANAGER->setSecondEvent(true);
 	}
 
+	SOUNDMANAGER->stopAll("");
 
 	return S_OK;
 }

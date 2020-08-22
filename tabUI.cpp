@@ -1673,13 +1673,15 @@ void tabUI::saveData(int num)
 	for (int i = 0; i < _vIv.size(); ++i)
 	{
 		//인벤토리 벡터
-		wstring type = _vIv[i].type;		//아이템 종류 wstring
-		int num = _vIv[i].itemNum;	//아이템 번호 int
-		int count = _vIv[i].count;		//아이템 갯수 int
+		//wstring type = _vIv[i].type;		//아이템 종류 wstring
+		//int num = _vIv[i].itemNum;	//아이템 번호 int
+		//int count = _vIv[i].count;		//아이템 갯수 int
 
-		WriteFile(file, &type, sizeof(wstring), &write, NULL);
-		WriteFile(file, &num, sizeof(int), &write, NULL);
-		WriteFile(file, &count, sizeof(int), &write, NULL);
+		//WriteFile(file, &type, 128, &write, NULL);
+		//WriteFile(file, &num, sizeof(int), &write, NULL);
+		//WriteFile(file, &count, sizeof(int), &write, NULL);
+
+		WriteFile(file, &_vIv[i], sizeof(invenObject), &write, NULL);
 	}
 	// =======================================================
 
@@ -1746,12 +1748,15 @@ void tabUI::loadData()
 
 			for (int i = 0; i < ivSize; ++i)
 			{
-				wstring type;
-				int num, count;
+				//wstring type;
+				//int num, count;
 
-				ReadFile(file, &type, sizeof(type), &read, NULL);
-				ReadFile(file, &num, sizeof(int), &read, NULL);
-				ReadFile(file, &count, sizeof(int), &read, NULL);
+				//ReadFile(file, &type, 128, &read, NULL);
+				//ReadFile(file, &num, sizeof(int), &read, NULL);
+				//ReadFile(file, &count, sizeof(int), &read, NULL);
+
+				invenObject o;
+				ReadFile(file, &o, sizeof(invenObject), &read, NULL);
 			}
 
 			for (int i = 0; i < 5; ++i)
