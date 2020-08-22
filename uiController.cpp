@@ -56,7 +56,7 @@ void uiController::update()
 		}
 	}
 
-	if (scene != "title" && scene != "maptool" && !EVENTMANAGER->isPlayingEvent())
+	if (scene != L"title" && scene != L"maptool" && !EVENTMANAGER->isPlayingEvent())
 	{
 		_nm->update();
 		if (!_uiOn)
@@ -125,7 +125,7 @@ void uiController::update()
 
 void uiController::render()
 {
-	if (scene != "title" && scene != "maptool" && scene != "loading" && !EVENTMANAGER->isPlayingEvent())
+	if (scene != L"title" && scene != L"maptool" && scene != L"loading" && !EVENTMANAGER->isPlayingEvent())
 	{
 		_nm->render();
 		_tu->render();

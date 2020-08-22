@@ -193,7 +193,7 @@ void boss::release()
 
 void boss::update()
 {
-
+	if (!EVENTMANAGER->getBossFirstEvent()) return;
 	_frameCount++;
 
 	protectFrame();
@@ -267,26 +267,32 @@ void boss::bossState()
 		_currentFrameX = 0;
 		_stopCount++;
 		bossInitialization2();
-		
+
+		CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 		
 		if (_stopCount >= 200)
 		{
+			if (!EVENTMANAGER->getBossSecondEvent()) return;
 			if (_attack1 == false && _attack2 == false && _attack3 == false && _attack4 == false)
 			{
 				_stopCount = 0;
 				_bossState = ICETHROWER_READY;
+				CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::MAPOBJECT, "target"));
+
 			}
 
 			if (_attack1 == true && _attack2 == false && _attack3 == false && _attack4 == false)
 			{
 				_stopCount = 0;
 				_bossState = MINE_READY;
+				CAMERA->changeTarget(this);
 			}
 
 			if (_attack1 == true && _attack2 == true && _attack3 == false && _attack4 == false)
 			{
 				_stopCount = 0;
 				_bossState = STONESHOWER_READY;
+				CAMERA->changeTarget(this);
 			}
 
 			if (_attack1 == true && _attack2 == true && _attack3 == true && _attack4 == false)
@@ -299,6 +305,7 @@ void boss::bossState()
 			{
 				_stopCount = 0;
 				_bossState = ICEGUIDE_READY;
+				CAMERA->changeTarget(this);
 			}
 
 		}		
@@ -1244,6 +1251,7 @@ void boss::bossState()
 		if (_Center._y >= (WINSIZEY / 2 - 175))
 		{
 			_bossState = DEATH;
+			CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 		}
 
 	}
@@ -1384,6 +1392,8 @@ void boss::bossMove()
 		_RightHand._rectBody2.update(Vector2(_RightHand._center.x + 100, _RightHand._center.y + 275), Vector2(275, 500), pivot::CENTER);
 	}
 
+	// 카메라용으로 사용할게용
+	_position = _Center._rectBody.getCenter() + Vector2(-10, 400);
 }
 
 void boss::bossDraw()
@@ -1731,7 +1741,7 @@ void boss::moveDown()
 		_RightArm._center.y += 1.0f / 4;
 		_Center._angle += 0.01f;
 	}
-
+	if(_moveCount == 17) CAMERA->shakeStart(5.f, 0.3f);
 
 	if (_moveCount >= 17 && _moveCount < 48)
 	{
@@ -1746,6 +1756,8 @@ void boss::moveDown()
 		_Center._angle -= 0.01f;
 
 	}
+
+	if (_moveCount == 48) CAMERA->shakeStart(5.f, 0.3f);
 
 	if (_moveCount >= 48 && _moveCount < 64)
 	{

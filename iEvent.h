@@ -47,6 +47,19 @@ public:
 	bool eventUpdate() override;
 };
 
+class iPlayerTurn final : public iEvent
+{
+	class player* _player;
+	int _direction;
+
+public:
+	//	0: TOP, 1: LEFT_TOP, 2: LEFT, 3: LEFT_BOTTOM, 4: BOTTOM, 5: RIGHT_BOTTOM, 6: RIGHT, 7: RIGHT_TOP,
+	iPlayerTurn(int direction);
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};
+
 class iDialog final : public iEvent
 {
 	class dialog* _dialog;
@@ -62,11 +75,11 @@ class iMoveScene final : public iEvent
 {
 private:
 	class player* _player;
-	string _sceneName;
+	wstring _sceneName;
 	Vector2 _location;
 
 public:
-	iMoveScene(string sceneName, Vector2 location);
+	iMoveScene(wstring sceneName, Vector2 location);
 
 	void eventStart() override;
 	bool eventUpdate() override;
@@ -95,6 +108,19 @@ private:
 
 public:
 	iObjectActive(gameObject* object, float time);
+
+	void eventStart() override;
+	bool eventUpdate() override;
+};
+
+class iShake final : public iEvent
+{
+private:
+	float _amount;
+	float _time;
+
+public:
+	iShake(float amount, float time);
 
 	void eventStart() override;
 	bool eventUpdate() override;

@@ -22,6 +22,10 @@ HRESULT titleScene::init()
 	IMAGEMANAGER->addImage("sky", L"images/title/sky.png");
 	IMAGEMANAGER->addImage("logo", L"images/title/logo.png");
 
+	SOUNDMANAGER->addSound("bgm title", "sounds/bgm/muTitle.ogg", true, true);
+	SOUNDMANAGER->playBGM("bgm title");
+
+
 	//로딩이미지
 	//IMAGEMANAGER->addFrameImage("load", "images/loading.png", 4371, 141, 31, 1, true, RGB(255, 0, 255));
 	
@@ -130,23 +134,27 @@ void titleScene::render()
 
 void titleScene::cbStart()
 {
-	SCENEMANAGER->loadScene("town");
+	SCENEMANAGER->loadScene(L"town");
+	SOUNDMANAGER->stop("bgm title");
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
 }
 
 void titleScene::cbContinue()
 {
-	SCENEMANAGER->loadScene("test2");
+	SCENEMANAGER->loadScene(L"test2");
+	SOUNDMANAGER->stop("bgm title");
 }
 
 void titleScene::cbMaptool()
 {
-	SCENEMANAGER->loadScene("maptool");
+	SCENEMANAGER->loadScene(L"maptool");
+	SOUNDMANAGER->stop("bgm title");
 }
 
 void titleScene::cbOption()
 {
-	SCENEMANAGER->loadScene("boss");
+	SCENEMANAGER->loadScene(L"boss");
+	SOUNDMANAGER->stop("bgm title");
 }
 
 void titleScene::cbExit()

@@ -2,6 +2,7 @@
 #include "bossTestScene.h"
 #include "bossBlock.h"
 #include "iEvent.h"
+#include "dialog.h"
 
 bossTestScene::~bossTestScene()
 {
@@ -9,7 +10,7 @@ bossTestScene::~bossTestScene()
 
 HRESULT bossTestScene::init()
 {
-	CAMERA->setCameraMode(CAMERASTATE::TARGET);
+	CAMERA->setCameraMode(CAMERASTATE::NONE);
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
 
@@ -48,19 +49,25 @@ HRESULT bossTestScene::init()
 	block->init();
 	block->setIsActive(false);
 
+	_cameraTarget = new gameObject();
+	_cameraTarget->setName("target");
+
 	OBJECTMANAGER->addObject(objectType::MAPOBJECT, block);
+	OBJECTMANAGER->addObject(objectType::MAPOBJECT, _cameraTarget);
 
-	/*iObjectMove* move = new iObjectMove(OBJECTMANAGER->findObject(""))
-	iCameraMove* camera = new iCameraMove(block, 3.0f);
-	iObjectActive* active = new iObjectActive(block, 2.0f);
-	EVENTMANAGER->addEvent(camera);
-	EVENTMANAGER->addEvent(active);*/
-	// ~~이벤트~~
-	// 플레이어가 앞으로 감
-	// block 켜는 이벤트
-	// 다이얼로그
-	// 보스 등장
-
+	// 보스방 이벤트
+	// 주석 풀면 이벤트 나와요 카메라 움직임도 조금 자연스러워짐~
+	/*
+	EVENTMANAGER->addEvent(new iPlayerMove(Vector2(1070, 1350)));
+	EVENTMANAGER->addEvent(new iDialog(new dialog("4")));
+	EVENTMANAGER->addEvent(new iObjectActive(block, 1.0f));
+	EVENTMANAGER->addEvent(new iPlayerTurn(4));
+	EVENTMANAGER->addEvent(new iCameraMove(block, 3.0f));
+	EVENTMANAGER->addEvent(new iDialog(new dialog("5")));
+	EVENTMANAGER->addEvent(new iShake(5.f, 1.f));
+	EVENTMANAGER->addEvent(new iShake(0.f, 2.f));
+	EVENTMANAGER->addEvent(new iShake(10.f, 1.f));
+	EVENTMANAGER->addEvent(new iShake(0.f, 2.f));*/
 
 	return S_OK;
 }
@@ -71,7 +78,20 @@ void bossTestScene::release()
 
 void bossTestScene::update()
 {
+	if (!EVENTMANAGER->isPlayingEvent() && !EVENTMANAGER->getBossFirstEvent())
+	{
+		EVENTMANAGER->setBossFirstEvent(true);
+		//EVENTMANAGER->addEvent(new iCameraMove(_boss, 5.0f));
+		//
+		//EVENTMANAGER->addEvent(new iDialog(new dialog("6")));
+	}
+	if (!EVENTMANAGER->isPlayingEvent() && !EVENTMANAGER->getBossSecondEvent())
+	{
+		EVENTMANAGER->setBossSecondEvent(true);
+		//CAMERA->setCameraMode(CAMERASTATE::TARGET);
+	}
 
+	_cameraTarget->setPosition(OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition() - Vector2(0, 300));
 }
 
 void bossTestScene::render()

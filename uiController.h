@@ -13,7 +13,7 @@ private:
 
 	vector<class gameObject*> _vVendor; 
 
-	string scene;
+	wstring scene;
 	nomalUI* _nm;
 	tabUI* _tu;
 	shop* _shop;
@@ -28,5 +28,7 @@ public:
 
 	bool isUIOn() { return _tu->getOn(); }
 	bool UIon() { return _uiOn; }
+
+	class inventory* getInven() { return _inven; }
 };
 

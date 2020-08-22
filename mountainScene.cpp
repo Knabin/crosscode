@@ -55,7 +55,7 @@ void mountainScene::update()
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
-			iMoveScene* m = new iMoveScene("town", Vector2(200, 1700));
+			iMoveScene* m = new iMoveScene(L"town", Vector2(200, 1700));
 			EVENTMANAGER->addEvent(m);
 		}
 	}
@@ -64,7 +64,7 @@ void mountainScene::update()
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
-			iMoveScene* m = new iMoveScene("boss", Vector2(1070, 1850));
+			iMoveScene* m = new iMoveScene(L"boss", Vector2(1070, 1850));
 			EVENTMANAGER->addEvent(m);
 		}
 	}

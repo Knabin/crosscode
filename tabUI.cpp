@@ -28,6 +28,7 @@ HRESULT tabUI::init()
 	IMAGEMANAGER->addImage("inven7", L"images/menu/inven7.png");
 	
 	IMAGEMANAGER->addImage("save", L"images/menu/save.png");
+	IMAGEMANAGER->addImage("save slot", L"images/menu/save_slot.png");
 	IMAGEMANAGER->addImage("stat", L"images/menu/stat.png");
 
 	IMAGEMANAGER->addFrameImage("button_menu", L"images/menu/button_menu.png", 1,4);
@@ -44,6 +45,9 @@ HRESULT tabUI::init()
 	IMAGEMANAGER->addImage("inven07", L"images/menu/inven07.png");
 	
 	IMAGEMANAGER->addFrameImage("weapon", L"images/equip/weapon.png", 4, 1);
+	IMAGEMANAGER->addFrameImage("eq_effect", L"images/equip/eq_eff.png", 5, 1);
+
+	EFFECTMANAGER->addEffect("eq_effect", "eq_effect", 1, 0.3f, 1, 0.74f);
 
 	_on = false;
 
@@ -152,7 +156,13 @@ HRESULT tabUI::init()
 		_equip[i] = 99999;
 	}
 	
-
+	for (int i = 0; i < 5; ++i)
+	{
+		//200 216
+		_saveSlot[i].rc.update(Vector2(203, 215 + i * 135), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+		_saveSlot[i].fileName = "data/crosscode" + to_string(i) + ".data";
+	}
+	loadData();
 
 
 	_item = new item;
@@ -381,6 +391,7 @@ void tabUI::update()
 		}
 	}
 
+	
 	if (_on)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON) || KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
@@ -393,37 +404,39 @@ void tabUI::update()
 	//세이브 존
 	if (_sv)
 	{
-		_player->getPlayerHP();     //플레이어 체력
-		_player->getPlayerMaxHP();	//플레이어 맥스 체력
-		_player->getPlayerEXP();	//플레이어 경험치
-		_player->getPlayerNextEXP();//레벨업 필요 경험치
-		_player->getPlayerAtk();	//플레이어 공격력
-		_player->getPlayerDef();	//플레이어 방어력
-		_player->getPlayerCri();	//플레이어 크리티컬
-		_player->getPlayerFR();		//플레이어 불 저항력
-		_player->getPlayerIR();		//플레이어 얼음 저항력
-		_player->getPlayerER();		//플레이어 전기 저항력
-		_player->getPlayerPR();		//플레이어 파동 저항력
-
-		for (int i = 0; i < _vIv.size(); ++i)
-		{
-			//인벤토리 벡터
-			_vIv[i].type;		//아이템 종류 wstring
-			_vIv[i].itemNum;	//아이템 번호 int
-			_vIv[i].count;		//아이템 갯수 int
-		}
-
-		//장비 배열 1.머리 2.팔 3.팔 4.몸통 5.다리
+		// 어떤 렉트 선택했는지
 		for (int i = 0; i < 5; ++i)
 		{
-			_equip[i];
-		}
-		
-		//돈
-		_inven->getMoney();
+			if (PtInRect(&_saveSlot[i].rc.getRect(), _ptMouse))
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					if (i == 0 && !_saveSlot[i].isSaved)
+					{
+						// for문 거꾸로 돌면서 밑에 비었는지 체크
+						for (int j = 4; j >= 0; --j)
+						{
+							if (!_saveSlot[j].isSaved)
+							{
+								saveData(j);
+								loadData();
+								break;
+							}
+						}
+					}
+					else if (i == 0)
+					{
+						// 0번째가 차 있으면 밑에 4개도 다 찬 거임, 그냥 저장 진행
+						saveData(0);
+						loadData();
+					}
 
-		//시간
-		_time;
+					break;
+				}
+			}
+		}
+
+		//saveData();
 	}
 
 	if (_hp < 0)
@@ -644,7 +657,7 @@ void tabUI::render()
 				itemObject it = _item->getItemInfo(L"다리", _equip[4]);
 				IMAGEMANAGER->findImage("weapon")->frameRender(Vector2(1340, 178), 3, 0);
 				D2DRENDERER->RenderText(1380, 152, it.itemName, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
-
+				
 				int list = 0;
 				for (int i = 0; i < _vIv.size(); ++i)
 				{
@@ -721,6 +734,7 @@ void tabUI::render()
 						_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 						_equip[0] = _equipItemNum[i];
+						EFFECTMANAGER->play("eq_effect", Vector2(1025, 222), 0, 0.7f);
 						outMenu();
 					}
 				}
@@ -779,6 +793,16 @@ void tabUI::render()
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 					_equip[_equipList] = _equipItemNum[i];
+
+					switch (_equipList)
+					{
+					case 1:
+						EFFECTMANAGER->play("eq_effect", Vector2(879, 533), 0, 0.7f);
+						break;
+					case 2:
+						EFFECTMANAGER->play("eq_effect", Vector2(1166, 533), 0, 0.7f);
+						break;
+					}
 					outMenu();
 				}
 			}
@@ -837,6 +861,7 @@ void tabUI::render()
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 					_equip[_equipList] = _equipItemNum[i];
+					EFFECTMANAGER->play("eq_effect", Vector2(1024, 550), 0, 0.7f);
 					outMenu();
 				}
 			}
@@ -895,6 +920,7 @@ void tabUI::render()
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
 					_equip[_equipList] = _equipItemNum[i];
+					EFFECTMANAGER->play("eq_effect", Vector2(1072, 995),0,0.7f);
 					outMenu();
 				}
 			}
@@ -1228,6 +1254,32 @@ void tabUI::render()
 	if (_sv)
 	{
 		IMAGEMANAGER->findImage("save")->render(Vector2(0, 0));
+
+		for (int i = 0; i < 5; ++i)
+		{
+			//D2DRENDERER->DrawRotationFillRectangle(_saveSlot[i].rc, D2D1::ColorF::CadetBlue, 0);
+			if (_saveSlot[i].isSaved)
+			{
+				IMAGEMANAGER->findImage("save slot")->render(Vector2(_saveSlot[i].rc.left, _saveSlot[i].rc.top));
+
+				// 돈
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 1240, _saveSlot[i].rc.top + 50, to_wstring(_saveSlot[i].credit), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+
+				// 레벨
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left, 200, to_wstring(_saveSlot[i].level), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+
+				// 맵 이름
+				wstring t = _saveSlot[i].map;
+				if (_saveSlot[i].map == L"town") t = L"마을";
+				else if (_saveSlot[i].map == L"puzzle") t = L"수상한 컨테이너";
+				else if (_saveSlot[i].map == L"boss") t = L"동굴(보스 맵)";
+				else if (_saveSlot[i].map == L"mountain") t = L"가을의 부상";
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 560, _saveSlot[i].rc.top + 85, t, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+
+				// 시간
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 1240, _saveSlot[i].rc.top + 15, to_wstring(_saveSlot[i].time), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+			}
+		}
 	}
 	if (_st)
 	{
@@ -1344,7 +1396,6 @@ void tabUI::render()
 			}
 		}
 	}
-	
 }
 
 void tabUI::inEquip()
@@ -1382,6 +1433,9 @@ void tabUI::inSave()
 	OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(false);
+
+	// TODO: 정보 가져와서 slot에 세팅하기
+	// TODO: 해당 정보 바탕으로 RECT 설정...
 }
 void tabUI::inStat()
 {
@@ -1525,3 +1579,188 @@ void tabUI::equipSelect()
 {
 
 }
+
+void tabUI::saveData(int num)
+{
+	HANDLE file;
+	DWORD write;
+	string fileName = "data/crosscode" + to_string(num) + ".data";
+
+	file = CreateFile(fileName.c_str(), GENERIC_WRITE, NULL, NULL,
+		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	// ================== 플레이어 정보 저장 =====================
+	int hp = _player->getPlayerHP();		//플레이어 체력
+	int maxHp = _player->getPlayerMaxHP();	//플레이어 맥스 체력
+	int level = _player->getPlayerLEVEL();	// 플레이어 레벨
+	int exp = _player->getPlayerEXP();		//플레이어 경험치
+	int nextExp = _player->getPlayerNextEXP();//레벨업 필요 경험치
+	int atk = _player->getPlayerAtk();		//플레이어 공격력
+	int def = _player->getPlayerDef();		//플레이어 방어력
+	int cri = _player->getPlayerCri();		//플레이어 크리티컬
+	int fr = _player->getPlayerFR();		//플레이어 불 저항력
+	int ir = _player->getPlayerIR();		//플레이어 얼음 저항력
+	int er = _player->getPlayerER();		//플레이어 전기 저항력
+	int pr = _player->getPlayerPR();		//플레이어 파동 저항력
+	wstring sc = SCENEMANAGER->getCurrentSceneName();	// 현재 위치
+
+	WriteFile(file, &hp, sizeof(int), &write, NULL);
+	WriteFile(file, &maxHp, sizeof(int), &write, NULL);
+	WriteFile(file, &level, sizeof(int), &write, NULL);
+	WriteFile(file, &exp, sizeof(int), &write, NULL);
+	WriteFile(file, &nextExp, sizeof(int), &write, NULL);
+	WriteFile(file, &atk, sizeof(int), &write, NULL);
+	WriteFile(file, &def, sizeof(int), &write, NULL);
+	WriteFile(file, &cri, sizeof(int), &write, NULL);
+	WriteFile(file, &fr, sizeof(int), &write, NULL);
+	WriteFile(file, &ir, sizeof(int), &write, NULL);
+	WriteFile(file, &er, sizeof(int), &write, NULL);
+	WriteFile(file, &pr, sizeof(int), &write, NULL);
+	WriteFile(file, &sc, sizeof(sc), &write, NULL);
+	// =========================================================
+
+	// ================== 이벤트 정보 저장 =====================
+	bool first = EVENTMANAGER->getFirstEvent();			// 타운 첫 번째 이벤트
+	bool second = EVENTMANAGER->getSecondEvent();		// 타운 두 번째 이벤트
+	bool puzzle = EVENTMANAGER->getPuzzleEvent();		// 퍼즐 클리어 이벤트
+	bool bossf = EVENTMANAGER->getBossFirstEvent();		// 보스 첫 번째 이벤트
+	bool bosss = EVENTMANAGER->getBossSecondEvent();	// 보스 두 번째 이벤트
+
+	WriteFile(file, &first, sizeof(bool), &write, NULL);
+	WriteFile(file, &second, sizeof(bool), &write, NULL);
+	WriteFile(file, &puzzle, sizeof(bool), &write, NULL);
+	WriteFile(file, &bossf, sizeof(bool), &write, NULL);
+	WriteFile(file, &bosss, sizeof(bool), &write, NULL);
+	// =======================================================
+
+	// ================== 인벤토리 저장 =====================
+	
+	int ivSize = _vIv.size();	// 인벤토리 벡터는 사이즈 저장 필요
+
+	WriteFile(file, &ivSize, sizeof(int), &write, NULL);
+
+	for (int i = 0; i < _vIv.size(); ++i)
+	{
+		//인벤토리 벡터
+		wstring type = _vIv[i].type;		//아이템 종류 wstring
+		int num = _vIv[i].itemNum;	//아이템 번호 int
+		int count = _vIv[i].count;		//아이템 갯수 int
+
+		WriteFile(file, &type, sizeof(wstring), &write, NULL);
+		WriteFile(file, &num, sizeof(int), &write, NULL);
+		WriteFile(file, &count, sizeof(int), &write, NULL);
+	}
+	// =======================================================
+
+	// ================== 장비 저장 =====================
+	//장비 배열 1.머리 2.팔 3.팔 4.몸통 5.다리
+	for (int i = 0; i < 5; ++i)
+	{
+		int eq = _equip[i];
+		WriteFile(file, &eq, sizeof(int), &write, NULL);
+	}
+	// =======================================================
+
+	// ================== 기타 저장 =====================
+	//돈
+	int money = _inven->getMoney();
+	WriteFile(file, &money, sizeof(int), &write, NULL);
+
+	//시간
+	_time;
+	WriteFile(file, &_time, sizeof(int), &write, NULL);
+	// =======================================================
+
+	CloseHandle(file);
+}
+
+void tabUI::loadData()
+{
+	
+	for (int i = 4; i >= 0; --i)
+	{
+		HANDLE file = CreateFile(_saveSlot[i].fileName.c_str(), GENERIC_READ, NULL, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		// 만약에 정보가 있다면? 받아와서 저장 후 render 처리
+		if (file != INVALID_HANDLE_VALUE)
+		{
+			DWORD read;
+
+			int hp, maxHp, level, exp, nextExp, atk, def, cri, fr, ir, er, pr;
+			wstring sc;
+
+			ReadFile(file, &hp, sizeof(int), &read, NULL);
+			ReadFile(file, &maxHp, sizeof(int), &read, NULL);
+			ReadFile(file, &level, sizeof(int), &read, NULL);
+			ReadFile(file, &exp, sizeof(int), &read, NULL);
+			ReadFile(file, &nextExp, sizeof(int), &read, NULL);
+			ReadFile(file, &atk, sizeof(int), &read, NULL);
+			ReadFile(file, &def, sizeof(int), &read, NULL);
+			ReadFile(file, &cri, sizeof(int), &read, NULL);
+			ReadFile(file, &fr, sizeof(int), &read, NULL);
+			ReadFile(file, &ir, sizeof(int), &read, NULL);
+			ReadFile(file, &er, sizeof(int), &read, NULL);
+			ReadFile(file, &pr, sizeof(int), &read, NULL);
+			ReadFile(file, &sc, sizeof(sc), &read, NULL);
+
+			bool first, second, puzzle, bossf, bosss;
+			ReadFile(file, &first, sizeof(bool), &read, NULL);
+			ReadFile(file, &second, sizeof(bool), &read, NULL);
+			ReadFile(file, &puzzle, sizeof(bool), &read, NULL);
+			ReadFile(file, &bossf, sizeof(bool), &read, NULL);
+			ReadFile(file, &bosss, sizeof(bool), &read, NULL);
+
+			int ivSize;
+			ReadFile(file, &ivSize, sizeof(int), &read, NULL);
+
+			for (int i = 0; i < ivSize; ++i)
+			{
+				wstring type;
+				int num, count;
+
+				ReadFile(file, &type, sizeof(type), &read, NULL);
+				ReadFile(file, &num, sizeof(int), &read, NULL);
+				ReadFile(file, &count, sizeof(int), &read, NULL);
+			}
+
+			for (int i = 0; i < 5; ++i)
+			{
+				int eq;
+				ReadFile(file, &eq, sizeof(int), &read, NULL);
+			}
+
+			int money, time;
+			ReadFile(file, &money, sizeof(int), &read, NULL);
+			ReadFile(file, &time, sizeof(int), &read, NULL);
+
+			_saveSlot[i].level = level;
+			_saveSlot[i].time = time;
+			_saveSlot[i].credit = money;
+			_saveSlot[i].map = sc;
+			_saveSlot[i].isSaved = true;
+		}
+		else
+			_saveSlot[i].isSaved = false;
+
+		CloseHandle(file);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		if (!_saveSlot[i].isSaved)
+		{
+			if(i == 0)
+				_saveSlot[i].rc.update(Vector2(203, 215 + i * 135), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+			else
+				_saveSlot[i].rc.update(Vector2(203, (int)_saveSlot[i - 1].rc.bottom), Vector2(0, 0), pivot::LEFTTOP);
+		}
+		else {
+			if (i == 0)
+				_saveSlot[i].rc.update(Vector2(203, 215), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+			else
+				_saveSlot[i].rc.update(Vector2(203, (int)_saveSlot[i - 1].rc.bottom), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+		}
+	}
+}
+

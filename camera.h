@@ -95,6 +95,7 @@ public:
 	float getZoomAmount() { return _nowZoomAmount; }
 
 	bool getIsFade() { return _isFade; }
+	bool getIsShake() { return _isShake; }
 
 	float getFadeAmount() { return _nowFadeAmount; }
 	bool getIsFadeOut() { return _fadeTime <= 0.0f; }

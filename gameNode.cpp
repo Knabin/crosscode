@@ -31,7 +31,7 @@ HRESULT gameNode::init(bool managerInit)
 		EFFECTMANAGER->init();
 		TEXTDATA->init();
 		SCENEMANAGER->init();
-
+		SOUNDMANAGER->init();
 	}
 
 
@@ -49,6 +49,7 @@ void gameNode::release()
 		OBJECTMANAGER->release();
 		TEXTDATA->release();
 		SCENEMANAGER->release();
+		SOUNDMANAGER->release();
 	}
 
 	ReleaseDC(_hWnd, _hdc);

@@ -101,6 +101,7 @@ private:
 	bool _isLethal; // 필살기 체크용
 
 	bool _beAttacked;	//충돌처리용 불값
+	bool _attackCollision;//에너미에게 공격당했을때 데미지를 중첩으로 먹는걸 방지하기 위한 값
 	int _beAttackedCount;	//피격모션용 카운트
 
 	float _jumpPower;
@@ -154,11 +155,14 @@ public:
 	void setPlayerPlusX(float x) { _position.x += x; }
 	void setPlayerPlusY(float y) { _position.y += y; }
 	void setBeAttacked(bool beAttacked) { _beAttacked = beAttacked; }
-
+	void setAttackCollision(bool attackCollision) { _attackCollision = attackCollision; }
 	
 
 	
 	bool isDashing() { return _state->getState() == _vState[PLAYERSTATE::DODGE]; }
+	bool isLongAttacking() { return (_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
+		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE]);
+	}
 	inline int getNowOrder() { return _nowOrder; }
 
 	inline bool getAttacking() {return _attacking;}
@@ -206,6 +210,6 @@ public:
 		CAMERA->getZoomAmount() + CAMERA->getRect().left, _ptMouse.y /
 		CAMERA->getZoomAmount() + CAMERA->getRect().top) < 150) ? true : false; }
 	bool getBeAttacked() { return _beAttacked; }
-
+	bool getAttackCollision() { return _attackCollision; }
 	void setIdle();
 };

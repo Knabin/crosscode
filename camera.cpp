@@ -93,6 +93,7 @@ void camera::updateShake()
 			_shakeDirectionChangeTime = 0.03f;
 		}
 		_position.x += _shakeAmount * _shakeFlag;
+		_position.y = _target->getPosition().y;
 
 
 		if (_shakeTime <= 0.f)
@@ -171,7 +172,7 @@ void camera::updateFade()
 		}
 		else
 		{
-			_nowFadeAmount -= 0.02f;
+			_nowFadeAmount -= 0.05f;
 			if (_nowFadeAmount <= 0.0f)
 				_isFade = false;
 		}

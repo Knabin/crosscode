@@ -27,8 +27,8 @@ HRESULT playGround::init()
 	_collisionManager = new collisionManager;
 	_collisionManager->init();
 
-	SCENEMANAGER->addScene("loading", new initLoadingScene());
-	SCENEMANAGER->loadScene("loading");
+	SCENEMANAGER->addScene(L"loading", new initLoadingScene());
+	SCENEMANAGER->loadScene(L"loading");
 
 	_puzzleCollision = new puzzleCollision;
 	_puzzleCollision->init();
@@ -46,6 +46,7 @@ HRESULT playGround::init()
 
 	ShowCursor(false);
 
+	
 	return S_OK;
 }
 
@@ -60,38 +61,38 @@ void playGround::update()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
-		SCENEMANAGER->loadScene("title");
+		SCENEMANAGER->loadScene(L"title");
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F2))
 	{
-		SCENEMANAGER->loadScene("test");
+		SCENEMANAGER->loadScene(L"test");
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F3))
 	{
-		SCENEMANAGER->loadScene("test2");
+		SCENEMANAGER->loadScene(L"test2");
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F4))
 	{
-		SCENEMANAGER->loadScene("maptool");
+		SCENEMANAGER->loadScene(L"maptool");
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
-		SCENEMANAGER->loadScene("boss");
+		SCENEMANAGER->loadScene(L"boss");
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{
-		SCENEMANAGER->loadScene("puzzle");
+		SCENEMANAGER->loadScene(L"puzzle");
 		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(9 * SIZE, 33 * SIZE));
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F7))
 	{
-		SCENEMANAGER->loadScene("mountain");
+		SCENEMANAGER->loadScene(L"mountain");
 		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2((float)76 * SIZE, 34.0f * SIZE));
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F8))
 	{
-		SCENEMANAGER->loadScene("town");
+		SCENEMANAGER->loadScene(L"town");
 		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
 	}
 
@@ -110,17 +111,21 @@ void playGround::update()
 
 
 	// 이벤트 재생 중, UI가 화면을 가리고 있는 경우에는 업데이트하지 않음
-	if (!EVENTMANAGER->isPlayingEvent())
+	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn() && !_ui->UIon())
 	{
 		_puzzleCollision->update();
 		_collisionManager->update();
 		_enemyManager->update();
 		_bossCollision->update();
+		_enemyManager->setInventory(_ui->getInven());
 	}
 
 	EVENTMANAGER->update();
 	SCENEMANAGER->update();
-	if(!_ui->isUIOn() && !_ui->UIon()) OBJECTMANAGER->update();
+	if (!_ui->isUIOn() && !_ui->UIon())
+	{
+		OBJECTMANAGER->update();
+	}
 	EFFECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();
@@ -135,12 +140,16 @@ void playGround::render()
 		//=================================================
 
 		SCENEMANAGER->render();
+		if (!_ui->isUIOn() && !_ui->UIon())
 		EFFECTMANAGER->render();
 		OBJECTMANAGER->render();
 		TIMEMANAGER->render();
 		_collisionManager->render();
 		_ui->render();
 		//_enemyManager->render();
+		if (_ui->isUIOn() || _ui->UIon())
+			EFFECTMANAGER->render();
+		EFFECTMANAGER->render();
 
 		if (EVENTMANAGER->isPlayingEvent())
 		{
@@ -148,13 +157,17 @@ void playGround::render()
 		}
 
 		// 상태에 따른 마우스 변경 처리
-		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn() || SCENEMANAGER->getCurrentSceneName() == "title" || SCENEMANAGER->getCurrentSceneName() == "maptool")
+		if (EVENTMANAGER->isPlayingEvent() || _ui->isUIOn() || SCENEMANAGER->getCurrentSceneName() == L"title" || SCENEMANAGER->getCurrentSceneName() == L"maptool")
 		{
 			IMAGEMANAGER->findImage("cursor normal")->render(Vector2(_ptMouse));
 		}
 		else if (_player->mouseCheck())
 		{
 			IMAGEMANAGER->findImage("cursor melee")->render(Vector2(_ptMouse));
+		}
+		else if (_player->isLongAttacking())
+		{
+			IMAGEMANAGER->findImage("cursor charge")->render(Vector2(_ptMouse));
 		}
 		else
 		{
