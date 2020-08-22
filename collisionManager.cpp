@@ -68,9 +68,7 @@ void collisionManager::render()
 	{
 		enemy* e = dynamic_cast<enemy*>(temp[i]);
 		wstring a = to_wstring(e->getDamaged());
-
-		//if (e->getEnemyCollision())
-
+		
 		int r = 0;
 		if (e->getCount() % 10)
 		{
@@ -90,15 +88,13 @@ void collisionManager::render()
 				D2DRENDERER->RenderText(Vector2(CAMERA->getRelativeVector2(e->getPosition())).x,
 					Vector2(CAMERA->getRelativeVector2(e->getPosition())).y - 80,
 					a, r, D2DRenderer::DefaultBrush::Red, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
-
 			}
-			
 			e->plusCount(1);
-		}
-		
+		}		
 		if (e->getCount() >= 50)
 			e->setDealing(false);
 	}
+	
 }
 
 void collisionManager::buffaloCollision()
@@ -184,6 +180,9 @@ void collisionManager::buffaloCollision()
 			{
 				b->setEnemyHP(_player->getPlayerAttackPower());
 				b->setDamaged(_player->getPlayerAttackPower());
+				EFFECTMANAGER->play("player bulletRemoveEffect",
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).x + 20,
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).y);
 				_player->getBullet()->remove(j);
 				b->setDealing(true);
 				b->setCount(0);
@@ -337,26 +336,27 @@ void collisionManager::hedgehagCollision()
 						h->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 					}
 				}
-
 				h->setEnemyHP(_player->getPlayerAttackPower());
 				h->setDamaged(_player->getPlayerAttackPower());
 				h->setDealing(true);
 				h->setCount(0);
+				EFFECTMANAGER->play("player bulletRemoveEffect",
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).x,
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).y);
 				_player->getBullet()->remove(j);
 			}
 		}
-		
-		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 고슴도치한테 맞으면
-		{
-			if (isCollision(h->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
-			{
-				h->setEnemyHP(_player->getPlayerAttackPower());//플레이어가 에너미(고슴도치)한테 주는 데미지
-				h->setDamaged(_player->getPlayerAttackPower());
-				h->setDealing(true);
-				h->setCount(0);
-				_player->getBullet()->remove(j);
-			}
-		}
+		//for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
+		//{
+		//	if (isCollision(h->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+		//	{
+		//		h->setEnemyHP(_player->getPlayerAttackPower());
+		//		h->setDamaged(_player->getPlayerAttackPower());
+		//		h->setDealing(true);
+		//		h->setCount(0);
+		//		_player->getBullet()->remove(j);
+		//	}
+		//}
 
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
@@ -550,26 +550,28 @@ void collisionManager::meerkatCollision()
 							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 						}
 					}
-
 					m->setEnemyHP(_player->getPlayerAttackPower());
 					m->setDamaged(_player->getPlayerAttackPower());
 					m->setDealing(true);
 					m->setCount(0);
+					EFFECTMANAGER->play("player bulletRemoveEffect",
+						CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).x + 20,
+						CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).y);
 					_player->getBullet()->remove(j);
 				}
 			}
 		}
-		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
-		{
-			if (isCollision(m->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
-			{
-				m->setEnemyHP(_player->getPlayerAttackPower());
-				m->setDamaged(_player->getPlayerAttackPower());
-				m->setDealing(true);
-				m->setCount(0);
-				_player->getBullet()->remove(j);
-			}
-		}
+		//for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
+		//{
+		//	if (isCollision(m->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+		//	{
+		//		m->setEnemyHP(_player->getPlayerAttackPower());
+		//		m->setDamaged(_player->getPlayerAttackPower());
+		//		m->setDealing(true);
+		//		m->setCount(0);
+		//		_player->getBullet()->remove(j);
+		//	}
+		//}
 
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
@@ -669,7 +671,9 @@ void collisionManager::playerHitCollision()
 				_player->setState(PLAYERSTATE::BE_ATTACKED);
 			}	
 			if (_player->getPlayerDef() < e->getEnemyAttackPower())
-			_player->setPlayerHP(_player->getPlayerHP() - (e->getEnemyAttackPower() - _player->getPlayerDef()));
+			{
+				_player->setPlayerHP(_player->getPlayerHP() - (e->getEnemyAttackPower() - _player->getPlayerDef()));
+			}
 		}
 	}
 }
@@ -724,6 +728,10 @@ void collisionManager::bulletCollision()
 				EFFECTMANAGER->play("enemyMeerkatBallEffect", CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).x + 25, CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).y + 25);
 				m->getBullets()->remove(j);//해당 총알의 벡터를 삭제
 				break;
+				if (_player->getPlayerDef() < m->getEnemyAttackPower())
+				{
+					_player->setPlayerHP(_player->getPlayerHP() - (m->getEnemyAttackPower() - _player->getPlayerDef()));
+				}
 			}
 		}
 	}
