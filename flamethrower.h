@@ -11,6 +11,7 @@ struct tagFlamethrower
 	float _angle;
 	float _speed;
 	float _size;
+	float _damage;
 
 	int _frameX;
 	int _frameCount;

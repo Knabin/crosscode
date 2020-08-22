@@ -11,6 +11,34 @@ boss::~boss()
 
 HRESULT boss::init()
 {
+	_icethrower = new icethrower;
+	_icethrower->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 1150);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _icethrower);
+
+	_mine = new mine;
+	_mine->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 550);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _mine);
+
+	_stoneshower = new stoneshower;
+	_stoneshower->init(WINSIZEX / 2 - 85 + 215, WINSIZEY / 2 - 675 - 499);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _stoneshower);
+
+	_flamethrower = new flamethrower;
+	_flamethrower->init(WINSIZEX / 2 - 85 + 385, WINSIZEY / 2 - 675 + 1025);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _flamethrower);
+
+	_iceguide = new iceguide;
+	_iceguide->init(WINSIZEX / 2 - 85 + 185, WINSIZEY / 2 - 675 + 1125);
+
+	OBJECTMANAGER->addObject(objectType::BOSS, _iceguide);
+
+	_name = "boss";
+
+
 	// 기본 y축WINSIZEY / 2 - 675
 	bossInitialization();
 
@@ -153,20 +181,8 @@ HRESULT boss::init()
 	}
 
 	//================================================================================================================================================================//
-	_icethrower = new icethrower;
-	_icethrower->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 1150);
 
-	_mine = new mine;
-	_mine->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 550);
 
-	_stoneshower = new stoneshower;
-	_stoneshower->init(WINSIZEX / 2 - 85 + 215, WINSIZEY / 2 - 675 - 499);
-
-	_flamethrower = new flamethrower;
-	_flamethrower->init(WINSIZEX / 2 - 85 + 385, WINSIZEY / 2 - 675 + 1025);
-
-	_iceguide = new iceguide;
-	_iceguide->init(WINSIZEX / 2 - 85 + 185, WINSIZEY / 2 - 675 + 1125);
 
 	return S_OK;
 }
@@ -177,7 +193,7 @@ void boss::release()
 
 void boss::update()
 {
-
+	if (!EVENTMANAGER->getBossFirstEvent()) return;
 	_frameCount++;
 
 	protectFrame();
@@ -190,24 +206,24 @@ void boss::update()
 
 	//================================================================================================================================================================//
 
-	_icethrower->update();
+	//_icethrower->update();
 
-	_mine->update();
+	//_mine->update();
 
-	_stoneshower->update();
+	//_stoneshower->update();
 
-	_flamethrower->update();
+	//_flamethrower->update();
 
-	_iceguide->update();
+	//_iceguide->update();
 
 }
 
 void boss::render()
 {
 
-	_icethrower->render();
+	//_icethrower->render();
 
-	_iceguide->render();
+	//_iceguide->render();
 
 	_mine->render(_Center._x + 115, _Center._y + 50);
 
@@ -215,9 +231,9 @@ void boss::render()
 
 	_mine->explotion(_Center._x + 115, _Center._y + 50);
 
-	_stoneshower->render();
+	//_stoneshower->render();
 
-	_flamethrower->render();
+	//_flamethrower->render();
 
 }
 
@@ -251,26 +267,32 @@ void boss::bossState()
 		_currentFrameX = 0;
 		_stopCount++;
 		bossInitialization2();
-		
+
+		CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 		
 		if (_stopCount >= 200)
 		{
+			if (!EVENTMANAGER->getBossSecondEvent()) return;
 			if (_attack1 == false && _attack2 == false && _attack3 == false && _attack4 == false)
 			{
 				_stopCount = 0;
 				_bossState = ICETHROWER_READY;
+				CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::MAPOBJECT, "target"));
+
 			}
 
 			if (_attack1 == true && _attack2 == false && _attack3 == false && _attack4 == false)
 			{
 				_stopCount = 0;
 				_bossState = MINE_READY;
+				CAMERA->changeTarget(this);
 			}
 
 			if (_attack1 == true && _attack2 == true && _attack3 == false && _attack4 == false)
 			{
 				_stopCount = 0;
 				_bossState = STONESHOWER_READY;
+				CAMERA->changeTarget(this);
 			}
 
 			if (_attack1 == true && _attack2 == true && _attack3 == true && _attack4 == false)
@@ -283,6 +305,7 @@ void boss::bossState()
 			{
 				_stopCount = 0;
 				_bossState = ICEGUIDE_READY;
+				CAMERA->changeTarget(this);
 			}
 
 		}		
@@ -377,6 +400,18 @@ void boss::bossState()
 		}
 		
 
+		if (_icethrowerDelay >= 205)
+		{
+			for (_icethrower->getIcethrowerIterVector() = _icethrower->getIcethrowerVector().begin();
+				_icethrower->getIcethrowerIterVector() != _icethrower->getIcethrowerVector().end();
+				++_icethrower->getIcethrowerIterVector())
+			{
+				_icethrower->getIcethrowerIterVector()->_fireStart = false;
+				_bossState = ICETHROWER_END;
+			}
+		}
+
+
 		if (_frameCount % 5 == 0)
 		{
 			if (_currentFrameX >= IMAGEMANAGER->findImage("왼손공격")->getMaxFrameX())
@@ -388,7 +423,6 @@ void boss::bossState()
 			{
 				_currentFrameY = 0;
 				_icethrowerDelay = 0;
-				_bossState = ICETHROWER_END;
 			}
 			_bossLeftHandAttackFrameX = _currentFrameX;
 			_bossLeftHandAttackFrameY = _currentFrameY;
@@ -1217,6 +1251,7 @@ void boss::bossState()
 		if (_Center._y >= (WINSIZEY / 2 - 175))
 		{
 			_bossState = DEATH;
+			CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 		}
 
 	}
@@ -1357,6 +1392,8 @@ void boss::bossMove()
 		_RightHand._rectBody2.update(Vector2(_RightHand._center.x + 100, _RightHand._center.y + 275), Vector2(275, 500), pivot::CENTER);
 	}
 
+	// 카메라용으로 사용할게용
+	_position = _Center._rectBody.getCenter() + Vector2(-10, 400);
 }
 
 void boss::bossDraw()
@@ -1704,7 +1741,7 @@ void boss::moveDown()
 		_RightArm._center.y += 1.0f / 4;
 		_Center._angle += 0.01f;
 	}
-
+	if(_moveCount == 17) CAMERA->shakeStart(5.f, 0.3f);
 
 	if (_moveCount >= 17 && _moveCount < 48)
 	{
@@ -1719,6 +1756,8 @@ void boss::moveDown()
 		_Center._angle -= 0.01f;
 
 	}
+
+	if (_moveCount == 48) CAMERA->shakeStart(5.f, 0.3f);
 
 	if (_moveCount >= 48 && _moveCount < 64)
 	{

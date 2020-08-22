@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "item.h"
 
 struct invenObject
 {
@@ -13,6 +14,7 @@ class inventory: public gameNode
 private:
 	vector<invenObject> _vInven;
 	int _money;
+	item* _it;
 public:
 	inventory() {};
 	~inventory() {};
@@ -29,6 +31,8 @@ public:
 	inline int getMoney() { return _money; }
 	//소지금 변경 price수치에 따른 마이너스
 	void setMoney(int price) { _money -= price; }
+
+	int getCount(wstring type, int num);
 
 	vector<invenObject> getInven() { return _vInven; }
 };

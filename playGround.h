@@ -5,6 +5,7 @@
 #include "uiController.h"
 #include "enemyManager.h"
 #include "puzzleCollision.h"
+#include "bossCollision.h"
 
 class playGround : public gameNode
 {
@@ -14,6 +15,7 @@ private:
 	uiController* _ui;
 	enemyManager* _enemyManager;
 	puzzleCollision* _puzzleCollision;
+	bossCollision* _bossCollision;
 
 	float _test;
 
