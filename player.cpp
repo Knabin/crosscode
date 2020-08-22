@@ -416,7 +416,6 @@ void player::update()
 		(KEYMANAGER->isStayKeyDown('C') || KEYMANAGER->isStayKeyDown(VK_RBUTTON)))
 	{
 		_state->setState(_vState[PLAYERSTATE::GUARD]);
-		_pDef += 10;
 	}
 	if (KEYMANAGER->isOnceKeyDown('V')) //근접공격키
 	{
