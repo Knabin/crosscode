@@ -28,6 +28,7 @@ HRESULT tabUI::init()
 	IMAGEMANAGER->addImage("inven7", L"images/menu/inven7.png");
 	
 	IMAGEMANAGER->addImage("save", L"images/menu/save.png");
+	IMAGEMANAGER->addImage("save slot", L"images/menu/save_slot.png");
 	IMAGEMANAGER->addImage("stat", L"images/menu/stat.png");
 
 	IMAGEMANAGER->addFrameImage("button_menu", L"images/menu/button_menu.png", 1,4);
@@ -152,7 +153,11 @@ HRESULT tabUI::init()
 		_equip[i] = 99999;
 	}
 	
-
+	for (int i = 0; i < 5; ++i)
+	{
+		//200 216
+		_saveSlot[i].rc.update(Vector2(203, 215 + i * 135), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+	}
 
 
 	_item = new item;
@@ -393,37 +398,14 @@ void tabUI::update()
 	//세이브 존
 	if (_sv)
 	{
-		_player->getPlayerHP();     //플레이어 체력
-		_player->getPlayerMaxHP();	//플레이어 맥스 체력
-		_player->getPlayerEXP();	//플레이어 경험치
-		_player->getPlayerNextEXP();//레벨업 필요 경험치
-		_player->getPlayerAtk();	//플레이어 공격력
-		_player->getPlayerDef();	//플레이어 방어력
-		_player->getPlayerCri();	//플레이어 크리티컬
-		_player->getPlayerFR();		//플레이어 불 저항력
-		_player->getPlayerIR();		//플레이어 얼음 저항력
-		_player->getPlayerER();		//플레이어 전기 저항력
-		_player->getPlayerPR();		//플레이어 파동 저항력
-
-		for (int i = 0; i < _vIv.size(); ++i)
+		// 어떤 렉트 선택했는지
+		//for(int i = 0; i <)
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			//인벤토리 벡터
-			_vIv[i].type;		//아이템 종류 wstring
-			_vIv[i].itemNum;	//아이템 번호 int
-			_vIv[i].count;		//아이템 갯수 int
+
 		}
 
-		//장비 배열 1.머리 2.팔 3.팔 4.몸통 5.다리
-		for (int i = 0; i < 5; ++i)
-		{
-			_equip[i];
-		}
-		
-		//돈
-		_inven->getMoney();
-
-		//시간
-		_time;
+		//saveData();
 	}
 
 	if (_hp < 0)
@@ -1228,6 +1210,12 @@ void tabUI::render()
 	if (_sv)
 	{
 		IMAGEMANAGER->findImage("save")->render(Vector2(0, 0));
+
+		for (int i = 0; i < 5; ++i)
+		{
+			D2DRENDERER->DrawRotationFillRectangle(_saveSlot[i].rc, D2D1::ColorF::CadetBlue, 0);
+			IMAGEMANAGER->findImage("save slot")->render(Vector2(_saveSlot[i].rc.left, _saveSlot[i].rc.top));
+		}
 	}
 	if (_st)
 	{
@@ -1382,6 +1370,9 @@ void tabUI::inSave()
 	OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(false);
+
+	// TODO: 정보 가져와서 slot에 세팅하기
+	// TODO: 해당 정보 바탕으로 RECT 설정...
 }
 void tabUI::inStat()
 {
@@ -1525,3 +1516,91 @@ void tabUI::equipSelect()
 {
 
 }
+
+void tabUI::saveData(int num)
+{
+	HANDLE file;
+	DWORD write;
+	string fileName = "data/crosscode" + to_string(num) + ".data";
+
+	file = CreateFile(fileName.c_str(), GENERIC_WRITE, NULL, NULL,
+		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	// ================== 플레이어 정보 저장 =====================
+	int hp = _player->getPlayerHP();		//플레이어 체력
+	int maxHp = _player->getPlayerMaxHP();	//플레이어 맥스 체력
+	int exp = _player->getPlayerEXP();		//플레이어 경험치
+	int nextExp = _player->getPlayerNextEXP();//레벨업 필요 경험치
+	int atk = _player->getPlayerAtk();		//플레이어 공격력
+	int def = _player->getPlayerDef();		//플레이어 방어력
+	int cri = _player->getPlayerCri();		//플레이어 크리티컬
+	int fr = _player->getPlayerFR();		//플레이어 불 저항력
+	int ir = _player->getPlayerIR();		//플레이어 얼음 저항력
+	int er = _player->getPlayerER();		//플레이어 전기 저항력
+	int pr = _player->getPlayerPR();		//플레이어 파동 저항력
+	string sc = SCENEMANAGER->getCurrentSceneName();	// 현재 위치
+
+	WriteFile(file, &hp, sizeof(int), &write, NULL);
+	WriteFile(file, &maxHp, sizeof(int), &write, NULL);
+	WriteFile(file, &exp, sizeof(int), &write, NULL);
+	WriteFile(file, &nextExp, sizeof(int), &write, NULL);
+	WriteFile(file, &atk, sizeof(int), &write, NULL);
+	WriteFile(file, &def, sizeof(int), &write, NULL);
+	WriteFile(file, &cri, sizeof(int), &write, NULL);
+	WriteFile(file, &fr, sizeof(int), &write, NULL);
+	WriteFile(file, &ir, sizeof(int), &write, NULL);
+	WriteFile(file, &er, sizeof(int), &write, NULL);
+	WriteFile(file, &pr, sizeof(int), &write, NULL);
+	WriteFile(file, &sc, sizeof(sc), &write, NULL);
+	// =========================================================
+
+	// ================== 이벤트 정보 저장 =====================
+	bool first = EVENTMANAGER->getFirstEvent();			// 타운 첫 번째 이벤트
+	bool second = EVENTMANAGER->getSecondEvent();		// 타운 두 번째 이벤트
+	bool puzzle = EVENTMANAGER->getPuzzleEvent();		// 퍼즐 클리어 이벤트
+	bool bossf = EVENTMANAGER->getBossFirstEvent();		// 보스 첫 번째 이벤트
+	bool bosss = EVENTMANAGER->getBossSecondEvent();	// 보스 두 번째 이벤트
+
+	WriteFile(file, &first, sizeof(bool), &write, NULL);
+	WriteFile(file, &second, sizeof(bool), &write, NULL);
+	WriteFile(file, &puzzle, sizeof(bool), &write, NULL);
+	WriteFile(file, &bossf, sizeof(bool), &write, NULL);
+	WriteFile(file, &bosss, sizeof(bool), &write, NULL);
+	// =======================================================
+
+	// ================== 인벤토리 저장 =====================
+	
+	int ivSize = _vIv.size();	// 인벤토리 벡터는 사이즈 저장 필요
+
+	WriteFile(file, &ivSize, sizeof(int), &write, NULL);
+
+	for (int i = 0; i < _vIv.size(); ++i)
+	{
+		//인벤토리 벡터
+		wstring type = _vIv[i].type;		//아이템 종류 wstring
+		int num = _vIv[i].itemNum;	//아이템 번호 int
+		int count = _vIv[i].count;		//아이템 갯수 int
+
+		WriteFile(file, &type, sizeof(wstring), &write, NULL);
+		WriteFile(file, &num, sizeof(int), &write, NULL);
+		WriteFile(file, &count, sizeof(int), &write, NULL);
+	}
+	// =======================================================
+
+	// ================== 장비 저장 =====================
+	//장비 배열 1.머리 2.팔 3.팔 4.몸통 5.다리
+	for (int i = 0; i < 5; ++i)
+	{
+		_equip[i];
+	}
+	// =======================================================
+
+	// ================== 기타 저장 =====================
+	//돈
+	_inven->getMoney();
+
+	//시간
+	_time;
+	// =======================================================
+}
+
