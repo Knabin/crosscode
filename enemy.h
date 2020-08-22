@@ -115,6 +115,8 @@ protected:
 	floatRect _tile;//에너미가 타일을 검출하기 위해 필요한 렉트
 	floatRect _ballTile;//미어캣의 볼 렉트의 타일검사용 렉트
 
+	floatRect _currentHpBar;
+
 	tile* _t[8];//검출할 타일
 	tile* _ballT[8];//미어캣의 볼타일
 

@@ -325,6 +325,7 @@ void buffalo::update()
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75), 0, 0.5f);
 	}
+	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 50), pivot::LEFTTOP);
 	//cout << "¹öÆÈ·Î : " << _currentHP << endl;
 }
 
@@ -340,6 +341,7 @@ void buffalo::render()
 	{
 		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
 	}
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_currentHpBar), D2D1::ColorF::Red, 0);
 	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_attackRC), D2D1::ColorF::Black, 0);//¹öÆÈ·Î °ø°Ý·ºÆ®
 }
 

@@ -225,6 +225,7 @@ void meerkat::update()
 			}
 		}
 	}
+	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 50), pivot::LEFTTOP);
 	//cout << "¹Ì¾îÄ¹ : " << _currentHP << endl;
 }
 
@@ -246,6 +247,7 @@ void meerkat::render()
 		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
 	}
 	_bullet->render();
+	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_currentHpBar), D2D1::ColorF::Red, 0);
 }
 
 void meerkat::move()
