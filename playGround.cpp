@@ -95,6 +95,11 @@ void playGround::update()
 		SCENEMANAGER->loadScene(L"town");
 		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
 	}
+	
+	if (KEYMANAGER->isOnceKeyDown(VK_F9))
+	{
+		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(Vector2(450, 1400)));
+	}
 
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
