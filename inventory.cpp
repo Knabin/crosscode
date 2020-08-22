@@ -49,14 +49,14 @@ void inventory::render()
 {
 }
 
-void inventory::getItem(wstring _type, int _itemNum, bool shop)
+void inventory::getItem(wstring _type, int _itemNum, int count, bool shop)
 {
 	int maxCount = 0;
 	for (int i = 0; i < _vInven.size(); ++i)
 	{
 		if (_vInven[i].type == _type && _vInven[i].itemNum == _itemNum)
 		{
-			_vInven[i].count++;
+			_vInven[i].count += count;
 			
 			if (shop)
 			{
@@ -71,7 +71,7 @@ void inventory::getItem(wstring _type, int _itemNum, bool shop)
 		invenObject ob;
 		ob.type = _type;
 		ob.itemNum = _itemNum;
-		ob.count = 1;
+		ob.count = count;
 
 		_vInven.push_back(ob);
 
@@ -83,13 +83,13 @@ void inventory::getItem(wstring _type, int _itemNum, bool shop)
 
 }
 
-void inventory::deleteItem(wstring _type, int _itemNum, bool shop)
+void inventory::deleteItem(wstring _type, int _itemNum, int count, bool shop)
 {
 	for (int i = 0; i < _vInven.size(); ++i)
 	{
 		if (_vInven[i].type == _type && _vInven[i].itemNum == _itemNum)
 		{
-			_vInven[i].count--;
+			_vInven[i].count -= count;
 			if (shop)
 			{
 				_money += _it->getItemInfo(_type, _itemNum).price;
