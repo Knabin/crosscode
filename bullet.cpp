@@ -68,7 +68,7 @@ void bullet::fire(float x, float y, float angle, float speed)
 {
 	tagPlayerBullet bullet;
 	ZeroMemory(&bullet, sizeof(tagPlayerBullet));
-	SOUNDMANAGER->play("pS lcattack");
+	SOUNDMANAGER->play("pS lcattack",0.5f);
 
 	bullet.image = IMAGEMANAGER->addFrameImage("playerBullet", L"images/player/player_bullet.png", 4, 1);
 	IMAGEMANAGER->addImage("player_bulletEffect", L"images/player/player_bulletEffect.png");

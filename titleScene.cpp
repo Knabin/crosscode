@@ -12,7 +12,7 @@ HRESULT titleScene::init()
 	CAMERA->setCameraMode(CAMERASTATE::NONE);
 	CAMERA->setMapSize(Vector2(WINSIZEX, WINSIZEY));
 
-	SOUNDMANAGER->playBGM("bgm title");
+	SOUNDMANAGER->playBGM("bgm title",0.5f);
 
 
 	//로딩이미지
