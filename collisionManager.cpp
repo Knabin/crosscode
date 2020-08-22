@@ -178,6 +178,7 @@ void collisionManager::buffaloCollision()
 			{ 
 				if (!b->getEnemyCollision())
 				{
+					SOUNDMANAGER->play("hit", 1.0f);
 					b->setEnemyHP(_player->getPlayerAttackPower());//플레이어가 에너미(버팔로)한테 주는 데미지
 					b->setDamaged(_player->getPlayerAttackPower());
 					b->setEnemyCollision(true);
@@ -191,6 +192,7 @@ void collisionManager::buffaloCollision()
 		{
 			if (isCollision(b->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
+				SOUNDMANAGER->play("hit", 1.0f);
 				b->setEnemyHP(_player->getPlayerAttackPower());
 				b->setDamaged(_player->getPlayerAttackPower());
 				EFFECTMANAGER->play("player bulletRemoveEffect",
@@ -511,9 +513,11 @@ void collisionManager::meerkatCollision()
 						{
 							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 						}
+						SOUNDMANAGER->play("hit", 1.0f);
 					}
 					if (!m->getEnemyCollision())//충돌판정이 펄스이면
 					{
+						SOUNDMANAGER->play("hit", 1.0f);
 						m->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
 						m->setDamaged(_player->getPlayerAttackPower());
 						m->setDealing(true);
@@ -562,7 +566,9 @@ void collisionManager::meerkatCollision()
 						{
 							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 						}
+						SOUNDMANAGER->play("hit", 1.0f);
 					}
+					SOUNDMANAGER->play("hit", 1.0f);
 					m->setEnemyHP(_player->getPlayerAttackPower());
 					m->setDamaged(_player->getPlayerAttackPower());
 					m->setDealing(true);

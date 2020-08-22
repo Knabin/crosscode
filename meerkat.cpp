@@ -225,7 +225,7 @@ void meerkat::update()
 			}
 		}
 	}
-	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 50), pivot::LEFTTOP);
+	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 25), pivot::LEFTTOP);
 	//cout << "¹Ì¾îÄ¹ : " << _currentHP << endl;
 }
 

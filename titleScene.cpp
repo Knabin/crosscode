@@ -24,7 +24,7 @@ HRESULT titleScene::init()
 	IMAGEMANAGER->addImage("logo", L"images/title/logo.png");
 
 	SOUNDMANAGER->addSound("bgm title", "sounds/bgm/muTitle.ogg", true, true);
-	SOUNDMANAGER->playBGM("bgm title");
+	SOUNDMANAGER->playBGM("bgm title", 0.5f);
 
 
 	//로딩이미지

@@ -11,6 +11,7 @@ private:
 	tile* _currentTile;
 
 	int _angleCount;
+	int _jumpSoundCount;
 
 public:
 	virtual HRESULT init();

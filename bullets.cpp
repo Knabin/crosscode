@@ -50,7 +50,7 @@ void bullets::fire(float x, float y, float angle, float speed)
 	bullet.count = 0;
 	bullet.currentFrameX = 0;
 	bullet.currentFrameY = 0;
-	bullet.rc.update(Vector2(0, 0), Vector2(50, 50), pivot::CENTER);
+	bullet.rc.update(Vector2(bullet.position.x, bullet.position.y), Vector2(50, 50), pivot::CENTER);
 	bullet.rc.set(bullet.position, pivot::CENTER);
 
 	_vBullet.push_back(bullet);

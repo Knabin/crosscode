@@ -34,6 +34,7 @@ HRESULT hedgehag::init()
 	_count = 0;
 	_attackCount = 0;
 	_hitCount = 0;
+	_jumpSoundCount = 0;
 
 	_isAttack = false;
 	_distanceChange = false;
@@ -212,7 +213,7 @@ void hedgehag::update()
 	{
 		EFFECTMANAGER->play("enemyHedgehogMoveDust", Vector2(CAMERA->getRelativeVector2(_position).x + 20, CAMERA->getRelativeVector2(_position).y + 40), 0, 0.5f);
 	}
-	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 50), pivot::LEFTTOP);
+	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 25), pivot::LEFTTOP);
 	//cout << "고슴도치 : " << _currentHP << endl;
 }
 
@@ -343,7 +344,7 @@ void hedgehag::move()
 			{
 				if (_attackCount >= 25)//에너미 공격상태에서 플레이어에게 공격하기까지의 딜레이
 				{
-					_attackRC.update(Vector2(0, 0), Vector2(70, 70), pivot::CENTER);//에너미 공격렉트
+					_attackRC.update(Vector2(_position.x, _position.y), Vector2(70, 70), pivot::CENTER);//에너미 공격렉트
 					_effect = false;
 
 					if (_t[0]->getOrderIndex() - _nowOrder == 1 ||
@@ -402,67 +403,47 @@ void hedgehag::move()
 				if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
 				{
 					_enemyDirection = ENEMY_LEFT_ATTACK;
-
-					if (!SOUNDMANAGER->isPlaySound("hedgehog-jump"))
-					{
-						SOUNDMANAGER->play("hedgehog-jump", 1.0f);
-					}
 				}
 
 				if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
 				{
 					_enemyDirection = ENEMY_UP_LEFT_ATTACK;
-
-					if (!SOUNDMANAGER->isPlaySound("hedgehog-jump"))
-					{
-						SOUNDMANAGER->play("hedgehog-jump", 1.0f);
-					}
 				}
 
 				if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
 				{
 					_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
-
-					if (!SOUNDMANAGER->isPlaySound("hedgehog-jump"))
-					{
-						SOUNDMANAGER->play("hedgehog-jump", 1.0f);
-					}
 				}
 
 				if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
 				{
 					_enemyDirection = ENEMY_RIGHT_ATTACK;
-
-					if (!SOUNDMANAGER->isPlaySound("hedgehog-jump"))
-					{
-						SOUNDMANAGER->play("hedgehog-jump", 1.0f);
-					}
 				}
 
 				if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
 				{
 					_enemyDirection = ENEMY_DOWN_RIGHT_ATTACK;
-
-					if (!SOUNDMANAGER->isPlaySound("hedgehog-jump"))
-					{
-						SOUNDMANAGER->play("hedgehog-jump", 1.0f);
-					}
 				}
 
 				if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
 				{
 					_enemyDirection = ENEMY_DOWN_LEFT_ATTACK;
+				}
 
+				_jumpSoundCount++;
+				if (_jumpSoundCount % 15 == 0)
+				{
 					if (!SOUNDMANAGER->isPlaySound("hedgehog-jump"))
 					{
-						SOUNDMANAGER->play("hedgehog-jump", 1.0f);
+						SOUNDMANAGER->play("hedgehog-jump", 0.5f);
 					}
+					_jumpSoundCount = 0;
 				}
 			}
 		}
 		if (!_isAttack)//에너미의 공격상태값이 펄스면
 		{
-			_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);//에너미의 공격 렉트크기 0
+			_attackRC.update(Vector2(_position.x, _position.y), Vector2(0, 0), pivot::CENTER);//에너미의 공격 렉트크기 0
 		}
 	}
 	else//데미지를 받지 않았을때
@@ -733,7 +714,7 @@ void hedgehag::animationControl()
 
 		if (!SOUNDMANAGER->isPlaySound("hedgehog-hit"))
 		{
-			SOUNDMANAGER->play("hedgehog-hit", 1.0f);
+			SOUNDMANAGER->play("hedgehog-hit", 0.5f);
 		}
 
 		_hitCount++;
@@ -749,7 +730,7 @@ void hedgehag::animationControl()
 
 		if (!SOUNDMANAGER->isPlaySound("hedgehog-hit"))
 		{
-			SOUNDMANAGER->play("hedgehog-hit", 1.0f);
+			SOUNDMANAGER->play("hedgehog-hit", 0.5f);
 		}
 
 		_hitCount++;
@@ -765,7 +746,7 @@ void hedgehag::animationControl()
 
 		if (!SOUNDMANAGER->isPlaySound("hedgehog-hit"))
 		{
-			SOUNDMANAGER->play("hedgehog-hit", 1.0f);
+			SOUNDMANAGER->play("hedgehog-hit", 0.5f);
 		}
 
 		_hitCount++;
@@ -781,7 +762,7 @@ void hedgehag::animationControl()
 
 		if (!SOUNDMANAGER->isPlaySound("hedgehog-hit"))
 		{
-			SOUNDMANAGER->play("hedgehog-hit", 1.0f);
+			SOUNDMANAGER->play("hedgehog-hit", 0.5f);
 		}
 
 		_hitCount++;
@@ -797,7 +778,7 @@ void hedgehag::animationControl()
 
 		if (!SOUNDMANAGER->isPlaySound("hedgehog-hit"))
 		{
-			SOUNDMANAGER->play("hedgehog-hit", 1.0f);
+			SOUNDMANAGER->play("hedgehog-hit", 0.5f);
 		}
 
 		_hitCount++;
@@ -813,7 +794,7 @@ void hedgehag::animationControl()
 
 		if (!SOUNDMANAGER->isPlaySound("hedgehog-hit"))
 		{
-			SOUNDMANAGER->play("hedgehog-hit", 1.0f);
+			SOUNDMANAGER->play("hedgehog-hit", 0.5f);
 		}
 
 		_hitCount++;
@@ -866,61 +847,31 @@ void hedgehag::animationAngleControl()
 				if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
 				{
 					_enemyDirection = ENEMY_LEFT_MOVE;
-
-					if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-					{
-						SOUNDMANAGER->stop("hedgehog-propeller-old");
-					}
 				}
 
 				if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
 				{
 					_enemyDirection = ENEMY_UP_LEFT_MOVE;
-
-					if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-					{
-						SOUNDMANAGER->stop("hedgehog-propeller-old");
-					}
 				}
 
 				if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
 				{
 					_enemyDirection = ENEMY_UP_RIGHT_MOVE;
-
-					if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-					{
-						SOUNDMANAGER->stop("hedgehog-propeller-old");
-					}
 				}
 
 				if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
 				{
 					_enemyDirection = ENEMY_RIGHT_MOVE;
-
-					if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-					{
-						SOUNDMANAGER->stop("hedgehog-propeller-old");
-					}
 				}
 
 				if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
 				{
 					_enemyDirection = ENEMY_DOWN_RIGHT_MOVE;
-
-					if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-					{
-						SOUNDMANAGER->stop("hedgehog-propeller-old");
-					}
 				}
 
 				if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
 				{
 					_enemyDirection = ENEMY_DOWN_LEFT_MOVE;
-
-					if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-					{
-						SOUNDMANAGER->stop("hedgehog-propeller-old");
-					}
 				}
 			}
 		}
@@ -939,61 +890,31 @@ void hedgehag::animationAngleControl()
 					if (_angle * (180 / PI) >= 135 && _angle * (180 / PI) <= 225)//왼쪽
 					{
 						_enemyDirection = ENEMY_LEFT_IDLE;
-
-						if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->stop("hedgehog-propeller-old");
-						}
 					}
 
 					if (_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135)//왼쪽위
 					{
 						_enemyDirection = ENEMY_UP_LEFT_IDLE;
-
-						if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->stop("hedgehog-propeller-old");
-						}
 					}
 
 					if (_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90)//오른쪽위
 					{
 						_enemyDirection = ENEMY_UP_RIGHT_IDLE;
-
-						if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->stop("hedgehog-propeller-old");
-						}
 					}
 
 					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45) || (_angle * (180 / PI) >= 315 && _angle * (180 / PI) <= 360))//오른쪽
 					{
 						_enemyDirection = ENEMY_RIGHT_IDLE;
-
-						if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->stop("hedgehog-propeller-old");
-						}
 					}
 
 					if (_angle * (180 / PI) >= 270 && _angle * (180 / PI) <= 315)//아래오른쪽
 					{
 						_enemyDirection = ENEMY_DOWN_RIGHT_IDLE;
-
-						if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->stop("hedgehog-propeller-old");
-						}
 					}
 
 					if (_angle * (180 / PI) >= 225 && _angle * (180 / PI) <= 270)//아래왼쪽
 					{
 						_enemyDirection = ENEMY_DOWN_LEFT_IDLE;
-
-						if (SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->stop("hedgehog-propeller-old");
-						}
 					}
 				}
 
@@ -1005,11 +926,6 @@ void hedgehag::animationAngleControl()
 						_enemyDirection != ENEMY_RIGHT_ATTACK)//왼쪽
 					{
 						_enemyDirection = ENEMY_LEFT_ATTACK;
-
-						if (!SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->play("hedgehog-propeller-old", 1.0f);
-						}
 					}
 
 					if ((_angle * (180 / PI) >= 90 && _angle * (180 / PI) <= 135 &&
@@ -1022,11 +938,6 @@ void hedgehag::animationAngleControl()
 							_enemyDirection != ENEMY_RIGHT_ATTACK))//왼쪽위와 왼쪽아래
 					{
 						_enemyDirection = ENEMY_UP_LEFT_ATTACK;
-
-						if (!SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->play("hedgehog-propeller-old", 1.0f);
-						}
 					}
 
 					if ((_angle * (180 / PI) >= 45 && _angle * (180 / PI) <= 90 &&
@@ -1039,11 +950,6 @@ void hedgehag::animationAngleControl()
 							_enemyDirection != ENEMY_RIGHT_ATTACK))//오른쪽위와 오른쪽아래
 					{
 						_enemyDirection = ENEMY_UP_RIGHT_ATTACK;
-
-						if (!SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->play("hedgehog-propeller-old", 1.0f);
-						}
 					}
 
 					if ((_angle * (180 / PI) >= 0 && _angle * (180 / PI) <= 45 &&
@@ -1056,11 +962,11 @@ void hedgehag::animationAngleControl()
 							_enemyDirection != ENEMY_UP_RIGHT_ATTACK))
 					{
 						_enemyDirection = ENEMY_RIGHT_ATTACK;
+					}
 
-						if (!SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
-						{
-							SOUNDMANAGER->play("hedgehog-propeller-old", 1.0f);
-						}
+					if (!SOUNDMANAGER->isPlaySound("hedgehog-propeller-old"))
+					{
+						SOUNDMANAGER->play("hedgehog-propeller-old", 0.5f);
 					}
 				}
 			}

@@ -37,8 +37,8 @@ void puzzleDestruct::update()
 
 void puzzleDestruct::render()
 {
-	D2DRENDERER->DrawRotationFillRectangle(
-		CAMERA->getRelativeRect(_rc), D2D1::ColorF::AliceBlue, 0);
+	//D2DRENDERER->DrawRotationFillRectangle(
+	//	CAMERA->getRelativeRect(_rc), D2D1::ColorF::AliceBlue, 0);
 	_image->setSize(Vector2(_image->getSize()) * CAMERA->getZoomAmount());
 	_image->render(CAMERA->getRelativeVector2(Vector2(_rc.left, _rc.top)));
 }

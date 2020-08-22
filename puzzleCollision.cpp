@@ -9,6 +9,8 @@
 
 HRESULT puzzleCollision::init()
 {
+	SOUNDMANAGER->addSound("counter", "sounds/object/counter.ogg", false, false);
+
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	_count = 0;
 
@@ -178,12 +180,22 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 		if (isCollision(buttonP1->getRect(), _player->getPlayerAttackRect()))//1번째 탑버튼 렉트에 플레이어 근접공격 렉트가 충돌하면
 		{
+			if (!SOUNDMANAGER->isPlaySound("counter"))
+			{
+				SOUNDMANAGER->play("counter", 1.0f);
+			}
+			
 			_puzzleTabButtonCollision[0] = true;
 			buttonP1->setRect(RectMakePivot(Vector2(buttonP1->getRect().getCenter().x, buttonP1->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//1번째 탑버튼 렉트크기 0으로 변경
 		}
 
 		if (isCollision(buttonP6->getRect(), _player->getPlayerAttackRect()))//상자에 둘러쌓인 탑버튼렉트에 플레이어의 근접공격 렉트가 충돌했으면
 		{
+			if (!SOUNDMANAGER->isPlaySound("counter"))
+			{
+				SOUNDMANAGER->play("counter", 1.0f);
+			}
+
 			_puzzleTabButtonCollision[5] = true;
 			buttonP6->setRect(RectMakePivot(Vector2(buttonP6->getRect().getCenter().x, buttonP6->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//상자에 둘러쌓인 탑버튼 렉트크기 0으로 변경
 		}
@@ -192,6 +204,11 @@ void puzzleCollision::puzzleTabButtonCollision()
 		{
 			if (isCollision(buttonP1->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//1번째 탑버튼렉트랑 플레이어의 총알렉트가 충돌하면
 			{
+				if (!SOUNDMANAGER->isPlaySound("counter"))
+				{
+					SOUNDMANAGER->play("counter", 1.0f);
+				}
+
 				_puzzleTabButtonCollision[0] = true;//1번째 탑버튼이 충돌했다는 bool값 트루
 				buttonP1->setRect(RectMakePivot(Vector2(buttonP1->getRect().getCenter().x, buttonP1->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//1번째 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
@@ -201,6 +218,11 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 			if (isCollision(buttonP2->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//2번째 탑버튼 렉트에 플레이어의 총알렉트가 충돌했으면
 			{
+				if (!SOUNDMANAGER->isPlaySound("counter"))
+				{
+					SOUNDMANAGER->play("counter", 1.0f);
+				}
+
 				_puzzleTabButtonCollision[1] = true;//2번째 탑버튼이 충돌했다는 bool값 트루
 				buttonP2->setRect(RectMakePivot(Vector2(buttonP2->getRect().getCenter().x, buttonP2->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//2번째 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
@@ -210,6 +232,11 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 			if (isCollision(buttonP3->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//3번째 탑버튼 렉트에 플레이어의 총알렉트가 충돌했으면
 			{
+				if (!SOUNDMANAGER->isPlaySound("counter"))
+				{
+					SOUNDMANAGER->play("counter", 1.0f);
+				}
+
 				_puzzleTabButtonCollision[2] = true;//3번째 탑버튼이 충돌했다는 bool값 트루
 				buttonP3->setRect(RectMakePivot(Vector2(buttonP3->getRect().getCenter().x, buttonP3->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//3번째 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
@@ -219,6 +246,11 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 			if (isCollision(buttonP4->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//위쪽 컨테이너 탑버튼에 플레이어의 총알렉트가 충돌했으면
 			{
+				if (!SOUNDMANAGER->isPlaySound("counter"))
+				{
+					SOUNDMANAGER->play("counter", 1.0f);
+				}
+
 				_puzzleTabButtonCollision[3] = true;//위쪽 컨테이너 탑버튼이 충돌했다는 bool값 트루
 				buttonP4->setRect(RectMakePivot(Vector2(buttonP4->getRect().getCenter().x, buttonP4->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//위쪽 컨테이너 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
@@ -228,6 +260,11 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 			if (isCollision(buttonP5->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//아래쪽 컨테이너 탑버튼에 플레이어의 총알렉트가 충돌했으면
 			{
+				if (!SOUNDMANAGER->isPlaySound("counter"))
+				{
+					SOUNDMANAGER->play("counter", 1.0f);
+				}
+
 				_puzzleTabButtonCollision[4] = true;//아래쪽 컨테이너 탑버튼이 충돌했다는 bool값 트루
 				buttonP5->setRect(RectMakePivot(Vector2(buttonP5->getRect().getCenter().x, buttonP5->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//아래쪽 컨테이너 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
@@ -237,6 +274,11 @@ void puzzleCollision::puzzleTabButtonCollision()
 
 			if (isCollision(buttonP6->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//상자에 둘러쌓인 탑버튼에 플레이어의 총알렉트가 충돌했으면
 			{
+				if (!SOUNDMANAGER->isPlaySound("counter"))
+				{
+					SOUNDMANAGER->play("counter", 1.0f);
+				}
+
 				_puzzleTabButtonCollision[5] = true;
 				buttonP6->setRect(RectMakePivot(Vector2(buttonP6->getRect().getCenter().x, buttonP6->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//상자에 둘러쌓인 탑버튼 렉트크기 0으로 변경
 				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제

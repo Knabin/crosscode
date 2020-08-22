@@ -9,6 +9,11 @@ HRESULT buffalo::init()
 	_attackImage = IMAGEMANAGER->addFrameImage("enemyAttack", L"images/enemy/buffalo_attack.png", 6, 12);
 	_hitImage = IMAGEMANAGER->addFrameImage("enemyHit", L"images/enemy/buffalo_hit.png", 4, 6);
 
+	SOUNDMANAGER->addSound("buffalo-attack", "sounds/enemy/buffalo-attack.ogg", false, false);
+	SOUNDMANAGER->addSound("buffalo-run", "sounds/enemy/buffalo-run.ogg", false, false);
+	SOUNDMANAGER->addSound("buffalo-gasp", "sounds/enemy/buffalo-gasp.ogg", false, false);
+	SOUNDMANAGER->addSound("hit", "sounds/enemy/hit.ogg", false, false);
+
 	_name = "buffalo";
 
 	_maxHP = 100;
@@ -325,7 +330,7 @@ void buffalo::update()
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 35, CAMERA->getRelativeVector2(_position).y + 100), 0, 0.5f);
 		EFFECTMANAGER->play("enemyHedgehogDust", Vector2(CAMERA->getRelativeVector2(_position).x + 60, CAMERA->getRelativeVector2(_position).y + 75), 0, 0.5f);
 	}
-	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 50), pivot::LEFTTOP);
+	_currentHpBar.update(Vector2(_position.x - 50, _position.y + 50), Vector2(_currentHP, 25), pivot::LEFTTOP);
 	//cout << "¹öÆÈ·Î : " << _currentHP << endl;
 }
 
@@ -493,7 +498,7 @@ void buffalo::move()
 					_wallCollision = true;
 					_isAttack = false;
 				}
-				_attackRC.update(Vector2(0, 0), Vector2(100, 100), pivot::CENTER);
+				_attackRC.update(Vector2(_position.x, _position.y), Vector2(100, 100), pivot::CENTER);
 			}
 
 			if (_wallCollision)
@@ -660,7 +665,7 @@ void buffalo::move()
 
 		if (!_isAttack)//¹öÆÈ·ÎÀÇ °ø°Ý»óÅÂ°ªÀÌ ÆÞ½º¸é
 		{
-			_attackRC.update(Vector2(0, 0), Vector2(0, 0), pivot::CENTER);
+			_attackRC.update(Vector2(_position.x, _position.y), Vector2(0, 0), pivot::CENTER);
 		}
 
 	}
@@ -729,21 +734,51 @@ void buffalo::animationDraw()
 	{
 	case ENEMY_LEFT_IDLE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_RIGHT_IDLE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_UP_LEFT_IDLE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_UP_RIGHT_IDLE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_DOWN_LEFT_IDLE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_IDLE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_LEFT_MOVE:
 		_enemyAnimationImage = _enemyImage;
@@ -765,75 +800,195 @@ void buffalo::animationDraw()
 		break;
 	case ENEMY_LEFT_HIT:
 		_enemyAnimationImage = _hitImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_RIGHT_HIT:
 		_enemyAnimationImage = _hitImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_UP_LEFT_HIT:
 		_enemyAnimationImage = _hitImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_UP_RIGHT_HIT:
 		_enemyAnimationImage = _hitImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_DOWN_LEFT_HIT:
 		_enemyAnimationImage = _hitImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_HIT:
 		_enemyAnimationImage = _hitImage;
+
+		if (SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->stop("buffalo-run");
+		}
 		break;
 	case ENEMY_LEFT_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->play("buffalo-run", 1.0f);
+		}
 		break;
 	case ENEMY_RIGHT_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->play("buffalo-run", 1.0f);
+		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->play("buffalo-run", 1.0f);
+		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->play("buffalo-run", 1.0f);
+		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->play("buffalo-run", 1.0f);
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
+		{
+			SOUNDMANAGER->play("buffalo-run", 1.0f);
+		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK_PREPARE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
+		{
+			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK_PREPARE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
+		{
+			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+		}
 		break;
 	case ENEMY_LEFT_ATTACK_PREPARE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
+		{
+			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+		}
 		break;
 	case ENEMY_RIGHT_ATTACK_PREPARE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
+		{
+			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK_PREPARE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
+		{
+			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK_PREPARE:
 		_enemyAnimationImage = _enemyImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
+		{
+			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+		}
 		break;
 	case ENEMY_UP_LEFT_MELEE_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
+		{
+			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+		}
 		break;
 	case ENEMY_UP_RIGHT_MELEE_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
+		{
+			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+		}
 		break;
 	case ENEMY_LEFT_MELEE_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
+		{
+			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+		}
 		break;
 	case ENEMY_RIGHT_MELEE_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
+		{
+			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+		}
 		break;
 	case ENEMY_DOWN_LEFT_MELEE_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
+		{
+			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+		}
 		break;
 	case ENEMY_DOWN_RIGHT_MELEE_ATTACK:
 		_enemyAnimationImage = _attackImage;
+
+		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
+		{
+			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+		}
 		break;
 	}
 	_enemyAnimationImage->setSize(Vector2(_enemyAnimationImage->getFrameSize()) * CAMERA->getZoomAmount());
