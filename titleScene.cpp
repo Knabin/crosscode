@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "titleScene.h"
+#include "iEvent.h"
 
 titleScene::~titleScene()
 {
@@ -24,6 +25,7 @@ HRESULT titleScene::init()
 
 	SOUNDMANAGER->addSound("bgm title", "sounds/bgm/muTitle.ogg", true, true);
 	SOUNDMANAGER->playBGM("bgm title");
+
 
 	//로딩이미지
 	//IMAGEMANAGER->addFrameImage("load", "images/loading.png", 4371, 141, 31, 1, true, RGB(255, 0, 255));
@@ -133,23 +135,29 @@ void titleScene::render()
 
 void titleScene::cbStart()
 {
-	SCENEMANAGER->loadScene("town");
-	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
+	iMoveScene* e = new iMoveScene(L"town", Vector2(36 * SIZE, 47 * SIZE));
+	EVENTMANAGER->addEvent(e);
 }
 
 void titleScene::cbContinue()
 {
-	SCENEMANAGER->loadScene("test2");
+	OBJECTMANAGER->findObject(objectType::UI, "start")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "continue")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "maptool")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "option")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "exit")->setIsActive(false);
+
+	OBJECTMANAGER->findObject(objectType::UI, "loadUI")->setIsActive(true);
 }
 
 void titleScene::cbMaptool()
 {
-	SCENEMANAGER->loadScene("maptool");
+	SCENEMANAGER->loadScene(L"maptool");
+	SOUNDMANAGER->stop("bgm title");
 }
 
 void titleScene::cbOption()
 {
-	SCENEMANAGER->loadScene("boss");
 }
 
 void titleScene::cbExit()

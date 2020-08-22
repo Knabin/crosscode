@@ -38,14 +38,14 @@ void initLoadingScene::update()
 	if (!_isInit)
 	{
 		// ============================ 씬 추가 ==============================
-		SCENEMANAGER->addScene("title", new titleScene());			// 타이틀 씬
-		SCENEMANAGER->addScene("maptool", new mapToolScene());		// 맵툴 씬
-		SCENEMANAGER->addScene("test", new testScene());			// 테스트용(새 게임 버튼)
-		SCENEMANAGER->addScene("test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
-		SCENEMANAGER->addScene("boss", new bossTestScene());		// 테스트용(옵션 버튼)
-		SCENEMANAGER->addScene("puzzle", new puzzleScene());
-		SCENEMANAGER->addScene("mountain", new mountainScene());
-		SCENEMANAGER->addScene("town", new townScene());
+		SCENEMANAGER->addScene(L"title", new titleScene());			// 타이틀 씬
+		SCENEMANAGER->addScene(L"maptool", new mapToolScene());		// 맵툴 씬
+		SCENEMANAGER->addScene(L"test", new testScene());			// 테스트용(새 게임 버튼)
+		SCENEMANAGER->addScene(L"test2", new testScene2());			// 테스트용(게임 불러오기 버튼)
+		SCENEMANAGER->addScene(L"boss", new bossTestScene());		// 테스트용(옵션 버튼)
+		SCENEMANAGER->addScene(L"puzzle", new puzzleScene());
+		SCENEMANAGER->addScene(L"mountain", new mountainScene());
+		SCENEMANAGER->addScene(L"town", new townScene());
 		// ==================================================================
 
 		// ============================ 이미지 추가 ==============================
@@ -97,7 +97,7 @@ void initLoadingScene::update()
 
 	if (_currentCount == LOADINGMAX)
 	{
-		SCENEMANAGER->loadScene("title");
+		SCENEMANAGER->loadScene(L"title");
 	}
 }
 

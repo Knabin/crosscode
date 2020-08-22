@@ -1570,5 +1570,5 @@ void mapToolScene::redrawMap()
 
 void mapToolScene::backToTitle()
 {
-	SCENEMANAGER->loadScene("title");
+	SCENEMANAGER->loadScene(L"title");
 }

@@ -138,7 +138,7 @@ void enemyManager::enemyDead()
 				default:
 					break;
 				}
-				_inven->setMoney(RND->getFromIntTo(-100, -300));
+				_inven->setMoney(RND->getFromIntTo(-300, -100));
 				_count = 0;
 				break;
 			}
@@ -173,7 +173,7 @@ void enemyManager::enemyDead()
 				default:
 					break;
 				}
-				_inven->setMoney(RND->getFromIntTo(-200, -400));
+				_inven->setMoney(RND->getFromIntTo(-400, -200));
 				_count = 0;
 				break;
 			}
@@ -208,7 +208,7 @@ void enemyManager::enemyDead()
 				default:
 					break;
 				}
-				_inven->setMoney(RND->getFromIntTo(-500, -700));
+				_inven->setMoney(RND->getFromIntTo(-700, -500));
 				_count = 0;
 				break;
 			}

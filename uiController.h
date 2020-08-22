@@ -13,7 +13,7 @@ private:
 
 	vector<class gameObject*> _vVendor; 
 
-	string scene;
+	wstring scene;
 	nomalUI* _nm;
 	tabUI* _tu;
 	shop* _shop;

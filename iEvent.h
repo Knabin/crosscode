@@ -75,11 +75,11 @@ class iMoveScene final : public iEvent
 {
 private:
 	class player* _player;
-	string _sceneName;
+	wstring _sceneName;
 	Vector2 _location;
 
 public:
-	iMoveScene(string sceneName, Vector2 location);
+	iMoveScene(wstring sceneName, Vector2 location);
 
 	void eventStart() override;
 	bool eventUpdate() override;

@@ -51,13 +51,13 @@ void sceneManager::render()
 	if (_currentScene != NULL) _currentScene->render();
 }
 
-void sceneManager::addScene(string sceneName, scene * scene)
+void sceneManager::addScene(wstring sceneName, scene * scene)
 {
 	if (scene == NULL) return;
 	_mScenes.insert(make_pair(sceneName, scene));
 }
 
-void sceneManager::loadScene(string sceneName)
+void sceneManager::loadScene(wstring sceneName)
 {
 	miScenes iter = _mScenes.find(sceneName);
 
@@ -71,7 +71,7 @@ void sceneManager::loadScene(string sceneName)
 	OBJECTMANAGER->removeObjectsWithoutPlayer();
 
 	// for DEBUG
-	if (sceneName.compare("maptool") == 0 || sceneName.compare("title") == 0 || sceneName.compare("boss") == 0)
+	if (sceneName.compare(L"maptool") == 0 || sceneName.compare(L"title") == 0 || sceneName.compare(L"boss") == 0)
 	{
 		OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(false);
 	}
@@ -80,7 +80,7 @@ void sceneManager::loadScene(string sceneName)
 	_currentScene->init();
 }
 
-scene * sceneManager::findScene(string sceneName)
+scene * sceneManager::findScene(wstring sceneName)
 {
 	miScenes iter = _mScenes.find(sceneName);
 	if (iter != _mScenes.end())

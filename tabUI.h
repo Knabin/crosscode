@@ -4,6 +4,27 @@
 
 #include "item.h"
 
+struct tagSlot
+{
+	bool isSaved;
+	string fileName;
+	floatRect rc;
+	int level;
+	int time;
+	int credit;
+	wstring map;
+
+	tagSlot()
+	{
+		isSaved = false;
+		fileName = "";
+		level = 0;
+		time = 0;
+		credit = 0;
+		map = L"";
+	}
+};
+
 class tabUI : public gameNode
 {
 private:
@@ -40,6 +61,9 @@ private:
 	vector<struct invenObject> _vIv;
 
 	floatRect _eqRect[5];
+	
+	// ³ªºó Ãß°¡
+	tagSlot _saveSlot[5];
 public:
 	tabUI() {};
 	~tabUI() {};
@@ -57,6 +81,12 @@ public:
 	void outMenu();
 	void InventoryList();
 	void equipSelect();
+
+	void saveData(int num);
+	void loadData();
+
+	void setTime(int time) { _time = time; }
+	void setEq(int index, int value) { _equip[index] = value; }
 
 	void setInven(vector<invenObject> inven) { _vIv = inven; }
 

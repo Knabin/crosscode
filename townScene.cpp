@@ -59,7 +59,7 @@ HRESULT townScene::init()
 		EVENTMANAGER->addEvent(dialogEvent);
 		EVENTMANAGER->setFirstEvent(true);
 	}
-	else if (!EVENTMANAGER->getSecondEvent())
+	else if (EVENTMANAGER->getPuzzleEvent() && !EVENTMANAGER->getSecondEvent())
 	{
 		iCameraMove* cameraEvent = new iCameraMove(block, 5.f);
 		iDialog* dialogEvent = new iDialog(new dialog("3"));
@@ -78,11 +78,12 @@ void townScene::release()
 
 void townScene::update()
 {
-	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
+	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80
+		&& !EVENTMANAGER->getPuzzleEvent())
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
-			iMoveScene* m = new iMoveScene("puzzle", Vector2(9 * SIZE, 33 * SIZE));
+			iMoveScene* m = new iMoveScene(L"puzzle", Vector2(9 * SIZE, 33 * SIZE));
 			EVENTMANAGER->addEvent(m);
 		}
 	}
@@ -95,11 +96,11 @@ void townScene::update()
 		dynamic_cast<door*>(OBJECTMANAGER->findObject(objectType::MAPOBJECT, "door"))->setIsOpen(false);
 
 	if (getDistance(_nextPoint.x, _nextPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80 &&
-		!EVENTMANAGER->getPuzzleEvent())
+		EVENTMANAGER->getPuzzleEvent())
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
-			iMoveScene* m = new iMoveScene("mountain", Vector2((float)76 * SIZE, 34.5f * SIZE));
+			iMoveScene* m = new iMoveScene(L"mountain", Vector2((float)76 * SIZE, 34.5f * SIZE));
 			EVENTMANAGER->addEvent(m);
 		}
 	}

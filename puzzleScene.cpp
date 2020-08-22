@@ -45,6 +45,9 @@ HRESULT puzzleScene::init()
 	_nextScene = "town";
 	_nextPoint = Vector2(2300, 1750);
 
+	SOUNDMANAGER->addSound("bgm puzzle", "sounds/bgm/puzzle-bgm.ogg", true, true);
+	SOUNDMANAGER->playBGM("bgm puzzle");
+
 	return S_OK;
 }
 
@@ -58,7 +61,7 @@ void puzzleScene::update()
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
-			iMoveScene* m = new iMoveScene("town", Vector2(1730, 300));
+			iMoveScene* m = new iMoveScene(L"town", Vector2(1730, 300));
 			EVENTMANAGER->addEvent(m);
 		}
 	}
@@ -76,7 +79,7 @@ void puzzleScene::update()
 			if (!EVENTMANAGER->getPuzzleEvent())
 			{
 				iDialog* d = new iDialog(new dialog("2"));
-				iMoveScene* m = new iMoveScene("town", Vector2(1730, 300));
+				iMoveScene* m = new iMoveScene(L"town", Vector2(1730, 300));
 				EVENTMANAGER->addEvent(d);
 				EVENTMANAGER->addEvent(m);
 				EVENTMANAGER->setPuzzleEvent(true);

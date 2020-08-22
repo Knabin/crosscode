@@ -2,6 +2,7 @@
 #include "uiController.h"
 #include "gameObject.h"
 #include "vendor.h"
+#include "loadUI.h"
 
 HRESULT uiController::init()
 {
@@ -24,6 +25,10 @@ HRESULT uiController::init()
 	_tu->setInventory(_inven);
 	_shop->setInventory(_inven);
 
+	loadUI* _lu = new loadUI;
+	_lu->init();
+	_lu->setTabUI(_tu);
+	_lu->setInventory(_inven);
 
 	return S_OK;
 }
@@ -56,16 +61,15 @@ void uiController::update()
 		}
 	}
 
-	if (scene != "title" && scene != "maptool" && !EVENTMANAGER->isPlayingEvent())
+	if (scene != L"title" && scene != L"maptool" && !EVENTMANAGER->isPlayingEvent())
 	{
 		_nm->update();
 		if (!_uiOn)
 		_tu->update();
 		_shop->update();
 		_inven->update();
-		
 	}
-	
+
 	if (_vVendor.size() != NULL)
 	{
 		for (int i = 0; i < _vVendor.size(); ++i)
@@ -125,12 +129,13 @@ void uiController::update()
 
 void uiController::render()
 {
-	if (scene != "title" && scene != "maptool" && scene != "loading" && !EVENTMANAGER->isPlayingEvent())
+	if (scene != L"title" && scene != L"maptool" && scene != L"loading" && !EVENTMANAGER->isPlayingEvent())
 	{
 		_nm->render();
 		_tu->render();
 		_shop->render();
 	}
+
 	for (int i = 0; i < _vUiObjects.size(); ++i)
 	{
 		if (!_vUiObjects[i]->getIsActive()) continue;
