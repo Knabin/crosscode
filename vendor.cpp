@@ -48,7 +48,7 @@ void vendor::update()
 void vendor::render()
 {
 	
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
 	_image->setSize(Vector2(_image->getFrameSize()) * CAMERA->getZoomAmount());
 	_image->frameRender(CAMERA->getRelativeVector2(_rc.getCenter()), _type, 0);
 
