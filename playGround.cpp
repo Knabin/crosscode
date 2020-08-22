@@ -140,13 +140,15 @@ void playGround::render()
 		//=================================================
 
 		SCENEMANAGER->render();
+		if (!_ui->isUIOn() && !_ui->UIon())
 		EFFECTMANAGER->render();
 		OBJECTMANAGER->render();
 		TIMEMANAGER->render();
 		_collisionManager->render();
 		_ui->render();
 		//_enemyManager->render();
-
+		if (_ui->isUIOn() || _ui->UIon())
+			EFFECTMANAGER->render();
 		if (EVENTMANAGER->isPlayingEvent())
 		{
 			D2DRENDERER->DrawRotationFillRectangle(floatRect(Vector2(0, 0), Vector2(WINSIZEX, 80), pivot::LEFTTOP), D2D1::ColorF::Black, 0);
