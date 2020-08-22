@@ -99,7 +99,7 @@ void dialog::loadText()
 	else if (_fileName == "3")
 	{
 		_vText.push_back(L"1");
-		_vText.push_back(L"저쪽으로 가면 드디어 몬스터를 만날 수 있어.");
+		_vText.push_back(L"저쪽으로 가면 드디어 \n몬스터를 만날 수 있어.");
 		_vText.push_back(L"1");
 		_vText.push_back(L"긴장하지 말고, 파이팅!");
 		_vText.push_back(L"2");
@@ -118,7 +118,7 @@ void dialog::loadText()
 		_vText.push_back(L"1");
 		_vText.push_back(L"한눈판 사이에 들어와 버리다니...");
 		_vText.push_back(L"1");
-		_vText.push_back(L"뭐 별일이야 있겠어?");
+		_vText.push_back(L"뭐... 별일이야 있겠어?");
 	}
 	else if (_fileName == "5")
 	{
