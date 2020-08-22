@@ -18,13 +18,13 @@ private:
 	~sceneManager();
 
 private:
-	typedef map<string, class scene*>			mScenes;
-	typedef map<string, class scene*>::iterator	miScenes;
+	typedef map<wstring, class scene*>			mScenes;
+	typedef map<wstring, class scene*>::iterator	miScenes;
 private:
 	mScenes		_mScenes;
 	miScenes	_miScenes;
 	class scene* _currentScene;
-	string _currentSceneName;
+	wstring _currentSceneName;
 	image* _tileBuffer;
 	image* _tileImages[3];
 	image* _objectImages[3];
@@ -39,12 +39,12 @@ public:
 	image* getTileImage(int pageNum) { return _tileImages[pageNum]; }
 	image* getObjectImage(int pageNum) { return _objectImages[pageNum]; }
 
-	void addScene(string sceneName, class scene* scene);
-	void loadScene(string sceneName);
-	scene* findScene(string sceneName);
+	void addScene(wstring sceneName, class scene* scene);
+	void loadScene(wstring sceneName);
+	scene* findScene(wstring sceneName);
 
 	scene* getCurrentScene() { return _currentScene; }
-	string getCurrentSceneName() { return _currentSceneName; }
+	wstring getCurrentSceneName() { return _currentSceneName; }
 
 	int getCurrentSceneMapXSize(); //{ return _currentScene->getTiles()[0].size(); }
 	int getCurrentSceneMapYSize(); //{ return _currentScene->getTiles().size(); }
