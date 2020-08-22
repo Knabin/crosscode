@@ -18,6 +18,7 @@ HRESULT uiController::init()
 
 	_inven = new inventory;
 	_inven->init();
+	OBJECTMANAGER->addObject(objectType::UI, _inven);
 
 	_shop = new shop;
 	_shop->init();

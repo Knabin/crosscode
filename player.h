@@ -143,6 +143,18 @@ public:
 	void playerLethalattack();
 	void playerLethalattackMove();
 
+	void damage(int damage)
+	{
+		int att = damage - _pDef;
+		if (_state->getState() == _vState[PLAYERSTATE::DODGE])
+		{
+			SOUNDMANAGER->play("dodge", 0.3f);
+			damage -= 10;
+		}
+		_pHp -= att < 0 ? 0 : att;
+		if (_pHp <= 0) _pHp = 0;
+	}
+
 	void setImage(image* image) { _image = image; }
 	void setImage(string imageName) { _image = IMAGEMANAGER->findImage(imageName); }
 	void setAnimation(animation* ani) { _ani = ani; }

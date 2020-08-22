@@ -373,7 +373,7 @@ void jumpState::enter()
 {
 	//cout << "jumpState enter()" << endl;
 	_player->setImage("player jump");
-	SOUNDMANAGER->play("pS jump", 0.5f);
+	SOUNDMANAGER->play("pS jump", 0.1f);
 
 	switch (_player->getDirection())
 	{
@@ -1472,7 +1472,7 @@ void rightattackState::enter()
 
 	//cout << "rightattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
-	SOUNDMANAGER->play("pS mattack", 0.5f);
+	SOUNDMANAGER->play("pS mattack", 0.6f);
 
 	switch (_player->getDirection())
 	{
@@ -1640,7 +1640,7 @@ void leftattackState::enter()
 			e->setEnemyCollision(false);
 		}
 	}
-	SOUNDMANAGER->play("pS mattack", 0.5f);
+	SOUNDMANAGER->play("pS mattack", 0.6f);
 	//cout << "leftattackState enter()" << endl;
 	_player->setImage("p_meleeattack_left");
 
@@ -1814,7 +1814,7 @@ void rightfinalattackState::enter()
 		}
 	}
 	//cout << "rightfinalattackState enter()" << endl;
-	SOUNDMANAGER->play("pS mattackf", 0.5f);
+	SOUNDMANAGER->play("pS mattackf", 0.6f);
 	_player->setImage("p_meleeattack_right");
 
 	switch (_player->getDirection())

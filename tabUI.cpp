@@ -191,6 +191,8 @@ void tabUI::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
 	{
+		if(_on) SOUNDMANAGER->play("button cancel");
+		else SOUNDMANAGER->play("button ok");
 		_on = _on == false ? true : false;
 	}
 	if (_on)
@@ -338,7 +340,7 @@ void tabUI::update()
 					_eqSelectNum = 0;
 					for (int j = 0; j < _vIv.size(); ++j)
 					{
-						
+						SOUNDMANAGER->play("button ok");
 						switch (i)
 						{
 						case 0:
@@ -418,6 +420,7 @@ void tabUI::update()
 						{
 							if (!_saveSlot[j].isSaved)
 							{
+								SOUNDMANAGER->play("button ok");
 								saveData(j);
 								loadData();
 								break;
@@ -426,6 +429,7 @@ void tabUI::update()
 					}
 					else
 					{
+						SOUNDMANAGER->play("button ok");
 						saveData(i);
 						loadData();
 						break;
@@ -1434,6 +1438,8 @@ void tabUI::inEquip()
 	OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(false);
+
+	SOUNDMANAGER->play("button ok");
 }
 void tabUI::inInven()
 {
@@ -1446,6 +1452,8 @@ void tabUI::inInven()
 	OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(false);
+
+	SOUNDMANAGER->play("button ok");
 }
 void tabUI::inSave()
 {
@@ -1459,8 +1467,7 @@ void tabUI::inSave()
 	OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(false);
 
-	// TODO: 정보 가져와서 slot에 세팅하기
-	// TODO: 해당 정보 바탕으로 RECT 설정...
+	SOUNDMANAGER->play("button ok");
 }
 void tabUI::inStat()
 {
@@ -1473,9 +1480,12 @@ void tabUI::inStat()
 	OBJECTMANAGER->findObject(objectType::UI, "inventory")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "stat")->setIsActive(false);
 	OBJECTMANAGER->findObject(objectType::UI, "save")->setIsActive(false);
+
+	SOUNDMANAGER->play("button ok");
 }
 void tabUI::outMenu()
 {
+	SOUNDMANAGER->play("button cancel");
 	if (_on == true && !_eq && !_iv && !_sv && !_st && !_eqSelect)
 	{
 		_on = false;
@@ -1519,9 +1529,7 @@ void tabUI::outMenu()
 	if (_st == true)
 	{
 		_st = false;
-	}
-	
-	
+	}	
 }
 
 void tabUI::InventoryList()
@@ -1537,6 +1545,7 @@ void tabUI::InventoryList()
 		if (PtInRect(&rc[i].getRect(), _ptMouse))
 		{
 			k = i;
+			SOUNDMANAGER->play("button hover");
 			break;
 		}
 	}

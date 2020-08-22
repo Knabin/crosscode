@@ -49,6 +49,7 @@ void loadUI::update()
 			OBJECTMANAGER->findObject(objectType::UI, "option")->setIsActive(true);
 			OBJECTMANAGER->findObject(objectType::UI, "exit")->setIsActive(true);
 
+			SOUNDMANAGER->play("button cancel");
 			this->setIsActive(false);
 		}
 	}
@@ -62,6 +63,7 @@ void loadUI::update()
 				if (_slot[i].isSaved)
 				{
 					load(i);
+					SOUNDMANAGER->play("button ok");
 					break;
 				}
 			}

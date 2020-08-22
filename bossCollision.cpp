@@ -78,6 +78,8 @@ void bossCollision::icethrowerCollision()
 		{
 			if (isCollision(_player->getRect(), attack1->getIcethrowerVector()[j]._rc))
 			{
+				_player->damage(attack1->getIcethrowerVector()[j]._damage);
+
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -110,8 +112,6 @@ void bossCollision::icethrowerCollision()
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
-
-				_player->setPlayerHP(_player->getPlayerHP() - attack1->getIcethrowerVector()[j]._damage);
 				attack1->removeFire(j);
 				break;
 			}
@@ -134,8 +134,6 @@ void bossCollision::mineCollision()
 			{
 				if (isCollision(spider->getMineVector()[k]._rc, _player->getBullet()->getVPlayerBullet()[j].rc))
 				{
-
-
 					spider->collision(k, _player->getBullet()->getVPlayerBullet()[j].angle);
 					_player->getBullet()->remove(j);
 					break;
@@ -173,6 +171,8 @@ void bossCollision::stoneCollision()
 		{
 			if (isCollision(_player->getRect(), attack2->getStoneVector()[j]._rc))
 			{
+				_player->damage(attack2->getStoneVector()[j]._damage);
+
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -206,7 +206,7 @@ void bossCollision::stoneCollision()
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
 
-				_player->setPlayerHP(_player->getPlayerHP() - attack2->getStoneVector()[j]._damage);
+				
 				attack2->removeFire(j);
 				break;
 			}
@@ -226,6 +226,8 @@ void bossCollision::flameCollision()
 		{
 			if (isCollision(_player->getRect(), attack3->getFlameVector()[j]._rc))
 			{
+				_player->damage(attack3->getFlameVector()[j]._damage);
+
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -259,7 +261,7 @@ void bossCollision::flameCollision()
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
 
-				_player->setPlayerHP(_player->getPlayerHP() - attack3->getFlameVector()[j]._damage);
+
 				attack3->removeFire(j);
 				break;
 			}
@@ -280,6 +282,8 @@ void bossCollision::iceguideCollision()
 		{
 			if (isCollision(_player->getRect(), attack4->getIceguideVector()[j]._rc))
 			{
+				_player->damage(attack4->getIceguideVector()[j]._damage);
+
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -313,7 +317,7 @@ void bossCollision::iceguideCollision()
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
 
-				_player->setPlayerHP(_player->getPlayerHP() - attack4->getIceguideVector()[j]._damage);
+
 				attack4->removeFire1(j);
 				break;
 			}
@@ -324,6 +328,7 @@ void bossCollision::iceguideCollision()
 		{
 			if (isCollision(_player->getRect(), attack4->getIceguideVector2()[j]._rc))
 			{
+				_player->damage(attack4->getIceguideVector2()[j]._damage);
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -356,8 +361,6 @@ void bossCollision::iceguideCollision()
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
-
-				_player->setPlayerHP(_player->getPlayerHP() - attack4->getIceguideVector2()[j]._damage);
 				attack4->removeFire2(j);
 				break;
 			}
@@ -367,6 +370,7 @@ void bossCollision::iceguideCollision()
 		{
 			if (isCollision(_player->getRect(), attack4->getIceguideVector3()[j]._rc))
 			{
+				_player->damage(attack4->getIceguideVector3()[j]._damage);
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -399,8 +403,6 @@ void bossCollision::iceguideCollision()
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
-
-				_player->setPlayerHP(_player->getPlayerHP() - attack4->getIceguideVector3()[j]._damage);
 				attack4->removeFire3(j);
 				break;
 			}
@@ -410,6 +412,7 @@ void bossCollision::iceguideCollision()
 		{
 			if (isCollision(_player->getRect(), attack4->getIceguideVector4()[j]._rc))
 			{
+				_player->damage(attack4->getIceguideVector4()[j]._damage);
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -442,8 +445,6 @@ void bossCollision::iceguideCollision()
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
-
-				_player->setPlayerHP(_player->getPlayerHP() - attack4->getIceguideVector4()[j]._damage);
 				attack4->removeFire4(j);
 				break;
 			}
@@ -454,6 +455,7 @@ void bossCollision::iceguideCollision()
 		{
 			if (isCollision(_player->getRect(), attack4->getIceguideVector5()[j]._rc))
 			{
+				_player->damage(attack4->getIceguideVector5()[j]._damage);
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -486,8 +488,6 @@ void bossCollision::iceguideCollision()
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
 				}
-
-				_player->setPlayerHP(_player->getPlayerHP() - attack4->getIceguideVector5()[j]._damage);
 				attack4->removeFire5(j);
 				break;
 			}

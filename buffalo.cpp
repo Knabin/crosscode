@@ -9,11 +9,6 @@ HRESULT buffalo::init()
 	_attackImage = IMAGEMANAGER->addFrameImage("enemyAttack", L"images/enemy/buffalo_attack.png", 6, 12);
 	_hitImage = IMAGEMANAGER->addFrameImage("enemyHit", L"images/enemy/buffalo_hit.png", 4, 6);
 
-	SOUNDMANAGER->addSound("buffalo-attack", "sounds/enemy/buffalo-attack.ogg", false, false);
-	SOUNDMANAGER->addSound("buffalo-run", "sounds/enemy/buffalo-run.ogg", false, false);
-	SOUNDMANAGER->addSound("buffalo-gasp", "sounds/enemy/buffalo-gasp.ogg", false, false);
-	SOUNDMANAGER->addSound("hit", "sounds/enemy/hit.ogg", false, false);
-
 	_name = "buffalo";
 
 	_maxHP = 100;

@@ -42,6 +42,10 @@ HRESULT mountainScene::init()
 	_nextScene = "boss";
 	_nextPoint = Vector2(450, 1100);
 
+	SOUNDMANAGER->stopAll("bgm town");
+	if (!SOUNDMANAGER->isPlaySound("bgm town"))
+		SOUNDMANAGER->play("bgm town", 0.3f);
+
 	return S_OK;
 }
 

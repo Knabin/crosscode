@@ -31,7 +31,12 @@ void dialogText::update()
 	_textCount++;
 	if (_textCount % 2 == 0)
 	{
-		if(_textIndex < _str.size()) _textIndex++;
+		if (_textIndex < _str.size())
+		{
+			_textIndex++;
+			SOUNDMANAGER->play("dialog");
+		}
+		
 	}
 }
 

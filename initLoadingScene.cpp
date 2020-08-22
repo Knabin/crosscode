@@ -106,6 +106,32 @@ void initLoadingScene::update()
 
 		// 사운드
 		SOUNDMANAGER->addSound("bgm title", "sounds/bgm/muTitle.ogg", true, true);
+		SOUNDMANAGER->addSound("bgm puzzle", "sounds/bgm/puzzle-bgm.ogg", true, true);
+		SOUNDMANAGER->addSound("bgm town", "sounds/bgm/muAutumnsrise.ogg", true, true);
+		SOUNDMANAGER->addSound("bgm boss", "sounds/bgm/muVermillion.ogg", true, true);
+
+		SOUNDMANAGER->addSound("buffalo-attack", "sounds/enemy/buffalo-attack.ogg", false, false);
+		SOUNDMANAGER->addSound("buffalo-run", "sounds/enemy/buffalo-run.ogg", false, false);
+		SOUNDMANAGER->addSound("buffalo-gasp", "sounds/enemy/buffalo-gasp.ogg", false, false);
+		SOUNDMANAGER->addSound("hit", "sounds/enemy/hit.ogg", false, false);
+
+		SOUNDMANAGER->addSound("pS step", "sounds/player/step-1.ogg", false, true);	//발자국소리
+		SOUNDMANAGER->addSound("pS jump", "sounds/player/jump.ogg", false, false);	//점프소리
+		SOUNDMANAGER->addSound("pS lattack", "sounds/player/throw-ball-1.ogg", false, false);	//원거리발사소리
+		SOUNDMANAGER->addSound("pS mattack", "sounds/player/close-combat-sweep-1.ogg", false, false);	//근거리공격소리
+		SOUNDMANAGER->addSound("pS mattackf", "sounds/player/close-combat-sweep-massive.ogg", false, false);	//근거리막타공격소리
+		SOUNDMANAGER->addSound("pS dodge", "sounds/player/dash-3.ogg", false, false);	//회피
+		SOUNDMANAGER->addSound("dodge", "sound/player/hit-block.ogg", false, false);
+		
+		SOUNDMANAGER->addSound("counter", "sounds/object/counter.ogg", false, false);
+		SOUNDMANAGER->addSound("barrier", "sounds/object/barrier-down.ogg", false, false);
+		SOUNDMANAGER->addSound("item drop", "sounds/object/drop-normal-bronze", false, false);
+		SOUNDMANAGER->addSound("puzzle", "sounds/object/puzzle-solved.ogg", false, false);
+
+		SOUNDMANAGER->addSound("button hover", "sounds/ui/menu-hover.ogg", false, false);
+		SOUNDMANAGER->addSound("button ok", "sounds/ui/menu-submit.ogg", false, false);
+		SOUNDMANAGER->addSound("button cancel", "sounds/ui/menu-cancel.ogg", false, false);
+		SOUNDMANAGER->addSound("dialog", "sounds/ui/dialog-beep-2.ogg", false, false);
 
 		_isInit = true;
 	}

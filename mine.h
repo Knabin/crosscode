@@ -48,6 +48,13 @@ private:
 	int _mineFrameX, _mineFrameY;
 	int _explosionFrameX, _explosionFrameY;
 
+	bool _isCollision;
+	int _colNum;
+	float _colAngle;
+
+	bool _isCollision2;
+	int _colNum2;
+	float _colAngle2;
 
 public:
 
@@ -75,6 +82,8 @@ public:
 
 	vector<tagMine>& getMine2Vector() { return _vMine2; }
 	vector<tagMine>::iterator& getMine2IterVector() { return _viMine2; }
+
+	void setCollision(bool col) { _isCollision = col; }
 
 };
 

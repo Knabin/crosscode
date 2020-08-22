@@ -68,7 +68,9 @@ HRESULT townScene::init()
 		EVENTMANAGER->setSecondEvent(true);
 	}
 
-	SOUNDMANAGER->stopAll("");
+	SOUNDMANAGER->stopAll("bgm town");
+	if (!SOUNDMANAGER->isPlaySound("bgm town"))
+		SOUNDMANAGER->play("bgm town", 0.3f);
 
 	return S_OK;
 }

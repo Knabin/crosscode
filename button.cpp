@@ -56,13 +56,18 @@ void button::update()
 		if (_imageName == "buttons")
 		{
 			if (!_selectOn)
+			{
 				_select->start();
+				SOUNDMANAGER->play("button hover");
+			}
 			_selectOn = true;
 		}
 		
 		
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
 			_direction = BUTTONDIRECTION::DOWN;
+		}
 		else if (_direction == BUTTONDIRECTION::DOWN && KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 		{
 			_direction = BUTTONDIRECTION::UP;

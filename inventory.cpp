@@ -3,7 +3,7 @@
 
 HRESULT inventory::init()
 {
-	_name = "inventory";
+	_name = "inven";
 	_money = 0;
 	
 
@@ -28,8 +28,6 @@ HRESULT inventory::init()
 
 	_it = new item;
 	_it->init();
-
-	OBJECTMANAGER->addObject(objectType::UI, this);
 
 	return S_OK;
 }

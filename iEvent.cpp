@@ -224,7 +224,7 @@ iItemAdd::iItemAdd()
 
 void iItemAdd::eventStart()
 {
-	_inven = dynamic_cast<inventory*>(OBJECTMANAGER->findObject(objectType::UI, "inventory"));
+	_inven = dynamic_cast<inventory*>(OBJECTMANAGER->findObject(objectType::UI, "inven"));
 }
 
 bool iItemAdd::eventUpdate()
