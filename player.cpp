@@ -645,6 +645,7 @@ void player::update()
 	{
 		if ((_state->getState() == _vState[IDLE] || _state->getState() == _vState[MOVE]) && !_isLethal && _pSp > 0)
 		{
+			CAMERA->zoomStart(1.3f, 0.75f, true);
 			_pSp--;
 			_isLethal = true;
 			_lethalCount--;

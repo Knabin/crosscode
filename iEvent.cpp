@@ -180,3 +180,39 @@ bool iObjectActive::eventUpdate()
 	if (_target->getIsActive() && _time <= 0.0f) return true;
 	return false;
 }
+
+iShake::iShake(float amount, float time)
+	: _amount(amount), _time(time)
+{
+}
+
+void iShake::eventStart()
+{
+	CAMERA->shakeStart(_amount, _time);
+}
+
+bool iShake::eventUpdate()
+{
+	if (!CAMERA->getIsShake())
+	{
+		return true;
+	}
+	return false;
+}
+
+iPlayerTurn::iPlayerTurn(int direction)
+	: _direction(direction)
+{
+}
+
+void iPlayerTurn::eventStart()
+{
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+	_player->setIdle();
+	_player->setDirection((PLAYERDIRECTION)_direction);
+}
+
+bool iPlayerTurn::eventUpdate()
+{
+	return true;
+}

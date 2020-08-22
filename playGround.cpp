@@ -153,6 +153,10 @@ void playGround::render()
 		{
 			IMAGEMANAGER->findImage("cursor melee")->render(Vector2(_ptMouse));
 		}
+		else if (_player->isLongAttacking())
+		{
+			IMAGEMANAGER->findImage("cursor charge")->render(Vector2(_ptMouse));
+		}
 		else
 		{
 			IMAGEMANAGER->findImage("cursor throw")->render(Vector2(_ptMouse));

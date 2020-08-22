@@ -159,6 +159,9 @@ public:
 
 	
 	bool isDashing() { return _state->getState() == _vState[PLAYERSTATE::DODGE]; }
+	bool isLongAttacking() { return (_state->getState() == _vState[PLAYERSTATE::LONGATTACKIDLE] ||
+		_state->getState() == _vState[PLAYERSTATE::LONGATTACKMOVE]);
+	}
 	inline int getNowOrder() { return _nowOrder; }
 
 	inline bool getAttacking() {return _attacking;}

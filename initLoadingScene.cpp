@@ -53,6 +53,7 @@ void initLoadingScene::update()
 		IMAGEMANAGER->addImage("cursor normal", L"cursor/cursor-3.png");
 		IMAGEMANAGER->addImage("cursor melee", L"cursor/cursor-melee-3.png");
 		IMAGEMANAGER->addImage("cursor throw", L"cursor/cursor-throw-3.png");
+		IMAGEMANAGER->addImage("cursor charge", L"cursor/cursor-charge-3.png");
 
 		// 맵툴 배경 이미지
 		IMAGEMANAGER->addImage("map bg", L"images/maptool/map_bg.png");
