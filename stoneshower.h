@@ -11,6 +11,7 @@ struct tagStoneshower
 	float _angle;
 	float _speed;
 	float _size;
+	float _damage;
 
 	floatPoint _center;
 	floatPoint _centerEnd;

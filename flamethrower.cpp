@@ -11,6 +11,8 @@ flamethrower::~flamethrower()
 
 HRESULT flamethrower::init(float centerX, float centerY)
 {
+	_name = "flamethrower";
+
 	IMAGEMANAGER->addFrameImage("ÃæÀü", L"images/boss/charge.png", 14, 1);
 	IMAGEMANAGER->addFrameImage("ÃæÀü2", L"images/boss/charge2.png", 8, 1);
 	IMAGEMANAGER->addFrameImage("È­¿°Æø¹ß", L"images/boss/fire_explosion.png", 12, 1);
@@ -46,6 +48,8 @@ HRESULT flamethrower::init(float centerX, float centerY)
 		attack3._frameCount = 0;
 
 		attack3._currentFrameX = 0;
+
+		attack3._damage = 5.0f;
 
 		_vFlamethrower.push_back(attack3);
 	}

@@ -12,6 +12,8 @@ stoneshower::~stoneshower()
 HRESULT stoneshower::init(float centerX, float centerY)
 {
 	
+	_name = "stoneshower";
+
 	_angle = PI / 2 + (PI);
 	_centerMeter = 50;
 
@@ -27,6 +29,7 @@ HRESULT stoneshower::init(float centerX, float centerY)
 		ZeroMemory(&attack2, sizeof(attack2));
 
 		attack2._size = 72.0f;
+		attack2._damage = 10.0f;
 
 		attack2._center.x = centerX;
 		attack2._center.y = centerY;
