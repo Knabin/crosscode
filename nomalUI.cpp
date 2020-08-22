@@ -23,6 +23,8 @@ HRESULT nomalUI::init()
 	
 	_lvUP = false;
 
+	SOUNDMANAGER->addSound("ui lvup", "sounds/ui/level-up.ogg", false, false);
+
 	return S_OK;
 }
 
@@ -50,6 +52,7 @@ void nomalUI::update()
 		_player->setPlayerAtk(_player->getPlayerAtk() + 5);
 		_player->setPlayerCri(_player->getPlayerCri() + 1);
 
+		SOUNDMANAGER->play("ui lvup");
 		_lvUP = true;
 		_lvAnim->start();
 		_lvUPCount = 0;
@@ -63,6 +66,7 @@ void nomalUI::update()
 		if(_lvUPCount > 100)
 		{
 			_lvUP = false;
+			SOUNDMANAGER->stop("ui lvup");
 		}
 	}
 	
