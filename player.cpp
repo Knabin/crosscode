@@ -444,7 +444,7 @@ void player::update()
 			_angle = _angle + RND->getFromFloatTo(-de, de);
 
 			_bullet->nomalFire(_position.x, _position.y, _angle, 17.0f);
-			SOUNDMANAGER->play("pS lattack");
+			SOUNDMANAGER->play("pS lattack",0.5f);
 		}
 	}
 	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && 
