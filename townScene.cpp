@@ -82,7 +82,7 @@ void townScene::update()
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
-			iMoveScene* m = new iMoveScene("puzzle", Vector2(9 * SIZE, 33 * SIZE));
+			iMoveScene* m = new iMoveScene(L"puzzle", Vector2(9 * SIZE, 33 * SIZE));
 			EVENTMANAGER->addEvent(m);
 		}
 	}
@@ -95,11 +95,11 @@ void townScene::update()
 		dynamic_cast<door*>(OBJECTMANAGER->findObject(objectType::MAPOBJECT, "door"))->setIsOpen(false);
 
 	if (getDistance(_nextPoint.x, _nextPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80 &&
-		!EVENTMANAGER->getPuzzleEvent())
+		EVENTMANAGER->getPuzzleEvent())
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
-			iMoveScene* m = new iMoveScene("mountain", Vector2((float)76 * SIZE, 34.5f * SIZE));
+			iMoveScene* m = new iMoveScene(L"mountain", Vector2((float)76 * SIZE, 34.5f * SIZE));
 			EVENTMANAGER->addEvent(m);
 		}
 	}

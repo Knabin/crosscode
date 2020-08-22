@@ -160,7 +160,9 @@ HRESULT tabUI::init()
 	{
 		//200 216
 		_saveSlot[i].rc.update(Vector2(203, 215 + i * 135), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+		_saveSlot[i].fileName = "data/crosscode" + to_string(i) + ".data";
 	}
+	loadData();
 
 
 	_item = new item;
@@ -403,10 +405,35 @@ void tabUI::update()
 	if (_sv)
 	{
 		// 어떤 렉트 선택했는지
-		//for(int i = 0; i <)
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		for (int i = 0; i < 5; ++i)
 		{
+			if (PtInRect(&_saveSlot[i].rc.getRect(), _ptMouse))
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					if (i == 0 && !_saveSlot[i].isSaved)
+					{
+						// for문 거꾸로 돌면서 밑에 비었는지 체크
+						for (int j = 4; j >= 0; --j)
+						{
+							if (!_saveSlot[j].isSaved)
+							{
+								saveData(j);
+								loadData();
+								break;
+							}
+						}
+					}
+					else if (i == 0)
+					{
+						// 0번째가 차 있으면 밑에 4개도 다 찬 거임, 그냥 저장 진행
+						saveData(0);
+						loadData();
+					}
 
+					break;
+				}
+			}
 		}
 
 		//saveData();
@@ -1230,8 +1257,28 @@ void tabUI::render()
 
 		for (int i = 0; i < 5; ++i)
 		{
-			D2DRENDERER->DrawRotationFillRectangle(_saveSlot[i].rc, D2D1::ColorF::CadetBlue, 0);
-			IMAGEMANAGER->findImage("save slot")->render(Vector2(_saveSlot[i].rc.left, _saveSlot[i].rc.top));
+			//D2DRENDERER->DrawRotationFillRectangle(_saveSlot[i].rc, D2D1::ColorF::CadetBlue, 0);
+			if (_saveSlot[i].isSaved)
+			{
+				IMAGEMANAGER->findImage("save slot")->render(Vector2(_saveSlot[i].rc.left, _saveSlot[i].rc.top));
+
+				// 돈
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 1240, _saveSlot[i].rc.top + 50, to_wstring(_saveSlot[i].credit), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+
+				// 레벨
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left, 200, to_wstring(_saveSlot[i].level), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+
+				// 맵 이름
+				wstring t = _saveSlot[i].map;
+				if (_saveSlot[i].map == L"town") t = L"마을";
+				else if (_saveSlot[i].map == L"puzzle") t = L"수상한 컨테이너";
+				else if (_saveSlot[i].map == L"boss") t = L"동굴(보스 맵)";
+				else if (_saveSlot[i].map == L"mountain") t = L"가을의 부상";
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 560, _saveSlot[i].rc.top + 85, t, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+
+				// 시간
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 1240, _saveSlot[i].rc.top + 15, to_wstring(_saveSlot[i].time), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"맑은고딕Bold");
+			}
 		}
 	}
 	if (_st)
@@ -1545,6 +1592,7 @@ void tabUI::saveData(int num)
 	// ================== 플레이어 정보 저장 =====================
 	int hp = _player->getPlayerHP();		//플레이어 체력
 	int maxHp = _player->getPlayerMaxHP();	//플레이어 맥스 체력
+	int level = _player->getPlayerLEVEL();	// 플레이어 레벨
 	int exp = _player->getPlayerEXP();		//플레이어 경험치
 	int nextExp = _player->getPlayerNextEXP();//레벨업 필요 경험치
 	int atk = _player->getPlayerAtk();		//플레이어 공격력
@@ -1554,10 +1602,11 @@ void tabUI::saveData(int num)
 	int ir = _player->getPlayerIR();		//플레이어 얼음 저항력
 	int er = _player->getPlayerER();		//플레이어 전기 저항력
 	int pr = _player->getPlayerPR();		//플레이어 파동 저항력
-	string sc = SCENEMANAGER->getCurrentSceneName();	// 현재 위치
+	wstring sc = SCENEMANAGER->getCurrentSceneName();	// 현재 위치
 
 	WriteFile(file, &hp, sizeof(int), &write, NULL);
 	WriteFile(file, &maxHp, sizeof(int), &write, NULL);
+	WriteFile(file, &level, sizeof(int), &write, NULL);
 	WriteFile(file, &exp, sizeof(int), &write, NULL);
 	WriteFile(file, &nextExp, sizeof(int), &write, NULL);
 	WriteFile(file, &atk, sizeof(int), &write, NULL);
@@ -1607,16 +1656,111 @@ void tabUI::saveData(int num)
 	//장비 배열 1.머리 2.팔 3.팔 4.몸통 5.다리
 	for (int i = 0; i < 5; ++i)
 	{
-		_equip[i];
+		int eq = _equip[i];
+		WriteFile(file, &eq, sizeof(int), &write, NULL);
 	}
 	// =======================================================
 
 	// ================== 기타 저장 =====================
 	//돈
-	_inven->getMoney();
+	int money = _inven->getMoney();
+	WriteFile(file, &money, sizeof(int), &write, NULL);
 
 	//시간
 	_time;
+	WriteFile(file, &_time, sizeof(int), &write, NULL);
 	// =======================================================
+
+	CloseHandle(file);
+}
+
+void tabUI::loadData()
+{
+	
+	for (int i = 4; i >= 0; --i)
+	{
+		HANDLE file = CreateFile(_saveSlot[i].fileName.c_str(), GENERIC_READ, NULL, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		// 만약에 정보가 있다면? 받아와서 저장 후 render 처리
+		if (file != INVALID_HANDLE_VALUE)
+		{
+			DWORD read;
+
+			int hp, maxHp, level, exp, nextExp, atk, def, cri, fr, ir, er, pr;
+			wstring sc;
+
+			ReadFile(file, &hp, sizeof(int), &read, NULL);
+			ReadFile(file, &maxHp, sizeof(int), &read, NULL);
+			ReadFile(file, &level, sizeof(int), &read, NULL);
+			ReadFile(file, &exp, sizeof(int), &read, NULL);
+			ReadFile(file, &nextExp, sizeof(int), &read, NULL);
+			ReadFile(file, &atk, sizeof(int), &read, NULL);
+			ReadFile(file, &def, sizeof(int), &read, NULL);
+			ReadFile(file, &cri, sizeof(int), &read, NULL);
+			ReadFile(file, &fr, sizeof(int), &read, NULL);
+			ReadFile(file, &ir, sizeof(int), &read, NULL);
+			ReadFile(file, &er, sizeof(int), &read, NULL);
+			ReadFile(file, &pr, sizeof(int), &read, NULL);
+			ReadFile(file, &sc, sizeof(sc), &read, NULL);
+
+			bool first, second, puzzle, bossf, bosss;
+			ReadFile(file, &first, sizeof(bool), &read, NULL);
+			ReadFile(file, &second, sizeof(bool), &read, NULL);
+			ReadFile(file, &puzzle, sizeof(bool), &read, NULL);
+			ReadFile(file, &bossf, sizeof(bool), &read, NULL);
+			ReadFile(file, &bosss, sizeof(bool), &read, NULL);
+
+			int ivSize;
+			ReadFile(file, &ivSize, sizeof(int), &read, NULL);
+
+			for (int i = 0; i < ivSize; ++i)
+			{
+				wstring type;
+				int num, count;
+
+				ReadFile(file, &type, sizeof(type), &read, NULL);
+				ReadFile(file, &num, sizeof(int), &read, NULL);
+				ReadFile(file, &count, sizeof(int), &read, NULL);
+			}
+
+			for (int i = 0; i < 5; ++i)
+			{
+				int eq;
+				ReadFile(file, &eq, sizeof(int), &read, NULL);
+			}
+
+			int money, time;
+			ReadFile(file, &money, sizeof(int), &read, NULL);
+			ReadFile(file, &time, sizeof(int), &read, NULL);
+
+			_saveSlot[i].level = level;
+			_saveSlot[i].time = time;
+			_saveSlot[i].credit = money;
+			_saveSlot[i].map = sc;
+			_saveSlot[i].isSaved = true;
+		}
+		else
+			_saveSlot[i].isSaved = false;
+
+		CloseHandle(file);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		if (!_saveSlot[i].isSaved)
+		{
+			if(i == 0)
+				_saveSlot[i].rc.update(Vector2(203, 215 + i * 135), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+			else
+				_saveSlot[i].rc.update(Vector2(203, (int)_saveSlot[i - 1].rc.bottom), Vector2(0, 0), pivot::LEFTTOP);
+		}
+		else {
+			if (i == 0)
+				_saveSlot[i].rc.update(Vector2(203, 215), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+			else
+				_saveSlot[i].rc.update(Vector2(203, (int)_saveSlot[i - 1].rc.bottom), Vector2(IMAGEMANAGER->findImage("save slot")->getSize()), pivot::LEFTTOP);
+		}
+	}
 }
 

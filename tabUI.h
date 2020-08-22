@@ -12,7 +12,7 @@ struct tagSlot
 	int level;
 	int time;
 	int credit;
-	string map;
+	wstring map;
 
 	tagSlot()
 	{
@@ -21,7 +21,7 @@ struct tagSlot
 		level = 0;
 		time = 0;
 		credit = 0;
-		map = "";
+		map = L"";
 	}
 };
 
@@ -83,6 +83,7 @@ public:
 	void equipSelect();
 
 	void saveData(int num);
+	void loadData();
 
 	void setInven(vector<invenObject> inven) { _vIv = inven; }
 

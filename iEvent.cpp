@@ -115,7 +115,7 @@ bool iPlayerMove::eventUpdate()
 	return false;
 }
 
-iMoveScene::iMoveScene(string sceneName, Vector2 location)
+iMoveScene::iMoveScene(wstring sceneName, Vector2 location)
 	:_sceneName(sceneName), _location(location)
 {
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));

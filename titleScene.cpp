@@ -134,26 +134,26 @@ void titleScene::render()
 
 void titleScene::cbStart()
 {
-	SCENEMANAGER->loadScene("town");
+	SCENEMANAGER->loadScene(L"town");
 	SOUNDMANAGER->stop("bgm title");
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
 }
 
 void titleScene::cbContinue()
 {
-	SCENEMANAGER->loadScene("test2");
+	SCENEMANAGER->loadScene(L"test2");
 	SOUNDMANAGER->stop("bgm title");
 }
 
 void titleScene::cbMaptool()
 {
-	SCENEMANAGER->loadScene("maptool");
+	SCENEMANAGER->loadScene(L"maptool");
 	SOUNDMANAGER->stop("bgm title");
 }
 
 void titleScene::cbOption()
 {
-	SCENEMANAGER->loadScene("boss");
+	SCENEMANAGER->loadScene(L"boss");
 	SOUNDMANAGER->stop("bgm title");
 }
 
