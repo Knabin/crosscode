@@ -11,6 +11,7 @@ struct tagIcethrower
 	float _angle;
 	float _speed;
 	float _size;
+	float _damage;
 	
 	bool _fireStart;
 };

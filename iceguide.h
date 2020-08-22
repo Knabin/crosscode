@@ -11,6 +11,7 @@ struct tagIceguide
 	float _angle;
 	float _speed;
 	float _size;
+	float _damage;
 
 	int _frameX;
 	int _frameCount;
@@ -63,6 +64,12 @@ public:
 
 	void angleUpdate();
 	void frameUpdate();
+
+	void removeFire1(int Num1);
+	void removeFire2(int Num2);
+	void removeFire3(int Num3);
+	void removeFire4(int Num4);
+	void removeFire5(int Num5);
 
 	vector<tagIceguide>& getIceguideVector() { return _vIceguide; }
 	vector<tagIceguide>::iterator& getIceguideIterVector() { return _viIceguide; }

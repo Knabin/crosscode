@@ -11,6 +11,8 @@ iceguide::~iceguide()
 
 HRESULT iceguide::init(float centerX, float centerY)
 {
+	_name = "iceguide";
+
 	IMAGEMANAGER->addImage("ªœ¡∑æÛ¿Ω", L"images/boss/cold2.png");
 	IMAGEMANAGER->addFrameImage("æÛ¿Ωªœ¡∑", L"images/boss/coldframe.png", 40, 1);
 
@@ -29,6 +31,7 @@ HRESULT iceguide::init(float centerX, float centerY)
 		ZeroMemory(&attack4, sizeof(attack4));
 		attack4._speed = 15.5f;
 		attack4._size = 170.0f;
+		attack4._damage = 10.0f;
 		
 
 		attack4._frameX = 0, attack4._frameCount, attack4._currentFrameX = 0;
@@ -44,6 +47,7 @@ HRESULT iceguide::init(float centerX, float centerY)
 		ZeroMemory(&attack5, sizeof(attack5));
 		attack5._speed = 15.5f;
 		attack5._size = 170.0f;
+		attack5._damage = 10.0f;
 
 		attack5._frameX = 0, attack5._frameCount, attack5._currentFrameX = 0;
 
@@ -58,6 +62,7 @@ HRESULT iceguide::init(float centerX, float centerY)
 		ZeroMemory(&attack6, sizeof(attack6));
 		attack6._speed = 15.5f;
 		attack6._size = 170.0f;
+		attack6._damage = 10.0f;
 
 		attack6._frameX = 0, attack6._frameCount, attack6._currentFrameX = 0;
 
@@ -72,6 +77,7 @@ HRESULT iceguide::init(float centerX, float centerY)
 		ZeroMemory(&attack7, sizeof(attack7));
 		attack7._speed = 15.5f;
 		attack7._size = 170.0f;
+		attack7._damage = 10.0f;
 
 		attack7._frameX = 0, attack7._frameCount, attack7._currentFrameX = 0;
 
@@ -86,6 +92,7 @@ HRESULT iceguide::init(float centerX, float centerY)
 		ZeroMemory(&attack8, sizeof(attack8));
 		attack8._speed = 15.5f;
 		attack8._size = 170.0f;
+		attack8._damage = 10.0f;
 
 		attack8._frameX = 0, attack8._frameCount, attack8._currentFrameX = 0;
 
@@ -484,8 +491,29 @@ void iceguide::frameUpdate()
 			}
 		}
 	}
+}
 
+void iceguide::removeFire1(int Num1)
+{
+	_vIceguide.erase(_vIceguide.begin() + Num1);
+}
 
+void iceguide::removeFire2(int Num2)
+{
+	_vIceguide2.erase(_vIceguide2.begin() + Num2);
+}
 
+void iceguide::removeFire3(int Num3)
+{
+	_vIceguide3.erase(_vIceguide3.begin() + Num3);
+}
 
+void iceguide::removeFire4(int Num4)
+{
+	_vIceguide4.erase(_vIceguide4.begin() + Num4);
+}
+
+void iceguide::removeFire5(int Num5)
+{
+	_vIceguide5.erase(_vIceguide5.begin() + Num5);
 }

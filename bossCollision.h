@@ -21,6 +21,9 @@ public:
 	void render();
 
 	void icethrowerCollision();
+	void stoneCollision();
+	void flameCollision();
+	void iceguideCollision();
 
 };
 
