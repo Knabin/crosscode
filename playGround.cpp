@@ -140,11 +140,15 @@ void playGround::render()
 		//=================================================
 
 		SCENEMANAGER->render();
+		if (!_ui->isUIOn() && !_ui->UIon())
+		EFFECTMANAGER->render();
 		OBJECTMANAGER->render();
 		TIMEMANAGER->render();
 		_collisionManager->render();
 		_ui->render();
 		//_enemyManager->render();
+		if (_ui->isUIOn() || _ui->UIon())
+			EFFECTMANAGER->render();
 		EFFECTMANAGER->render();
 
 		if (EVENTMANAGER->isPlayingEvent())
