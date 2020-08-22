@@ -213,6 +213,7 @@ void moveState::enter()
 //	cout << "moveState enter()" << endl;
 
 	_player->setImage("p");
+	SOUNDMANAGER->play("pS step");
 
 	switch (_player->getDirection())
 	{
@@ -298,6 +299,9 @@ void moveState::exit()
 	_right_bottom->stop();
 	_right->stop();
 	_right_top->stop();
+
+	SOUNDMANAGER->stop("pS step");
+
 }
 
 // =========================== 플레이어 점프 =========================== //
@@ -371,6 +375,7 @@ void jumpState::enter()
 {
 	//cout << "jumpState enter()" << endl;
 	_player->setImage("player jump");
+	SOUNDMANAGER->play("pS jump");
 
 	switch (_player->getDirection())
 	{
@@ -462,6 +467,7 @@ void jumpState::exit()
 	_right_bottom->stop();
 	_right->stop();
 	_right_top->stop();
+	SOUNDMANAGER->stop("pS jump");
 }
 
 // =========================== 플레이어 가드 =========================== //
@@ -692,6 +698,8 @@ void dodgeState::enter()
 {
 //	cout << "dodgeState enter()" << endl;
 	_player->setImage("player dodge");
+	SOUNDMANAGER->play("pS dodge");
+
 	switch (_player->getDirection())
 	{
 	case PLAYERDIRECTION::TOP:
@@ -771,6 +779,7 @@ void dodgeState::exit()
 	_right_bottom->stop();
 	_right->stop();
 	_right_top->stop();
+	SOUNDMANAGER->stop("pS dodge");
 }
 
 // =========================== 플레이어 원거리 공격 =========================== //
@@ -868,7 +877,6 @@ void longAttackState::enter()
 			_player->setDirection((PLAYERDIRECTION)i);
 		}
 	}
-
 
 	//cout << "longAttackState enter()" << endl;
 	_player->setImage("player longAttack");
@@ -1020,6 +1028,7 @@ void longAttackState::exit()
 	_right_top->stop();
 	_left_bottom->stop();
 	_right_bottom->stop();
+	SOUNDMANAGER->stop("pS lattack");
 }
 
 void longAttackState::longAttack(animation* anim, int a, bool b)
@@ -1465,6 +1474,7 @@ void rightattackState::enter()
 
 	//cout << "rightattackState enter()" << endl;
 	_player->setImage("p_meleeattack_right");
+	SOUNDMANAGER->play("pS mattack");
 
 	switch (_player->getDirection())
 	{
@@ -1553,6 +1563,7 @@ void rightattackState::exit()
 	_right->stop();
 	_right_bottom->stop();
 	_player->setAttackRC(0, 0);
+	SOUNDMANAGER->stop("pS mattack");
 }
 
 // =========================== 플레이어 근거리 왼손공격 =========================== //
@@ -1631,6 +1642,7 @@ void leftattackState::enter()
 			e->setEnemyCollision(false);
 		}
 	}
+	SOUNDMANAGER->play("pS mattack");
 	//cout << "leftattackState enter()" << endl;
 	_player->setImage("p_meleeattack_left");
 
@@ -1721,6 +1733,7 @@ void leftattackState::exit()
 	_right->stop();
 	_right_bottom->stop();
 	_player->setAttackRC(0, 0);
+	SOUNDMANAGER->stop("pS mattack");
 }
 
 // =========================== 플레이어 근거리 마지막공격 =========================== //
@@ -1803,6 +1816,7 @@ void rightfinalattackState::enter()
 		}
 	}
 	//cout << "rightfinalattackState enter()" << endl;
+	SOUNDMANAGER->play("pS mattackf");
 	_player->setImage("p_meleeattack_right");
 
 	switch (_player->getDirection())
@@ -1892,6 +1906,7 @@ void rightfinalattackState::exit()
 	_right->stop();
 	_right_bottom->stop();
 	_player->setAttackRC(0, 0);
+	SOUNDMANAGER->stop("pS mattackf");
 }
 
 longAttackIdleState::longAttackIdleState(player * player)
