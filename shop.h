@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "item.h"
 
 class shop : public gameNode
 {
@@ -7,6 +8,9 @@ private:
 	bool _shopOn;
 	int _type;
 
+	class inventory* _inven;
+
+	item* _it;
 
 	wstring _itemName1;
 	wstring _itemName2;
@@ -40,5 +44,6 @@ public:
 	inline int getItemNum(int i) { return _itemNum[i]; }
 
 	void setItemCount(int i, wstring count);
+	void setInventory(class inventory* inven) { _inven = inven; }
 };
 

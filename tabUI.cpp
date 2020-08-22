@@ -323,6 +323,8 @@ void tabUI::update()
 					_eqSelect = true;
 					_equipList = i;
 
+					_equipItemNum.clear();
+
 					_eqSelectNum = 0;
 					for (int j = 0; j < _vIv.size(); ++j)
 					{
@@ -418,7 +420,7 @@ void tabUI::update()
 		}
 		
 		//µ∑
-		_money;
+		_inven->getMoney();
 
 		//Ω√∞£
 		_time;
@@ -469,7 +471,7 @@ void tabUI::render()
 			D2DRENDERER->DrawRotationFillRectangle(rc, D2D1::ColorF::DeepSkyBlue, 0);
 		}
 
-		Num = to_wstring(_money);
+		Num = to_wstring(_inven->getMoney());
 		D2DRENDERER->RenderText(120, 980, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_time);
 		D2DRENDERER->RenderText(155, 1025, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
@@ -668,7 +670,7 @@ void tabUI::render()
 			{
 			case 0:
 			{
-				itemObject it = _item->getItemInfo(L"∏”∏Æ", _equipItemNum[_eqSelectNum - 1]);
+				itemObject it = _item->getItemInfo(L"∏”∏Æ", _equipItemNum[i]);
 				if (PtInRect(&rc.getRect(), _ptMouse))
 				{
 					int x = 420;
@@ -693,9 +695,10 @@ void tabUI::render()
 
 					if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 					{
-						_inven->deleteItem(L"∏”∏Æ", _eqSelectNum - 1);
+						_inven->deleteItem(L"∏”∏Æ", _equipItemNum[i]);
 						if (_equip[0] != 99999)
 						{
+							it = _item->getItemInfo(L"∏”∏Æ", _equip[0]);
 							_inven->getItem(L"∏”∏Æ", _equip[0]);
 							_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
 							_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
@@ -707,7 +710,7 @@ void tabUI::render()
 							_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
 						}
 
-						it = _item->getItemInfo(L"∏”∏Æ", _eqSelectNum - 1);
+						it = _item->getItemInfo(L"∏”∏Æ", _equipItemNum[i]);
 						_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
 						_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
 						_player->setPlayerDef(_player->getPlayerDef() + it.def);
@@ -717,7 +720,7 @@ void tabUI::render()
 						_player->setPlayerER(_player->getPlayerER() + it.electricR);
 						_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
-						_equip[0] = _eqSelectNum - 1;
+						_equip[0] = _equipItemNum[i];
 						outMenu();
 					}
 				}
@@ -750,9 +753,10 @@ void tabUI::render()
 
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
-					_inven->deleteItem(L"∆»", _eqSelectNum - 1);
+					_inven->deleteItem(L"∆»", _equipItemNum[i]);
 					if (_equip[_equipList] != 99999)
 					{
+						it = _item->getItemInfo(L"∆»", _equip[_equipList]);
 						_inven->getItem(L"∆»", _equip[_equipList]);
 						_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
 						_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
@@ -764,7 +768,7 @@ void tabUI::render()
 						_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
 					}
 
-					it = _item->getItemInfo(L"∆»", _eqSelectNum - 1);
+					it = _item->getItemInfo(L"∆»", _equipItemNum[i]);
 					_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
 					_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
 					_player->setPlayerDef(_player->getPlayerDef() + it.def);
@@ -774,7 +778,7 @@ void tabUI::render()
 					_player->setPlayerER(_player->getPlayerER() + it.electricR);
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
-					_equip[_equipList] = _eqSelectNum - 1;
+					_equip[_equipList] = _equipItemNum[i];
 					outMenu();
 				}
 			}
@@ -807,10 +811,11 @@ void tabUI::render()
 
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
-					_inven->deleteItem(L"∏ˆ≈Î", _eqSelectNum - 1);
-					if (_equip[3] != 99999)
+					_inven->deleteItem(L"∏ˆ≈Î", _equipItemNum[i]);
+					if (_equip[_equipList] != 99999)
 					{
-						_inven->getItem(L"∏ˆ≈Î", _equip[3]);
+						it = _item->getItemInfo(L"∏ˆ≈Î", _equip[_equipList]);
+						_inven->getItem(L"∏ˆ≈Î", _equip[_equipList]);
 						_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
 						_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
 						_player->setPlayerDef(_player->getPlayerDef() - it.def);
@@ -821,7 +826,7 @@ void tabUI::render()
 						_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
 					}
 
-					it = _item->getItemInfo(L"∏ˆ≈Î", _eqSelectNum - 1);
+					it = _item->getItemInfo(L"∏ˆ≈Î", _equipItemNum[i]);
 					_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
 					_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
 					_player->setPlayerDef(_player->getPlayerDef() + it.def);
@@ -831,7 +836,7 @@ void tabUI::render()
 					_player->setPlayerER(_player->getPlayerER() + it.electricR);
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
-					_equip[3] = _eqSelectNum - 1;
+					_equip[_equipList] = _equipItemNum[i];
 					outMenu();
 				}
 			}
@@ -864,10 +869,11 @@ void tabUI::render()
 
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
-					_inven->deleteItem(L"¥Ÿ∏Æ", _eqSelectNum - 1);
-					if (_equip[4] != 99999)
+					_inven->deleteItem(L"¥Ÿ∏Æ", _equipItemNum[i]);
+					if (_equip[_equipList] != 99999)
 					{
-						_inven->getItem(L"¥Ÿ∏Æ", _equip[4]);
+						it = _item->getItemInfo(L"¥Ÿ∏Æ", _equip[_equipList]);
+						_inven->getItem(L"¥Ÿ∏Æ", _equip[_equipList]);
 						_player->setPlayerMaxHP(_player->getPlayerMaxHP() - it.hp);
 						_player->setPlayerAtk(_player->getPlayerAtk() - it.atk);
 						_player->setPlayerDef(_player->getPlayerDef() - it.def);
@@ -878,7 +884,7 @@ void tabUI::render()
 						_player->setPlayerPR(_player->getPlayerPR() - it.psycoR);
 					}
 
-					it = _item->getItemInfo(L"¥Ÿ∏Æ", _eqSelectNum - 1);
+					it = _item->getItemInfo(L"¥Ÿ∏Æ", _equipItemNum[i]);
 					_player->setPlayerMaxHP(_player->getPlayerMaxHP() + it.hp);
 					_player->setPlayerAtk(_player->getPlayerAtk() + it.atk);
 					_player->setPlayerDef(_player->getPlayerDef() + it.def);
@@ -888,7 +894,7 @@ void tabUI::render()
 					_player->setPlayerER(_player->getPlayerER() + it.electricR);
 					_player->setPlayerPR(_player->getPlayerPR() + it.psycoR);
 
-					_equip[4] = _eqSelectNum - 1;
+					_equip[_equipList] = _equipItemNum[i];
 					outMenu();
 				}
 			}
@@ -956,6 +962,11 @@ void tabUI::render()
 
 						if (PtInRect(&rc.getRect(), _ptMouse))
 						{
+							IMAGEMANAGER->findImage("eq_ui")->render(Vector2(_ptMouse), 0.6f);
+							D2DRENDERER->RenderText(_ptMouse.x + 60, _ptMouse.y +3, L"√º∑¬»∏∫π:", 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+							wstring Num = to_wstring(it.hp);
+							D2DRENDERER->RenderText(_ptMouse.x + 230, _ptMouse.y +3 , Num, 35, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
+
 							if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 							{
 								_inven->deleteItem(L"º“∏", _vIv[i].itemNum);
@@ -1281,7 +1292,7 @@ void tabUI::render()
 			D2DRENDERER->DrawRotationFillRectangle(rc, D2D1::ColorF::DeepSkyBlue, 0);
 		}
 
-		Num = to_wstring(_money);
+		Num = to_wstring(_inven->getMoney());
 		D2DRENDERER->RenderText(120, 980, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
 		Num = to_wstring(_time);
 		D2DRENDERER->RenderText(155, 1025, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"∏º¿∫∞ÌµÒBold");
