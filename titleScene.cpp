@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "titleScene.h"
+#include "iEvent.h"
 
 titleScene::~titleScene()
 {
@@ -134,15 +135,19 @@ void titleScene::render()
 
 void titleScene::cbStart()
 {
-	SCENEMANAGER->loadScene(L"town");
-	SOUNDMANAGER->stop("bgm title");
-	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setPosition(Vector2(36 * SIZE, 47 * SIZE));
+	iMoveScene* e = new iMoveScene(L"town", Vector2(36 * SIZE, 47 * SIZE));
+	EVENTMANAGER->addEvent(e);
 }
 
 void titleScene::cbContinue()
 {
-	SCENEMANAGER->loadScene(L"test2");
-	SOUNDMANAGER->stop("bgm title");
+	OBJECTMANAGER->findObject(objectType::UI, "start")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "continue")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "maptool")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "option")->setIsActive(false);
+	OBJECTMANAGER->findObject(objectType::UI, "exit")->setIsActive(false);
+
+	OBJECTMANAGER->findObject(objectType::UI, "loadUI")->setIsActive(true);
 }
 
 void titleScene::cbMaptool()
@@ -153,8 +158,6 @@ void titleScene::cbMaptool()
 
 void titleScene::cbOption()
 {
-	SCENEMANAGER->loadScene(L"boss");
-	SOUNDMANAGER->stop("bgm title");
 }
 
 void titleScene::cbExit()

@@ -9,7 +9,7 @@ townBlock::~townBlock()
 HRESULT townBlock::init()
 {
 	_img = IMAGEMANAGER->findImage("townblock");
-	_isOpen = true;
+	_isOpen = false;
 	_rc = RectMakePivot(_position, _img->getSize() - Vector2(0, 100), pivot::CENTER);
 	
 	return S_OK;
@@ -33,6 +33,9 @@ void townBlock::update()
 			p->setPlayerPlusX(4.5f);
 		}
 	}
+
+	if (EVENTMANAGER->getPuzzleEvent())
+		_isOpen = true;
 	
 }
 

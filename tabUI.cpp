@@ -424,19 +424,15 @@ void tabUI::update()
 							}
 						}
 					}
-					else if (i == 0)
+					else
 					{
-						// 0¹øÂ°°¡ Â÷ ÀÖÀ¸¸é ¹Ø¿¡ 4°³µµ ´Ù Âù °ÅÀÓ, ±×³É ÀúÀå ÁøÇà
-						saveData(0);
+						saveData(i);
 						loadData();
+						break;
 					}
-
-					break;
 				}
 			}
 		}
-
-		//saveData();
 	}
 
 	if (_hp < 0)
@@ -486,8 +482,16 @@ void tabUI::render()
 
 		Num = to_wstring(_inven->getMoney());
 		D2DRENDERER->RenderText(120, 980, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
+
+		char str[256];
+		sprintf_s(str, "%02d : %02d", _time / 60, _time % 60);
+		string ss;
+		ss = str;
+
+		wstring sstr;
+		sstr.assign(ss.begin(), ss.end());
 		Num = to_wstring(_time);
-		D2DRENDERER->RenderText(155, 1025, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
+		D2DRENDERER->RenderText(155, 1025, sstr, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
 	}
 	
 
@@ -1266,7 +1270,7 @@ void tabUI::render()
 				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 1240, _saveSlot[i].rc.top + 50, to_wstring(_saveSlot[i].credit), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
 
 				// ·¹º§
-				D2DRENDERER->RenderText(_saveSlot[i].rc.left, 200, to_wstring(_saveSlot[i].level), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 585, _saveSlot[i].rc.top + 10, to_wstring(_saveSlot[i].level), 25, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
 
 				// ¸Ê ÀÌ¸§
 				wstring t = _saveSlot[i].map;
@@ -1274,10 +1278,21 @@ void tabUI::render()
 				else if (_saveSlot[i].map == L"puzzle") t = L"¼ö»óÇÑ ÄÁÅ×ÀÌ³Ê";
 				else if (_saveSlot[i].map == L"boss") t = L"µ¿±¼(º¸½º ¸Ê)";
 				else if (_saveSlot[i].map == L"mountain") t = L"°¡À»ÀÇ ºÎ»ó";
-				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 560, _saveSlot[i].rc.top + 85, t, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 560, _saveSlot[i].rc.top + 87, t, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
 
 				// ½Ã°£
-				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 1240, _saveSlot[i].rc.top + 15, to_wstring(_saveSlot[i].time), 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
+				int m = _saveSlot[i].time / 60;
+				int s = _saveSlot[i].time % 60;
+
+				char str[256];
+				sprintf_s(str, "%02d : %02d", m, s);
+				string ss;
+				ss = str;
+
+				wstring sstr;
+				sstr.assign(ss.begin(), ss.end());
+
+				D2DRENDERER->RenderText(_saveSlot[i].rc.left + 1240, _saveSlot[i].rc.top + 15, sstr, 20, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
 			}
 		}
 	}
@@ -1346,8 +1361,18 @@ void tabUI::render()
 
 		Num = to_wstring(_inven->getMoney());
 		D2DRENDERER->RenderText(120, 980, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
+
+		// ½Ã°£
+		char str[256];
+		sprintf_s(str, "%02d : %02d", _time / 60, _time % 60);
+		string ss;
+		ss = str;
+
+		wstring sstr;
+		sstr.assign(ss.begin(), ss.end());
+
 		Num = to_wstring(_time);
-		D2DRENDERER->RenderText(155, 1025, Num, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
+		D2DRENDERER->RenderText(155, 1025, sstr, 40, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING, L"¸¼Àº°íµñBold");
 
 		for (int i = 0; i < 5; ++i)
 		{
@@ -1603,6 +1628,12 @@ void tabUI::saveData(int num)
 	int er = _player->getPlayerER();		//ÇÃ·¹ÀÌ¾î Àü±â ÀúÇ×·Â
 	int pr = _player->getPlayerPR();		//ÇÃ·¹ÀÌ¾î ÆÄµ¿ ÀúÇ×·Â
 	wstring sc = SCENEMANAGER->getCurrentSceneName();	// ÇöÀç À§Ä¡
+	
+	int sn = 0;
+	if (sc == L"town") sn = 0;
+	else if (sc == L"puzzle") sn = 1;
+	else if (sc == L"mountain") sn = 2;
+	else if (sc == L"boss") sn = 3;
 
 	WriteFile(file, &hp, sizeof(int), &write, NULL);
 	WriteFile(file, &maxHp, sizeof(int), &write, NULL);
@@ -1616,7 +1647,7 @@ void tabUI::saveData(int num)
 	WriteFile(file, &ir, sizeof(int), &write, NULL);
 	WriteFile(file, &er, sizeof(int), &write, NULL);
 	WriteFile(file, &pr, sizeof(int), &write, NULL);
-	WriteFile(file, &sc, sizeof(sc), &write, NULL);
+	WriteFile(file, &sn, sizeof(int), &write, NULL);
 	// =========================================================
 
 	// ================== ÀÌº¥Æ® Á¤º¸ ÀúÀå =====================
@@ -1687,8 +1718,7 @@ void tabUI::loadData()
 		{
 			DWORD read;
 
-			int hp, maxHp, level, exp, nextExp, atk, def, cri, fr, ir, er, pr;
-			wstring sc;
+			int hp, maxHp, level, exp, nextExp, atk, def, cri, fr, ir, er, pr, sn;
 
 			ReadFile(file, &hp, sizeof(int), &read, NULL);
 			ReadFile(file, &maxHp, sizeof(int), &read, NULL);
@@ -1702,7 +1732,7 @@ void tabUI::loadData()
 			ReadFile(file, &ir, sizeof(int), &read, NULL);
 			ReadFile(file, &er, sizeof(int), &read, NULL);
 			ReadFile(file, &pr, sizeof(int), &read, NULL);
-			ReadFile(file, &sc, sizeof(sc), &read, NULL);
+			ReadFile(file, &sn, sizeof(int), &read, NULL);
 
 			bool first, second, puzzle, bossf, bosss;
 			ReadFile(file, &first, sizeof(bool), &read, NULL);
@@ -1737,6 +1767,12 @@ void tabUI::loadData()
 			_saveSlot[i].level = level;
 			_saveSlot[i].time = time;
 			_saveSlot[i].credit = money;
+
+			wstring sc = L"town";
+			if (sn == 0)  sc = L"town";
+			else if (sn == 1)  sc = L"puzzle";
+			else if (sn == 2)  sc = L"mountain";
+			else if (sn == 3)  sc = L"boss";
 			_saveSlot[i].map = sc;
 			_saveSlot[i].isSaved = true;
 		}
@@ -1763,4 +1799,3 @@ void tabUI::loadData()
 		}
 	}
 }
-

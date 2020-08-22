@@ -109,9 +109,6 @@
     <ClCompile Include="tile.cpp">
       <Filter>2DGameFrameWork\tile</Filter>
     </ClCompile>
-    <ClCompile Include="uiObject.cpp">
-      <Filter>playGround\object</Filter>
-    </ClCompile>
     <ClCompile Include="item.cpp">
       <Filter>playGround\item</Filter>
     </ClCompile>
@@ -251,6 +248,9 @@
     <ClCompile Include="bossCollision.cpp">
       <Filter>playGround\collision</Filter>
     </ClCompile>
+    <ClCompile Include="loadUI.cpp">
+      <Filter>playGround\uiController</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -372,9 +372,6 @@
     </ClInclude>
     <ClInclude Include="tile.h">
       <Filter>2DGameFrameWork\tile</Filter>
-    </ClInclude>
-    <ClInclude Include="uiObject.h">
-      <Filter>playGround\object</Filter>
     </ClInclude>
     <ClInclude Include="item.h">
       <Filter>playGround\item</Filter>
@@ -513,6 +510,9 @@
     </ClInclude>
     <ClInclude Include="bossCollision.h">
       <Filter>playGround\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="loadUI.h">
+      <Filter>playGround\uiController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -85,6 +85,9 @@ public:
 	void saveData(int num);
 	void loadData();
 
+	void setTime(int time) { _time = time; }
+	void setEq(int index, int value) { _equip[index] = value; }
+
 	void setInven(vector<invenObject> inven) { _vIv = inven; }
 
 	void setInventory(class inventory* inven) { _inven = inven; }

@@ -7,6 +7,13 @@ struct invenObject
 	wstring type;
 	int itemNum;
 	int count;
+	
+	invenObject()
+	{}
+
+	invenObject(wstring ptype, int pitemNum, int pcount)
+		: type(ptype), itemNum(pitemNum), count(pcount)
+	{}
 };
 
 class inventory: public gameNode
@@ -29,6 +36,8 @@ public:
 	void deleteItem(wstring _type, int _itemNum, bool shop = 0);
 
 	inline int getMoney() { return _money; }
+	//소지금 변경(로드용)
+	void setInvenMoney(int price) { _money = price; }
 	//소지금 변경 price수치에 따른 마이너스
 	void setMoney(int price) { _money -= price; }
 

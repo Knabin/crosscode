@@ -59,7 +59,7 @@ HRESULT townScene::init()
 		EVENTMANAGER->addEvent(dialogEvent);
 		EVENTMANAGER->setFirstEvent(true);
 	}
-	else if (!EVENTMANAGER->getSecondEvent())
+	else if (EVENTMANAGER->getPuzzleEvent() && !EVENTMANAGER->getSecondEvent())
 	{
 		iCameraMove* cameraEvent = new iCameraMove(block, 5.f);
 		iDialog* dialogEvent = new iDialog(new dialog("3"));
@@ -78,7 +78,8 @@ void townScene::release()
 
 void townScene::update()
 {
-	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80)
+	if (getDistance(_prevPoint.x, _prevPoint.y, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().x, OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition().y) <= 80
+		&& !EVENTMANAGER->getPuzzleEvent())
 	{
 		if (!EVENTMANAGER->isPlayingEvent())
 		{
