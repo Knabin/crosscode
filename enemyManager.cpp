@@ -5,6 +5,7 @@
 #include "hedgehag.h"
 #include "meerkat.h"
 #include "buffalo.h"
+#include "inventory.h"
 
 HRESULT enemyManager::init()
 {
@@ -17,6 +18,11 @@ HRESULT enemyManager::init()
 	_time = _index = 0;
 	_count = 0;
 	
+	IMAGEMANAGER->addFrameImage("drop", L"images/object/drop.png", 11, 1);
+	EFFECTMANAGER->addEffect("drop", "drop", 1, 0.5, 1, 1.5f);
+
+
+
 	return S_OK;
 }
 
@@ -114,6 +120,25 @@ void enemyManager::enemyDead()
 			{
 				h->setIsAlive(false);
 				_player->setPlayerEXP(_player->getPlayerEXP() + 10);
+				int r = RND->getFromIntTo(0, 2);
+				float x = CAMERA->getRelativeVector2(h->getPosition()).x;
+				float y = CAMERA->getRelativeVector2(h->getPosition()).y;
+				switch (r)
+				{
+				case 0:
+					_inven->getItem(L"거래", 0);
+
+					EFFECTMANAGER->play("drop", Vector2(x, y));
+					break;
+				case 1:
+					_inven->getItem(L"거래", 5);
+					
+					EFFECTMANAGER->play("drop", Vector2(x,y));
+					break;
+				default:
+					break;
+				}
+				_inven->setMoney(RND->getFromIntTo(-100, -300));
 				_count = 0;
 				break;
 			}
@@ -130,6 +155,25 @@ void enemyManager::enemyDead()
 			{
 				m->setIsAlive(false);
 				_player->setPlayerEXP(_player->getPlayerEXP() + 20);
+				int r = RND->getFromIntTo(0, 2);
+				float x = CAMERA->getRelativeVector2(m->getPosition()).x;
+				float y = CAMERA->getRelativeVector2(m->getPosition()).y;
+				switch (r)
+				{
+				case 0:
+					_inven->getItem(L"거래", 1);
+
+					EFFECTMANAGER->play("drop", Vector2(x, y));
+					break;
+				case 1:
+					_inven->getItem(L"거래", 4);
+
+					EFFECTMANAGER->play("drop", Vector2(x, y));
+					break;
+				default:
+					break;
+				}
+				_inven->setMoney(RND->getFromIntTo(-200, -400));
 				_count = 0;
 				break;
 			}
@@ -146,6 +190,25 @@ void enemyManager::enemyDead()
 			{
 				b->setIsAlive(false);
 				_player->setPlayerEXP(_player->getPlayerEXP() + 30);
+				int r = RND->getFromIntTo(0, 2);
+				float x = CAMERA->getRelativeVector2(b->getPosition()).x;
+				float y = CAMERA->getRelativeVector2(b->getPosition()).y;
+				switch (r)
+				{
+				case 0:
+					_inven->getItem(L"거래", 2);
+
+					EFFECTMANAGER->play("drop", Vector2(x, y));
+					break;
+				case 1:
+					_inven->getItem(L"거래", 3);
+
+					EFFECTMANAGER->play("drop", Vector2(x, y));
+					break;
+				default:
+					break;
+				}
+				_inven->setMoney(RND->getFromIntTo(-500, -700));
 				_count = 0;
 				break;
 			}

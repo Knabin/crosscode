@@ -46,6 +46,7 @@ HRESULT playGround::init()
 
 	ShowCursor(false);
 
+	
 	return S_OK;
 }
 
@@ -110,17 +111,21 @@ void playGround::update()
 
 
 	// 이벤트 재생 중, UI가 화면을 가리고 있는 경우에는 업데이트하지 않음
-	if (!EVENTMANAGER->isPlayingEvent())
+	if (!EVENTMANAGER->isPlayingEvent() && !_ui->isUIOn() && !_ui->UIon())
 	{
 		_puzzleCollision->update();
 		_collisionManager->update();
 		_enemyManager->update();
 		_bossCollision->update();
+		_enemyManager->setInventory(_ui->getInven());
 	}
 
 	EVENTMANAGER->update();
 	SCENEMANAGER->update();
-	if(!_ui->isUIOn() && !_ui->UIon()) OBJECTMANAGER->update();
+	if (!_ui->isUIOn() && !_ui->UIon())
+	{
+		OBJECTMANAGER->update();
+	}
 	EFFECTMANAGER->update();
 	CAMERA->update();
 	_ui->update();
