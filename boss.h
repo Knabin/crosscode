@@ -226,8 +226,6 @@ public:
 //
 //
 //		
-	icethrower* getIcethrower() { return _icethrower; }
-
 	floatRect getRightHandRect() { return _RightHand._rectBody2; }
 	floatRect getLeftHandRect() { return _LeftHand._rectBody2; }
 	floatRect getBottomRect() { return _Bottom._rectBody; }

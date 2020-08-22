@@ -42,10 +42,10 @@ HRESULT boss::init()
 	// ±‚∫ª y√‡WINSIZEY / 2 - 675
 	bossInitialization();
 
-	_bossState = APPEARANCE;
+	//_bossState = APPEARANCE;
 	//_bossState = STOP;
 	//_bossState = ICETHROWER_READY;
-	//_bossState = MINE_READY;
+	_bossState = MINE_READY;
 	//_bossState = STONESHOWER_READY;
 	//_bossState = FLAMETHROWER_READY;
 	//_bossState = ICEGUIDE_READY;

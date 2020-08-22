@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "bossCollision.h"
 #include "icethrower.h"
+#include "mine.h"
 #include "stoneshower.h"
 #include "flamethrower.h"
 #include "iceguide.h"
+#include "boss.h"
+#include "bullet.h"
 
 bossCollision::bossCollision()
 {
@@ -27,11 +30,12 @@ void bossCollision::release()
 void bossCollision::update()
 {
 
-
-	icethrowerCollision();		//얼음흩뿌리기 충돌
+	icethrowerCollision();		//얼음흩뿌리기 충돌		
+	mineCollision();			//지뢰 충돌
 	stoneCollision();			//바위 충돌
 	flameCollision();			//화염 충돌
 	iceguideCollision();		//뾰족얼음 충돌
+	bossHandCollision();		//플레이어 총알과 보스 팔 충돌				
 
 }
 
@@ -90,6 +94,48 @@ void bossCollision::icethrowerCollision()
 			}
 		}
 	}	
+}
+
+void bossCollision::mineCollision()
+{
+	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "mine");
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+		mine* spider = dynamic_cast<mine*>(temp[i]);
+
+		
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)
+		{
+			for (int k = 0; k < spider->getMineVector().size(); k++)
+			{
+				if (isCollision(spider->getMineVector()[k]._rc, _player->getBullet()->getVPlayerBullet()[j].rc))
+				{
+
+					spider->getMineMove() == false;
+					spider->collision(k, _player->getBullet()->getVPlayerBullet()[j].angle);
+					_player->getBullet()->remove(j);
+					break;
+				
+				}
+			}	
+		}
+		
+
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)
+		{
+			for (int k = 0; k < spider->getMine2Vector().size(); k++)
+			{
+				if (isCollision(spider->getMine2Vector()[k]._rc, _player->getBullet()->getVPlayerBullet()[j].rc))
+				{
+
+					spider->collision2(k, _player->getBullet()->getVPlayerBullet()[j].angle);
+					_player->getBullet()->remove(j);
+					break;
+				}
+			}
+		}
+	}
 }
 
 void bossCollision::stoneCollision()
@@ -427,4 +473,30 @@ void bossCollision::iceguideCollision()
 	}
 
 
+}
+
+void bossCollision::bossHandCollision()
+{
+	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+		boss* hand = dynamic_cast<boss*>(temp[i]);
+
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)
+		{
+			if (isCollision(hand->getRightHandRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+			{
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+			if (isCollision(hand->getLeftHandRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
+			{
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+		}
+	}
 }

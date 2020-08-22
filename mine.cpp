@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "mine.h"
+#include "bullet.h"
 
 mine::mine()
 {
@@ -12,6 +13,8 @@ mine::~mine()
 HRESULT mine::init(float centerX, float centerY)
 {
 	_name = "mine";
+
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 
 	_angle = PI / 2;
 	_centerMeter = 50;
@@ -55,6 +58,7 @@ HRESULT mine::init(float centerX, float centerY)
 		_Mine._center.x = centerX - 268 + (57 * i);
 		_Mine._center.y = centerY  - (44 * i);
 		_Mine._speed = 40.0f;
+		_Mine._speed2 = 55.0f;
 
 		_Mine._fireStart = false;
 
@@ -68,11 +72,20 @@ HRESULT mine::init(float centerX, float centerY)
 		_Mine2._center.x = centerX + 403 - (57 * i);
 		_Mine2._center.y = centerY - (44 * i);
 		_Mine2._speed = 40.0f;
+		_Mine2._speed2 = 55.0f;
 
 		_Mine2._fireStart = false;
 
 		_vMine2.push_back(_Mine2);
 	}
+
+
+	mineMove = false;
+	mineMove2 = false;
+	mineMove3 = false;
+	mineMove4 = false;
+	mineMove5 = false;
+	mineMove6 = false;
 
 	return S_OK;
 }
@@ -86,6 +99,26 @@ void mine::update()
 	frameUpdate();
 
 	move();
+
+	
+	if (mineMove == true || mineMove2 == true || mineMove3 == true || mineMove4 == true || mineMove5 == true || mineMove6 == true)
+	{
+		for (_viMine = _vMine.begin(); _viMine != _vMine.end(); ++_viMine)
+		{
+			_viMine->_center.x += cosf(_viMine->_angle) * 	_viMine->_speed;
+			_viMine->_center.y += -sinf(_viMine->_angle) * 	_viMine->_speed;
+
+		}
+
+		for (_viMine2 = _vMine2.begin(); _viMine2 != _vMine2.end(); ++_viMine2)
+		{
+			_viMine2->_center.x += cosf(_viMine2->_angle) * _viMine2->_speed;
+			_viMine2->_center.y += -sinf(_viMine2->_angle) * _viMine2->_speed;
+
+		}
+	}
+	
+	
 
 }
 
@@ -225,16 +258,19 @@ void mine::move()
 	if (_vMine.begin()->_y > (WINSIZEY / 2 + 600) + _randomDropY)
 	{
 		_vMine.begin()->_speed = 0;
+		mineMove = true;
 	}
 
 	if ((_vMine.begin() + 1)->_y > (WINSIZEY / 2 + 600) + _randomDropY3)
 	{
 		(_vMine.begin() + 1)->_speed = 0;
+		mineMove2 = true;
 	}
 
 	if ((_vMine.begin() + 2)->_y > (WINSIZEY / 2 + 600) + _randomDropY5)
 	{
 		(_vMine.begin() + 2)->_speed = 0;
+		mineMove3 = true;
 	}
 	
 
@@ -275,16 +311,19 @@ void mine::move()
 	if (_vMine2.begin()->_y > (WINSIZEY / 2 + 600) + _randomDropY2)
 	{
 		_vMine2.begin()->_speed = 0;
+		mineMove4 = true;
 	}
 
 	if ((_vMine2.begin() + 1)->_y > (WINSIZEY / 2 + 600) + _randomDropY4)
 	{
 		(_vMine2.begin() + 1)->_speed = 0;
+		mineMove5 = true;
 	}
 
 	if ((_vMine2.begin() + 2)->_y > (WINSIZEY / 2 + 600) + _randomDropY4)
 	{
 		(_vMine2.begin() + 2)->_speed = 0;
+		mineMove6 = true;
 	}
 	
 }
@@ -338,11 +377,23 @@ void mine::explotion(float centerX, float centerY)
 				_explosionFrameX, _explosionFrameY);
 		}
 	}
+}
+
+void mine::collision(int Num1, float angle)
+{
+
+		
+	(_vMine.begin() + Num1)->_x += cosf(angle) * (_vMine.begin() + Num1)->_speed2;
+	(_vMine.begin() + Num1)->_y += -sinf(angle) * (_vMine.begin() + Num1)->_speed2;
+
+}
+
+void mine::collision2(int Num2, float angle)
+{
 
 
-
-
-
+	(_vMine2.begin() + Num2)->_x += cosf(angle) * (_vMine2.begin() + Num2)->_speed2;
+	(_vMine2.begin() + Num2)->_y += -sinf(angle) * (_vMine2.begin() + Num2)->_speed2;
 
 }
 

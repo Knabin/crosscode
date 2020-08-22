@@ -1,5 +1,6 @@
 #pragma once
 #include "gameObject.h"
+#include "player.h"
 
 struct tagMine
 {
@@ -10,6 +11,7 @@ struct tagMine
 	float _x, _y;
 	float _angle;
 	float _speed;
+	float _speed2;
 	floatPoint _center;
 	floatPoint _centerEnd;
 
@@ -20,6 +22,8 @@ struct tagMine
 class mine : public gameObject
 {
 private:
+
+	player* _player;
 
 	//ÁÂÃø ¹ß»ç
 	vector<tagMine>						_vMine;
@@ -44,6 +48,14 @@ private:
 	int _mineFrameX, _mineFrameY;
 	int _explosionFrameX, _explosionFrameY;
 
+	bool mineMove;
+	bool mineMove2;
+	bool mineMove3;
+	bool mineMove4;
+	bool mineMove5;
+	bool mineMove6;
+
+
 public:
 
 	mine();
@@ -59,10 +71,16 @@ public:
 	void move();			//Áö·Ú ¹ß»ç ÈÄ ¿òÁ÷ÀÓ
 	void explotion(float centerX, float centerY);		//Æø¹ß ÀÌÆåÆ®
 
+	void collision(int Num1, float angle);  //Áö·Ú Ãæµ¹
+	void collision2(int Num2, float angle);  //Áö·Ú Ãæµ¹2
+
 	vector<tagMine>& getMineVector() { return _vMine; }
 	vector<tagMine>::iterator& getMineIterVector() { return _viMine; }
 
 	vector<tagMine>& getMine2Vector() { return _vMine2; }
 	vector<tagMine>::iterator& getMine2IterVector() { return _viMine2; }
+
+	bool& getMineMove() { return mineMove; }
+
 };
 

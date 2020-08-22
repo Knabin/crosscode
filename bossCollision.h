@@ -21,9 +21,12 @@ public:
 	void render();
 
 	void icethrowerCollision();
+	void mineCollision();
 	void stoneCollision();
 	void flameCollision();
 	void iceguideCollision();
+
+	void bossHandCollision();
 
 };
 
