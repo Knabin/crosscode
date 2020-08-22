@@ -184,9 +184,15 @@ private:
 	//파괴 이펙트 딜레이
 	int _effectDelay;
 
+	int _stunDelay;
+
 	bool _attack1, _attack2, _attack3, _attack4, _attack5;
 
-	
+	int _hp;
+	int _bossMaxHp;
+
+	bool _attackCollision;
+	bool _stunTrue;
 
 public:
 
@@ -218,7 +224,20 @@ public:
 	void bossInitialization();	//보스 stop후 위치 확인용
 	void bossInitialization2();	//보스 stop후 위치 확인용
 
-								
+	void hpManager();
+
+
+	int getBossHp() { return _hp; }
+	void setBossHp(int hp) { _hp = hp; }
+
+	int getBossMaxHp() { return _bossMaxHp; }
+	void setBossMaxHp(int Maxhp) { _bossMaxHp = Maxhp; }
+
+	bool getBossCollision() { return _attackCollision;}
+	void setBossCollision(bool attackCollision) { _attackCollision = attackCollision; }
+
+
+							
 ///////////////////////////////////////////////////////////////
 //렉트 접근
 //
@@ -229,6 +248,7 @@ public:
 	floatRect getRightHandRect() { return _RightHand._rectBody2; }
 	floatRect getLeftHandRect() { return _LeftHand._rectBody2; }
 	floatRect getBottomRect() { return _Bottom._rectBody; }
+
 	
 };
 

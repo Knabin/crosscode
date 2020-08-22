@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "boss.h"
 
+
 boss::boss()
 {
 }
@@ -38,14 +39,15 @@ HRESULT boss::init()
 
 	_name = "boss";
 
+	_attackCollision = false;
 
 	// 기본 y축WINSIZEY / 2 - 675
 	bossInitialization();
 
-	//_bossState = APPEARANCE;
+	_bossState = APPEARANCE;
 	//_bossState = STOP;
 	//_bossState = ICETHROWER_READY;
-	_bossState = MINE_READY;
+	//_bossState = MINE_READY;
 	//_bossState = STONESHOWER_READY;
 	//_bossState = FLAMETHROWER_READY;
 	//_bossState = ICEGUIDE_READY;
@@ -68,8 +70,13 @@ HRESULT boss::init()
 	_chargeCount = 0;
 	_iceguideDelay = 0;
 	_stunCount = 0;
+	_stunDelay = 0;
 
 	_attack1, _attack2, _attack3, _attack4, _attack5 = false;
+
+	_hp = 1000;
+	_bossMaxHp = 1000;
+	_stunTrue = false;
 
 	//================================================================================================================================================================//
 
@@ -104,6 +111,7 @@ HRESULT boss::init()
 	IMAGEMANAGER->addFrameImage("오른손공격2", L"images/boss/right_hand_attack.png", 4, 1);
 
 	IMAGEMANAGER->addFrameImage("파괴", L"images/boss/death_effect.png", 10, 1);
+
 
 	//================================================================================================================================================================//
 
@@ -145,7 +153,7 @@ HRESULT boss::init()
 
 	//바텀
 
-	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y), Vector2(150, 70), pivot::CENTER);
+	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y + 40), Vector2(150, 150), pivot::CENTER);
 
 	//실제 팔 렉트
 
@@ -204,6 +212,8 @@ void boss::update()
 
 	fireCollision();
 
+	hpManager();
+
 	//================================================================================================================================================================//
 
 	//_icethrower->update();
@@ -254,7 +264,7 @@ void boss::bossState()
 		moveDown();
 
 		
-		if (_Center._y == WINSIZEY / 2 - 175)
+		if (_Center._y == WINSIZEY / 2 - 165)
 		{		
 			_bossState = STOP;
 		}
@@ -1156,6 +1166,7 @@ void boss::bossState()
 
 	case STUN:
 	{
+		_stunTrue = true;
 
 		_Center._y -= 0.5f * 2.0f;
 		_LeftArm._center.y -= 0.5f * 2.0f;
@@ -1174,8 +1185,7 @@ void boss::bossState()
 		_RightHand._realAngle -= 1.5f * 2.0f;
 
 
-
-		if (_LeftHand._rectBody.left < WINSIZEX / 2 - 270)
+		if (_LeftHand._rectBody.left > WINSIZEX / 2 - 270)
 		{
 			_bossState = STUN2;
 		}
@@ -1250,7 +1260,7 @@ void boss::bossState()
 
 		if (_Center._y >= (WINSIZEY / 2 - 175))
 		{
-			_bossState = DEATH;
+			_bossState = STOP;
 			CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 		}
 
@@ -1330,7 +1340,7 @@ void boss::bossMove()
 	_Center._centerEnd.x = cosf(_Center._angle) * _Center._centerMeter + _Center._center.x;
 	_Center._centerEnd.y = -sinf(_Center._angle) * _Center._centerMeter + _Center._center.y;
 
-	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y), Vector2(150, 100), pivot::CENTER);
+	_Bottom._rectBody.update(Vector2(_Bottom._x + 50, _Bottom._y + 40), Vector2(150, 150), pivot::CENTER);
 
 	//================================================================================================================================================================//
 
@@ -1991,3 +2001,21 @@ void boss::bossInitialization2()
 	_Bottom._y = _Center._y + 450;
 	_Center._angle = 0;
 }
+
+void boss::hpManager()
+{
+	if (_hp <= 666 && !_stunTrue)
+	{
+		_bossState = STUN;
+
+	}
+
+	if (_hp <= 0)
+	{
+		_bossState = DEATH;
+	}
+
+
+}
+
+
