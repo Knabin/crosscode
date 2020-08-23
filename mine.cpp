@@ -61,7 +61,7 @@ HRESULT mine::init(float centerX, float centerY)
 		_Mine._center.x = centerX - 268 + (57 * i);
 		_Mine._center.y = centerY  - (44 * i);
 		_Mine._speed = 40.0f;
-		_Mine._speed2 = 55.0f;
+		_Mine._speed2 = 10.0f;
 
 		_Mine._fireStart = false;
 
@@ -75,7 +75,7 @@ HRESULT mine::init(float centerX, float centerY)
 		_Mine2._center.x = centerX + 403 - (57 * i);
 		_Mine2._center.y = centerY - (44 * i);
 		_Mine2._speed = 40.0f;
-		_Mine2._speed2 = 55.0f;
+		_Mine2._speed2 = 10.0f;
 
 		_Mine2._fireStart = false;
 
@@ -211,20 +211,20 @@ void mine::move()
 	
 	if (_vMine.begin()->_y < - 700)
 	{
-		_vMine.begin()->_angle = PI + (PI / 2);
+	_vMine.begin()->_angle = PI + (PI / 2);
 
-		_vMine.begin()->_x += _randomDropX;
+	_vMine.begin()->_x += _randomDropX;
 
 	}
 
-	if ((_vMine.begin() + 1)->_y < - 700)
+	if ((_vMine.begin() + 1)->_y < -700)
 	{
 		(_vMine.begin() + 1)->_angle = PI + (PI / 2);
 
 		(_vMine.begin() + 1)->_x += _randomDropX3;
 	}
 
-	if ((_vMine.begin() + 2)->_y < - 700)
+	if ((_vMine.begin() + 2)->_y < -700)
 	{
 		(_vMine.begin() + 2)->_angle = PI + (PI / 2);
 
@@ -248,7 +248,7 @@ void mine::move()
 		(_vMine.begin() + 2)->_speed = 0;
 
 	}
-	
+
 
 
 
@@ -262,22 +262,22 @@ void mine::move()
 			_viMine2->_rc.update(Vector2(_viMine2->_x, _viMine2->_y), Vector2(40, 40), pivot::CENTER);
 		}
 	}
-	
-	if (_vMine2.begin()->_y < - 700)
+
+	if (_vMine2.begin()->_y < -700)
 	{
 		_vMine2.begin()->_angle = PI + (PI / 2);
 
 		_vMine2.begin()->_x += _randomDropX2;
 	}
 
-	if ((_vMine2.begin() + 1)->_y < - 700)
+	if ((_vMine2.begin() + 1)->_y < -700)
 	{
 		(_vMine2.begin() + 1)->_angle = PI + (PI / 2);
 
 		(_vMine2.begin() + 1)->_x += _randomDropX4;
 	}
 
-	if ((_vMine2.begin() + 2)->_y < - 700)
+	if ((_vMine2.begin() + 2)->_y < -700)
 	{
 		(_vMine2.begin() + 2)->_angle = PI + (PI / 2);
 
@@ -301,13 +301,14 @@ void mine::move()
 		(_vMine2.begin() + 2)->_speed = 0;
 
 	}
-	
+
 	if (_isCollision)
 	{
 		(_vMine.begin() + _colNum)->_x += cosf(_colAngle) * (_vMine.begin() + _colNum)->_speed2;
 		(_vMine.begin() + _colNum)->_y += -sinf(_colAngle) * (_vMine.begin() + _colNum)->_speed2;
 		// 만약 사거리 이상 벗어나면 isCollision을 꺼 주세요
 		// 보스와 부딪혔을 경우 isCollision을 꺼 주세요
+
 	}
 	if (_isCollision2)
 	{
@@ -315,6 +316,8 @@ void mine::move()
 		(_vMine2.begin() + _colNum)->_y += -sinf(_colAngle) * (_vMine2.begin() + _colNum)->_speed2;
 		// 만약 사거리 이상 벗어나면 isCollision을 꺼 주세요
 		// 보스와 부딪혔을 경우 isCollision을 꺼 주세요
+
+
 	}
 }
 
@@ -400,4 +403,5 @@ void mine::mineRemove2(int Num2)
 {
 	_vMine2.erase(_vMine2.begin() + Num2);
 }
+
 

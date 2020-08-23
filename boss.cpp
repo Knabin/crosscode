@@ -13,7 +13,7 @@ boss::~boss()
 HRESULT boss::init()
 {
 	_icethrower = new icethrower;
-	_icethrower->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 1150);
+	_icethrower->init(WINSIZEX / 2 + 85, WINSIZEY / 2 - 675 + 1150);
 
 	OBJECTMANAGER->addObject(objectType::BOSS, _icethrower);
 
@@ -206,6 +206,13 @@ HRESULT boss::init()
 	SOUNDMANAGER->addSound("boss death", "sounds/boss/special-boom.ogg", false, true);
 
 
+	_imagineWallRight.update(Vector2(WINSIZEX / 2 + 1050, WINSIZEY / 2 + 500), Vector2(50, 1300), pivot::CENTER);
+	_imagineWallLeft.update(Vector2(WINSIZEX / 2 - 800, WINSIZEY / 2 + 500), Vector2(50, 1300), pivot::CENTER);
+	_imagineWallBottom.update(Vector2(WINSIZEX / 2 + 125, WINSIZEY / 2 + 1150), Vector2(1800, 50), pivot::CENTER);
+	_imagineWallTop.update(Vector2(WINSIZEX / 2 + 125, WINSIZEY / 2 + 250), Vector2(1800, 50), pivot::CENTER);
+
+
+
 	return S_OK;
 }
 
@@ -216,6 +223,9 @@ void boss::release()
 void boss::update()
 {
 	if (!EVENTMANAGER->getBossFirstEvent()) return;
+
+
+
 	_frameCount++;
 
 	protectFrame();
@@ -245,6 +255,13 @@ void boss::update()
 
 void boss::render()
 {
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallRight));
+
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallLeft));
+
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallBottom));
+
+	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallTop));
 
 	//_icethrower->render();
 
@@ -1991,18 +2008,30 @@ void boss::effectDraw()
 
 void boss::fireCollision()
 {
-
+	
 	for (int i = 0; i < _icethrower->getIcethrowerVector().size(); i++)
 	{
 
-		if (WINSIZEY + 800 < _icethrower->getIcethrowerVector()[i]._rc.bottom)
+		if (isCollision(_imagineWallRight , _icethrower->getIcethrowerVector()[i]._rc))
+		{
+			_icethrower->removeFire(i);
+			break;
+		}
+
+		if (isCollision(_imagineWallLeft, _icethrower->getIcethrowerVector()[i]._rc))
+		{
+			_icethrower->removeFire(i);
+			break;
+		}
+
+		if (isCollision(_imagineWallBottom, _icethrower->getIcethrowerVector()[i]._rc))
 		{
 			_icethrower->removeFire(i);
 			break;
 		}
 
 	}
-
+	
 	for (int i = 0; i < _stoneshower->getStoneVector().size(); i++)
 	{
 		int _randomDrop;
@@ -2020,7 +2049,13 @@ void boss::fireCollision()
 	for (int i = 0; i < _flamethrower->getFlameVector().size(); i++)
 	{
 
-		if (WINSIZEY + 1600 < _flamethrower->getFlameVector()[i]._rc.bottom)
+
+		if (isCollision(_imagineWallLeft, _flamethrower->getFlameVector()[i]._rc))
+		{
+			_flamethrower->removeFire(i);
+			break;
+		}
+		if (isCollision(_imagineWallBottom, _flamethrower->getFlameVector()[i]._rc))
 		{
 			_flamethrower->removeFire(i);
 			break;
