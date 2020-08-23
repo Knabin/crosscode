@@ -12,10 +12,6 @@ HRESULT bossTestScene::init()
 {
 	IMAGEMANAGER->addImage("bossHpbar", L"images/boss/bossHpbar.png");
 
-	_hpBar.update(Vector2(155, 1007), Vector2(1665, 20), pivot::LEFTTOP);
-	_hp = 1665;
-
-
 	CAMERA->setCameraMode(CAMERASTATE::NONE);
 	CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 	OBJECTMANAGER->findObject(objectType::PLAYER, "player")->setIsActive(true);
@@ -61,6 +57,13 @@ HRESULT bossTestScene::init()
 	OBJECTMANAGER->addObject(objectType::MAPOBJECT, block);
 	OBJECTMANAGER->addObject(objectType::MAPOBJECT, _cameraTarget);
 
+	_hpBar = new bossHPBar();
+	_hpBar->setMaxHP(1665);
+	_hpBar->setHP(1665);
+	_hpBar->init();
+	_hpBar->setIsActive(false);
+	OBJECTMANAGER->addObject(objectType::UI, _hpBar);
+
 	
 	SOUNDMANAGER->stopAll("bgm boss");
 	if (!SOUNDMANAGER->isPlaySound("bgm boss"))
@@ -70,7 +73,7 @@ HRESULT bossTestScene::init()
 	// 보스방 이벤트
 	// 주석 풀면 이벤트 나와요 카메라 움직임도 조금 자연스러워짐~
 	
-	
+	EVENTMANAGER->addEvent(new iPlayerTurn(0));
 	EVENTMANAGER->addEvent(new iPlayerMove(Vector2(1070, 1350)));
 	EVENTMANAGER->addEvent(new iDialog(new dialog("4")));
 	EVENTMANAGER->addEvent(new iObjectActive(block, 1.0f));
@@ -93,9 +96,7 @@ void bossTestScene::update()
 {
 	_hp = (float)_boss->getBossHp() / (float)_boss->getBossMaxHp() * 1665;
 
-	_hpBar.update(Vector2(155, 1007), Vector2(_hp, 20), pivot::LEFTTOP);
-
-
+	_hpBar->setHP(_hp);
 
 	if (!EVENTMANAGER->isPlayingEvent() && !EVENTMANAGER->getBossFirstEvent())
 	{
@@ -108,6 +109,7 @@ void bossTestScene::update()
 	{
 		EVENTMANAGER->setBossSecondEvent(true);
 		CAMERA->setCameraMode(CAMERASTATE::TARGET);
+		_hpBar->setIsActive(true);
 	}
 
 	_cameraTarget->setPosition(OBJECTMANAGER->findObject(objectType::PLAYER, "player")->getPosition() - Vector2(0, 300));
@@ -115,15 +117,5 @@ void bossTestScene::update()
 
 void bossTestScene::render()
 {
-
-
 	scene::render();
-
-	IMAGEMANAGER->findImage("bossHpbar")->render(Vector2(57, 1000));
-
-	if (_boss->getBossHp() >= 0)
-	{
-		D2DRENDERER->SkewRectangle(_hpBar, D2D1::ColorF::Red, 0, 135);
-	}
-
 }

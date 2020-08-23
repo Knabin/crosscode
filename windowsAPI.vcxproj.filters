@@ -251,6 +251,9 @@
     <ClCompile Include="loadUI.cpp">
       <Filter>playGround\uiController</Filter>
     </ClCompile>
+    <ClCompile Include="bossHPBar.cpp">
+      <Filter>enemyTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -513,6 +516,9 @@
     </ClInclude>
     <ClInclude Include="loadUI.h">
       <Filter>playGround\uiController</Filter>
+    </ClInclude>
+    <ClInclude Include="bossHPBar.h">
+      <Filter>enemyTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -153,6 +153,7 @@
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossBlock.h" />
     <ClInclude Include="bossCollision.h" />
+    <ClInclude Include="bossHPBar.h" />
     <ClInclude Include="bossTestScene.h" />
     <ClInclude Include="buffalo.h" />
     <ClInclude Include="bullet.h" />
@@ -240,6 +241,7 @@
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossBlock.cpp" />
     <ClCompile Include="bossCollision.cpp" />
+    <ClCompile Include="bossHPBar.cpp" />
     <ClCompile Include="bossTestScene.cpp" />
     <ClCompile Include="buffalo.cpp" />
     <ClCompile Include="bullet.cpp" />

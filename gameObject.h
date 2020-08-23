@@ -9,7 +9,6 @@ protected:
 	float _width;		// 오브젝트 가로 크기
 	float _height;		// 오브젝트 세로 크기
 	floatRect _rc;		// 오브젝트 RECT(float type)
-	floatRect _bulletRc;// 플레이어 마사일RECT
 	bool _isActive;		// 오브젝트 활성화 여부, 화면에 표시할 것인지
 	bool _isAlive;		// 오브젝트가 살아 있는지
 	bool _trigger;			// 트리거
@@ -43,9 +42,6 @@ public:
 
 	void setRect(floatRect rect) { _rc = rect; }
 	floatRect& getRect() { return _rc; }
-
-	void setBulletRect(floatRect bulletRc) { _bulletRc = bulletRc; }
-	floatRect& getBulletRect() { return _bulletRc; }
 
 	void setIsActive(bool isActive) { _isActive = isActive; }
 	bool getIsActive() const { return _isActive; }

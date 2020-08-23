@@ -1,6 +1,7 @@
 #pragma once
 #include "scene.h"
 #include "boss.h"
+#include "bossHPBar.h"
 
 
 class bossTestScene : public scene
@@ -9,9 +10,8 @@ private:
 
 	boss* _boss;
 	gameObject* _cameraTarget;
-	floatRect _hpBar;
+	bossHPBar* _hpBar;
 	int _hp;
-
 
 public:
 	virtual ~bossTestScene() override;
