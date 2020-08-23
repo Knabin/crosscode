@@ -846,7 +846,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
 		{
-			SOUNDMANAGER->play("buffalo-run", 1.0f);
+			SOUNDMANAGER->play("buffalo-run", 0.5f);
 		}
 		break;
 	case ENEMY_RIGHT_ATTACK:
@@ -854,7 +854,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
 		{
-			SOUNDMANAGER->play("buffalo-run", 1.0f);
+			SOUNDMANAGER->play("buffalo-run", 0.5f);
 		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK:
@@ -862,7 +862,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
 		{
-			SOUNDMANAGER->play("buffalo-run", 1.0f);
+			SOUNDMANAGER->play("buffalo-run", 0.5f);
 		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK:
@@ -870,7 +870,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
 		{
-			SOUNDMANAGER->play("buffalo-run", 1.0f);
+			SOUNDMANAGER->play("buffalo-run", 0.5f);
 		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK:
@@ -878,7 +878,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
 		{
-			SOUNDMANAGER->play("buffalo-run", 1.0f);
+			SOUNDMANAGER->play("buffalo-run", 0.5f);
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK:
@@ -886,7 +886,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-run"))
 		{
-			SOUNDMANAGER->play("buffalo-run", 1.0f);
+			SOUNDMANAGER->play("buffalo-run", 0.5f);
 		}
 		break;
 	case ENEMY_UP_LEFT_ATTACK_PREPARE:
@@ -894,7 +894,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
 		{
-			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+			SOUNDMANAGER->play("buffalo-gasp", 0.5f);
 		}
 		break;
 	case ENEMY_UP_RIGHT_ATTACK_PREPARE:
@@ -902,7 +902,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
 		{
-			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+			SOUNDMANAGER->play("buffalo-gasp", 0.5f);
 		}
 		break;
 	case ENEMY_LEFT_ATTACK_PREPARE:
@@ -910,7 +910,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
 		{
-			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+			SOUNDMANAGER->play("buffalo-gasp", 0.5f);
 		}
 		break;
 	case ENEMY_RIGHT_ATTACK_PREPARE:
@@ -918,7 +918,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
 		{
-			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+			SOUNDMANAGER->play("buffalo-gasp", 0.5f);
 		}
 		break;
 	case ENEMY_DOWN_LEFT_ATTACK_PREPARE:
@@ -926,7 +926,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
 		{
-			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+			SOUNDMANAGER->play("buffalo-gasp", 0.5f);
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_ATTACK_PREPARE:
@@ -934,7 +934,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-gasp"))
 		{
-			SOUNDMANAGER->play("buffalo-gasp", 1.0f);
+			SOUNDMANAGER->play("buffalo-gasp", 0.5f);
 		}
 		break;
 	case ENEMY_UP_LEFT_MELEE_ATTACK:
@@ -942,7 +942,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
 		{
-			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+			SOUNDMANAGER->play("buffalo-attack", 0.5f);
 		}
 		break;
 	case ENEMY_UP_RIGHT_MELEE_ATTACK:
@@ -950,7 +950,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
 		{
-			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+			SOUNDMANAGER->play("buffalo-attack", 0.5f);
 		}
 		break;
 	case ENEMY_LEFT_MELEE_ATTACK:
@@ -958,7 +958,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
 		{
-			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+			SOUNDMANAGER->play("buffalo-attack", 0.5f);
 		}
 		break;
 	case ENEMY_RIGHT_MELEE_ATTACK:
@@ -966,7 +966,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
 		{
-			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+			SOUNDMANAGER->play("buffalo-attack", 0.5f);
 		}
 		break;
 	case ENEMY_DOWN_LEFT_MELEE_ATTACK:
@@ -974,7 +974,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
 		{
-			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+			SOUNDMANAGER->play("buffalo-attack", 0.5f);
 		}
 		break;
 	case ENEMY_DOWN_RIGHT_MELEE_ATTACK:
@@ -982,7 +982,7 @@ void buffalo::animationDraw()
 
 		if (!SOUNDMANAGER->isPlaySound("buffalo-attack"))
 		{
-			SOUNDMANAGER->play("buffalo-attack", 1.0f);
+			SOUNDMANAGER->play("buffalo-attack", 0.5f);
 		}
 		break;
 	}
