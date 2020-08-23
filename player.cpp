@@ -701,15 +701,15 @@ void player::render()
 {
 
 	//_rc.render(getMemDC());
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
 	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_tileRect));
 	_image->setSize(_image->getFrameSize() * CAMERA->getZoomAmount());
 	_image->aniRender(CAMERA->getRelativeVector2(_position.x, _position.y - _jumpPower), _ani, 1.0f);
 	IMAGEMANAGER->findImage("player shadow")->setAlpha(0.2);
 	IMAGEMANAGER->findImage("player shadow")->render(CAMERA->getRelativeVector2(_position.x - 25, _position.y + 10));
 	//RectangleMake(getMemDC(), tileIndex.x * SIZE, tileIndex.y *SIZE, SIZE, SIZE);
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_attackRC));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(floatRect(rcCollision)));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_attackRC));
 
 	/*D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(SCENEMANAGER->getCurrentScene()->getTiles()[next[0].y][next[0].x]->getRect()),
 		D2D1::ColorF::Aqua, 0);

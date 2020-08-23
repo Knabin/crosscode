@@ -77,6 +77,6 @@ void mountainScene::update()
 void mountainScene::render()
 {
 	scene::render();
-	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_prevPoint), 10);
-	D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_nextPoint), 10);
+	//D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_prevPoint), 10);
+	//D2DRENDERER->DrawEllipse(CAMERA->getRelativeVector2(_nextPoint), 10);
 }
