@@ -727,7 +727,7 @@ void collisionManager::bulletCollision()
 				}
 				if (!SOUNDMANAGER->isPlaySound("meerkat-ball-hit"))
 				{
-					SOUNDMANAGER->play("meerkat-ball-hit", 1.0f);
+					SOUNDMANAGER->play("meerkat-ball-hit", 0.5f);
 				}
 				EFFECTMANAGER->play("enemyMeerkatBallEffect", CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).x + 25, CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).y + 25);
 
