@@ -110,17 +110,6 @@ HRESULT player::init()
 
 	EFFECTMANAGER->addEffect("player chargeeffect", "player chargeeffect", 1, 0.5f, 1, 1.0f);
 
-	//======================================    사운드    ===============================================
-
-	SOUNDMANAGER->addSound("pS step", "sounds/player/step-1.ogg", false, true);	//발자국소리
-	SOUNDMANAGER->addSound("pS jump", "sounds/player/jump.ogg", false, false);	//점프소리
-	SOUNDMANAGER->addSound("pS lattack", "sounds/player/throw-ball-1.ogg", false, false);	//원거리발사소리
-	SOUNDMANAGER->addSound("pS mattack", "sounds/player/close-combat-sweep-1.ogg", false, false);	//근거리공격소리
-	SOUNDMANAGER->addSound("pS mattackf", "sounds/player/close-combat-sweep-massive.ogg", false, false);	//근거리막타공격소리
-	SOUNDMANAGER->addSound("pS dodge", "sounds/player/dash-3.ogg", false, false);	//회피
-
-
-
 
 	//=================================== 근거리 이펙트 용=================================
 	for (int i = 0; i < 40; i++)
@@ -416,7 +405,6 @@ void player::update()
 		(KEYMANAGER->isStayKeyDown('C') || KEYMANAGER->isStayKeyDown(VK_RBUTTON)))
 	{
 		_state->setState(_vState[PLAYERSTATE::GUARD]);
-		_pDef += 10;
 	}
 	if (KEYMANAGER->isOnceKeyDown('V')) //근접공격키
 	{
@@ -444,7 +432,7 @@ void player::update()
 			_angle = _angle + RND->getFromFloatTo(-de, de);
 
 			_bullet->nomalFire(_position.x, _position.y, _angle, 17.0f);
-			SOUNDMANAGER->play("pS lattack",0.5f);
+			SOUNDMANAGER->play("pS lattack", 1.0f);
 		}
 	}
 	else if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && 

@@ -228,13 +228,15 @@ void puzzleCollision::puzzleTabButtonCollision()
 						SOUNDMANAGER->play("counter", 1.0f);
 					}
 
-					_puzzleTabButtonCollision[0] = true;//1번째 탑버튼이 충돌했다는 bool값 트루
-					buttonP1->setRect(RectMakePivot(Vector2(buttonP1->getRect().getCenter().x, buttonP1->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//1번째 탑버튼 렉트크기 0으로 변경
-					_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
-					iCameraMove* i = new iCameraMove(blueP, 1.5f);
-					EVENTMANAGER->addEvent(i);
-					break;
-				}
+				_puzzleTabButtonCollision[0] = true;//1번째 탑버튼이 충돌했다는 bool값 트루
+				buttonP1->setRect(RectMakePivot(Vector2(buttonP1->getRect().getCenter().x, buttonP1->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//1번째 탑버튼 렉트크기 0으로 변경
+				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
+				iPlayerTurn* i2 = new iPlayerTurn(0);
+				iCameraMove* i = new iCameraMove(blueP, 1.5f);
+				SOUNDMANAGER->play("barrier");
+				EVENTMANAGER->addEvent(i2);
+				EVENTMANAGER->addEvent(i);
+				break;
 			}
 
 			if (buttonP2->getRect().getSize().x != 0 && buttonP2->getRect().getSize().y != 0)
@@ -246,13 +248,15 @@ void puzzleCollision::puzzleTabButtonCollision()
 						SOUNDMANAGER->play("counter", 1.0f);
 					}
 
-					_puzzleTabButtonCollision[1] = true;//2번째 탑버튼이 충돌했다는 bool값 트루
-					buttonP2->setRect(RectMakePivot(Vector2(buttonP2->getRect().getCenter().x, buttonP2->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//2번째 탑버튼 렉트크기 0으로 변경
-					_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
-					iCameraMove* i = new iCameraMove(orangeP1, 1.5f);
-					EVENTMANAGER->addEvent(i);
-					break;
-				}
+				_puzzleTabButtonCollision[1] = true;//2번째 탑버튼이 충돌했다는 bool값 트루
+				buttonP2->setRect(RectMakePivot(Vector2(buttonP2->getRect().getCenter().x, buttonP2->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//2번째 탑버튼 렉트크기 0으로 변경
+				_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
+				iCameraMove* i = new iCameraMove(orangeP1, 1.5f);
+				iPlayerTurn* i2 = new iPlayerTurn(4);
+				SOUNDMANAGER->play("barrier");
+				EVENTMANAGER->addEvent(i2);
+				EVENTMANAGER->addEvent(i);
+				break;
 			}
 
 
@@ -638,7 +642,10 @@ void puzzleCollision::puzzleComplete()
 		{
 			if (!footholdP->getIsOn())
 			{
+				SOUNDMANAGER->play("puzzle");
 				iCameraMove* i = new iCameraMove(footholdP, 2.0f);
+				iPlayerTurn* i2 = new iPlayerTurn(4);
+				EVENTMANAGER->addEvent(i2);
 				EVENTMANAGER->addEvent(i);
 			}
 			footholdP->setIsOn(true);//발판상태값 트루

@@ -44,7 +44,7 @@ HRESULT boss::init()
 	// ±âº» yÃàWINSIZEY / 2 - 675
 	bossInitialization();
 
-	_bossState = APPEARANCE;
+	_bossState = APPEARANCE_READY;
 	//_bossState = STOP;
 	//_bossState = ICETHROWER_READY;
 	//_bossState = MINE_READY;
@@ -71,6 +71,7 @@ HRESULT boss::init()
 	_iceguideDelay = 0;
 	_stunCount = 0;
 	_stunDelay = 0;
+	_appearanceCount = 0;
 
 	_attack1, _attack2, _attack3, _attack4, _attack5 = false;
 
@@ -191,6 +192,19 @@ HRESULT boss::init()
 	//================================================================================================================================================================//
 
 
+	SOUNDMANAGER->addSound("boss walk", "sounds/boss/drill-boss-walk.ogg", false, true);
+	SOUNDMANAGER->addSound("boss armmove", "sounds/boss/bot-lift-arm.ogg", false, false);
+	SOUNDMANAGER->addSound("boss drill", "sounds/boss/drill-boss-drill.ogg", false, false);
+	SOUNDMANAGER->addSound("boss mine", "sounds/boss/explosion-2.ogg", false, false);
+	SOUNDMANAGER->addSound("boss punch", "sounds/boss/big-explosion.ogg", false, false);
+	SOUNDMANAGER->addSound("boss stone", "sounds/boss/rock-debris-loop.ogg", false, false);
+	SOUNDMANAGER->addSound("boss charge", "sounds/boss/long-charge.ogg", false, true);
+	SOUNDMANAGER->addSound("boss fireflame", "sounds/boss/fire-generic-attack-4.ogg", false, false);
+	SOUNDMANAGER->addSound("boss fire", "sounds/boss/explosion-1.ogg", false, true);
+	SOUNDMANAGER->addSound("boss iceguide", "sounds/boss/ground-ice-crystal.ogg", false, false);
+	SOUNDMANAGER->addSound("boss iceguide2", "sounds/boss/ground-ice-crystal-disintegrate.ogg", false, false);
+	SOUNDMANAGER->addSound("boss death", "sounds/boss/special-boom.ogg", false, true);
+
 
 	return S_OK;
 }
@@ -226,6 +240,7 @@ void boss::update()
 
 	//_iceguide->update();
 
+
 }
 
 void boss::render()
@@ -241,6 +256,7 @@ void boss::render()
 
 	_mine->explotion(_Center._x + 115, _Center._y + 50);
 
+
 	//_stoneshower->render();
 
 	//_flamethrower->render();
@@ -255,19 +271,37 @@ void boss::bossState()
 
 	switch (_bossState)
 	{
-		
+	case APPEARANCE_READY:
+	{
+		_appearanceCount++;
+
+		if (_appearanceCount >= 60)
+		{
+			SOUNDMANAGER->play("boss walk", 0.5f);
+			_bossState = APPEARANCE;
+
+		}
+
+
+	}
+	break;
+
+
 	case APPEARANCE:
 	{
 
 		//CAMERA->shakeStart(5.f, 4.2f);
 
-		moveDown();
 
-		
-		if (_Center._y == WINSIZEY / 2 - 165)
+
+		moveDown();
+	
+		if (_Center._y >= WINSIZEY / 2 - 175)
 		{		
+			SOUNDMANAGER->stop("boss walk");
 			_bossState = STOP;
 		}
+
 
 	}
 	break;
@@ -293,6 +327,7 @@ void boss::bossState()
 
 			if (_attack1 == true && _attack2 == false && _attack3 == false && _attack4 == false)
 			{
+				SOUNDMANAGER->play("boss walk", 0.5f);
 				_stopCount = 0;
 				_bossState = MINE_READY;
 				CAMERA->changeTarget(this);
@@ -300,6 +335,7 @@ void boss::bossState()
 
 			if (_attack1 == true && _attack2 == true && _attack3 == false && _attack4 == false)
 			{
+				SOUNDMANAGER->play("boss armmove", 0.5f);
 				_stopCount = 0;
 				_bossState = STONESHOWER_READY;
 				CAMERA->changeTarget(this);
@@ -307,12 +343,14 @@ void boss::bossState()
 
 			if (_attack1 == true && _attack2 == true && _attack3 == true && _attack4 == false)
 			{
+				SOUNDMANAGER->play("boss armmove", 0.5f);
 				_stopCount = 0;
 				_bossState = FLAMETHROWER_READY;
 			}
 
 			if (_attack1 == true && _attack2 == true && _attack3 == true && _attack4 == true)
 			{
+				SOUNDMANAGER->play("boss armmove", 0.5f);
 				_stopCount = 0;
 				_bossState = ICEGUIDE_READY;
 				CAMERA->changeTarget(this);
@@ -345,6 +383,8 @@ void boss::bossState()
 		{
 			_motionDelay++;
 
+		
+
 			if (_motionDelay < 15)
 			{
 				_RightArm._angle += 0.012f;
@@ -362,6 +402,7 @@ void boss::bossState()
 
 			if (_motionDelay >= 15)
 			{
+				SOUNDMANAGER->play("boss armmove", 0.5f);
 				_motionDelay = 0;
 				_bossState = ICETHROWER_READY2;
 			}
@@ -371,6 +412,7 @@ void boss::bossState()
 
 	case ICETHROWER_READY2:
 	{
+		
 		_LeftArm._center.x += 1.5f;
 		_LeftArm._center.y += 2.0f;
 
@@ -391,6 +433,8 @@ void boss::bossState()
 
 		if (_RightHand._rectBody.top < _Center._y + 50)
 		{
+			SOUNDMANAGER->stop("boss armmove");
+			SOUNDMANAGER->play("boss drill", 0.5f);
 			_bossState = ICETHROWER;
 		}
 
@@ -410,18 +454,6 @@ void boss::bossState()
 		}
 		
 
-		if (_icethrowerDelay >= 205)
-		{
-			for (_icethrower->getIcethrowerIterVector() = _icethrower->getIcethrowerVector().begin();
-				_icethrower->getIcethrowerIterVector() != _icethrower->getIcethrowerVector().end();
-				++_icethrower->getIcethrowerIterVector())
-			{
-				_icethrower->getIcethrowerIterVector()->_fireStart = false;
-				_bossState = ICETHROWER_END;
-			}
-		}
-
-
 		if (_frameCount % 5 == 0)
 		{
 			if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý")->getMaxFrameX())
@@ -433,12 +465,34 @@ void boss::bossState()
 			{
 				_currentFrameY = 0;
 				_icethrowerDelay = 0;
+				for (_icethrower->getIcethrowerIterVector() = _icethrower->getIcethrowerVector().begin();
+					_icethrower->getIcethrowerIterVector() != _icethrower->getIcethrowerVector().end();
+					++_icethrower->getIcethrowerIterVector())
+				{
+					SOUNDMANAGER->play("boss armmove", 0.5f);
+					_icethrower->getIcethrowerIterVector()->_fireStart = false;
+					_bossState = ICETHROWER_END;
+				}
 			}
 			_bossLeftHandAttackFrameX = _currentFrameX;
 			_bossLeftHandAttackFrameY = _currentFrameY;
 			_currentFrameX++;
 			_frameCount = 0;
 		}		
+
+		/*
+		if (_icethrowerDelay >= 215)
+		{
+			for (_icethrower->getIcethrowerIterVector() = _icethrower->getIcethrowerVector().begin();
+				_icethrower->getIcethrowerIterVector() != _icethrower->getIcethrowerVector().end();
+				++_icethrower->getIcethrowerIterVector())
+			{
+				SOUNDMANAGER->play("boss armmove", 1.0f);
+				_icethrower->getIcethrowerIterVector()->_fireStart = false;
+				_bossState = ICETHROWER_END;
+			}
+		}
+		*/
 	}
 	break;
 
@@ -465,6 +519,7 @@ void boss::bossState()
 
 		if (_LeftHand._rectBody.left <= WINSIZEX / 2 - 243)
 		{
+			SOUNDMANAGER->stop("boss armmove");
 			_bossState = STOP;
 		}
 
@@ -477,22 +532,25 @@ void boss::bossState()
 
 	case MINE_READY:
 	{	
+
 		_attack2 = true;
 
 		moveUp();
 
 		if (_moveCount >= 64 || _Center._y < WINSIZEY / 2 - 275)
 		{			
+			SOUNDMANAGER->stop("boss walk");
+			SOUNDMANAGER->play("boss armmove", 0.5f);
 			_moveCount = 0;
 			_bossState = MINE_READY2;
 		}
-		
+
 	}
 	break;
 
 	case MINE_READY2:
 	{
-
+		
 		_LeftArm._angle -= 0.01f ;
 		_RightArm._angle += 0.01f ;
 		_LeftHand._angle -= 0.025f ;
@@ -516,11 +574,14 @@ void boss::bossState()
 		
 		_bossCenterMoveFrameY = 0;
 
-		
+	
+		SOUNDMANAGER->stop("boss armmove");
+
 		if (_frameCount % 9 == 0)
 		{
 			if (_currentFrameX >= IMAGEMANAGER->findImage("º¸½º¸öÅë¿òÁ÷ÀÓ")->getMaxFrameX())
 			{
+				SOUNDMANAGER->play("boss armmove", 0.5f);
 				_currentFrameX = 0;
 				_bossState = MINE_END;
 			}
@@ -530,6 +591,8 @@ void boss::bossState()
 				_mineAttackDelay++;
 				if (_mineAttackDelay % 2 == 0)
 				{
+					SOUNDMANAGER->stop("boss armmove");
+					SOUNDMANAGER->play("boss mine", 0.5f);
 					_mine->fire();
 				}
 			}
@@ -556,6 +619,8 @@ void boss::bossState()
 
 		if (_LeftHand._rectBody.left > WINSIZEX / 2 - 266)
 		{
+			SOUNDMANAGER->stop("boss armmove");
+			SOUNDMANAGER->play("boss walk", 0.5f);
 			_bossState = MINE_END2;
 		}
 
@@ -569,6 +634,7 @@ void boss::bossState()
 
 		if (_moveCount >= 64 || _Center._y > WINSIZEY / 2 - 175)
 		{
+			SOUNDMANAGER->stop("boss walk");
 			_moveCount = 0;
 			_bossState = STOP;
 		}
@@ -614,6 +680,7 @@ void boss::bossState()
 
 		if (_RightHand._rectBody.top < WINSIZEY / 2 - 200)
 		{
+			SOUNDMANAGER->stop("boss armmove");
 			_bossState = STONESHOWER_READY2;
 		}
 
@@ -671,6 +738,7 @@ void boss::bossState()
 
 				if (_currentFrameX >= 7)
 				{
+					SOUNDMANAGER->play("boss punch", 0.5f);
 					_motionDelay = 0;
 					CAMERA->shakeStart(3.f, 4.2f);
 					_bossState = STONESHOWER;
@@ -698,6 +766,7 @@ void boss::bossState()
 
 		if (_stoneAttackDelay % 8 == 0)
 		{
+			SOUNDMANAGER->play("boss stone", 0.5f);
 			_stoneshower->fire();
 		}
 
@@ -712,6 +781,7 @@ void boss::bossState()
 
 		if (_motionDelay >= 250)
 		{
+			SOUNDMANAGER->play("boss armmove", 0.5f);
 			_motionDelay = 0;
 			_stoneAttackDelay = 0;
 			_bossState = STONESHOWER_END;
@@ -742,6 +812,7 @@ void boss::bossState()
 
 		if (_RightHand._rectBody.top < WINSIZEY / 2 - 50)
 		{
+			SOUNDMANAGER->stop("boss armmove");
 			_bossState = STOP;
 		}
 
@@ -778,6 +849,8 @@ void boss::bossState()
 
 		if (_LeftHand._rectBody.right > WINSIZEX / 2 - 50)
 		{
+			SOUNDMANAGER->stop("boss armmove");
+			SOUNDMANAGER->play("boss walk", 0.5f);
 			_bossState = FLAMETHROWER_READY2;
 		}
 
@@ -788,9 +861,12 @@ void boss::bossState()
 	case FLAMETHROWER_READY2:
 	{
 		moveUp();
+
 		
 		if (_Center._y < WINSIZEY / 2 - 350)
 		{
+			SOUNDMANAGER->stop("boss walk");
+			SOUNDMANAGER->play("boss armmove", 0.5f);
 			_bossState = FLAMETHROWER_READY3;
 		}
 
@@ -838,6 +914,8 @@ void boss::bossState()
 
 		if (_RightHand._rectBody.left < WINSIZEX / 2 + 325)
 		{
+			SOUNDMANAGER->stop("boss armmove");
+			SOUNDMANAGER->play("boss charge", 0.5f);
 			_bossState = FLAMETHROWER_READY4;
 		}
 
@@ -847,9 +925,10 @@ void boss::bossState()
 	case FLAMETHROWER_READY4:
 	{
 		_chargeCount++;
-
+	
 		if (_chargeCount >= 250)
 		{
+			SOUNDMANAGER->stop("boss charge");
 			_chargeCount = 0;
 			_bossState = FLAMETHROWER;
 		}
@@ -864,6 +943,9 @@ void boss::bossState()
 
 		if (_flamethrowerDelay % 3 == 0)
 		{
+			SOUNDMANAGER->play("boss fireflame", 0.5f);
+			SOUNDMANAGER->play("boss fire", 1.0f);
+
 			_flamethrower->fire();
 
 		}
@@ -874,6 +956,8 @@ void boss::bossState()
 				_flamethrower->getFlameEffectIterVector() != _flamethrower->getFlameEffectVector().end();
 				++_flamethrower->getFlameEffectIterVector())
 			{
+				SOUNDMANAGER->stop("boss fireflame");
+				SOUNDMANAGER->stop("boss fire");
 				_flamethrower->getFlameEffectIterVector()->_fireStart = false;
 			}
 		}
@@ -884,8 +968,8 @@ void boss::bossState()
 				_flamethrower->getFlameIterVector() != _flamethrower->getFlameVector().end();
 				++_flamethrower->getFlameIterVector())
 			{
-				
 				_flamethrower->getFlameIterVector()->_fireStart = false;
+				SOUNDMANAGER->play("boss armmove", 0.5f);
 				_bossState = FLAMETHROWER_END;
 				
 				
@@ -923,6 +1007,8 @@ void boss::bossState()
 
 		if (_RightHand._rectBody.right > WINSIZEX / 2 + 490)
 		{
+			SOUNDMANAGER->stop("boss armmove");
+			SOUNDMANAGER->play("boss walk", 0.5f);
 			_bossState = FLAMETHROWER_END2;
 		}
 
@@ -934,8 +1020,12 @@ void boss::bossState()
 	{	
 		moveDown();
 
+	
+
 		if (_Center._y >= WINSIZEY / 2 - 175)
 		{
+			SOUNDMANAGER->stop("boss walk");
+			SOUNDMANAGER->play("boss armmove", 0.5f);
 			_bossState = FLAMETHROWER_END3;
 		}
 
@@ -969,6 +1059,7 @@ void boss::bossState()
 
 		if (_LeftHand._rectBody.left < WINSIZEX / 2 - 245)
 		{
+			SOUNDMANAGER->stop("boss armmove");
 			_bossState = STOP;
 		}
 
@@ -1018,6 +1109,7 @@ void boss::bossState()
 		
 		if (_LeftHand._rectBody.top < WINSIZEY / 2 - 200)
 		{
+			SOUNDMANAGER->stop("boss armmove");
 			_bossState = ICEGUIDE_READY2;
 		}
 		
@@ -1032,6 +1124,8 @@ void boss::bossState()
 
 		if (_motionDelay >= 100)
 		{
+	
+
 			_LeftArm._center.x += 1.5f * 2.5f;
 			_LeftArm._center.y += 2.5f * 2.5f;
 
@@ -1067,7 +1161,6 @@ void boss::bossState()
 			}
 
 
-
 			if (_frameCount % 3 == 0)
 			{
 				if (_currentFrameX >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameX())
@@ -1078,7 +1171,7 @@ void boss::bossState()
 				if (_currentFrameY >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameY())
 				{
 					_currentFrameY = 0;
-					_bossState = ICEGUIDE_END;
+					//_bossState = ICEGUIDE_END;
 				}
 				_bossLeftHandAttackFrameX2 = _currentFrameX;
 				_bossLeftHandAttackFrameY2 = _currentFrameY;
@@ -1089,10 +1182,11 @@ void boss::bossState()
 
 			if (_LeftHand._rectBody.bottom > WINSIZEY / 2  + 150)
 			{
+
+				SOUNDMANAGER->play("boss drill", 0.5f);
 				_centerFrameCount = 0;
 				_bossState = ICEGUIDE;
 			}
-
 
 		}
 
@@ -1103,9 +1197,10 @@ void boss::bossState()
 	{
 		_iceguideDelay++;
 
-		
+
 		if (_iceguideDelay % 3 == 0)
 		{
+			SOUNDMANAGER->play("boss iceguide", 1.0f);
 			_iceguide->fire();
 
 		}
@@ -1121,6 +1216,10 @@ void boss::bossState()
 			}
 			if (_currentFrameY >= IMAGEMANAGER->findImage("¿Þ¼Õ°ø°Ý2")->getMaxFrameY())
 			{
+				SOUNDMANAGER->stop("boss drill");
+				SOUNDMANAGER->stop("boss iceguide");
+				SOUNDMANAGER->play("boss iceguide2", 1.0f);
+				SOUNDMANAGER->play("boss armmove", 0.5f);
 				_currentFrameY = 0;
 				_iceguideDelay = 0;
 				_bossState = ICEGUIDE_END;
@@ -1136,6 +1235,8 @@ void boss::bossState()
 
 	case ICEGUIDE_END:
 	{
+		SOUNDMANAGER->stop("boss iceguide2");
+
 		_Center._angle += 0.12f;
 
 		_LeftArm._center.x -= 4.30f / 2.0f;
@@ -1158,6 +1259,7 @@ void boss::bossState()
 
 		if (_LeftHand._rectBody.top < WINSIZEY / 2 - 45)
 		{
+			SOUNDMANAGER->stop("boss armmove");
 			_bossState = STUN;
 		}
 
@@ -1246,6 +1348,7 @@ void boss::bossState()
 
 		if (_LeftHand._rectBody.top < WINSIZEY / 2 - 65)
 		{
+			SOUNDMANAGER->play("boss walk", 0.5f);
 			_stunCount = 0;
 			_bossState = STUN4;
 		}
@@ -1260,6 +1363,7 @@ void boss::bossState()
 
 		if (_Center._y >= (WINSIZEY / 2 - 175))
 		{
+			SOUNDMANAGER->stop("boss walk");
 			_bossState = STOP;
 			CAMERA->changeTarget(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 		}
@@ -1276,6 +1380,7 @@ void boss::bossState()
 
 		if (_effectDelay % 10 == 0)
 		{
+			SOUNDMANAGER->play("boss death", 0.5f);
 			effectFire();
 		}
 
@@ -1309,6 +1414,8 @@ void boss::bossState()
 
 			_Bottom._x = _Center._x + 1600;
 			_Bottom._y = _Center._y + 4500;
+
+			SOUNDMANAGER->stop("boss death");
 
 			_bossState = DEATH2;
 
@@ -1558,7 +1665,7 @@ void boss::bossDraw()
 		_flamethrower->chargeDraw2(_RightHand._centerEnd.x - 30, _RightHand._centerEnd.y + 255);
 	}
 
-	if (_bossState == DEATH)
+	if (_bossState == DEATH && !_bossState == DEATH2)
 	{
 		for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
 		{
@@ -1672,51 +1779,51 @@ void boss::moveUp()
 
 	_moveCount++;
 
-	_Center._y -= 2.0f;
-	_LeftArm._center.y -= 2.0f;
-	_LeftHand._center.y -= 2.0f;
-	_RightArm._center.y -= 2.0f;
-	_RightHand._center.y -= 2.0f;
-	_Bottom._y -= 2.0f;
+	_Center._y -= 1.5f;
+	_LeftArm._center.y -= 1.5f;
+	_LeftHand._center.y -= 1.5f;
+	_RightArm._center.y -= 1.5f;
+	_RightHand._center.y -= 1.5f;
+	_Bottom._y -= 1.5f;
 
 	if (_moveCount < 17)
 	{	
-		_LeftArm._angle += 0.01f / 40;
-		_LeftHand._angle += 0.001f / 40;
-		_RightArm._angle += 0.01f / 40;
-		_RightHand._angle += 0.001f / 40;
-		_LeftArm._center.x += 0.5f / 4;
-		_LeftArm._center.y += 1.0f / 4;
-		_RightArm._center.x -= 0.5f / 4;
-		_RightArm._center.y -= 1.0f / 4;
+		_LeftArm._angle += 0.01f / 80;
+		_LeftHand._angle += 0.001f / 80;
+		_RightArm._angle += 0.01f / 80;
+		_RightHand._angle += 0.001f / 80;
+		_LeftArm._center.x += 0.5f / 8;
+		_LeftArm._center.y += 1.0f / 8;
+		_RightArm._center.x -= 0.5f / 8;
+		_RightArm._center.y -= 1.0f / 8;
 		_Center._angle -= 0.01f;
 	}
 
 	
 	if (_moveCount >= 17 && _moveCount < 48)
 	{
-		_LeftArm._angle -= 0.01f / 40;
-		_LeftHand._angle -= 0.001f / 40;
-		_RightArm._angle -= 0.01f / 40;
-		_RightHand._angle -= 0.001f / 40;
-		_LeftArm._center.x -= 0.5f / 4;
-		_LeftArm._center.y -= 1.0f / 4;
-		_RightArm._center.x += 0.5f / 4;
-		_RightArm._center.y += 1.0f / 4;
+		_LeftArm._angle -= 0.01f / 80;
+		_LeftHand._angle -= 0.001f / 80;
+		_RightArm._angle -= 0.01f / 80;
+		_RightHand._angle -= 0.001f / 80;
+		_LeftArm._center.x -= 0.5f / 8;
+		_LeftArm._center.y -= 1.0f / 8;
+		_RightArm._center.x += 0.5f / 8;
+		_RightArm._center.y += 1.0f / 8;
 		_Center._angle += 0.01f;
 
 	}
 	
 	if (_moveCount >= 48 && _moveCount < 64)
 	{
-		_LeftArm._angle += 0.01f / 40;
-		_LeftHand._angle += 0.001f / 40;
-		_RightArm._angle += 0.01f / 40;
-		_RightHand._angle += 0.001f / 40;
-		_LeftArm._center.x += 0.5f / 4;
-		_LeftArm._center.y += 1.0f / 4;
-		_RightArm._center.x -= 0.5f / 4;
-		_RightArm._center.y -= 1.0f / 4;
+		_LeftArm._angle += 0.01f / 80;
+		_LeftHand._angle += 0.001f / 80;
+		_RightArm._angle += 0.01f / 80;
+		_RightHand._angle += 0.001f / 80;
+		_LeftArm._center.x += 0.5f / 8;
+		_LeftArm._center.y += 1.0f / 8;
+		_RightArm._center.x -= 0.5f / 8;
+		_RightArm._center.y -= 1.0f / 8;
 		_Center._angle -= 0.01f;
 	}
 	
@@ -1732,12 +1839,12 @@ void boss::moveDown()
 {
 	_moveCount++;
 
-	_Center._y += 2.0f;
-	_LeftArm._center.y += 2.0f;
-	_LeftHand._center.y += 2.0f;
-	_RightArm._center.y += 2.0f;
-	_RightHand._center.y += 2.0f;
-	_Bottom._y += 2.0f;
+	_Center._y += 1.5f;
+	_LeftArm._center.y += 1.5f;
+	_LeftHand._center.y += 1.5f;
+	_RightArm._center.y += 1.5f;
+	_RightHand._center.y += 1.5f;
+	_Bottom._y += 1.5f;
 
 	if (_moveCount < 17)
 	{
@@ -2006,6 +2113,7 @@ void boss::hpManager()
 {
 	if (_hp <= 666 && !_stunTrue)
 	{
+		bossInitialization2();
 		_bossState = STUN;
 
 	}

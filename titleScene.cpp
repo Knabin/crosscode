@@ -12,7 +12,7 @@ HRESULT titleScene::init()
 	CAMERA->setCameraMode(CAMERASTATE::NONE);
 	CAMERA->setMapSize(Vector2(WINSIZEX, WINSIZEY));
 
-	SOUNDMANAGER->playBGM("bgm title",0.5f);
+	SOUNDMANAGER->playBGM("bgm title", 0.4f);
 
 
 	//로딩이미지
@@ -125,6 +125,7 @@ void titleScene::cbStart()
 {
 	iMoveScene* e = new iMoveScene(L"town", Vector2(36 * SIZE, 47 * SIZE));
 	EVENTMANAGER->addEvent(e);
+	SOUNDMANAGER->play("button ok");
 }
 
 void titleScene::cbContinue()
@@ -136,12 +137,14 @@ void titleScene::cbContinue()
 	OBJECTMANAGER->findObject(objectType::UI, "exit")->setIsActive(false);
 
 	OBJECTMANAGER->findObject(objectType::UI, "loadUI")->setIsActive(true);
+	SOUNDMANAGER->play("button ok");
 }
 
 void titleScene::cbMaptool()
 {
 	SCENEMANAGER->loadScene(L"maptool");
 	SOUNDMANAGER->stop("bgm title");
+	SOUNDMANAGER->play("button ok");
 }
 
 void titleScene::cbOption()
@@ -150,5 +153,6 @@ void titleScene::cbOption()
 
 void titleScene::cbExit()
 {
+	SOUNDMANAGER->play("button ok");
 	PostQuitMessage(0);
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "gameNode.h"
+#include "gameObject.h"
 #include "item.h"
 
 struct invenObject
@@ -16,7 +16,7 @@ struct invenObject
 	{}
 };
 
-class inventory: public gameNode
+class inventory: public gameObject
 {
 private:
 	vector<invenObject> _vInven;

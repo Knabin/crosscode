@@ -178,7 +178,7 @@ void collisionManager::buffaloCollision()
 			{ 
 				if (!b->getEnemyCollision())
 				{
-					SOUNDMANAGER->play("hit", 1.0f);
+					SOUNDMANAGER->play("hit", 0.6f);
 					b->setEnemyHP(_player->getPlayerAttackPower());//플레이어가 에너미(버팔로)한테 주는 데미지
 					b->setDamaged(_player->getPlayerAttackPower());
 					b->setEnemyCollision(true);
@@ -192,7 +192,7 @@ void collisionManager::buffaloCollision()
 		{
 			if (isCollision(b->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
-				SOUNDMANAGER->play("hit", 1.0f);
+				SOUNDMANAGER->play("hit", 0.6f);
 				b->setEnemyHP(_player->getPlayerAttackPower());
 				b->setDamaged(_player->getPlayerAttackPower());
 				EFFECTMANAGER->play("player bulletRemoveEffect",
@@ -502,11 +502,11 @@ void collisionManager::meerkatCollision()
 						{
 							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 						}
-						SOUNDMANAGER->play("hit", 1.0f);
+						SOUNDMANAGER->play("hit", 0.6f);
 					}
 					if (!m->getEnemyCollision())//충돌판정이 펄스이면
 					{
-						SOUNDMANAGER->play("hit", 1.0f);
+						SOUNDMANAGER->play("hit", 0.6f);
 						m->setEnemyHP(_player->getPlayerAttackPower());//에너미한테 데미지
 						m->setDamaged(_player->getPlayerAttackPower());
 						m->setDealing(true);
@@ -555,9 +555,9 @@ void collisionManager::meerkatCollision()
 						{
 							m->setEnemyDirection(ENEMY_DOWN_LEFT_HIT);
 						}
-						SOUNDMANAGER->play("hit", 1.0f);
+						SOUNDMANAGER->play("hit", 0.6f);
 					}
-					SOUNDMANAGER->play("hit", 1.0f);
+					SOUNDMANAGER->play("hit", 0.6f);
 					m->setEnemyHP(_player->getPlayerAttackPower());
 					m->setDamaged(_player->getPlayerAttackPower());
 					m->setDealing(true);
@@ -635,6 +635,12 @@ void collisionManager::playerHitCollision()
 
 		if (isCollision(_player->getRect(), e->getEnemyAttackRect()))
 		{
+			if (!_player->getAttackCollision())
+			{
+				_player->damage(e->getEnemyAttackPower());
+				_player->setAttackCollision(true);
+			}
+
 			if(_player->getDirection() == PLAYERDIRECTION::TOP)
 			{
 				_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -667,14 +673,6 @@ void collisionManager::playerHitCollision()
 			{
 				_player->setState(PLAYERSTATE::BE_ATTACKED);
 			}	
-			if (_player->getPlayerDef() < e->getEnemyAttackPower())
-			{
-				if (!_player->getAttackCollision())
-				{
-					_player->setPlayerHP(_player->getPlayerHP() - (e->getEnemyAttackPower() - _player->getPlayerDef()));
-					_player->setAttackCollision(true);
-				}
-			}
 		}
 	}
 }
@@ -694,6 +692,7 @@ void collisionManager::bulletCollision()
 		{
 			if (isCollision(_player->getRect(), m->getBullets()->getvEnemyBullet()[j].rc))//미어캣의 총알이 플레이어 렉트에 충돌했으면
 			{
+				_player->damage(m->getEnemyAttackPower());
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
@@ -731,10 +730,7 @@ void collisionManager::bulletCollision()
 					SOUNDMANAGER->play("meerkat-ball-hit", 1.0f);
 				}
 				EFFECTMANAGER->play("enemyMeerkatBallEffect", CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).x + 25, CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).y + 25);
-				if (_player->getPlayerDef() < m->getEnemyAttackPower())
-				{
-					_player->setPlayerHP(_player->getPlayerHP() - (m->getEnemyAttackPower() - _player->getPlayerDef()));
-				}
+
 				m->getBullets()->remove(j);//해당 총알의 벡터를 삭제
 				break;
 			}

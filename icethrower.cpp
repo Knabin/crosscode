@@ -230,10 +230,7 @@ void icethrower::move()
 		}
 
 		
-		if (_viIcethrower->_fireStart && _angle < PI - (PI / 4))
-		{
-			_viIcethrower->_fireStart = false;
-		}
+	
 		
 	}
 }

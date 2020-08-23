@@ -14,6 +14,9 @@ HRESULT mine::init(float centerX, float centerY)
 {
 	_name = "mine";
 
+
+	SOUNDMANAGER->addSound("boss mine", "sounds/boss/explosion-2.ogg", false, false);
+
 	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
 
 	_angle = PI / 2;
@@ -92,7 +95,6 @@ void mine::update()
 	frameUpdate();
 
 	move();
-
 
 }
 
@@ -300,6 +302,20 @@ void mine::move()
 
 	}
 	
+	if (_isCollision)
+	{
+		(_vMine.begin() + _colNum)->_x += cosf(_colAngle) * (_vMine.begin() + _colNum)->_speed2;
+		(_vMine.begin() + _colNum)->_y += -sinf(_colAngle) * (_vMine.begin() + _colNum)->_speed2;
+		// 만약 사거리 이상 벗어나면 isCollision을 꺼 주세요
+		// 보스와 부딪혔을 경우 isCollision을 꺼 주세요
+	}
+	if (_isCollision2)
+	{
+		(_vMine2.begin() + _colNum)->_x += cosf(_colAngle) * (_vMine2.begin() + _colNum)->_speed2;
+		(_vMine2.begin() + _colNum)->_y += -sinf(_colAngle) * (_vMine2.begin() + _colNum)->_speed2;
+		// 만약 사거리 이상 벗어나면 isCollision을 꺼 주세요
+		// 보스와 부딪혔을 경우 isCollision을 꺼 주세요
+	}
 }
 
 void mine::explotion(float centerX, float centerY)
@@ -355,19 +371,22 @@ void mine::explotion(float centerX, float centerY)
 
 void mine::collision(int Num1, float angle)
 {
-
-		
-	(_vMine.begin() + Num1)->_x += cosf(angle) * (_vMine.begin() + Num1)->_speed2;
-	(_vMine.begin() + Num1)->_y += -sinf(angle) * (_vMine.begin() + Num1)->_speed2;
-
+	_isCollision = true;
+	_colNum = Num1;
+	_colAngle = angle;
+	//(_vMine.begin() + Num1)->_x += cosf(angle) * (_vMine.begin() + Num1)->_speed2;
+	//(_vMine.begin() + Num1)->_y += -sinf(angle) * (_vMine.begin() + Num1)->_speed2;
 }
 
 void mine::collision2(int Num2, float angle)
 {
 
+	_isCollision2 = true;
+	_colNum2 = Num2;
+	_colAngle2 = angle;
 
-	(_vMine2.begin() + Num2)->_x += cosf(angle) * (_vMine2.begin() + Num2)->_speed2;
-	(_vMine2.begin() + Num2)->_y += -sinf(angle) * (_vMine2.begin() + Num2)->_speed2;
+	//(_vMine2.begin() + Num2)->_x += cosf(angle) * (_vMine2.begin() + Num2)->_speed2;
+	//(_vMine2.begin() + Num2)->_y += -sinf(angle) * (_vMine2.begin() + Num2)->_speed2;
 
 }
 

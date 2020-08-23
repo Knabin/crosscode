@@ -129,11 +129,13 @@ void enemyManager::enemyDead()
 					_inven->getItem(L"거래", 0);
 
 					EFFECTMANAGER->play("drop", Vector2(x, y));
+					SOUNDMANAGER->play("item drop");
 					break;
 				case 1:
 					_inven->getItem(L"거래", 5);
 					
 					EFFECTMANAGER->play("drop", Vector2(x,y));
+					SOUNDMANAGER->play("item drop");
 					break;
 				default:
 					break;
@@ -164,11 +166,13 @@ void enemyManager::enemyDead()
 					_inven->getItem(L"거래", 1);
 
 					EFFECTMANAGER->play("drop", Vector2(x, y));
+					SOUNDMANAGER->play("item drop");
 					break;
 				case 1:
 					_inven->getItem(L"거래", 4);
 
 					EFFECTMANAGER->play("drop", Vector2(x, y));
+					SOUNDMANAGER->play("item drop");
 					break;
 				default:
 					break;
@@ -199,11 +203,13 @@ void enemyManager::enemyDead()
 					_inven->getItem(L"거래", 2);
 
 					EFFECTMANAGER->play("drop", Vector2(x, y));
+					SOUNDMANAGER->play("item drop");
 					break;
 				case 1:
 					_inven->getItem(L"거래", 3);
 
 					EFFECTMANAGER->play("drop", Vector2(x, y));
+					SOUNDMANAGER->play("item drop");
 					break;
 				default:
 					break;
