@@ -25,7 +25,7 @@ void collisionManager::release()
 
 void collisionManager::update()
 {
-	enemyCollision();//에너미끼리 충돌
+	//enemyCollision();//에너미끼리 충돌
 	buffaloCollision();//버팔로랑 플레이어 충돌처리
 	hedgehagCollision();//고슴도치랑 플레이어 충돌처리
 	meerkatCollision();//미어캣이랑 플레이어 충돌처리
