@@ -11,6 +11,8 @@ HRESULT meerkat::init()
 	IMAGEMANAGER->addFrameImage("enemyMeerkatBallEffect", L"images/enemy/meerkatBallEffect.png", 8, 1);//¹Ì¾îÄ¹ ÃÑ¾Ë Æø¹ß ÀÌÆåÆ®
 	EFFECTMANAGER->addEffect("enemyMeerkatBallEffect", "enemyMeerkatBallEffect", 1.0f, 0.5f, 5, 1.0f);//¹Ì¾îÄ¹ ÃÑ¾Ë Æø¹ß ÀÌÆåÆ®
 
+	SOUNDMANAGER->addSound("meerkat-ball-hit", "sounds/enemy/meerkat-ball-hit.ogg", false, false);
+
 	_name = "meerkat";
 
 	_maxHP = 100;
@@ -241,11 +243,11 @@ void meerkat::render()
 		_meerkatMoveImage->setSize(Vector2(_meerkatMoveImage->getFrameSize()) * CAMERA->getZoomAmount());
 		_meerkatMoveImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter()), _enemyMotion, 1.0f);
 	}
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//¿¡³Ê¹Ì ·ºÆ®
-	for (int i = 0; i < 8; i++)
-	{
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
-	}
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//¿¡³Ê¹Ì ·ºÆ®
+	//for (int i = 0; i < 8; i++)
+	//{
+	//	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
+	//}
 	_bullet->render();
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_currentHpBar), D2D1::ColorF::Red, 0);
 }

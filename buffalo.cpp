@@ -337,15 +337,15 @@ void buffalo::update()
 void buffalo::render()
 {
 	animationDraw();
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//버팔로 렉트
-	for (int i = 0; i < 3; i++)
-	{
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
-	}
-	for (int i = 0; i < _move.size(); i++)
-	{
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
-	}
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//버팔로 렉트
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
+	//}
+	//for (int i = 0; i < _move.size(); i++)
+	//{
+	//	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
+	//}
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_currentHpBar), D2D1::ColorF::Red, 0);
 	//D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_attackRC), D2D1::ColorF::Black, 0);//버팔로 공격렉트
 }

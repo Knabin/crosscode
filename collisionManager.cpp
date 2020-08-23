@@ -361,17 +361,6 @@ void collisionManager::hedgehagCollision()
 				_player->getBullet()->remove(j);
 			}
 		}
-		//for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
-		//{
-		//	if (isCollision(h->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
-		//	{
-		//		h->setEnemyHP(_player->getPlayerAttackPower());
-		//		h->setDamaged(_player->getPlayerAttackPower());
-		//		h->setDealing(true);
-		//		h->setCount(0);
-		//		_player->getBullet()->remove(j);
-		//	}
-		//}
 
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
@@ -580,17 +569,6 @@ void collisionManager::meerkatCollision()
 				}
 			}
 		}
-		//for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)//플레이어 원거리 공격이 버팔로한테 맞으면
-		//{
-		//	if (isCollision(m->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
-		//	{
-		//		m->setEnemyHP(_player->getPlayerAttackPower());
-		//		m->setDamaged(_player->getPlayerAttackPower());
-		//		m->setDealing(true);
-		//		m->setCount(0);
-		//		_player->getBullet()->remove(j);
-		//	}
-		//}
 
 		//플레이어 렉트와 에너미 렉트가 충돌시 플레이어를 밀어내기
 		RECT rcInter;
@@ -747,6 +725,10 @@ void collisionManager::bulletCollision()
 				if (_player->getDirection() == PLAYERDIRECTION::LEFT_TOP)
 				{
 					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (!SOUNDMANAGER->isPlaySound("meerkat-ball-hit"))
+				{
+					SOUNDMANAGER->play("meerkat-ball-hit", 1.0f);
 				}
 				EFFECTMANAGER->play("enemyMeerkatBallEffect", CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).x + 25, CAMERA->getRelativeVector2(m->getBullets()->getvEnemyBullet()[j].position).y + 25);
 				if (_player->getPlayerDef() < m->getEnemyAttackPower())

@@ -219,19 +219,19 @@ void hedgehag::update()
 
 void hedgehag::render()
 {
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_attackRC), D2DRenderer::DefaultBrush::Black, 2.f);//에너미 공격렉트
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_attackRC), D2DRenderer::DefaultBrush::Black, 2.f);//에너미 공격렉트
 	_enemyImage->setSize(Vector2(_enemyImage->getFrameSize()) * CAMERA->getZoomAmount());
 	_enemyImage->aniRender(CAMERA->getRelativeVector2(_rc.getCenter().x, _rc.getCenter().y), _enemyMotion, 1.0f);//에너미 애니메이션 재생
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//에너미 렉트
-	for (int i = 0; i < 3; i++)
-	{
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
-	}
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));//에너미 렉트
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_t[i]->getRect()));
+	//}
 
-	for (int i = 0; i < _move.size(); ++i)
-	{
-		D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
-	}
+	//for (int i = 0; i < _move.size(); ++i)
+	//{
+	//	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_move[i]->getRect()));
+	//}
 	D2DRENDERER->DrawRotationFillRectangle(CAMERA->getRelativeRect(_currentHpBar), D2D1::ColorF::Red, 0);
 }
 
