@@ -84,6 +84,8 @@ public:
 	vector<tagMine>::iterator& getMine2IterVector() { return _viMine2; }
 
 	void setCollision(bool col) { _isCollision = col; }
+	void setCollision2(bool col2) { _isCollision2 = col2; }
+	bool getCollision() { return _isCollision; }
 
 };
 

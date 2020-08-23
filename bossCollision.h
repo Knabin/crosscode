@@ -8,6 +8,7 @@ class bossCollision : public gameNode
 private:
 	player* _player;
 	int _collisionCount;
+	int _playerCollisionCount;
 
 
 public:
@@ -31,6 +32,7 @@ public:
 	void bossMineCollision();
 
 	void bossBulletCollision();
+	void bossAttackCollision();
 
 };
 
