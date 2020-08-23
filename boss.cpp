@@ -96,6 +96,12 @@ HRESULT boss::init()
 	IMAGEMANAGER->addFrameImage("보스바텀방어막2", L"images/boss/bottom_second.png", 5, 1);
 	IMAGEMANAGER->addFrameImage("보스바텀방어막3", L"images/boss/bottom_third.png", 4, 1);
 
+	IMAGEMANAGER->addImage("방어막1", L"images/boss/protect1.png");
+	IMAGEMANAGER->addImage("방어막2", L"images/boss/protect2.png");
+	IMAGEMANAGER->addImage("방어막3", L"images/boss/protect3.png");
+	IMAGEMANAGER->addImage("방어막4", L"images/boss/protect4.png");
+	IMAGEMANAGER->addImage("방어막5", L"images/boss/protect5.png");
+
 	IMAGEMANAGER->addImage("왼팔", L"images/boss/left_arm.png");
 	IMAGEMANAGER->addImage("왼손", L"images/boss/left_hand.png");
 	IMAGEMANAGER->addImage("왼손움직임3", L"images/boss/left_hand_move3.png");
@@ -263,9 +269,9 @@ void boss::render()
 
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallTop));
 
-	//_icethrower->render();
+	_icethrower->render();
 
-	//_iceguide->render();
+	_iceguide->render();
 
 	_mine->render(_Center._x + 115, _Center._y + 50);
 
@@ -274,9 +280,9 @@ void boss::render()
 	_mine->explotion(_Center._x + 115, _Center._y + 50);
 
 
-	//_stoneshower->render();
+	_stoneshower->render();
 
-	//_flamethrower->render();
+	_flamethrower->render();
 
 }
 
@@ -1087,6 +1093,10 @@ void boss::bossState()
 	{
 
 		_attack1 = false;
+		_attack2 = false;
+		_attack3 = false;
+		_attack4 = false;
+		_attack5 = false;
 
 		_LeftArm._center.x += 1.5f / 1.5f;
 		_LeftArm._center.y -= 2.0f / 1.5f;
@@ -1277,7 +1287,7 @@ void boss::bossState()
 		if (_LeftHand._rectBody.top < WINSIZEY / 2 - 45)
 		{
 			SOUNDMANAGER->stop("boss armmove");
-			_bossState = STUN;
+			_bossState = STOP;
 		}
 
 	}
@@ -1346,7 +1356,7 @@ void boss::bossState()
 		_stunCount++;
 
 
-		if (_stunCount >= 525)
+		if (_stunCount >= 575)
 		{
 			_LeftArm._center.x -= 8.8f / 2.5f;
 			_RightArm._center.x += 8.8f / 2.5f;
@@ -1361,13 +1371,14 @@ void boss::bossState()
 			_LeftHand._realAngle += 0.5f / 2.5f;
 			_RightHand._realAngle -= 0.5f / 2.5f;
 
-		}
+			if (_LeftHand._rectBody.top < WINSIZEY / 2 - 54 ||
+				_RightHand._rectBody.top < WINSIZEY / 2 - 54)
+			{
+				SOUNDMANAGER->play("boss walk", 0.5f);
+				_stunCount = 0;
+				_bossState = STUN4;
+			}
 
-		if (_LeftHand._rectBody.top < WINSIZEY / 2 - 65)
-		{
-			SOUNDMANAGER->play("boss walk", 0.5f);
-			_stunCount = 0;
-			_bossState = STUN4;
 		}
 
 
@@ -1505,7 +1516,7 @@ void boss::bossMove()
 	{
 		_LeftHand._rectBody2.update(Vector2(_LeftHand._center.x + 50, _LeftHand._center.y + 410), Vector2(375, 350), pivot::CENTER);
 
-		//_RightHand._rectBody2.update(Vector2(_RightHand._center.x + 100, _RightHand._center.y + 275), Vector2(275, 250), pivot::CENTER);
+		_RightHand._rectBody2.update(Vector2(_RightHand._center.x + 100, _RightHand._center.y + 275), Vector2(275, 250), pivot::CENTER);
 	}
 	else if (_bossState == STONESHOWER)
 	{
@@ -1535,21 +1546,39 @@ void boss::bossDraw()
 	//바텀
 	IMAGEMANAGER->findImage("보스바텀")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left - 175, _Bottom._rectBody.top - 60)));
 
+	IMAGEMANAGER->findImage("보스바텀방어막1")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 75, _Bottom._rectBody.top + 60)),
+		_bossShieldOneFrameX, _bossShieldOneFrameY);
+
+
+
+	
+	if (_hp <= 1000 && _hp >= 900 || _hp <= 500 && _hp >= 400)
+	{
+		IMAGEMANAGER->findImage("방어막1")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left, _Bottom._rectBody.top + 25)));
+	}
+	else if (_hp <= 900 && _hp >= 800 || _hp <= 400 && _hp >= 300)
+	{
+		IMAGEMANAGER->findImage("방어막2")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left, _Bottom._rectBody.top + 25)));
+	}
+	else if (_hp <= 800 && _hp >= 700 || _hp <= 300 && _hp >= 200)
+	{
+		IMAGEMANAGER->findImage("방어막3")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left, _Bottom._rectBody.top + 25)));
+	}
+	else if (_hp <= 700 && _hp >= 600 || _hp <= 200 && _hp >= 100)
+	{
+		IMAGEMANAGER->findImage("방어막4")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left, _Bottom._rectBody.top + 25)));
+	}
+	else
+	{
+		IMAGEMANAGER->findImage("방어막5")->render(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left, _Bottom._rectBody.top + 25)));
+	}
+
+
 	if (_bossState == STUN || _bossState == STUN2 || _bossState == STUN3 && _stunCount < 350)
 	{
 		IMAGEMANAGER->findImage("보스바텀방어막3")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 75, _Bottom._rectBody.top + 60)),
 			_bossShieldOneFrameX3, _bossShieldOneFrameY3);
 	}
-
-	else
-	{
-		IMAGEMANAGER->findImage("보스바텀방어막1")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 75, _Bottom._rectBody.top + 60)),
-			_bossShieldOneFrameX, _bossShieldOneFrameY);
-
-		IMAGEMANAGER->findImage("보스바텀방어막2")->frameRender(CAMERA->getRelativeVector2(Vector2(_Bottom._rectBody.left + 75, _Bottom._rectBody.top + 60)),
-			_bossShieldOneFrameX2, _bossShieldOneFrameY2);
-	}
-
 
 	//양팔
 	IMAGEMANAGER->findImage("왼팔")->setAngle(_LeftArm._realAngle);
@@ -1682,7 +1711,7 @@ void boss::bossDraw()
 		_flamethrower->chargeDraw2(_RightHand._centerEnd.x - 30, _RightHand._centerEnd.y + 255);
 	}
 
-	if (_bossState == DEATH && !_bossState == DEATH2)
+	if (_bossState == DEATH)
 	{
 		for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
 		{
@@ -1778,16 +1807,11 @@ void boss::protectFrame()
 			_protectFrameCount = 0;
 		}
 
-		if (_protectFrameCount2 % 100 == 0)
-		{
-			if (_protectCurrentFrameX2 >= IMAGEMANAGER->findImage("보스바텀방어막2")->getMaxFrameX())
-			{
-				_protectCurrentFrameX2 = 0;
-			}
-			_bossShieldOneFrameX2 = _protectCurrentFrameX2;
-			_protectCurrentFrameX2++;
-			_protectFrameCount2 = 0;
-		}
+		
+
+		
+
+		
 	}
 }
 
@@ -2146,17 +2170,17 @@ void boss::bossInitialization2()
 
 void boss::hpManager()
 {
-	if (_hp <= 666 && !_stunTrue)
+	if (_hp <= 500 && !_stunTrue)
 	{
 		bossInitialization2();
 		_bossState = STUN;
-
 	}
 
 	if (_hp <= 0)
 	{
 		_bossState = DEATH;
 	}
+
 
 
 }
