@@ -699,6 +699,7 @@ void player::update()
 
 void player::render()
 {
+
 	//_rc.render(getMemDC());
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_rc));
 	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_tileRect));

@@ -101,7 +101,7 @@ void flamethrower::render()
 	{
 		if (!_viFlamethrower->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viFlamethrower->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viFlamethrower->_rc));
 			IMAGEMANAGER->findImage("È­¿°")->frameRender(CAMERA->getRelativeVector2(Vector2(_viFlamethrower->_x, _viFlamethrower->_y )),
 				_viFlamethrower->_frameX, _flameFrameY);
 		}
@@ -286,7 +286,7 @@ void flamethrower::move()
 	{
 		if (!_viFlameEffect->_fireStart) continue;
 		{
-			_angle2 += 1.41f;
+			_angle2 += 1.51f;
 
 			_viFlameEffect->_x += cosf(_viFlameEffect->_angle)  * _viFlameEffect->_speed;
 			_viFlameEffect->_y += -sinf(_viFlameEffect->_angle) * _viFlameEffect->_speed;

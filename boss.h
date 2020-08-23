@@ -236,6 +236,8 @@ public:
 
 	void hpManager();
 
+	
+
 
 	int getBossHp() { return _hp; }
 	void setBossHp(int hp) { _hp = hp; }

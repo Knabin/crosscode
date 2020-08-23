@@ -34,5 +34,9 @@ public:
 	void bossBulletCollision();
 	void bossAttackCollision();
 
+	void newMineCollision();
+	void newBossMineCollision();
+
+
 };
 

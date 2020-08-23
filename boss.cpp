@@ -18,7 +18,7 @@ HRESULT boss::init()
 	OBJECTMANAGER->addObject(objectType::BOSS, _icethrower);
 
 	_mine = new mine;
-	_mine->init(WINSIZEX / 2 - 85, WINSIZEY / 2 - 675 + 550);
+	_mine->init(WINSIZEX / 2 - 15, WINSIZEY / 2 - 675 + 550);
 
 	OBJECTMANAGER->addObject(objectType::BOSS, _mine);
 
@@ -118,6 +118,9 @@ HRESULT boss::init()
 	IMAGEMANAGER->addFrameImage("¿À¸¥¼Õ°ø°Ý2", L"images/boss/right_hand_attack.png", 4, 1);
 
 	IMAGEMANAGER->addFrameImage("ÆÄ±«", L"images/boss/death_effect.png", 10, 1);
+
+	EFFECTMANAGER->addEffect("ÆÄ±«ÀÌÆåÆ®", "ÆÄ±«", 1, 0.5f, 10, 1.f);
+	EFFECTMANAGER->addEffect("È­¿°ÀÌÆåÆ®", "È­¿°Æø¹ß", 1, 0.5f, 10, 1.f);
 
 
 	//================================================================================================================================================================//
@@ -261,13 +264,13 @@ void boss::update()
 
 void boss::render()
 {
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallRight));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallRight));
 
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallLeft));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallLeft));
 
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallBottom));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallBottom));
 
-	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallTop));
+	//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_imagineWallTop));
 
 	_icethrower->render();
 
@@ -331,6 +334,7 @@ void boss::bossState()
 	
 	case STOP:
 	{
+
 		_currentFrameX = 0;
 		_stopCount++;
 		bossInitialization2();
@@ -1727,7 +1731,7 @@ void boss::bossDraw()
 	//================================================================================================================================================================//
 
 	
-
+	/*
 	//À§Ä¡ È®ÀÎ¿ë ¸öÅë, ¹ÙÅÒ ·ºÆ®
 
 	D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_Center._rectBody));
@@ -1761,7 +1765,7 @@ void boss::bossDraw()
 	D2DRENDERER->DrawLine((CAMERA->getRelativeVector2(Vector2(_RightHand._center.x, _RightHand._center.y))),
 		(CAMERA->getRelativeVector2(Vector2(_RightHand._centerEnd.x, _RightHand._centerEnd.y))),
 		D2D1::ColorF::Black, 1, 2.0f);
-	
+	*/
 }
 
 void boss::protectFrame()
@@ -2038,18 +2042,21 @@ void boss::fireCollision()
 
 		if (isCollision(_imagineWallRight , _icethrower->getIcethrowerVector()[i]._rc))
 		{
+			EFFECTMANAGER->play("ÆÄ±«ÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(_icethrower->getIcethrowerVector()[i]._x, _icethrower->getIcethrowerVector()[i]._y)), 0);
 			_icethrower->removeFire(i);
 			break;
 		}
 
 		if (isCollision(_imagineWallLeft, _icethrower->getIcethrowerVector()[i]._rc))
 		{
+			EFFECTMANAGER->play("ÆÄ±«ÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(_icethrower->getIcethrowerVector()[i]._x, _icethrower->getIcethrowerVector()[i]._y)), 0);
 			_icethrower->removeFire(i);
 			break;
 		}
 
 		if (isCollision(_imagineWallBottom, _icethrower->getIcethrowerVector()[i]._rc))
 		{
+			EFFECTMANAGER->play("ÆÄ±«ÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(_icethrower->getIcethrowerVector()[i]._x, _icethrower->getIcethrowerVector()[i]._y)), 0);
 			_icethrower->removeFire(i);
 			break;
 		}
@@ -2076,11 +2083,15 @@ void boss::fireCollision()
 
 		if (isCollision(_imagineWallLeft, _flamethrower->getFlameVector()[i]._rc))
 		{
+
+			EFFECTMANAGER->play("È­¿°ÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(_flamethrower->getFlameVector()[i]._x, _flamethrower->getFlameVector()[i]._y)), 0);
 			_flamethrower->removeFire(i);
 			break;
 		}
 		if (isCollision(_imagineWallBottom, _flamethrower->getFlameVector()[i]._rc))
 		{
+
+			EFFECTMANAGER->play("È­¿°ÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(_flamethrower->getFlameVector()[i]._x, _flamethrower->getFlameVector()[i]._y)), 0);
 			_flamethrower->removeFire(i);
 			break;
 		}

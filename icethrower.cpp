@@ -47,7 +47,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 		attack1._image = _attackImage[2];
 		attack1._size = _attackSize[2];
 
-		attack1._speed = 30.5f;
+		attack1._speed = 32.5f;
 		attack1._damage = 5.0f;
 
 		attack1._fireStart = false;
@@ -90,7 +90,7 @@ void icethrower::render()
 	{
 		if (!_viIcethrower->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIcethrower->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIcethrower->_rc));
 
 			_viIcethrower->_image->setAngle(_angle);
 			_viIcethrower->_image->render(CAMERA->getRelativeVector2(Vector2(_viIcethrower->_x - _viIcethrower->_size / 2, _viIcethrower->_y - _viIcethrower->_size / 2)));
@@ -158,6 +158,7 @@ void icethrower::frameUpdate()
 	_frameCount++;
 	//_collisionFrameCount++;
 
+	/*
 	_iceEffectFrameY = 0;
 
 	if (_frameCount % 5 == 0)
@@ -172,7 +173,7 @@ void icethrower::frameUpdate()
 		_currentFrameX++;
 		_frameCount = 0;
 	}
-
+	*/
 	/*
 	_collisionFrameY = 0;
 
@@ -222,7 +223,7 @@ void icethrower::move()
 
 		if (!_viIcethrower->_fireStart) continue;
 		{
-			_angle -= 0.002f * 1.7f;
+			_angle -= 0.002f * 1.8f;
 			_angle2 += 0.10f / 2;
 			_viIcethrower->_x += cosf(_viIcethrower->_angle) * _viIcethrower->_speed;
 			_viIcethrower->_y += -sinf(_viIcethrower->_angle) * _viIcethrower->_speed;

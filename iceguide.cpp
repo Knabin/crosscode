@@ -138,7 +138,7 @@ void iceguide::render()
 	{
 		if (!_viIceguide->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide->_rc));
 
 			IMAGEMANAGER->findImage("¾óÀ½»ÏÁ·")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIceguide->_x , _viIceguide->_y )),
 				_viIceguide->_frameX, _iceFrameY);
@@ -149,7 +149,7 @@ void iceguide::render()
 	{
 		if (!_viIceguide2->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide2->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide2->_rc));
 
 			IMAGEMANAGER->findImage("¾óÀ½»ÏÁ·")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIceguide2->_x , _viIceguide2->_y )),
 				_viIceguide2->_frameX, _iceFrameY);
@@ -160,7 +160,7 @@ void iceguide::render()
 	{
 		if (!_viIceguide3->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide3->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide3->_rc));
 
 			IMAGEMANAGER->findImage("¾óÀ½»ÏÁ·")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIceguide3->_x , _viIceguide3->_y)),
 				_viIceguide3->_frameX, _iceFrameY);
@@ -171,7 +171,7 @@ void iceguide::render()
 	{
 		if (!_viIceguide4->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide4->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide4->_rc));
 
 			IMAGEMANAGER->findImage("¾óÀ½»ÏÁ·")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIceguide4->_x, _viIceguide4->_y)),
 				_viIceguide4->_frameX, _iceFrameY);
@@ -182,7 +182,7 @@ void iceguide::render()
 	{
 		if (!_viIceguide5->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide5->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viIceguide5->_rc));
 
 			IMAGEMANAGER->findImage("¾óÀ½»ÏÁ·")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIceguide5->_x, _viIceguide5->_y)),
 				_viIceguide5->_frameX, _iceFrameY);

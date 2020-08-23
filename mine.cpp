@@ -49,6 +49,8 @@ HRESULT mine::init(float centerX, float centerY)
 	IMAGEMANAGER->addFrameImage("Æø¹ß", L"images/boss/explosion.png", 18, 1);
 	IMAGEMANAGER->addFrameImage("Áö·Ú", L"images/boss/mine.png", 6, 1);
 
+	EFFECTMANAGER->addEffect("Æø¹ßÀÌÆåÆ®", "Æø¹ß", 1, 0.5f, 10, 1.f);
+
 	_currentFrameX, _currentFrameY, _frameCount = 0;
 	_mineCurrentFrameX, _mineCurrentFrameY, _mineFrameCount = 0;
 
@@ -62,6 +64,7 @@ HRESULT mine::init(float centerX, float centerY)
 		_Mine._center.y = centerY  - (44 * i);
 		_Mine._speed = 40.0f;
 		_Mine._speed2 = 10.0f;
+		_Mine._damage = 2.0f;
 
 		_Mine._fireStart = false;
 
@@ -76,11 +79,16 @@ HRESULT mine::init(float centerX, float centerY)
 		_Mine2._center.y = centerY - (44 * i);
 		_Mine2._speed = 40.0f;
 		_Mine2._speed2 = 10.0f;
+		_Mine2._damage = 2.0f;
 
 		_Mine2._fireStart = false;
 
 		_vMine2.push_back(_Mine2);
 	}
+
+	_isCollision, _isCollision2, _isCollision3, _isCollision4, _isCollision5, _isCollision6 = false;
+	_dropTrue1, _dropTrue2, _dropTrue3, _dropTrue4, _dropTrue5, _dropTrue6 = false;
+
 
 
 	return S_OK;
@@ -104,7 +112,7 @@ void mine::render(float centerX, float centerY)
 	{
 		if (!_viMine->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine->_rc));
 
 			IMAGEMANAGER->findImage("Áö·Ú")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine->_x , _viMine->_y)),
 				_mineFrameX, _mineFrameY);
@@ -117,7 +125,7 @@ void mine::render(float centerX, float centerY)
 
 		if (!_viMine2->_fireStart) continue;
 		{
-			D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine2->_rc));
+			//D2DRENDERER->DrawRectangle(CAMERA->getRelativeRect(_viMine2->_rc));
 
 			IMAGEMANAGER->findImage("Áö·Ú")->frameRender(CAMERA->getRelativeVector2(Vector2(_viMine2->_x, _viMine2->_y)),
 				_mineFrameX, _mineFrameY);
@@ -234,18 +242,21 @@ void mine::move()
 	if (_vMine.begin()->_y > (WINSIZEY / 2 + 600) + _randomDropY)
 	{
 		_vMine.begin()->_speed = 0;
+		_dropTrue1 = true;
 
 	}
 
 	if ((_vMine.begin() + 1)->_y > (WINSIZEY / 2 + 600) + _randomDropY3)
 	{
 		(_vMine.begin() + 1)->_speed = 0;
+		_dropTrue2 = true;
 
 	}
 
 	if ((_vMine.begin() + 2)->_y > (WINSIZEY / 2 + 600) + _randomDropY5)
 	{
 		(_vMine.begin() + 2)->_speed = 0;
+		_dropTrue3 = true;
 
 	}
 
@@ -287,38 +298,73 @@ void mine::move()
 	if (_vMine2.begin()->_y > (WINSIZEY / 2 + 600) + _randomDropY2)
 	{
 		_vMine2.begin()->_speed = 0;
+		_dropTrue4 = true;
 
 	}
 
 	if ((_vMine2.begin() + 1)->_y > (WINSIZEY / 2 + 600) + _randomDropY4)
 	{
 		(_vMine2.begin() + 1)->_speed = 0;
+		_dropTrue5 = true;
 
 	}
 
 	if ((_vMine2.begin() + 2)->_y > (WINSIZEY / 2 + 600) + _randomDropY4)
 	{
 		(_vMine2.begin() + 2)->_speed = 0;
+		_dropTrue6 = true;
 
 	}
 
 	if (_isCollision)
 	{
-		(_vMine.begin() + _colNum)->_x += cosf(_colAngle) * (_vMine.begin() + _colNum)->_speed2;
-		(_vMine.begin() + _colNum)->_y += -sinf(_colAngle) * (_vMine.begin() + _colNum)->_speed2;
+		_vMine.begin()->_x += cosf(_colAngle) * _vMine.begin()->_speed2;
+		_vMine.begin()->_y += -sinf(_colAngle) * _vMine.begin()->_speed2;
 		// ¸¸¾à »ç°Å¸® ÀÌ»ó ¹þ¾î³ª¸é isCollisionÀ» ²¨ ÁÖ¼¼¿ä
 		// º¸½º¿Í ºÎµúÇûÀ» °æ¿ì isCollisionÀ» ²¨ ÁÖ¼¼¿ä
 
 	}
 	if (_isCollision2)
 	{
-		(_vMine2.begin() + _colNum)->_x += cosf(_colAngle) * (_vMine2.begin() + _colNum)->_speed2;
-		(_vMine2.begin() + _colNum)->_y += -sinf(_colAngle) * (_vMine2.begin() + _colNum)->_speed2;
+		(_vMine2.begin() + 1)->_x += cosf(_colAngle2) * (_vMine2.begin() + 1)->_speed2;
+		(_vMine2.begin() + 1)->_y += -sinf(_colAngle2) * (_vMine2.begin() + 1)->_speed2;
+		// ¸¸¾à »ç°Å¸® ÀÌ»ó ¹þ¾î³ª¸é isCollisionÀ» ²¨ ÁÖ¼¼¿ä
+		// º¸½º¿Í ºÎµúÇûÀ» °æ¿ì isCollisionÀ» ²¨ ÁÖ¼¼¿ä
+	}
+
+	if (_isCollision3)
+	{
+		(_vMine2.begin() + 2)->_x += cosf(_colAngle3) * (_vMine2.begin() + 2)->_speed2;
+		(_vMine2.begin() + 2)->_y += -sinf(_colAngle3) * (_vMine2.begin() + 2)->_speed2;
 		// ¸¸¾à »ç°Å¸® ÀÌ»ó ¹þ¾î³ª¸é isCollisionÀ» ²¨ ÁÖ¼¼¿ä
 		// º¸½º¿Í ºÎµúÇûÀ» °æ¿ì isCollisionÀ» ²¨ ÁÖ¼¼¿ä
 
+	}
+	if (_isCollision4)
+	{
+		_vMine2.begin()->_x += cosf(_colAngle4) * _vMine2.begin()->_speed2;
+		_vMine2.begin()->_y += -sinf(_colAngle4) * _vMine2.begin()->_speed2;
+		// ¸¸¾à »ç°Å¸® ÀÌ»ó ¹þ¾î³ª¸é isCollisionÀ» ²¨ ÁÖ¼¼¿ä
+		// º¸½º¿Í ºÎµúÇûÀ» °æ¿ì isCollisionÀ» ²¨ ÁÖ¼¼¿ä
+	}
+
+	if (_isCollision5)
+	{
+		(_vMine2.begin() + 1)->_x += cosf(_colAngle5) * (_vMine2.begin() + 1)->_speed2;
+		(_vMine2.begin() + 1)->_y += -sinf(_colAngle5) * (_vMine2.begin() + 1)->_speed2;
+		// ¸¸¾à »ç°Å¸® ÀÌ»ó ¹þ¾î³ª¸é isCollisionÀ» ²¨ ÁÖ¼¼¿ä
+		// º¸½º¿Í ºÎµúÇûÀ» °æ¿ì isCollisionÀ» ²¨ ÁÖ¼¼¿ä
 
 	}
+	if (_isCollision6)
+	{
+		(_vMine2.begin() + 2)->_x += cosf(_colAngle6) * (_vMine2.begin() + 2)->_speed2;
+		(_vMine2.begin() + 2)->_y += -sinf(_colAngle6) * (_vMine2.begin() + 2)->_speed2;
+		// ¸¸¾à »ç°Å¸® ÀÌ»ó ¹þ¾î³ª¸é isCollisionÀ» ²¨ ÁÖ¼¼¿ä
+		// º¸½º¿Í ºÎµúÇûÀ» °æ¿ì isCollisionÀ» ²¨ ÁÖ¼¼¿ä
+	}
+
+
 }
 
 void mine::explotion(float centerX, float centerY)
@@ -372,25 +418,42 @@ void mine::explotion(float centerX, float centerY)
 	}
 }
 
-void mine::collision(int Num1, float angle)
+void mine::collision(float angle)
 {
 	_isCollision = true;
-	_colNum = Num1;
 	_colAngle = angle;
-	//(_vMine.begin() + Num1)->_x += cosf(angle) * (_vMine.begin() + Num1)->_speed2;
-	//(_vMine.begin() + Num1)->_y += -sinf(angle) * (_vMine.begin() + Num1)->_speed2;
+
 }
 
-void mine::collision2(int Num2, float angle)
+void mine::collision2(float angle)
 {
 
 	_isCollision2 = true;
-	_colNum2 = Num2;
 	_colAngle2 = angle;
+}
 
-	//(_vMine2.begin() + Num2)->_x += cosf(angle) * (_vMine2.begin() + Num2)->_speed2;
-	//(_vMine2.begin() + Num2)->_y += -sinf(angle) * (_vMine2.begin() + Num2)->_speed2;
+void mine::collision3(float angle)
+{
+	_isCollision3 = true;
+	_colAngle3 = angle;
+}
 
+void mine::collision4(float angle)
+{
+	_isCollision4 = true;
+	_colAngle4 = angle;
+}
+
+void mine::collision5(float angle)
+{
+	_isCollision5 = true;
+	_colAngle5 = angle;
+}
+
+void mine::collision6(float angle)
+{
+	_isCollision6 = true;
+	_colAngle6 = angle;
 }
 
 void mine::mineRemove(int Num1)
@@ -403,5 +466,7 @@ void mine::mineRemove2(int Num2)
 {
 	_vMine2.erase(_vMine2.begin() + Num2);
 }
+
+
 
 

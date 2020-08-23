@@ -45,6 +45,9 @@ void bossCollision::update()
 	bossBulletCollision();
 	bossAttackCollision();
 
+	newMineCollision();
+	//newBossMineCollision();
+
 	vector<gameObject*> temp10 = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
 
 	for (int i = 0; i < temp10.size(); i++)
@@ -89,6 +92,7 @@ void bossCollision::icethrowerCollision()
 		{
 			if (isCollision(_player->getRect(), attack1->getIcethrowerVector()[j]._rc))
 			{
+
 				_player->damage(attack1->getIcethrowerVector()[j]._damage);
 				_player->setAttackCollision(true);
 
@@ -132,8 +136,10 @@ void bossCollision::icethrowerCollision()
 	}	
 }
 
+
 void bossCollision::mineCollision()
 {
+	/*
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "mine");
 
 	for (int i = 0; i < temp.size(); i++)
@@ -147,6 +153,7 @@ void bossCollision::mineCollision()
 			{
 				if (isCollision(spider->getMineVector()[k]._rc, _player->getBullet()->getVPlayerBullet()[j].rc))
 				{
+					EFFECTMANAGER->play("Æø¹ßÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(spider->getMineVector()[k]._x, spider->getMineVector()[k]._y)), 0);
 					spider->collision(k, _player->getBullet()->getVPlayerBullet()[j].angle);
 					_player->getBullet()->remove(j);
 					break;
@@ -162,79 +169,129 @@ void bossCollision::mineCollision()
 			{
 				if (isCollision(spider->getMine2Vector()[y]._rc, _player->getBullet()->getVPlayerBullet()[p].rc))
 				{
-
+					EFFECTMANAGER->play("Æø¹ßÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(spider->getMineVector()[y]._x, spider->getMineVector()[y]._y)), 0);
 					spider->collision2(y, _player->getBullet()->getVPlayerBullet()[p].angle);
 					_player->getBullet()->remove(p);
 					break;
 				}
 			}
+		}		
+
+	}
+	*/
+
+
+	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "mine");
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+
+		mine* spider = dynamic_cast<mine*>(temp[i]);
+
+		for (int k = 0; k < spider->getMineVector().size(); k++)
+		{
+
+			if (isCollision(_player->getRect(), spider->getMineVector()[k]._rc))
+			{
+				EFFECTMANAGER->play("Æø¹ßÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(spider->getMineVector()[k]._x, spider->getMineVector()[k]._y)), 0);
+				_player->damage(spider->getMineVector()[k]._damage);
+				_player->setAttackCollision(true);
+
+				if (_player->getDirection() == PLAYERDIRECTION::TOP)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::LEFT)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::RIGHT)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::LEFT_BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::RIGHT_TOP)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::RIGHT_BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::LEFT_BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+
+
+				break;
+
+			}
+
+
+
 		}
 
-
-
-
-
-
-		vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
-
-		for (int d = 0; d < temp.size(); d++)
+		for (int s = 0; s < spider->getMine2Vector().size(); s++)
 		{
-			boss* b = dynamic_cast<boss*>(temp[d]);
 
-
-			for (int a = 0; a < spider->getMineVector().size(); a++)
+			if (isCollision(_player->getRect(), spider->getMine2Vector()[s]._rc))
 			{
-				if (isCollision(spider->getMineVector()[a]._rc, b->getRightWall()))
-				{
-					spider->setCollision(false);
-					spider->mineRemove(a);
-					break;
-				}
-				if (isCollision(spider->getMineVector()[a]._rc, b->getLeftWall()))
-				{
-					spider->setCollision(false);
-					spider->mineRemove(a);
-					break;
-				}
-				if (isCollision(spider->getMineVector()[a]._rc, b->getBottomWall()))
-				{
-					spider->setCollision(false);
-					spider->mineRemove(a);
-					break;
-				}
-		
+				EFFECTMANAGER->play("Æø¹ßÀÌÆåÆ®", CAMERA->getRelativeVector2(Vector2(spider->getMine2Vector()[s]._x, spider->getMine2Vector()[s]._y)), 0);
+				_player->damage(spider->getMine2Vector()[s]._damage);
+				_player->setAttackCollision(true);
 
+				if (_player->getDirection() == PLAYERDIRECTION::TOP)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::LEFT)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::RIGHT)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::LEFT_BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::RIGHT_TOP)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::RIGHT_BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+				if (_player->getDirection() == PLAYERDIRECTION::LEFT_BOTTOM)
+				{
+					_player->setState(PLAYERSTATE::BE_ATTACKED);
+				}
+
+
+				break;
 
 			}
 
-			for (int c = 0; c < spider->getMine2Vector().size(); c++)
-			{
-				if (isCollision(spider->getMine2Vector()[c]._rc, b->getRightWall()))
-				{
-					spider->setCollision2(false);
-					spider->mineRemove2(c);
-					break;
-				}
-				if (isCollision(spider->getMine2Vector()[c]._rc, b->getLeftWall()))
-				{
-					spider->setCollision2(false);
-					spider->mineRemove2(c);
-					break;
-				}
-				if (isCollision(spider->getMine2Vector()[c]._rc, b->getBottomWall()))
-				{
-					spider->setCollision2(false);
-					spider->mineRemove2(c);
-					break;
-				}
-		
-
-			}
 
 
 		}
 
 	}
+
 }
 
 void bossCollision::stoneCollision()
@@ -594,12 +651,20 @@ void bossCollision::bossHandCollision()
 		{
 			if (isCollision(hand->getRightHandRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
+				SOUNDMANAGER->play("hit", 0.6f);
+				EFFECTMANAGER->play("player bulletRemoveEffect",
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).x + 20,
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).y);
 				_player->getBullet()->remove(j);
 				break;
 			}
 
 			if (isCollision(hand->getLeftHandRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
+				SOUNDMANAGER->play("hit", 0.6f);
+				EFFECTMANAGER->play("player bulletRemoveEffect",
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).x + 20,
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).y);
 				_player->getBullet()->remove(j);
 				break;
 			}
@@ -613,37 +678,85 @@ void bossCollision::bossMineCollision()
 {
 
 	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "mine");
-	vector<gameObject*> temp2 = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
 
 
 	for (int i = 0; i < temp.size(); i++)
 	{
 		mine* spider = dynamic_cast<mine*>(temp[i]);
 
-		for (int j = 0; j < temp2.size(); j++)
+		vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
+
+		for (int d = 0; d < temp.size(); d++)
 		{
-			boss* hand = dynamic_cast<boss*>(temp[j]);
+			boss* b = dynamic_cast<boss*>(temp[d]);
 
-			for (int k = 0; k < spider->getMineVector().size(); k++)
+			if (spider->getDropTrue1() && spider->getDropTrue2() && spider->getDropTrue3() && spider->getDropTrue4() && spider->getDropTrue5() && spider->getDropTrue6())
 			{
-				if (isCollision(spider->getMineVector()[k]._rc, hand->getBottomRect()))
+				for (int a = 0; a < spider->getMineVector().size(); a++)
 				{
-					//spider->mineRemove(k); 
-					//break;
+
+					if (isCollision(spider->getMineVector()[a]._rc, b->getRightWall()))
+					{
+						spider->setCollision(false);
+						//spider->mineRemove(a);
+						break;
+					}
+					if (isCollision(spider->getMineVector()[a]._rc, b->getLeftWall()))
+					{
+						spider->setCollision(false);
+						//spider->mineRemove(a);
+						break;
+					}
+					if (isCollision(spider->getMineVector()[a]._rc, b->getBottomWall()))
+					{
+						spider->setCollision(false);
+						//spider->mineRemove(a);
+						break;
+					}
+					if (isCollision(spider->getMineVector()[a]._rc, b->getBottomRect()))
+					{
+						spider->setCollision(false);
+						//spider->mineRemove(a);
+						break;
+					}
+
+
+
+
+				}
+
+				for (int c = 0; c < spider->getMine2Vector().size(); c++)
+				{
+					if (isCollision(spider->getMine2Vector()[c]._rc, b->getRightWall()))
+					{
+						spider->setCollision2(false);
+						//spider->mineRemove2(c);
+						break;
+					}
+					if (isCollision(spider->getMine2Vector()[c]._rc, b->getLeftWall()))
+					{
+						spider->setCollision2(false);
+						//spider->mineRemove2(c);
+						break;
+					}
+					if (isCollision(spider->getMine2Vector()[c]._rc, b->getBottomWall()))
+					{
+						spider->setCollision2(false);
+						//spider->mineRemove2(c);
+						break;
+					}
+					if (isCollision(spider->getMine2Vector()[c]._rc, b->getBottomRect()))
+					{
+						spider->setCollision(false);
+						//spider->mineRemove2(c);
+						break;
+					}
+
 
 				}
 			}
 
-
-			for (int z = 0; z < spider->getMine2Vector().size(); z++)
-			{
-				if (isCollision(spider->getMine2Vector()[z]._rc, hand->getBottomRect()))
-				{
-					//spider->mineRemove2(z);
-					//break;
-
-				}
-			}
+			
 
 
 		}
@@ -719,5 +832,136 @@ void bossCollision::bossAttackCollision()
 	}
 
 
+}
+
+void bossCollision::newMineCollision()
+{
+	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "mine");
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+		mine* spider = dynamic_cast<mine*>(temp[i]);
+
+		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)
+		{
+
+			if (isCollision(_player->getBullet()->getVPlayerBullet()[j].rc, spider->getMineVector().begin()->_rc))
+			{
+
+				spider->collision(_player->getBullet()->getVPlayerBullet()[j].angle);
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+			if (isCollision(_player->getBullet()->getVPlayerBullet()[j].rc, (spider->getMineVector().begin() + 1)->_rc))
+			{
+
+				spider->collision2(_player->getBullet()->getVPlayerBullet()[j].angle);
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+			if (isCollision(_player->getBullet()->getVPlayerBullet()[j].rc, (spider->getMineVector().begin() + 2)->_rc))
+			{
+
+				spider->collision3(_player->getBullet()->getVPlayerBullet()[j].angle);
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+			if (isCollision(_player->getBullet()->getVPlayerBullet()[j].rc, spider->getMine2Vector().begin()->_rc))
+			{
+
+				spider->collision4(_player->getBullet()->getVPlayerBullet()[j].angle);
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+			if (isCollision(_player->getBullet()->getVPlayerBullet()[j].rc, (spider->getMine2Vector().begin() + 1)->_rc))
+			{
+
+				spider->collision5(_player->getBullet()->getVPlayerBullet()[j].angle);
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+			if (isCollision(_player->getBullet()->getVPlayerBullet()[j].rc, (spider->getMine2Vector().begin() + 2)->_rc))
+			{
+
+				spider->collision6(_player->getBullet()->getVPlayerBullet()[j].angle);
+				_player->getBullet()->remove(j);
+				break;
+			}
+
+
+		}
+
+
+	}
+
+}
+
+void bossCollision::newBossMineCollision()
+{
+	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "mine");
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+		mine* spider = dynamic_cast<mine*>(temp[i]);
+
+		vector<gameObject*> temp2 = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
+
+		for (int d = 0; d < temp2.size(); d++)
+		{
+			boss* bottom = dynamic_cast<boss*>(temp[d]);
+
+			if (spider->getDropTrue1() && spider->getDropTrue2() && spider->getDropTrue3() && spider->getDropTrue4() && spider->getDropTrue5() && spider->getDropTrue6())
+			{
+				if (isCollision(bottom->getBottomRect(), spider->getMineVector().begin()->_rc))
+				{
+					spider->setCollision(false);
+					break;
+
+				}
+
+				if (isCollision(bottom->getBottomRect(), (spider->getMineVector().begin() + 1)->_rc))
+				{
+					spider->setCollision2(false);
+					break;
+
+				}
+
+				if (isCollision(bottom->getBottomRect(), (spider->getMineVector().begin() + 2)->_rc))
+				{
+					spider->setCollision3(false);
+					break;
+
+				}
+
+				if (isCollision(bottom->getBottomRect(), spider->getMine2Vector().begin()->_rc))
+				{
+					spider->setCollision4(false);
+					break;
+
+				}
+
+				if (isCollision(bottom->getBottomRect(), (spider->getMine2Vector().begin() + 1)->_rc))
+				{
+					spider->setCollision5(false);
+					break;
+
+				}
+
+				if (isCollision(bottom->getBottomRect(), (spider->getMine2Vector().begin() + 2)->_rc))
+				{
+					spider->setCollision6(false);
+					break;
+
+				}
+			}
+
+		}
+
+	}
 }
 
