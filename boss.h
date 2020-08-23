@@ -251,6 +251,8 @@ public:
 	floatRect& getBottomWall() { return _imagineWallBottom; }
 	floatRect& getTopWall() { return _imagineWallTop; }
 
+	enum bossState getBossState() { return _bossState; }
+
 
 							
 ///////////////////////////////////////////////////////////////

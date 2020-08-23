@@ -90,6 +90,7 @@ void bossCollision::icethrowerCollision()
 			if (isCollision(_player->getRect(), attack1->getIcethrowerVector()[j]._rc))
 			{
 				_player->damage(attack1->getIcethrowerVector()[j]._damage);
+				_player->setAttackCollision(true);
 
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
@@ -249,6 +250,7 @@ void bossCollision::stoneCollision()
 			if (isCollision(_player->getRect(), attack2->getStoneVector()[j]._rc))
 			{
 				_player->damage(attack2->getStoneVector()[j]._damage);
+				_player->setAttackCollision(true);
 
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
@@ -304,6 +306,7 @@ void bossCollision::flameCollision()
 			if (isCollision(_player->getRect(), attack3->getFlameVector()[j]._rc))
 			{
 				_player->damage(attack3->getFlameVector()[j]._damage);
+				_player->setAttackCollision(true);
 
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
@@ -363,6 +366,7 @@ void bossCollision::iceguideCollision()
 			if (isCollision(_player->getRect(), attack4->getIceguideVector()[j]._rc))
 			{
 				_player->damage(attack4->getIceguideVector()[j]._damage);
+				_player->setAttackCollision(true);
 
 				if (_player->getDirection() == PLAYERDIRECTION::TOP)
 				{
@@ -663,7 +667,14 @@ void bossCollision::bossBulletCollision()
 			if (isCollision(hand->getBottomRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
 				SOUNDMANAGER->play("hit", 0.6f);
-				hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower());
+				if (hand->getBossState() == STUN || hand->getBossState() == STUN2 || hand->getBossState() == STUN3)
+				{
+					hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower() * 2.5f);
+				}
+				else
+				{
+					hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower());
+				}
 				EFFECTMANAGER->play("player bulletRemoveEffect",
 					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).x + 20,
 					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).y);
@@ -690,7 +701,14 @@ void bossCollision::bossAttackCollision()
 			if (!hand->getBossCollision())
 			{
 				SOUNDMANAGER->play("hit", 0.6f);
-				hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower());
+				if (hand->getBossState() == STUN || hand->getBossState() == STUN2 || hand->getBossState() == STUN3)
+				{
+					hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower() * 5);
+				}
+				else
+				{
+					hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower() * 2);
+				}
 				hand->setBossCollision(true);
 			}
 
