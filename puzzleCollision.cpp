@@ -238,27 +238,28 @@ void puzzleCollision::puzzleTabButtonCollision()
 					EVENTMANAGER->addEvent(i);
 					break;
 				}
+			}
 
-				if (buttonP2->getRect().getSize().x != 0 && buttonP2->getRect().getSize().y != 0)
+			if (buttonP2->getRect().getSize().x != 0 && buttonP2->getRect().getSize().y != 0)
+			{
+				if (isCollision(buttonP2->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//2번째 탑버튼 렉트에 플레이어의 총알렉트가 충돌했으면
 				{
-					if (isCollision(buttonP2->getRect(), _player->getBullet()->getVPlayerBullet()[j].rc))//2번째 탑버튼 렉트에 플레이어의 총알렉트가 충돌했으면
+					if (!SOUNDMANAGER->isPlaySound("counter"))
 					{
-						if (!SOUNDMANAGER->isPlaySound("counter"))
-						{
-							SOUNDMANAGER->play("counter", 1.0f);
-						}
-
-						_puzzleTabButtonCollision[1] = true;//2번째 탑버튼이 충돌했다는 bool값 트루
-						buttonP2->setRect(RectMakePivot(Vector2(buttonP2->getRect().getCenter().x, buttonP2->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//2번째 탑버튼 렉트크기 0으로 변경
-						_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
-						iCameraMove* i = new iCameraMove(orangeP1, 1.5f);
-						iPlayerTurn* i2 = new iPlayerTurn(4);
-						SOUNDMANAGER->play("barrier");
-						EVENTMANAGER->addEvent(i2);
-						EVENTMANAGER->addEvent(i);
-						break;
+						SOUNDMANAGER->play("counter", 1.0f);
 					}
 
+					_puzzleTabButtonCollision[1] = true;//2번째 탑버튼이 충돌했다는 bool값 트루
+					buttonP2->setRect(RectMakePivot(Vector2(buttonP2->getRect().getCenter().x, buttonP2->getRect().getCenter().y), Vector2(0, 0), pivot::CENTER));//2번째 탑버튼 렉트크기 0으로 변경
+					_player->getBullet()->remove(j);//플레이어의 총알벡터 삭제
+					iCameraMove* i = new iCameraMove(orangeP1, 1.5f);
+					iPlayerTurn* i2 = new iPlayerTurn(4);
+					SOUNDMANAGER->play("barrier");
+					EVENTMANAGER->addEvent(i2);
+					EVENTMANAGER->addEvent(i);
+					break;
+				}
+			}
 
 					if (buttonP3->getRect().getSize().x != 0 && buttonP3->getRect().getSize().y != 0)
 					{
@@ -529,8 +530,6 @@ void puzzleCollision::puzzleTabButtonCollision()
 				}
 				//탑버튼 렉트랑 플레이어 렉트랑 충돌시 플레이어를 밀어내기 위한 코드
 			}
-		}
-	}
 }
 
 void puzzleCollision::puzzleDestructCollision()
