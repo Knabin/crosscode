@@ -122,6 +122,8 @@ void initLoadingScene::update()
 		SOUNDMANAGER->addSound("pS mattackf", "sounds/player/close-combat-sweep-massive.ogg", false, false);	//근거리막타공격소리
 		SOUNDMANAGER->addSound("pS dodge", "sounds/player/dash-3.ogg", false, false);	//회피
 		SOUNDMANAGER->addSound("dodge", "sound/player/hit-block.ogg", false, false);
+		SOUNDMANAGER->addSound("dead", "sound/player/teleport-out-1s.ogg", false, false);
+		SOUNDMANAGER->addSound("dead2", "sound/player/teleport-1s.ogg", false, false);
 		
 		SOUNDMANAGER->addSound("counter", "sounds/object/counter.ogg", false, false);
 		SOUNDMANAGER->addSound("barrier", "sounds/object/barrier-down.ogg", false, false);

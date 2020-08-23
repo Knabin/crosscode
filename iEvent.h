@@ -137,3 +137,14 @@ public:
 	void eventStart() override;
 	bool eventUpdate() override;
 };
+
+class iPlayerDead final : public iEvent
+{
+private:
+	class player* _player;
+
+public:
+	iPlayerDead();
+	void eventStart() override;
+	bool eventUpdate() override;
+};

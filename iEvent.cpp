@@ -239,3 +239,31 @@ bool iItemAdd::eventUpdate()
 
 	return true;
 }
+
+iPlayerDead::iPlayerDead()
+{
+	_player = dynamic_cast<player*>(OBJECTMANAGER->findObject(objectType::PLAYER, "player"));
+}
+
+void iPlayerDead::eventStart()
+{
+	CAMERA->zoomStart(1.4f, 0.9f, true);
+	CAMERA->fadeStart(1.f, 3.f);
+}
+
+bool iPlayerDead::eventUpdate()
+{
+
+	if (CAMERA->getIsFadeOut() && !CAMERA->getIsZoom())
+	{
+		SOUNDMANAGER->stopAll("");
+		SCENEMANAGER->loadScene(L"town");
+		_player->setPlayerHP(_player->getPlayerMaxHP());
+		_player->setState(PLAYERSTATE::IDLE);
+		_player->setDirection(PLAYERDIRECTION::BOTTOM);
+		_player->setPosition(Vector2(500, 1600));
+		return true;
+	}
+
+	return false;
+}
