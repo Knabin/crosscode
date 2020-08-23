@@ -39,9 +39,11 @@ void bossCollision::update()
 	stoneCollision();			//바위 충돌
 	flameCollision();			//화염 충돌
 	iceguideCollision();		//뾰족얼음 충돌
-	bossHandCollision();		//플레이어 총알과 보스 팔 충돌				
+	bossHandCollision();		//플레이어 총알과 보스 팔 충돌		
+
 	//bossMineCollision();
 	bossBulletCollision();
+	bossAttackCollision();
 
 	vector<gameObject*> temp10 = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
 
@@ -59,6 +61,15 @@ void bossCollision::update()
 		}
 	}
 
+	if (_player->getAttackCollision())
+	{
+		_playerCollisionCount++;
+		if (_playerCollisionCount % 40 == 0)
+		{
+			_player->setAttackCollision(false);
+			_playerCollisionCount = 0;
+		}
+	}
 
 }
 
@@ -115,6 +126,7 @@ void bossCollision::icethrowerCollision()
 				attack1->removeFire(j);
 				break;
 			}
+
 		}
 	}	
 }
@@ -143,19 +155,84 @@ void bossCollision::mineCollision()
 		}
 		
 
-		for (int j = 0; j < _player->getBullet()->getVPlayerBullet().size(); j++)
+		for (int p = 0; p < _player->getBullet()->getVPlayerBullet().size(); p++)
 		{
 			for (int y = 0; y < spider->getMine2Vector().size(); y++)
 			{
-				if (isCollision(spider->getMine2Vector()[y]._rc, _player->getBullet()->getVPlayerBullet()[j].rc))
+				if (isCollision(spider->getMine2Vector()[y]._rc, _player->getBullet()->getVPlayerBullet()[p].rc))
 				{
 
-					spider->collision2(y, _player->getBullet()->getVPlayerBullet()[j].angle);
-					_player->getBullet()->remove(j);
+					spider->collision2(y, _player->getBullet()->getVPlayerBullet()[p].angle);
+					_player->getBullet()->remove(p);
 					break;
 				}
 			}
 		}
+
+
+
+
+
+
+		vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
+
+		for (int d = 0; d < temp.size(); d++)
+		{
+			boss* b = dynamic_cast<boss*>(temp[d]);
+
+
+			for (int a = 0; a < spider->getMineVector().size(); a++)
+			{
+				if (isCollision(spider->getMineVector()[a]._rc, b->getRightWall()))
+				{
+					spider->setCollision(false);
+					spider->mineRemove(a);
+					break;
+				}
+				if (isCollision(spider->getMineVector()[a]._rc, b->getLeftWall()))
+				{
+					spider->setCollision(false);
+					spider->mineRemove(a);
+					break;
+				}
+				if (isCollision(spider->getMineVector()[a]._rc, b->getBottomWall()))
+				{
+					spider->setCollision(false);
+					spider->mineRemove(a);
+					break;
+				}
+		
+
+
+			}
+
+			for (int c = 0; c < spider->getMine2Vector().size(); c++)
+			{
+				if (isCollision(spider->getMine2Vector()[c]._rc, b->getRightWall()))
+				{
+					spider->setCollision2(false);
+					spider->mineRemove2(c);
+					break;
+				}
+				if (isCollision(spider->getMine2Vector()[c]._rc, b->getLeftWall()))
+				{
+					spider->setCollision2(false);
+					spider->mineRemove2(c);
+					break;
+				}
+				if (isCollision(spider->getMine2Vector()[c]._rc, b->getBottomWall()))
+				{
+					spider->setCollision2(false);
+					spider->mineRemove2(c);
+					break;
+				}
+		
+
+			}
+
+
+		}
+
 	}
 }
 
@@ -265,7 +342,10 @@ void bossCollision::flameCollision()
 				attack3->removeFire(j);
 				break;
 			}
+
+
 		}
+
 	}
 
 }
@@ -521,6 +601,7 @@ void bossCollision::bossHandCollision()
 			}
 
 		}
+
 	}
 }
 
@@ -566,9 +647,6 @@ void bossCollision::bossMineCollision()
 
 
 
-
-
-
 }
 
 void bossCollision::bossBulletCollision()
@@ -584,18 +662,44 @@ void bossCollision::bossBulletCollision()
 		{
 			if (isCollision(hand->getBottomRect(), _player->getBullet()->getVPlayerBullet()[j].rc))
 			{
+				SOUNDMANAGER->play("hit", 0.6f);
 				hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower());
+				EFFECTMANAGER->play("player bulletRemoveEffect",
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).x + 20,
+					CAMERA->getRelativeVector2(_player->getBullet()->getVPlayerBullet()[j].position).y);
 				_player->getBullet()->remove(j);
 				break;
 			}
 
 		}
 
+	}
+}
+
+void bossCollision::bossAttackCollision()
+{
+	vector<gameObject*> temp = OBJECTMANAGER->findObjects(objectType::BOSS, "boss");
+
+	for (int i = 0; i < temp.size(); i++)
+	{
+		boss* hand = dynamic_cast<boss*>(temp[i]);
+
+	
 		if (isCollision(hand->getBottomRect(), _player->getPlayerAttackRect()))
 		{
-			hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower());
+			if (!hand->getBossCollision())
+			{
+				SOUNDMANAGER->play("hit", 0.6f);
+				hand->setBossHp(hand->getBossHp() - _player->getPlayerAttackPower());
+				hand->setBossCollision(true);
+			}
 
+		
 		}
+
+		
 	}
+
+
 }
 

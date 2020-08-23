@@ -40,7 +40,7 @@ HRESULT icethrower::init(float centerX, float centerY)
 	//================================================================================================================================================================//
 
 	
-	for (int i = 0; i < 47; i++)
+	for (int i = 0; i < 45; i++)
 	{
 		tagIcethrower attack1;
 		ZeroMemory(&attack1, sizeof(attack1));
@@ -97,7 +97,7 @@ void icethrower::render()
 			
 		}
 		
-		
+		/*
 		if (!_viIcethrower->_fireStart) continue;
 		{
 			IMAGEMANAGER->findImage("얼음이펙트")->setAngle(_angle2);
@@ -115,7 +115,9 @@ void icethrower::render()
 			//IMAGEMANAGER->findImage("얼음충돌")->frameRender(CAMERA->getRelativeVector2(Vector2(_viIcethrower->_x, _viIcethrower->_y)), _collisionFrameX, _collisionFrameY);
 			
 		}
-	
+
+	*/
+
 	}
 }
 
@@ -220,17 +222,13 @@ void icethrower::move()
 
 		if (!_viIcethrower->_fireStart) continue;
 		{
-			_angle -= 0.002f / 2;
+			_angle -= 0.002f * 1.7f;
 			_angle2 += 0.10f / 2;
 			_viIcethrower->_x += cosf(_viIcethrower->_angle) * _viIcethrower->_speed;
 			_viIcethrower->_y += -sinf(_viIcethrower->_angle) * _viIcethrower->_speed;
 
-			_viIcethrower->_x -= _viIcethrower->_speed / 4;
 			_viIcethrower->_rc.update(Vector2(_viIcethrower->_x, _viIcethrower->_y), Vector2(_viIcethrower->_size, _viIcethrower->_size), pivot::CENTER);
 		}
-
-		
-	
 		
 	}
 }

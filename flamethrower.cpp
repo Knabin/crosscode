@@ -37,7 +37,7 @@ HRESULT flamethrower::init(float centerX, float centerY)
 		tagFlamethrower attack3;
 		ZeroMemory(&attack3, sizeof(attack3));
 
-		attack3._speed = 20.0f;
+		attack3._speed = 23.0f;
 
 		attack3._size = 144.0f;
 
@@ -286,12 +286,12 @@ void flamethrower::move()
 	{
 		if (!_viFlameEffect->_fireStart) continue;
 		{
-			_angle2 += 1.01f;
+			_angle2 += 1.41f;
 
 			_viFlameEffect->_x += cosf(_viFlameEffect->_angle)  * _viFlameEffect->_speed;
 			_viFlameEffect->_y += -sinf(_viFlameEffect->_angle) * _viFlameEffect->_speed;
 
-			_viFlameEffect->_x += _viFlameEffect->_speed;
+			//_viFlameEffect->_x += _viFlameEffect->_speed;
 
 			_viFlameEffect->_rc.update(Vector2(_viFlameEffect->_x, _viFlameEffect->_y), Vector2(_viFlameEffect->_size, _viFlameEffect->_size), pivot::CENTER);
 

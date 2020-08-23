@@ -53,7 +53,7 @@ void nomalUI::update()
 		_player->setPlayerCri(_player->getPlayerCri() + 1);
 		_player->setPlayerLEVEL(_player->getPlayerLEVEL() + 1);
 
-		SOUNDMANAGER->play("ui lvup", 0.5f);
+		SOUNDMANAGER->play("ui lvup", 0.8f);
 		_lvUP = true;
 		_lvAnim->start();
 		_lvUPCount = 0;

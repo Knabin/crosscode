@@ -93,6 +93,7 @@ struct tagBossPart  //보스 파츠별 구조체
 	floatPoint _center;
 	floatPoint _centerEnd;
 	float _centerMeter;
+
 };
 
 class boss : public gameObject
@@ -197,6 +198,11 @@ private:
 	bool _attackCollision;
 	bool _stunTrue;
 
+	floatRect _imagineWallRight;
+	floatRect _imagineWallLeft;
+	floatRect _imagineWallBottom;
+	floatRect _imagineWallTop;
+
 
 public:
 
@@ -239,6 +245,11 @@ public:
 
 	bool getBossCollision() { return _attackCollision;}
 	void setBossCollision(bool attackCollision) { _attackCollision = attackCollision; }
+
+	floatRect& getRightWall() { return _imagineWallRight; }
+	floatRect& getLeftWall() { return _imagineWallLeft; }
+	floatRect& getBottomWall() { return _imagineWallBottom; }
+	floatRect& getTopWall() { return _imagineWallTop; }
 
 
 							
