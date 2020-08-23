@@ -68,8 +68,12 @@ bool dialog::next()
 
 void dialog::loadText()
 {
+	int l = 1;
+	int p = 0;
 	if (_fileName == "1")
 	{
+		p = 0;
+		l = 1;
 		_vText.push_back(L"0");
 		_vText.push_back(L"레아! 첫 접속 소감은 어때?");
 		_vText.push_back(L"3");
@@ -97,6 +101,8 @@ void dialog::loadText()
 	}
 	else if (_fileName == "2")
 	{
+		p = 6;
+		l = 1;
 		_vText.push_back(L"6");
 		_vText.push_back(L"해냈구나, 레아!");
 		_vText.push_back(L"6");
@@ -110,6 +116,8 @@ void dialog::loadText()
 	}
 	else if (_fileName == "3")
 	{
+		p = 0;
+		l = 1;
 		_vText.push_back(L"0");
 		_vText.push_back(L"저쪽으로 가면 드디어 \n몬스터를 만날 수 있어.");
 		_vText.push_back(L"0");
@@ -121,6 +129,8 @@ void dialog::loadText()
 	}
 	else if (_fileName == "4")
 	{
+		p = 8;
+		l = 1;
 		_vText.push_back(L"8");
 		_vText.push_back(L"자, 잠깐만 레아!");
 		_vText.push_back(L"4");
@@ -134,6 +144,8 @@ void dialog::loadText()
 	}
 	else if (_fileName == "5")
 	{
+		p = 0;
+		l = 5;
 		_vText.push_back(L"5");
 		_vText.push_back(L"...!");
 		_vText.push_back(L"8");
@@ -141,14 +153,16 @@ void dialog::loadText()
 	}
 	else if (_fileName == "6")
 	{
+		p = 8;
+		l = 5;
 		_vText.push_back(L"5");
 		_vText.push_back(L"...");
 		_vText.push_back(L"8");
 		_vText.push_back(L"온다! 조심해, 레아!");
 	}
 
-	lea = new portrait(0);
-	pro = new portrait(1);
+	lea = new portrait(l);
+	pro = new portrait(p);
 	lea->init();
 	pro->init();
 

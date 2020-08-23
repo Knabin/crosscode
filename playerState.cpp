@@ -2,6 +2,7 @@
 #include "playerState.h"
 #include "player.h"
 #include "enemy.h"
+#include "iEvent.h"
 
 // =========================== 플레이어 아이들 =========================== //
 idleState::idleState(player * player)
@@ -2468,6 +2469,14 @@ void beAttackedState::enter()
 		_player->setAnimation(_left_bottom);
 		_left_bottom->start();
 		break;
+	}
+
+	if (_player->getPlayerHP() <= 0)
+	{
+		cout << "죽엇따" << endl;
+		CAMERA->zoomStart(2.0f, 1.0f, false);
+		iPlayerDead* move = new iPlayerDead();
+		EVENTMANAGER->addEvent(move);
 	}
 }
 
