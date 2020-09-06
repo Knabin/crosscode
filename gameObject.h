@@ -5,13 +5,13 @@ class gameObject : public gameNode
 {
 protected:
 	string _name;		// 오브젝트 이름
-	Vector2 _position;
+	Vector2 _position;	// 오브젝트 위치
 	float _width;		// 오브젝트 가로 크기
 	float _height;		// 오브젝트 세로 크기
 	floatRect _rc;		// 오브젝트 RECT(float type)
 	bool _isActive;		// 오브젝트 활성화 여부, 화면에 표시할 것인지
-	bool _isAlive;		// 오브젝트가 살아 있는지
-	bool _trigger;			// 트리거
+	bool _isAlive;		// 오브젝트 사용 여부, false라면 delete 처리 진행
+	bool _trigger;		// 트리거
 	pivot _pivot;		// 오브젝트 RECT 기준(pivot)
 
 public:

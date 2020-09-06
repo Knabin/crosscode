@@ -202,7 +202,6 @@
     <ClInclude Include="playerStateController.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="portrait.h" />
-    <ClInclude Include="progressBar.h" />
     <ClInclude Include="puzzleBlueWall.h" />
     <ClInclude Include="puzzleCollision.h" />
     <ClInclude Include="puzzleComboButton.h" />
@@ -222,7 +221,6 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testScene.h" />
     <ClInclude Include="testScene2.h" />
-    <ClInclude Include="textData.h" />
     <ClInclude Include="tile.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
@@ -290,7 +288,6 @@
     <ClCompile Include="playerStateController.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="portrait.cpp" />
-    <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="puzzleBlueWall.cpp" />
     <ClCompile Include="puzzleCollision.cpp" />
     <ClCompile Include="puzzleComboButton.cpp" />
@@ -312,7 +309,6 @@
     <ClCompile Include="tabUI.cpp" />
     <ClCompile Include="testScene.cpp" />
     <ClCompile Include="testScene2.cpp" />
-    <ClCompile Include="textData.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />

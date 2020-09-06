@@ -49,9 +49,6 @@
     <ClCompile Include="objectManager.cpp">
       <Filter>2DGameFrameWork\manager</Filter>
     </ClCompile>
-    <ClCompile Include="progressBar.cpp">
-      <Filter>2DGameFrameWork\progressBar</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
     </ClCompile>
     <ClCompile Include="soundManager.cpp">
       <Filter>2DGameFrameWork\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="textData.cpp">
-      <Filter>2DGameFrameWork\textData</Filter>
     </ClCompile>
     <ClCompile Include="timer.cpp">
       <Filter>2DGameFrameWork\timer</Filter>
@@ -307,9 +301,6 @@
     <ClInclude Include="objectManager.h">
       <Filter>2DGameFrameWork\manager</Filter>
     </ClInclude>
-    <ClInclude Include="progressBar.h">
-      <Filter>2DGameFrameWork\progressBar</Filter>
-    </ClInclude>
     <ClInclude Include="randomFunction.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -330,9 +321,6 @@
     </ClInclude>
     <ClInclude Include="soundManager.h">
       <Filter>2DGameFrameWork\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="textData.h">
-      <Filter>2DGameFrameWork\textData</Filter>
     </ClInclude>
     <ClInclude Include="timer.h">
       <Filter>2DGameFrameWork\timer</Filter>
@@ -566,14 +554,8 @@
     <Filter Include="playerTest">
       <UniqueIdentifier>{61d0858b-2ce5-41c2-bf94-7b121375b8fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2DGameFrameWork\progressBar">
-      <UniqueIdentifier>{4e40cc42-ee15-4a77-98e1-a4d36296b302}</UniqueIdentifier>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{bf693f75-2c83-49ba-9638-d82a6203b9ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFrameWork\textData">
-      <UniqueIdentifier>{7a66c115-dd3a-484b-829d-06a991453af0}</UniqueIdentifier>
     </Filter>
     <Filter Include="2DGameFrameWork\timer">
       <UniqueIdentifier>{2fc2d90c-84d8-4bdc-80ae-a63892c21077}</UniqueIdentifier>

@@ -55,7 +55,6 @@ enum class pivot : int
 #include "eventManager.h"
 #include "objectManager.h"
 #include "soundManager.h"
-#include "textData.h"
 #include "sceneManager.h"
 #include "camera.h"
 
@@ -82,7 +81,6 @@ using namespace MINTCHOCO_UTIL;
 #define EFFECTMANAGER effectManager::getInstance()
 #define EVENTMANAGER eventManager::getInstance()
 #define OBJECTMANAGER objectManager::getInstance()
-#define TEXTDATA textData::getInstance()
 #define SCENEMANAGER sceneManager::getInstance()
 #define CAMERA camera::getInstance()
 #define D2DRENDERER D2DRenderer::getInstance()

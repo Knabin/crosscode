@@ -2,9 +2,8 @@
 
 enum class CAMERASTATE : int
 {
-	NONE,		// 고정 카메라
-	TARGET,		// 타겟팅 카메라
-	EVENT,		// 이벤트용 카메라
+	NONE,		// 고정된 카메라
+	TARGET,		// 타겟팅 카메라, 부드럽게 움직임
 	END,
 };
 
@@ -23,7 +22,7 @@ private:
 private:
 	CAMERASTATE _state;		// 현재 카메라의 상태
 	RECT _rc;				// 현재 카메라의 RECT
-	Vector2 _position;	// 카메라의 중점
+	Vector2 _position;		// 카메라의 중점
 	float _width;			// 카메라의 가로 길이
 	float _height;			// 카메라의 세로 길이
 	Vector2 _mapSize;		// 맵의 크기

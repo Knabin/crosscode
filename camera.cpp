@@ -4,13 +4,9 @@
 #include "gameObject.h"
 
 camera::camera()
-	: _state(CAMERASTATE::NONE), _position(0.0f, 0.0f)
+	: _state(CAMERASTATE::NONE), _position(0.0f, 0.0f), _mapSize(Vector2(WINSIZEX, WINSIZEY)),
+	_width(WINSIZEX), _height(WINSIZEY), _isZoom(false), _nowZoomAmount(1.0f)
 {
-	_mapSize = Vector2(WINSIZEX, WINSIZEY);
-	_width = WINSIZEX;
-	_height = WINSIZEY;
-	_isZoom = false;
-	_nowZoomAmount = 1.0f;
 }
 
 camera::~camera()
@@ -23,7 +19,6 @@ void camera::update()
 	switch (_state)
 	{
 	case CAMERASTATE::NONE:
-		//_rc = RectMakeCenter(_position.x, _position.y, WINSIZEX / _nowZoomAmount, WINSIZEY / _nowZoomAmount);
 		moveToTarget();
 		break;
 	case CAMERASTATE::TARGET:
@@ -182,7 +177,6 @@ void camera::updateFade()
 void camera::changeTarget(gameObject* gameObject)
 {
 	_target = gameObject;
-	//_state = CAMERASTATE::TARGET;
 }
 
 void camera::shakeStart(float amount, float time)
