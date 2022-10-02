@@ -10,4 +10,4 @@
 ---
 
 ### 시연 동영상
-[![crosscode project](http://img.youtube.com/vi/QMneIMFBW64/sddefault.jpg)](https://youtu.be/QMneIMFBW64?t=0s)
+[![crosscode project](http://img.youtube.com/vi/6WA52XtgPHM/sddefault.jpg)](https://youtu.be/6WA52XtgPHM?t=0s)
